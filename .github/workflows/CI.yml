@@ -1,0 +1,30 @@
+name: CI
+
+on: 
+  pull_request:
+    branches:
+      - 'Develop'  # 들여쓰기를 수정했습니다.
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Test
+        run: npm run test
+        
+      - name: Build
+        run: npm run build
+
+      - name: Merge PR if review approved
+        if: ${{ github.event.pull_request.reviewDecision == 'APPROVED' && github.event.pull_request.approvals >= 4 }}
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} --merge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
