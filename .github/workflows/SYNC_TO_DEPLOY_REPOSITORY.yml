@@ -15,7 +15,7 @@ jobs:
         with: 
           token: ${{ secrets.GITHUBACTIONKEY }}
           fetch-depth: 0
-          ref: Deploy
+          ref: Develop
 
       - name: Add remote-url
         run: |
