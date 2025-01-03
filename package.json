@@ -1,0 +1,59 @@
+{
+  "name": "mogua",
+  "main": "index.js",
+  "version": "0.0.0",
+  "description": "møgua는 스터디 및 과외 모집을 위한 플랫폼입니다.",
+  "homepage": "https://mogua.vercel.app",
+  "author": {
+    "name": "møgua-station",
+    "url": "https:/github.com/mogua-station/FE"
+  },
+  "private": true,
+  "scripts": {
+    "start": "next start",
+    "build": "next build",
+    "dev": "next dev",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "prepare": "husky install",
+    "test": "jest"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.62.11",
+    "@tanstack/react-query-devtools": "^5.62.11",
+    "@types/jest": "^29.5.14",
+    "next": "14.2.22",
+    "react": "^18",
+    "react-dom": "^18",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@jest/types": "^29.6.3",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
+    "@typescript-eslint/parser": "^8.19.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.22",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.10.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "husky": "^9.1.7",
+    "postcss": "^8",
+    "prettier": "3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5"
+  }
+}
