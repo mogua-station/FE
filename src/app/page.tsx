@@ -2,13 +2,19 @@ export default function Home() {
   return (
     <div>
       <h1>møgua project</h1>
-      <h2 className='my-4 text-title-2 font-semibold'>Typography</h2>
+      <h2 className='my-4 text-title-2 font-semibold text-blue-200'>
+        Typography
+      </h2>
       <ul>
         <li>
-          <p className='text-title-1 font-bold'>Title 1 / 24px-Bold</p>
+          <p className='text-title-1 font-bold text-primary'>
+            Title 1 / 24px-Bold
+          </p>
         </li>
         <li>
-          <p className='text-title-2 font-semibold'>Title 2 / 22px-Semibold</p>
+          <p className='text-title-2 font-semibold text-red-200'>
+            Title 2 / 22px-Semibold
+          </p>
         </li>
         <li>
           <p className='text-heading-1 font-medium'>Heading 1 / 20px-Medium</p>
