@@ -2,7 +2,7 @@ name: Synchronize to forked repo
 on:
   push:
     branches:
-      - Deploy
+      - Develop
 
 jobs:
   sync:
