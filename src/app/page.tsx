@@ -1,7 +1,10 @@
+import KakaoIcon from "@/assets/images/icons/kakao.svg";
+
 export default function Home() {
   return (
     <div>
       <h1>møgua project</h1>
+      <KakaoIcon className='size-10 text-yellow-400' />
       <h2 className='my-4 text-title-2 font-semibold text-blue-200'>
         Typography
       </h2>
