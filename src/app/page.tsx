@@ -1,4 +1,8 @@
+"use client";
+
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
+import Dropdown from "@/components/common/Dropdown";
+import Popover from "@/components/common/Popover";
 
 export default function Home() {
   return (
@@ -58,6 +62,41 @@ export default function Home() {
           </p>
         </li>
       </ul>
+
+      <div className='flex justify-center gap-4'>
+        <Dropdown
+          defaultSelected='Hello, World! 1'
+          align='RR'
+          content={[
+            {
+              label: "Hello, World! 1",
+              onClick: () => {
+                console.log("onClick");
+              },
+            },
+            {
+              label: "Hello, World! 2",
+              value: "Hello2",
+              onClick: () => {
+                console.log("onClick");
+              },
+            },
+            {
+              label: "Hello, World! 3",
+              value: "Hello3",
+              onClick: () => {
+                console.log("onClick");
+              },
+            },
+          ]}
+        >
+          <div className='filter-sm filter-default'>{"버튼"}</div>
+        </Dropdown>
+
+        <Popover content={<div className='w-max'>팝오버</div>}>
+          <div>버튼</div>
+        </Popover>
+      </div>
     </div>
   );
 }
