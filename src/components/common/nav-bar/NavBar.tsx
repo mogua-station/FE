@@ -1,4 +1,4 @@
-import NavMenuItem from "../NavMenuItem";
+import NavMenuItem from "./NavMenuItem";
 import HeartIcon from "@/assets/images/icons/heart.svg";
 import PlanetIcon from "@/assets/images/icons/planet.svg";
 import UserIcon from "@/assets/images/icons/user.svg";
