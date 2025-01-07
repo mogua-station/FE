@@ -7,11 +7,30 @@ import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButt
 import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Dropdown from "@/components/common/Dropdown";
+import CommonImageInput from "@/components/common/inputs/ImageUpload";
 import Popover from "@/components/common/Popover";
+import { usePostImage } from "@/hooks/inputs/images/usePostImage";
 
 export default function Home() {
+  const { postImage } = usePostImage(); // uploadError, isUploading 상태는 각자 시안에 맞게 사용하시면 됩니다.
+
+  const handleImagePost = async () => {
+    const endpoint = "/example/uploadImage"; // 각자 서버 엔드포인트 설정해서 사용하시면 됩니다.
+    await postImage(endpoint);
+  };
+
   return (
     <div>
+      <CommonImageInput label={"프로필 이미지"} />
+      <SolidButton
+        size='small'
+        state='activated'
+        type='submit'
+        onClick={handleImagePost}
+      >
+        <span>서버에 POST</span>
+      </SolidButton>
+
       <h1>møgua project</h1>
       {/* SVGR */}
       <KakaoIcon className='size-10 text-yellow-400' />
@@ -217,7 +236,6 @@ export default function Home() {
           <div>버튼</div>
         </Popover>
       </div>
-
       {/* lorem */}
       <p className='text-body-1-normal'>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
