@@ -8,14 +8,18 @@ export default function SolidButton({
   className = "",
   ...props
 }: SolidButtonProps) {
-  const buttonHeight = {
+  const hierarchyStyles = {
     primary: {
-      large: "h-14 text-body-1-normal font-semibold",
-      small: "h-10 text-label-normal font-medium",
+      large:
+        "h-14 text-body-1-normal px-[10px] gap-[10px] font-semibold rounded-2xl",
+      small:
+        "h-10 rounded-[6px] px-[10px] py-2 gap-1 text-label-normal font-medium",
     },
     secondary: {
-      large: "h-[54px] text-body-2-normal font-semibold",
-      small: "h-[38px] text-body-2-normal font-semibold",
+      large:
+        "h-[54px] text-body-2-normal px-4 gap-[10px] font-semibold rounded-2xl",
+      small:
+        "h-[38px] rounded-[6px] px-4 gap-1 text-body-2-normal font-semibold",
     },
   }[hierarchy][size];
 
@@ -27,7 +31,7 @@ export default function SolidButton({
 
   return (
     <button
-      className={`btn-base btn-size-${size} ${buttonHeight} ${stateStyles} ${className}`}
+      className={`btn-base ${hierarchyStyles} ${stateStyles} ${className}`}
       disabled={state === "inactive"}
       {...props}
     >

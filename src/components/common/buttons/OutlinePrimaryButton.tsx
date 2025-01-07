@@ -8,8 +8,8 @@ export default function OutlinePrimaryButton({
   ...props
 }: OutlinePrimaryButtonProps) {
   const sizeStyles = {
-    large: "btn-size-large h-14 text-body-1-normal font-semibold",
-    small: "btn-size-small h-10 text-label-normal font-semibold",
+    large: "rounded-2xl gap-[10px] h-14 text-body-1-normal font-semibold",
+    small: "rounded-[6px] gap-1 h-[38px] text-label-normal font-semibold",
   }[size];
 
   const stateStyles = {
@@ -20,7 +20,7 @@ export default function OutlinePrimaryButton({
 
   return (
     <button
-      className={`btn-base ${sizeStyles} ${stateStyles} ${className}`}
+      className={`btn-base px-4 ${sizeStyles} ${stateStyles} ${className}`}
       disabled={state === "inactive"}
       {...props}
     >
