@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import StatusBadge from "./StatusBadge";
-import Heart from "@/assets/images/icons/heart.svg";
-import HeartNoneActive from "@/assets/images/icons/heartNoneActive.svg";
+import Bookmark from "@/assets/images/icons/bookmark.svg";
+import BookmarkActive from "@/assets/images/icons/bookmarkActive.svg";
 import useFormatKrDate from "@/hooks/useFormatKrDate";
 import { type CardProps } from "@/types/card";
 
@@ -18,6 +18,7 @@ export default function Card({
   recruitmentPeriod,
   eventPeriod,
   image,
+  review,
 }: CardProps) {
   const router = useRouter();
   const formatKrDate = useFormatKrDate();
@@ -33,6 +34,11 @@ export default function Card({
 
   const handleClickDetail = (type: string, id: number): void => {
     router.push(`/${type}/${id}`);
+  };
+
+  const handleClickReview = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    alert("리뷰 작성");
   };
 
   return (
@@ -52,9 +58,9 @@ export default function Card({
 
         <button onClick={hadleClickWhishlist}>
           {whishlist ? (
-            <Heart className='size-6 text-red-300' />
+            <Bookmark className='size-6' />
           ) : (
-            <HeartNoneActive className='size-6' />
+            <BookmarkActive className='size-6' />
           )}
         </button>
       </div>
@@ -105,6 +111,9 @@ export default function Card({
           />
         </div>
       </div>
+
+      {/* 버튼 컴포넌트 머지 후 추가 작업필요 */}
+      {review && <button onClick={handleClickReview}>리뷰 작성</button>}
     </div>
   );
 }

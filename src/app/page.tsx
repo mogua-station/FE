@@ -78,6 +78,7 @@ export default function Home() {
       },
       image:
         "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+      review: true,
     },
   ];
 
@@ -186,6 +187,7 @@ export default function Home() {
               recruitmentPeriod={item.recruitmentPeriod}
               eventPeriod={item.eventPeriod}
               image={item.image}
+              review={item.review}
             />
           );
         })}
