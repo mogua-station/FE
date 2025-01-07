@@ -4,11 +4,11 @@
 
 @layer components {
   .filter-sm {
-    @apply text-body-2-normal mx-auto flex h-11 w-max items-center justify-center rounded-xl px-[0.875rem] py-3 font-semibold;
+    @apply mx-auto flex h-11 w-max items-center justify-center rounded-xl px-[0.875rem] py-3 text-body-2-normal font-semibold;
   }
 
   .filter-lg {
-    @apply text-heading-1 mx-auto flex h-16 w-max items-center justify-center rounded-3xl px-6 py-3 font-semibold;
+    @apply mx-auto flex h-16 w-max items-center justify-center rounded-3xl px-6 py-3 text-heading-1 font-semibold;
   }
 
   .filter-default {
@@ -25,5 +25,20 @@
 
   .filter-inactive {
     @apply border border-gray-700 bg-gray-900 text-gray-500;
+  }
+}
+
+/* 공용 버튼 */
+@layer components {
+  .btn-base {
+    @apply flex w-full items-center justify-center border;
+  }
+
+  .btn-size-large {
+    @apply max-w-[343px] gap-[10px] rounded-[16px];
+  }
+
+  .btn-size-small {
+    @apply max-h-[40px] max-w-[109px] gap-[4px] rounded-[6px] p-[10px];
   }
 }
