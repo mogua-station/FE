@@ -14,13 +14,10 @@ export interface SolidButtonProps extends BaseButtonProps {
   state?: ButtonState;
 }
 
-export interface OutlinePrimaryButtonProps extends BaseButtonProps {
+export interface OutlineButtonProps extends BaseButtonProps {
+  hierarchy?: "primary" | "secondary";
   size?: ButtonSize;
   state?: ButtonState;
-}
-
-export interface OutlineSecondaryButtonProps extends BaseButtonProps {
-  size?: ButtonSize;
 }
 
 export interface IconButtonProps extends BaseButtonProps {

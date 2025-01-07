@@ -3,8 +3,7 @@
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
-import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
-import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
+import OutlineButton from "@/components/common/buttons/OutlineButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
@@ -61,43 +60,43 @@ export default function Home() {
         </SolidButton>
 
         <p className='mt-2 text-white'>OutlineButton - Primary</p>
-        <OutlinePrimaryButton state='activated'>large</OutlinePrimaryButton>
-        <OutlinePrimaryButton>
+        <OutlineButton state='activated'>large</OutlineButton>
+        <OutlineButton>
           <div className='size-6 rounded-[6px] border border-white' />
           large
-        </OutlinePrimaryButton>
-        <OutlinePrimaryButton size='small'>
-          <span>small</span>
-        </OutlinePrimaryButton>
-        <OutlinePrimaryButton size='small' state='inactive'>
-          <span>small</span>
-        </OutlinePrimaryButton>
-        <OutlinePrimaryButton size='small' state='activated'>
+        </OutlineButton>
+        <OutlineButton size='small'>small</OutlineButton>
+        <OutlineButton size='small' state='inactive'>
+          small
+        </OutlineButton>
+        <OutlineButton size='small' state='activated'>
           <div className='size-6 rounded-[6px] border border-white' />
-          <span>small</span>
+          small
           <div className='size-6 rounded-[6px] border border-white' />
-        </OutlinePrimaryButton>
+        </OutlineButton>
 
         <p className='mt-2 text-white'>OutlineButton - Secondary</p>
-        <OutlineSecondaryButton>large</OutlineSecondaryButton>
-        <OutlineSecondaryButton>
+        <OutlineButton className='h-[54px]' hierarchy='secondary'>
+          new
+        </OutlineButton>
+        <OutlineButton hierarchy='secondary'>
           <div className='size-6 rounded-[6px] border border-white' />
-          large
-        </OutlineSecondaryButton>
-        <OutlineSecondaryButton>
-          large
+          new
+        </OutlineButton>
+        <OutlineButton hierarchy='secondary'>
+          new
           <div className='size-6 rounded-[6px] border border-white' />
-        </OutlineSecondaryButton>
-        <OutlineSecondaryButton>
+        </OutlineButton>
+        <OutlineButton hierarchy='secondary'>
           <div className='size-6 rounded-[6px] border border-white' />
-          large
+          new
           <div className='size-6 rounded-[6px] border border-white' />
-        </OutlineSecondaryButton>
-        <OutlineSecondaryButton size='small'>
+        </OutlineButton>
+        <OutlineButton hierarchy='secondary' size='small'>
           <div className='size-6 rounded-[6px] border border-white' />
-          large
+          new
           <div className='size-6 rounded-[6px] border border-white' />
-        </OutlineSecondaryButton>
+        </OutlineButton>
         <p className='mt-2 text-white'>IconButton</p>
         <IconButton>
           <KakaoIcon className='size-6' />
