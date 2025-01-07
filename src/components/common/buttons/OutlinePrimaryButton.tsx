@@ -1,12 +1,4 @@
-import { type ButtonHTMLAttributes } from "react";
-
-interface OutlinePrimaryButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: "large" | "small";
-  state?: "default" | "activated" | "inactive";
-  children: React.ReactNode;
-  className?: string;
-}
+import { type OutlinePrimaryButtonProps } from "@/types/button";
 
 export default function OutlinePrimaryButton({
   size = "large",

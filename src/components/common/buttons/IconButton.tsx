@@ -1,10 +1,4 @@
-import { type ButtonHTMLAttributes } from "react";
-
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: "large" | "small";
-  children: React.ReactNode;
-  className?: string;
-}
+import { type IconButtonProps } from "@/types/button";
 
 export default function IconButton({
   size = "large",

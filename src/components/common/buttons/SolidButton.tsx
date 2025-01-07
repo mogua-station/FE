@@ -1,12 +1,4 @@
-import { type ButtonHTMLAttributes } from "react";
-
-interface SolidButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  hierarchy?: "primary" | "secondary";
-  size?: "large" | "small";
-  state?: "default" | "activated" | "inactive";
-  children: React.ReactNode;
-  className?: string;
-}
+import { type SolidButtonProps } from "@/types/button";
 
 export default function SolidButton({
   hierarchy = "primary",

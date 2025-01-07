@@ -1,10 +1,4 @@
-import { type ButtonHTMLAttributes } from "react";
-
-interface ETCButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  state?: "default" | "activated";
-  children: React.ReactNode;
-  className?: string;
-}
+import { type ETCButtonProps } from "@/types/button";
 
 export default function ETCButton({
   state = "default",

@@ -1,11 +1,4 @@
-import { type ButtonHTMLAttributes } from "react";
-
-interface OutlineSecondaryButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: "large" | "small";
-  children: React.ReactNode;
-  className?: string;
-}
+import { type OutlineSecondaryButtonProps } from "@/types/button";
 
 export default function OutlineSecondaryButton({
   size = "large",
