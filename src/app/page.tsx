@@ -1,10 +1,86 @@
 "use client";
 
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
+import Card from "@/components/common/Card";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
 
 export default function Home() {
+  const cardList = [
+    {
+      id: 1,
+      status: "모집중",
+      itemType: "study",
+      title: "모각각코",
+      location: "집",
+      participants: 10,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-07"),
+        endDate: new Date("2025-01-20"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-25"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
+    },
+    {
+      id: 2,
+      status: "모집중",
+      itemType: "study",
+      title: "모집집코",
+      location: "집",
+      participants: 8,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-01-10"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-25"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+    },
+    {
+      id: 3,
+      status: "진행중",
+      itemType: "study",
+      title: "코딩공부",
+      location: "집",
+      participants: 8,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-01-05"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-07"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+    },
+    {
+      id: 4,
+      status: "종료",
+      itemType: "tutoring",
+      title: "게임코칭",
+      location: "pc방",
+      participants: 5,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-01-05"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-07"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+    },
+  ];
+
   return (
     <div>
       <h1>møgua project</h1>
@@ -96,6 +172,23 @@ export default function Home() {
         <Popover content={<div className='w-max'>팝오버</div>}>
           <div>버튼</div>
         </Popover>
+      </div>
+      <div className='mt-10 px-5'>
+        {cardList.map((item) => {
+          return (
+            <Card
+              id={item.id}
+              status={item.status}
+              itemType={item.itemType}
+              title={item.title}
+              location={item.location}
+              participants={item.participants}
+              recruitmentPeriod={item.recruitmentPeriod}
+              eventPeriod={item.eventPeriod}
+              image={item.image}
+            />
+          );
+        })}
       </div>
     </div>
   );
