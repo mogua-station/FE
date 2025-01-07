@@ -10,7 +10,7 @@ interface OutlineSecondaryButtonProps
 export default function OutlineSecondaryButton({
   size = "large",
   children,
-  className,
+  className = "",
   ...props
 }: OutlineSecondaryButtonProps) {
   const sizeStyles = {

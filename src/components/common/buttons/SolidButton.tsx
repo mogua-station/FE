@@ -13,7 +13,7 @@ export default function SolidButton({
   size = "large",
   state = "default",
   children,
-  className,
+  className = "",
   ...props
 }: SolidButtonProps) {
   const buttonHeight = {

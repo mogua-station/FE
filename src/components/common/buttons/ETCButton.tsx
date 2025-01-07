@@ -9,7 +9,7 @@ interface ETCButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export default function ETCButton({
   state = "default",
   children,
-  className,
+  className = "",
   ...props
 }: ETCButtonProps) {
   const stateStyles = {

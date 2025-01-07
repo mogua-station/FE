@@ -12,7 +12,7 @@ export default function OutlinePrimaryButton({
   size = "large",
   state = "default",
   children,
-  className,
+  className = "",
   ...props
 }: OutlinePrimaryButtonProps) {
   const sizeStyles = {

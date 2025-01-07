@@ -9,7 +9,7 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export default function IconButton({
   size = "large",
   children,
-  className,
+  className = "",
   ...props
 }: IconButtonProps) {
   const sizeStyles = {
