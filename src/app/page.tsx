@@ -97,6 +97,35 @@ export default function Home() {
           <div>버튼</div>
         </Popover>
       </div>
+
+      {/* lorem */}
+      <p className='text-body-1-normal'>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+        laborum labore autem aut maxime quam vel eligendi. Fugiat, earum
+        voluptas, eos debitis rerum nostrum quis, quaerat odit labore distinctio
+        optio? Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        Recusandae laborum labore autem aut maxime quam vel eligendi. Fugiat,
+        earum voluptas, eos debitis rerum nostrum quis, quaerat odit labore
+        distinctio optio? Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Recusandae laborum labore autem aut maxime quam vel eligendi.
+        Fugiat, earum voluptas, eos debitis rerum nostrum quis, quaerat odit
+        labore distinctio optio? Lorem ipsum dolor sit amet consectetur
+        adipisicing elit. Recusandae laborum labore autem aut maxime quam vel
+        eligendi. Fugiat, earum voluptas, eos debitis rerum nostrum quis,
+        quaerat odit labore distinctio optio? Lorem ipsum dolor sit amet
+        consectetur adipisicing elit. Recusandae laborum labore autem aut maxime
+        quam vel eligendi. Fugiat, earum voluptas, eos debitis rerum nostrum
+        quis, quaerat odit labore distinctio optio? Lorem ipsum dolor sit amet
+        consectetur adipisicing elit. Recusandae laborum labore autem aut maxime
+        quam vel eligendi. Fugiat, earum voluptas, eos debitis rerum nostrum
+        quis, quaerat odit labore distinctio optio? Lorem ipsum dolor sit amet
+        consectetur adipisicing elit. Recusandae laborum labore autem aut maxime
+        quam vel eligendi. Fugiat, earum voluptas, eos debitis rerum nostrum
+        quis, quaerat odit labore distinctio optio? Lorem ipsum dolor sit amet
+        consectetur adipisicing elit. Recusandae laborum labore autem aut maxime
+        quam vel eligendi. Fugiat, earum voluptas, eos debitis rerum nostrum
+        quis, quaerat odit labore distinctio optio?
+      </p>
     </div>
   );
 }
