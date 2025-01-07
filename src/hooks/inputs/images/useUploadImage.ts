@@ -29,7 +29,10 @@ export const useUploadImage = () => {
       setPreviewUrl(objectUrl);
       setImage(file);
 
-      localStorage.setItem("uploadedImage", objectUrl);
+      // 브라우저 환경에서만 localStorage에 저장
+      if (typeof window !== "undefined") {
+        localStorage.setItem("uploadedImage", objectUrl);
+      }
     }
   };
 

@@ -1,19 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const usePostImage = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  // 로컬 스토리지에 저장된 이미지 URL 가져오기
-  // 클라이언트 사이드에서만 localStorage 접근하도록 설정
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setImageUrl(localStorage.getItem("uploadedImage"));
-    }
-  }, []);
 
   const postImage = async (endpoint: string) => {
+    // 로컬 스토리지에 저장된 이미지 URL 가져오기
+    // 클라이언트 사이드에서만 localStorage 접근하도록 설정
+    const imageUrl =
+      typeof window !== "undefined"
+        ? localStorage.getItem("uploadedImage")
+        : null;
     if (!imageUrl) {
       return;
     }
