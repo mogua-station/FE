@@ -10,7 +10,10 @@ const CommonImageInput = ({ label }: ImageuploadProps) => {
 
   return (
     <div className='flex flex-col gap-[12px]'>
-      <label className='pl-[8px] text-body-2-normal font-medium text-gray-300'>
+      <label
+        htmlFor='fileInput'
+        className='pl-[8px] text-body-2-normal font-medium text-gray-300'
+      >
         {label}
       </label>
 
