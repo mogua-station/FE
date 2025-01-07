@@ -5,7 +5,6 @@ import { useState } from "react";
 import StatusBadge from "./StatusBadge";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmarkActive.svg";
-import useFormatKrDate from "@/hooks/useFormatKrDate";
 import { type CardProps } from "@/types/card";
 
 export default function Card({
@@ -18,10 +17,9 @@ export default function Card({
   recruitmentPeriod,
   eventPeriod,
   image,
-  review,
+  isReview,
 }: CardProps) {
   const router = useRouter();
-  const formatKrDate = useFormatKrDate();
 
   const [whishlist, setWhishlist] = useState(false);
 
@@ -86,8 +84,8 @@ export default function Card({
                 모집
               </span>
               <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>
-                {formatKrDate(recruitmentPeriod.startDate)} -{" "}
-                {formatKrDate(recruitmentPeriod.endDate)}
+                {recruitmentPeriod.startDate.toLocaleDateString("ko-KR")} -{" "}
+                {recruitmentPeriod.endDate.toLocaleDateString("ko-KR")}
               </span>
             </div>
             <div className='flex'>
@@ -97,8 +95,8 @@ export default function Card({
                 참여
               </span>
               <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>
-                {formatKrDate(eventPeriod.startDate)} -{" "}
-                {formatKrDate(eventPeriod.endDate)}
+                {eventPeriod.startDate.toLocaleDateString("ko-KR")} -{" "}
+                {eventPeriod.endDate.toLocaleDateString("ko-KR")}
               </span>
             </div>
           </div>
@@ -113,7 +111,7 @@ export default function Card({
       </div>
 
       {/* 버튼 컴포넌트 머지 후 추가 작업필요 */}
-      {review && <button onClick={handleClickReview}>리뷰 작성</button>}
+      {isReview && <button onClick={handleClickReview}>리뷰 작성</button>}
     </div>
   );
 }
