@@ -1,10 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
+import Calendar from "@/components/common/Calendar";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
 
 export default function Home() {
+  const [selectedDate, setSelectedDate] = useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: null,
+    endDate: null,
+  });
+
   return (
     <div>
       <h1>møgua project</h1>
@@ -96,6 +106,19 @@ export default function Home() {
         <Popover content={<div className='w-max'>팝오버</div>}>
           <div>버튼</div>
         </Popover>
+      </div>
+
+      {/* calendar */}
+      <div className='mx-auto h-max w-[368px] bg-gray-900 p-4'>
+        <Calendar onDateChange={(date) => setSelectedDate(date)} />
+      </div>
+
+      <div className='flex flex-col items-center gap-4'>
+        <h1>Selected Date</h1>
+        <p>
+          {selectedDate.startDate?.toLocaleDateString()} ~{" "}
+          {selectedDate.endDate?.toLocaleDateString()}
+        </p>
       </div>
 
       {/* lorem */}
