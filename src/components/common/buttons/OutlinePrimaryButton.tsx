@@ -8,8 +8,8 @@ export default function OutlinePrimaryButton({
   ...props
 }: OutlinePrimaryButtonProps) {
   const sizeStyles = {
-    large: "btn-size-large h-[56px] text-body-1-normal font-semibold",
-    small: "btn-size-small h-[40px] text-label-normal font-semibold",
+    large: "btn-size-large h-14 text-body-1-normal font-semibold",
+    small: "btn-size-small h-10 text-label-normal font-semibold",
   }[size];
 
   const stateStyles = {

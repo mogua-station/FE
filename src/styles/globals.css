@@ -35,10 +35,10 @@
   }
 
   .btn-size-large {
-    @apply max-w-[343px] gap-[10px] rounded-[16px];
+    @apply max-w-[343px] gap-[10px] rounded-2xl;
   }
 
   .btn-size-small {
-    @apply max-h-[40px] max-w-[109px] gap-[4px] rounded-[6px] p-[10px];
+    @apply max-h-10 max-w-[109px] gap-1 rounded-[6px] p-[10px];
   }
 }

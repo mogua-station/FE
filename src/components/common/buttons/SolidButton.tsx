@@ -10,8 +10,8 @@ export default function SolidButton({
 }: SolidButtonProps) {
   const buttonHeight = {
     primary: {
-      large: "h-[56px] text-body-1-normal font-semibold",
-      small: "h-[40px] text-label-normal font-medium",
+      large: "h-14 text-body-1-normal font-semibold",
+      small: "h-10 text-label-normal font-medium",
     },
     secondary: {
       large: "h-[54px] text-body-2-normal font-semibold",

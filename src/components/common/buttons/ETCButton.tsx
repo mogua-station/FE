@@ -13,7 +13,7 @@ export default function ETCButton({
 
   return (
     <button
-      className={`btn-base h-[44px] max-w-[132px] gap-[10px] rounded-[12px] text-body-2-normal font-semibold text-gray-200 hover:bg-gray-400 ${stateStyles} ${className}`}
+      className={`btn-base max-w- h-11 max-w-[132px] gap-[10px] rounded-xl text-body-2-normal font-semibold text-gray-200 hover:bg-gray-400 ${stateStyles} ${className}`}
       {...props}
     >
       {children}

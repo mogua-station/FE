@@ -7,8 +7,8 @@ export default function IconButton({
   ...props
 }: IconButtonProps) {
   const sizeStyles = {
-    large: "h-[56px] rounded-[14px] bg-gray-900",
-    small: "h-[38px] px-[16px] rounded-[8px] bg-gray-700",
+    large: "h-14 rounded-[14px] bg-gray-900",
+    small: "h-[38px] px-4 rounded-lg bg-gray-700",
   }[size];
 
   return (
