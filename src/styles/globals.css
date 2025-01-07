@@ -44,3 +44,18 @@
     border-radius: 0;
   }
 }
+
+/* 공용 버튼 */
+@layer components {
+  .btn-base {
+    @apply flex w-full items-center justify-center border;
+  }
+
+  .btn-size-large {
+    @apply max-w-[343px] gap-[10px] rounded-2xl;
+  }
+
+  .btn-size-small {
+    @apply max-h-10 max-w-[109px] gap-1 rounded-[6px] p-[10px];
+  }
+}

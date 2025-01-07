@@ -3,6 +3,11 @@
 import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
 import Calendar from "@/components/common/Calendar";
+import ETCButton from "@/components/common/buttons/ETCButton";
+import IconButton from "@/components/common/buttons/IconButton";
+import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
+import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
+import SolidButton from "@/components/common/buttons/SolidButton";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
 
@@ -18,7 +23,121 @@ export default function Home() {
   return (
     <div>
       <h1>møgua project</h1>
+      {/* SVGR */}
       <KakaoIcon className='size-10 text-yellow-400' />
+
+      {/* 버튼 */}
+      <div className='my-4 flex flex-col gap-2 bg-black p-4'>
+        <p className='text-white'>SolidButton - Primary</p>
+        <SolidButton>
+          <div className='size-6 rounded-[6px] border border-white' />
+          large
+          <div className='size-6 rounded-[6px] border border-white' />
+        </SolidButton>
+        <SolidButton>
+          <div className='size-6 rounded-[6px] border border-white' />
+          large
+        </SolidButton>
+        <div className='flex gap-2'>
+          <SolidButton size='small'>
+            <span>small</span>
+          </SolidButton>
+          <SolidButton size='small' state='inactive'>
+            <span>small</span>
+          </SolidButton>
+          <SolidButton size='small' state='activated'>
+            <span>small</span>
+          </SolidButton>
+        </div>
+
+        <p className='mt-2 text-white'>SolidButton - Secondary</p>
+        <SolidButton hierarchy='secondary'>
+          large
+          <div className='size-6 rounded-[6px] border border-white' />
+        </SolidButton>
+        <SolidButton hierarchy='secondary' state='inactive'>
+          large
+        </SolidButton>
+        <SolidButton hierarchy='secondary' state='activated'>
+          large
+        </SolidButton>
+        <div className='flex gap-2'>
+          <SolidButton hierarchy='secondary' size='small'>
+            <span>small</span>
+          </SolidButton>
+          <SolidButton hierarchy='secondary' size='small' state='inactive'>
+            <span>small</span>
+          </SolidButton>
+          <SolidButton hierarchy='secondary' size='small' state='activated'>
+            <span>small</span>
+          </SolidButton>
+        </div>
+
+        <p className='mt-2 text-white'>OutlineButton - Primary</p>
+        <OutlinePrimaryButton>
+          <div className='size-6 rounded-[6px] border border-white' />
+          large
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlinePrimaryButton>
+        <OutlinePrimaryButton>
+          <div className='size-6 rounded-[6px] border border-white' />
+          large
+        </OutlinePrimaryButton>
+        <div className='flex gap-2'>
+          <OutlinePrimaryButton size='small'>
+            <span>small</span>
+          </OutlinePrimaryButton>
+          <OutlinePrimaryButton size='small' state='inactive'>
+            <span>small</span>
+          </OutlinePrimaryButton>
+          <OutlinePrimaryButton size='small' state='activated'>
+            <span>small</span>
+          </OutlinePrimaryButton>
+        </div>
+
+        <p className='mt-2 text-white'>OutlineButton - Secondary</p>
+        <div className='it flex flex-wrap gap-2'>
+          <OutlineSecondaryButton>large</OutlineSecondaryButton>
+          <OutlineSecondaryButton>
+            <div className='size-6 rounded-[6px] border border-white' />
+            large
+          </OutlineSecondaryButton>
+          <OutlineSecondaryButton>
+            large
+            <div className='size-6 rounded-[6px] border border-white' />
+          </OutlineSecondaryButton>
+          <OutlineSecondaryButton>
+            <div className='size-6 rounded-[6px] border border-white' />
+            large
+            <div className='size-6 rounded-[6px] border border-white' />
+          </OutlineSecondaryButton>
+          <OutlineSecondaryButton size='small'>
+            <div className='size-6 rounded-[6px] border border-white' />
+            large
+            <div className='size-6 rounded-[6px] border border-white' />
+          </OutlineSecondaryButton>
+        </div>
+        <p className='mt-2 text-white'>IconButton</p>
+        <IconButton>
+          <div className='size-6 rounded-[6px] border border-white' />
+        </IconButton>
+        <IconButton size='small'>
+          <div className='size-6 rounded-[6px] border border-white' />
+        </IconButton>
+        <p className='mt-2 text-white'>ETCButton</p>
+        <ETCButton>
+          <div className='size-6 rounded-[6px] border border-white' />
+          label
+          <div className='size-6 rounded-[6px] border border-white' />
+        </ETCButton>
+        <ETCButton state='activated'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          label
+          <div className='size-6 rounded-[6px] border border-white' />
+        </ETCButton>
+      </div>
+
+      {/* 타이포그라피 */}
       <h2 className='my-4 text-title-2 font-semibold text-blue-200'>
         Typography
       </h2>
@@ -73,6 +192,7 @@ export default function Home() {
         </li>
       </ul>
 
+      {/* 드롭다운 */}
       <div className='flex justify-center gap-4'>
         <Dropdown
           defaultSelected='Hello, World! 1'
