@@ -1,5 +1,5 @@
 import NavMenuItem from "./NavMenuItem";
-import HeartIcon from "@/assets/images/icons/heart.svg";
+import BookmarkFillIcon from "@/assets/images/icons/bookmark_fill.svg";
 import PlanetIcon from "@/assets/images/icons/planet.svg";
 import UserIcon from "@/assets/images/icons/user.svg";
 
@@ -8,7 +8,7 @@ const userId = 1;
 
 const NAV_ITEMS = [
   { href: "/", icon: <PlanetIcon />, label: "모임 찾기" },
-  { href: "/wishlist", icon: <HeartIcon />, label: "찜한 모임" },
+  { href: "/wishlist", icon: <BookmarkFillIcon />, label: "북마크" },
   { href: `/users/${userId}`, icon: <UserIcon />, label: "마이 페이지" },
 ];
 
