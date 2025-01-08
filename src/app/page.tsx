@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
-import Calendar from "@/components/common/Calendar";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
 import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
 import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import Calendar from "@/components/common/Calendar";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
+import Review from "@/components/common/review/Review";
+import { type ReviewInfo } from "@/types/review";
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState<{
@@ -19,6 +21,35 @@ export default function Home() {
     startDate: null,
     endDate: null,
   });
+
+  const comments: ReviewInfo[] = [
+    {
+      rating: 4,
+      review:
+        "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
+      userid: 1,
+      date: new Date(),
+    },
+    {
+      rating: 2,
+      review:
+        "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
+      userid: 2,
+      userprofile:
+        "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
+      date: new Date(),
+    },
+    {
+      rating: 3,
+      title: "모각코 모임",
+      review: "이 카드는 마이페이지에서의 내가 작성한 리뷰입니다",
+      userid: 3,
+      userprofile:
+        "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
+      date: new Date(),
+      isMyReview: true,
+    },
+  ];
 
   return (
     <div>
@@ -269,6 +300,12 @@ export default function Home() {
         quam vel eligendi. Fugiat, earum voluptas, eos debitis rerum nostrum
         quis, quaerat odit labore distinctio optio?
       </p>
+
+      <div className='flex flex-col gap-2'>
+        {comments.map((review) => {
+          return <Review reviewinfo={review} />;
+        })}
+      </div>
     </div>
   );
 }
