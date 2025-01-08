@@ -17,7 +17,7 @@ export default function OutlineButton({
     secondary: {
       large: "h-14 gap-2 text-body-1-normal font-semibold px-4 rounded-[14px]",
       small:
-        "h-[38px] gap-1 text-body-2-normal font-semibold px-[14px] rounded-lg",
+        "h-[38px] gap-1 text-body-2-normal font-semibold px-3.5 rounded-lg",
     },
   }[variant][size];
 
@@ -34,6 +34,7 @@ export default function OutlineButton({
   return (
     <button
       className={`btn-base ${variantStyles} ${stateStyles} ${className}`}
+      disabled={state === "inactive"}
       {...props}
     >
       {children}
