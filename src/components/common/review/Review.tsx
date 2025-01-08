@@ -8,8 +8,6 @@ import { type ReviewInfoProps } from "@/types/review";
 export default function Review({ reviewinfo }: ReviewInfoProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(reviewinfo);
-
   return (
     <div className='rounded-[12px] bg-gray-900 p-4'>
       <div className='relative'>
