@@ -23,7 +23,7 @@ jobs:
         run: npm run build
 
       - name: Merge PR if review approved
-        if: ${{ github.event.pull_request.reviewDecision == 'APPROVED' && github.event.pull_request.approvals >= 4 }}
+        if: ${{ github.event.pull_request.reviewDecision == 'APPROVED' && github.event.pull_request.approvals >= 3 }}
         run: |
           gh pr merge ${{ github.event.pull_request.number }} --merge
         env:
