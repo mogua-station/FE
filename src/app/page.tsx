@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
-import Calendar from "@/components/common/Calendar";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
 import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
 import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import Calendar from "@/components/common/Calendar";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
 
@@ -21,7 +21,7 @@ export default function Home() {
   });
 
   return (
-    <div>
+    <div className='bg-red-500 tablet:bg-blue-500 desktop:bg-green-500'>
       <h1>møgua project</h1>
       {/* SVGR */}
       <KakaoIcon className='size-10 text-yellow-400' />
@@ -239,6 +239,13 @@ export default function Home() {
           {selectedDate.startDate?.toLocaleDateString()} ~{" "}
           {selectedDate.endDate?.toLocaleDateString()}
         </p>
+      </div>
+
+      {/* 브레이크 포인트 */}
+      <div className='text-center text-white'>
+        <p className='tablet:hidden'>모바일</p>
+        <p className='hidden tablet:block desktop:hidden'>태블릿</p>
+        <p className='hidden desktop:block'>데스크탑</p>
       </div>
 
       {/* lorem */}

@@ -7,6 +7,10 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      tablet: "481px",
+      desktop: "769px",
+    },
     fontSize: {
       "title-1": ["24px", "32px"],
       "title-2": ["22px", "28px"],
