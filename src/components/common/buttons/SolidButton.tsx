@@ -1,14 +1,14 @@
 import { type SolidButtonProps } from "@/types/button";
 
 export default function SolidButton({
-  hierarchy = "primary",
+  variant = "primary",
   size = "large",
   state = "default",
   children,
   className = "",
   ...props
 }: SolidButtonProps) {
-  const hierarchyStyles = {
+  const variantStyles = {
     primary: {
       large:
         "h-14 text-body-1-normal px-[10px] gap-[10px] font-semibold rounded-2xl",
@@ -21,7 +21,7 @@ export default function SolidButton({
       small:
         "h-[38px] rounded-[6px] px-4 gap-1 text-body-2-normal font-semibold",
     },
-  }[hierarchy][size];
+  }[variant][size];
 
   const stateStyles = {
     default: "bg-gray-800 border-gray-800 text-gray-200",
@@ -31,7 +31,7 @@ export default function SolidButton({
 
   return (
     <button
-      className={`btn-base ${hierarchyStyles} ${stateStyles} ${className}`}
+      className={`btn-base ${variantStyles} ${stateStyles} ${className}`}
       disabled={state === "inactive"}
       {...props}
     >

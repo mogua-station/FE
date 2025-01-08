@@ -1,5 +1,6 @@
 import { type ButtonHTMLAttributes } from "react";
 
+type ButtonVariant = "primary" | "secondary";
 type ButtonSize = "large" | "small";
 type ButtonState = "default" | "activated" | "inactive";
 
@@ -8,17 +9,14 @@ interface BaseButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-export interface SolidButtonProps extends BaseButtonProps {
-  hierarchy?: "primary" | "secondary";
+interface BaseVariantButtonProps extends BaseButtonProps {
+  variant?: ButtonVariant;
   size?: ButtonSize;
   state?: ButtonState;
 }
 
-export interface OutlineButtonProps extends BaseButtonProps {
-  hierarchy?: "primary" | "secondary";
-  size?: ButtonSize;
-  state?: ButtonState;
-}
+export type SolidButtonProps = BaseVariantButtonProps;
+export type OutlineButtonProps = BaseVariantButtonProps;
 
 export interface IconButtonProps extends BaseButtonProps {
   size?: ButtonSize;

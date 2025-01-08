@@ -37,23 +37,23 @@ export default function Home() {
         </SolidButton>
 
         <p className='mt-2 text-white'>SolidButton - Secondary</p>
-        <SolidButton hierarchy='secondary'>
+        <SolidButton variant='secondary'>
           large
           <div className='size-6 rounded-[6px] border border-white' />
         </SolidButton>
-        <SolidButton hierarchy='secondary' state='inactive'>
+        <SolidButton variant='secondary' state='inactive'>
           large
         </SolidButton>
-        <SolidButton hierarchy='secondary' state='activated'>
+        <SolidButton variant='secondary' state='activated'>
           large
         </SolidButton>
-        <SolidButton hierarchy='secondary' size='small'>
+        <SolidButton variant='secondary' size='small'>
           <span>small</span>
         </SolidButton>
-        <SolidButton hierarchy='secondary' size='small' state='inactive'>
+        <SolidButton variant='secondary' size='small' state='inactive'>
           <span>small</span>
         </SolidButton>
-        <SolidButton hierarchy='secondary' size='small' state='activated'>
+        <SolidButton variant='secondary' size='small' state='activated'>
           <div className='size-6 rounded-[6px] border border-white' />
           <span>small</span>
           <div className='size-6 rounded-[6px] border border-white' />
@@ -76,27 +76,28 @@ export default function Home() {
         </OutlineButton>
 
         <p className='mt-2 text-white'>OutlineButton - Secondary</p>
-        <OutlineButton className='h-[54px]' hierarchy='secondary'>
+        <OutlineButton className='h-[54px]' variant='secondary'>
           new
         </OutlineButton>
-        <OutlineButton hierarchy='secondary'>
+        <OutlineButton variant='secondary'>
           <div className='size-6 rounded-[6px] border border-white' />
           new
         </OutlineButton>
-        <OutlineButton hierarchy='secondary'>
+        <OutlineButton variant='secondary'>
           new
           <div className='size-6 rounded-[6px] border border-white' />
         </OutlineButton>
-        <OutlineButton hierarchy='secondary'>
-          <div className='size-6 rounded-[6px] border border-white' />
-          new
-          <div className='size-6 rounded-[6px] border border-white' />
-        </OutlineButton>
-        <OutlineButton hierarchy='secondary' size='small'>
+        <OutlineButton variant='secondary'>
           <div className='size-6 rounded-[6px] border border-white' />
           new
           <div className='size-6 rounded-[6px] border border-white' />
         </OutlineButton>
+        <OutlineButton variant='secondary' size='small'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          new
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlineButton>
+
         <p className='mt-2 text-white'>IconButton</p>
         <IconButton>
           <KakaoIcon className='size-6' />
@@ -104,6 +105,7 @@ export default function Home() {
         <IconButton size='small'>
           <KakaoIcon className='size-6' />
         </IconButton>
+
         <p className='mt-2 text-white'>ETCButton</p>
         <ETCButton>
           <div className='size-6 rounded-[6px] border border-white' />
