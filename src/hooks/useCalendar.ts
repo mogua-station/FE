@@ -51,7 +51,7 @@ export function useCalendar({ onDateChange }: UseCalendarProps) {
     }
 
     onDateChange?.({
-      startDate: startDate && endDate ? selectedDate : startDate,
+      startDate: startDate ? startDate : selectedDate,
       endDate:
         startDate && selectedDate > startDate && !endDate ? selectedDate : null,
     });
