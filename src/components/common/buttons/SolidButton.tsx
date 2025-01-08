@@ -10,14 +10,13 @@ export default function SolidButton({
 }: SolidButtonProps) {
   const variantStyles = {
     primary: {
-      large:
-        "h-14 text-body-1-normal px-[10px] gap-[10px] font-semibold rounded-2xl",
+      large: "h-14 text-body-1-normal px-2.5 gap-2.5 font-semibold rounded-2xl",
       small:
-        "h-10 rounded-[6px] px-[10px] py-2 gap-1 text-label-normal font-medium",
+        "h-10 rounded-[6px] px-2.5 py-2 gap-1 text-label-normal font-medium",
     },
     secondary: {
       large:
-        "h-[54px] text-body-2-normal px-4 gap-[10px] font-semibold rounded-2xl",
+        "h-[54px] text-body-2-normal px-4 gap-2.5 font-semibold rounded-2xl",
       small:
         "h-[38px] rounded-[6px] px-4 gap-1 text-body-2-normal font-semibold",
     },
