@@ -21,4 +21,4 @@
 - 관련 이슈 번호 연결해주세요 e.g.`#1`
 ### 리뷰어 멘션하기
 - 본인 username 제외하고 PR 날려주세요
-@joshuayeyo @ITHPARK @wjsdncl @Stilllee @seoyeon1123
+@joshuayeyo @ITHPARK @wjsdncl @Stilllee
