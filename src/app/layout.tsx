@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang='ko-KR' className={pretendard.className}>
       <body>
         <Header />
-        {children}
+        <main className='pb-[62px] pt-[56px]'>{children}</main>
       </body>
     </html>
   );
