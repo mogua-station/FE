@@ -1,4 +1,4 @@
-export type CardProps = {
+export interface CardProps {
   id: number;
   status: string;
   itemType: string;
@@ -9,9 +9,25 @@ export type CardProps = {
   eventPeriod: { startDate: Date; endDate: Date };
   image?: string;
   isReview?: boolean; //리뷰 작성 가능한 상태?
-};
+}
 
-export type BadgeProps = {
+export interface CardInfo {
+  card: CardProps;
+}
+
+export interface BadgeProps {
   status: string;
   recruitmentDate: Date;
-};
+}
+
+export interface CardContentProps {
+  content: Pick<
+    CardProps,
+    | "title"
+    | "location"
+    | "participants"
+    | "recruitmentPeriod"
+    | "eventPeriod"
+    | "image"
+  >;
+}

@@ -1,12 +1,13 @@
 "use client";
 
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
-import Card from "@/components/common/Card";
+import Card from "@/components/common/card/Card";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
+import { type CardProps } from "@/types/card";
 
 export default function Home() {
-  const cardList = [
+  const cardList: CardProps[] = [
     {
       id: 1,
       status: "모집중",
@@ -176,20 +177,7 @@ export default function Home() {
       </div>
       <div className='mt-10 px-5'>
         {cardList.map((item) => {
-          return (
-            <Card
-              id={item.id}
-              status={item.status}
-              itemType={item.itemType}
-              title={item.title}
-              location={item.location}
-              participants={item.participants}
-              recruitmentPeriod={item.recruitmentPeriod}
-              eventPeriod={item.eventPeriod}
-              image={item.image}
-              isReview={item.isReview}
-            />
-          );
+          return <Card card={item} />;
         })}
       </div>
     </div>
