@@ -4,7 +4,13 @@ import Modal from "@/components/common/modals/Modal";
 export default function useModal() {
   const openModal = (children: React.ReactNode, title?: string) => {
     overlay.open((props) => (
-      <Modal children={children} title={title} {...props} />
+      <Modal
+        children={children}
+        title={title}
+        close={props.close}
+        isOpen={props.isOpen}
+        unmount={props.unmount}
+      />
     ));
   };
 
