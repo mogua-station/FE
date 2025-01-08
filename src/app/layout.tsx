@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang='ko-KR' className={pretendard.className}>
       <body>
-        {children}
+        <main className='pb-[62px] desktop:pb-0'>{children}</main>
         <NavBar />
       </body>
     </html>
