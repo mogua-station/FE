@@ -30,7 +30,7 @@ export default function Header() {
               </li>
               <li>
                 <Link
-                  href='/whishlist'
+                  href='/wishlist'
                   className='body-1-normal text-gray-300 hover:text-gray-100'
                 >
                   북마크
