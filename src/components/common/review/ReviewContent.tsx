@@ -8,9 +8,9 @@ export default function Content({ review, isOpen }: ContentProps) {
       <div className='flex'>
         {Array.from({ length: 5 }, (_, i) =>
           i + 1 <= review.rating ? (
-            <Rating className='size-6 text-orange-200' />
+            <Rating key={i} className='size-6 text-orange-200' />
           ) : (
-            <Rating className='size-6 text-gray-600' />
+            <Rating key={i} className='size-6 text-gray-600' />
           ),
         )}
       </div>
@@ -29,7 +29,7 @@ export default function Content({ review, isOpen }: ContentProps) {
       )}
 
       <p
-        className={`body-2-reading mt-4 break-keep text-gray-200 ${isOpen ? "" : "comment-overflow"}`}
+        className={`body-2-reading mt-4 break-keep text-gray-200 ${isOpen ? "" : "comment-overflow comment-overflow-webkit"}`}
       >
         {review.review}
       </p>
@@ -49,7 +49,7 @@ export default function Content({ review, isOpen }: ContentProps) {
               </div>
             </div>
             <span className='caption-stroke relative inline-block pr-2 text-caption-normal font-regular text-gray-400'>
-              {"모과"}
+              {review.username}
             </span>
           </Link>
           <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>

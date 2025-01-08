@@ -3,9 +3,12 @@ export interface ReviewInfo {
   title?: string;
   review: string;
   userid: number;
+  username: string;
   userprofile?: string;
   date: Date;
   isMyReview?: boolean;
+  eventId?: number;
+  eventType?: string;
 }
 
 export interface ReviewInfoProps {
