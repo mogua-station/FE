@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
-import Calendar from "@/components/common/Calendar";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
 import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
 import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import Calendar from "@/components/common/Calendar";
 import Dropdown from "@/components/common/Dropdown";
 import Popover from "@/components/common/Popover";
 
@@ -229,7 +229,7 @@ export default function Home() {
       </div>
 
       {/* calendar */}
-      <div className='mx-auto h-max w-[368px] bg-gray-900 p-4'>
+      <div className='mx-auto w-fit bg-gray-900'>
         <Calendar onDateChange={(date) => setSelectedDate(date)} />
       </div>
 
