@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import localFont from "next/font/local";
+import Providers from "./providers/Providers";
 import NavBar from "@/components/common/nav-bar/NavBar";
 
 const pretendard = localFont({
@@ -16,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang='ko-KR' className={pretendard.className}>
       <body>
-        <main className='pb-[62px] desktop:pb-0'>{children}</main>
-        <NavBar />
+        <Providers>
+          <main className='pb-[62px] desktop:pb-0'>{children}</main>
+          <NavBar />
+        </Providers>
       </body>
     </html>
   );
