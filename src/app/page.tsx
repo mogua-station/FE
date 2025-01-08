@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
@@ -9,16 +8,29 @@ import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondary
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Calendar from "@/components/common/Calendar";
 import Dropdown from "@/components/common/Dropdown";
+import {
+  CALENDAR_MODAL_TITLE,
+  CalendarModal,
+} from "@/components/common/modals/CalendarModal";
+import FilterModal from "@/components/common/modals/FilterModal";
 import Popover from "@/components/common/Popover";
+import useModal from "@/hooks/useModal";
+import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
 
 export default function Home() {
-  const [selectedDate, setSelectedDate] = useState<{
-    startDate: Date | null;
-    endDate: Date | null;
-  }>({
-    startDate: null,
-    endDate: null,
-  });
+  const { selectedDates, setSelectedDates } = useSelectedDateRange();
+  const { openModal } = useModal();
+
+  const handleOpenModal = () => {
+    openModal(
+      <CalendarModal onDateChange={(date) => setSelectedDates(date)} />,
+      CALENDAR_MODAL_TITLE,
+    );
+  };
+
+  const handleOpenFilterModal = () => {
+    openModal(<FilterModal onDateChange={(date) => setSelectedDates(date)} />);
+  };
 
   return (
     <div>
@@ -230,14 +242,14 @@ export default function Home() {
 
       {/* calendar */}
       <div className='mx-auto w-fit bg-gray-900'>
-        <Calendar onDateChange={(date) => setSelectedDate(date)} />
+        <Calendar onDateChange={(date) => setSelectedDates(date)} />
       </div>
 
       <div className='flex flex-col items-center gap-4'>
         <h1>Selected Date</h1>
         <p>
-          {selectedDate.startDate?.toLocaleDateString()} ~{" "}
-          {selectedDate.endDate?.toLocaleDateString()}
+          {selectedDates.startDate?.toLocaleDateString()} ~{" "}
+          {selectedDates.endDate?.toLocaleDateString()}
         </p>
       </div>
 
@@ -247,6 +259,21 @@ export default function Home() {
         <p className='hidden tablet:block desktop:hidden'>태블릿</p>
         <p className='hidden desktop:block'>데스크탑</p>
       </div>
+
+      {/* modal */}
+      <button
+        onClick={handleOpenModal}
+        className='h-24 w-40 bg-gray-700 text-center text-gray-100'
+      >
+        Open Modal
+      </button>
+
+      <button
+        onClick={handleOpenFilterModal}
+        className='h-24 w-40 bg-gray-700 text-center text-gray-100'
+      >
+        Open Filter Modal
+      </button>
 
       {/* lorem */}
       <p className='text-body-1-normal'>
