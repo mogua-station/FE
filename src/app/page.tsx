@@ -241,6 +241,13 @@ export default function Home() {
         </p>
       </div>
 
+      {/* 브레이크 포인트 */}
+      <div className='bg-gray-200 text-center'>
+        <p className='tablet:hidden'>모바일</p>
+        <p className='hidden tablet:block desktop:hidden'>태블릿</p>
+        <p className='hidden desktop:block'>데스크탑</p>
+      </div>
+
       {/* lorem */}
       <p className='text-body-1-normal'>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
