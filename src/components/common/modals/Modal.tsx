@@ -9,7 +9,7 @@ export default function Modal({
   children,
   ...props
 }: OverlayController & { title?: string; children: React.ReactNode }) {
-  const { close, unmount, isOpen, ...rest } = props;
+  const { close, isOpen, ...rest } = props;
 
   useEffect(() => {
     if (isOpen) {
@@ -19,17 +19,12 @@ export default function Modal({
     }
   }, [isOpen]);
 
-  const onClose = () => {
-    close();
-    unmount();
-  };
-
   useEffect(() => {
     if (!isOpen) return;
 
     const preventGoBack = () => {
       history.go(1);
-      onClose();
+      close();
     };
 
     history.pushState(null, "", location.href);
@@ -39,7 +34,7 @@ export default function Modal({
   }, [isOpen, close]);
 
   const handleOverlayClick = () => {
-    onClose();
+    close();
   };
 
   if (!isOpen) return null;
