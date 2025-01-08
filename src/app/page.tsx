@@ -21,7 +21,7 @@ export default function Home() {
   });
 
   return (
-    <div className='bg-red-500 tablet:bg-blue-500 desktop:bg-green-500'>
+    <div>
       <h1>møgua project</h1>
       {/* SVGR */}
       <KakaoIcon className='size-10 text-yellow-400' />
@@ -242,7 +242,7 @@ export default function Home() {
       </div>
 
       {/* 브레이크 포인트 */}
-      <div className='text-center text-white'>
+      <div className='bg-gray-200 text-center'>
         <p className='tablet:hidden'>모바일</p>
         <p className='hidden tablet:block desktop:hidden'>태블릿</p>
         <p className='hidden desktop:block'>데스크탑</p>
