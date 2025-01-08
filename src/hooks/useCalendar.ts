@@ -111,6 +111,12 @@ export function useCalendar({ onDateChange }: UseCalendarProps) {
     return endDate && selectedDate.toDateString() === endDate.toDateString();
   };
 
+  const onDatesReset = () => {
+    setStartDate(null);
+    setEndDate(null);
+    onDateChange?.({ startDate: null, endDate: null });
+  };
+
   return {
     year,
     month,
@@ -126,6 +132,7 @@ export function useCalendar({ onDateChange }: UseCalendarProps) {
     isInRange,
     isRangeStart,
     isRangeEnd,
+    onDatesReset,
   };
 }
 
