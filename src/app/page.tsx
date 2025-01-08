@@ -117,6 +117,12 @@ export default function Home() {
           label
           <div className='size-6 rounded-[6px] border border-white' />
         </ETCButton>
+
+        <p className='mt-2 text-white'>스페샬🥲</p>
+        <SolidButton mode='special'>label</SolidButton>
+        <IconButton mode='special'>
+          <KakaoIcon className='size-6' />
+        </IconButton>
       </div>
 
       {/* 타이포그라피 */}

@@ -4,6 +4,7 @@ export default function SolidButton({
   variant = "primary",
   size = "large",
   state = "default",
+  mode = "default",
   children,
   className = "",
   ...props
@@ -23,7 +24,10 @@ export default function SolidButton({
   }[variant][size];
 
   const stateStyles = {
-    default: "bg-gray-800 border-gray-800 text-gray-200",
+    default:
+      mode === "special"
+        ? "bg-gray-700 border-gray-700 text-gray-200"
+        : "bg-gray-800 border-gray-800 text-gray-200",
     activated: "bg-orange-300 border-orange-300 text-gray-50",
     inactive: "bg-gray-800 border-gray-800 text-gray-500 cursor-not-allowed",
   }[state];
