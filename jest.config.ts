@@ -1,5 +1,16 @@
-/// <reference types="next" />
-/// <reference types="next/image-types/global" />
+import type { Config } from "@jest/types";
+import nextJest from "next/jest";
 
-// NOTE: This file should not be edited
-// see https://nextjs.org/docs/app/building-your-application/configuring/typescript for more information.
+const createJestConfig = nextJest({
+  dir: "./",
+});
+
+const config: Config.InitialOptions = {
+  testEnvironment: "jest-environment-jsdom",
+  //   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
+};
+
+export default createJestConfig(config);
