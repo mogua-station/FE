@@ -26,23 +26,6 @@
   .filter-inactive {
     @apply border border-gray-700 bg-gray-900 text-gray-500;
   }
-
-  .custom-calendar {
-    width: 100%;
-    border: none;
-  }
-
-  .custom-calendar .react-calendar__tile--active,
-  .custom-calendar .react-calendar__tile--hover {
-    background-color: #ffa726 !important;
-    color: white !important;
-    border-radius: 50%;
-  }
-
-  .custom-calendar .selected-range {
-    background-color: rgba(255, 167, 38, 0.5) !important;
-    border-radius: 0;
-  }
 }
 
 /* 공용 버튼 */
