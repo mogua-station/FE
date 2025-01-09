@@ -1,6 +1,5 @@
-import { useState } from "react";
 import ArrowIcon from "@/assets/images/icons/arrow_left.svg";
-import generateCalendar from "@/utils/generateCalendar";
+import { useCalendar } from "@/hooks/useCalendar";
 
 const WEEK = {
   style: "flex flex-1 items-center justify-center",
@@ -28,52 +27,20 @@ interface CalendarProps {
 }
 
 export default function Calendar({ onDateChange }: CalendarProps) {
-  const today = new Date();
-  const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth());
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-
-  const { prevDates, currentDates, nextDates } = generateCalendar(year, month);
-
-  const handlePrevMonth = () => {
-    setMonth((prev) => (prev === 0 ? 11 : prev - 1));
-    if (month === 0) setYear((prev) => prev - 1);
-  };
-
-  const handleNextMonth = () => {
-    setMonth((prev) => (prev === 11 ? 0 : prev + 1));
-    if (month === 11) setYear((prev) => prev + 1);
-  };
-
-  const handleDateClick = ({
-    date,
-    state = "current",
-  }: {
-    date: number;
-    state?: "prev" | "next" | "current";
-  }) => {
-    let selectedDate = new Date(year, month, date);
-    if (state === "prev") selectedDate = new Date(year, month - 1, date);
-    if (state === "next") selectedDate = new Date(year, month + 1, date);
-
-    if (!startDate || (startDate && endDate)) {
-      setStartDate(selectedDate);
-      setEndDate(null);
-    } else {
-      if (selectedDate > startDate) {
-        setEndDate(selectedDate);
-      } else {
-        setStartDate(selectedDate);
-        setEndDate(null);
-      }
-    }
-
-    onDateChange?.({
-      startDate: startDate,
-      endDate: startDate && selectedDate > startDate ? selectedDate : null,
-    });
-  };
+  const {
+    year,
+    month,
+    prevDates,
+    currentDates,
+    nextDates,
+    handlePrevMonth,
+    handleNextMonth,
+    handleDateClick,
+    isSelected,
+    isInRange,
+    isRangeStart,
+    isRangeEnd,
+  } = useCalendar({ onDateChange });
 
   const getDateWrapperStyles = (
     date: number,
@@ -83,9 +50,14 @@ export default function Calendar({ onDateChange }: CalendarProps) {
     const isPrevNext = state === "prev" || state === "next";
     const base = `${DATE_STYLE.base} ${isPrevNext ? DATE_STYLE.prevNext : ""}`;
 
+    const isLastIndex =
+      (state === "current" && index === currentDates.length - 1) ||
+      (state === "next" && index === nextDates.length - 1);
+
     const rangeStart =
       isRangeStart({ date, state }) &&
-      (!isRangeEnd({ date, state }) || (prevDates.length + index) % 7 === 0)
+      (!isRangeEnd({ date, state }) || (prevDates.length + index) % 7 === 0) &&
+      !isLastIndex
         ? DATE_STYLE.rangeStart
         : "";
     const rangeEnd =
@@ -131,78 +103,17 @@ export default function Calendar({ onDateChange }: CalendarProps) {
     return [base, selected, inRange].filter(Boolean).join(" ");
   };
 
-  const isSelected = ({
-    date,
-    state = "current",
-  }: {
-    date: number;
-    state?: "prev" | "next" | "current";
-  }) => {
-    let selectedDate = new Date(year, month, date);
-    if (state === "prev") selectedDate = new Date(year, month - 1, date);
-    if (state === "next") selectedDate = new Date(year, month + 1, date);
-    return (
-      (startDate && selectedDate.toDateString() === startDate.toDateString()) ||
-      (endDate && selectedDate.toDateString() === endDate.toDateString())
-    );
-  };
-
-  const isInRange = ({
-    date,
-    state = "current",
-  }: {
-    date: number;
-    state?: "prev" | "next" | "current";
-  }) => {
-    let selectedDate = new Date(year, month, date);
-    if (state === "prev") selectedDate = new Date(year, month - 1, date);
-    if (state === "next") selectedDate = new Date(year, month + 1, date);
-    return (
-      startDate && endDate && selectedDate > startDate && selectedDate < endDate
-    );
-  };
-
-  const isRangeStart = ({
-    date,
-    state = "current",
-  }: {
-    date: number;
-    state?: "prev" | "next" | "current";
-  }) => {
-    let selectedDate = new Date(year, month, date);
-    if (state === "prev") selectedDate = new Date(year, month - 1, date);
-    if (state === "next") selectedDate = new Date(year, month + 1, date);
-    return (
-      startDate &&
-      endDate &&
-      selectedDate.toDateString() === startDate.toDateString()
-    );
-  };
-
-  const isRangeEnd = ({
-    date,
-    state = "current",
-  }: {
-    date: number;
-    state?: "prev" | "next" | "current";
-  }) => {
-    let selectedDate = new Date(year, month, date);
-    if (state === "prev") selectedDate = new Date(year, month - 1, date);
-    if (state === "next") selectedDate = new Date(year, month + 1, date);
-    return endDate && selectedDate.toDateString() === endDate.toDateString();
-  };
-
   return (
-    <div className='flex flex-col items-center gap-2 font-medium'>
+    <div className='flex w-[23rem] flex-col items-center gap-2 p-4 font-medium'>
       <div className='flex w-full items-center justify-between text-gray-100'>
         <button className='size-6' onClick={handlePrevMonth}>
-          <ArrowIcon className='size-full text-gray-300' />
+          <ArrowIcon className='size-full text-gray-100 disabled:text-gray-300' />
         </button>
         <div className='text-body-1-normal'>
           {year}년 {month + 1}월
         </div>
         <button className='size-6' onClick={handleNextMonth}>
-          <ArrowIcon className='size-full rotate-180 text-gray-300' />
+          <ArrowIcon className='size-full rotate-180 text-gray-100 disabled:text-gray-300' />
         </button>
       </div>
 
