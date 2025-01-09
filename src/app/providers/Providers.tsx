@@ -8,11 +8,11 @@ const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <OverlayProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <OverlayProvider>
         {children}
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </OverlayProvider>
+      </OverlayProvider>
+    </QueryClientProvider>
   );
 }

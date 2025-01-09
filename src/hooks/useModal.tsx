@@ -1,15 +1,16 @@
 import { overlay } from "overlay-kit";
 import Modal from "@/components/common/modals/Modal";
+import { type ModalInterface } from "@/types/overlay.type";
 
 export default function useModal() {
-  const openModal = (children: React.ReactNode, title?: string) => {
+  const openModal = ({ title, children, isDark }: ModalInterface) => {
     overlay.open((props) => (
       <Modal
-        children={children}
         title={title}
+        children={children}
+        isDark={isDark}
         close={props.close}
         isOpen={props.isOpen}
-        unmount={props.unmount}
       />
     ));
   };

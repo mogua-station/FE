@@ -22,9 +22,9 @@ export default function FilterModal({
   const renderFilter = () => {
     switch (filter) {
       case "지역":
-        return <div>지역</div>;
+        return <div className='w-[23.4375rem]'>지역</div>;
       case "상태":
-        return <div>상태</div>;
+        return <div className='w-[23.4375rem]'>상태</div>;
       case "날짜":
         return <CalendarModal onDateChange={onDateChange} />;
     }

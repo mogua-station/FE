@@ -1,5 +1,10 @@
 export type OverlayController = {
   isOpen: boolean;
   close: () => void;
-  unmount: () => void;
+};
+
+export type ModalInterface = {
+  title?: string;
+  children: React.ReactNode;
+  isDark?: boolean;
 };

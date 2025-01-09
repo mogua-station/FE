@@ -22,14 +22,19 @@ export default function Home() {
   const { openModal } = useModal();
 
   const handleOpenModal = () => {
-    openModal(
-      <CalendarModal onDateChange={(date) => setSelectedDates(date)} />,
-      CALENDAR_MODAL_TITLE,
-    );
+    openModal({
+      title: CALENDAR_MODAL_TITLE,
+      children: (
+        <CalendarModal onDateChange={(date) => setSelectedDates(date)} />
+      ),
+      isDark: false,
+    });
   };
 
   const handleOpenFilterModal = () => {
-    openModal(<FilterModal onDateChange={(date) => setSelectedDates(date)} />);
+    openModal({
+      children: <FilterModal onDateChange={(date) => setSelectedDates(date)} />,
+    });
   };
 
   return (
