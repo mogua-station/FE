@@ -17,12 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko-KR' className={pretendard.className}>
-      <body>
-        <Providers>
-          <Header />
-          <main className='pb-[62px] pt-[56px] desktop:pb-0'>{children}</main>;
-          <NavBar />
-        </Providers>
+      <body className='flex min-h-[100dvh] flex-col'>
+        <Header />
+        <main className='flex flex-1 flex-col pb-[62px] pt-[56px] desktop:pb-0'>
+          {children}
+        </main>
+        <NavBar />
       </body>
     </html>
   );
