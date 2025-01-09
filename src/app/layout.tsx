@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import localFont from "next/font/local";
+import Providers from "./providers/Providers";
 import Header from "@/components/common/Header";
 import NavBar from "@/components/common/nav-bar/NavBar";
 
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang='ko-KR' className={pretendard.className}>
       <body>
-        <Header />
-          <main className='desktop:pb-0 pb-[62px] pt-[56px]'>{children}</main>;
-        <NavBar />
+        <Providers>
+          <Header />
+          <main className='pb-[62px] pt-[56px] desktop:pb-0'>{children}</main>;
+          <NavBar />
+        </Providers>
       </body>
     </html>
   );
