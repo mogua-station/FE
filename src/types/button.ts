@@ -22,6 +22,7 @@ export type OutlineButtonProps = BaseVariantButtonProps;
 
 export interface IconButtonProps extends BaseButtonProps {
   size?: ButtonSize;
+  variant?: ButtonVariant;
   mode?: ButtonMode;
 }
 

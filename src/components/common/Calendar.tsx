@@ -24,9 +24,13 @@ interface CalendarProps {
     startDate: Date | null;
     endDate: Date | null;
   }) => void;
+  exposeOnDatesReset?: (fn: () => void) => void; // 추가
 }
 
-export default function Calendar({ onDateChange }: CalendarProps) {
+export default function Calendar({
+  onDateChange,
+  exposeOnDatesReset,
+}: CalendarProps) {
   const {
     year,
     month,
@@ -40,7 +44,12 @@ export default function Calendar({ onDateChange }: CalendarProps) {
     isInRange,
     isRangeStart,
     isRangeEnd,
+    onDatesReset,
   } = useCalendar({ onDateChange });
+
+  if (exposeOnDatesReset) {
+    exposeOnDatesReset(onDatesReset);
+  }
 
   const getDateWrapperStyles = (
     date: number,
@@ -126,7 +135,7 @@ export default function Calendar({ onDateChange }: CalendarProps) {
           ))}
         </div>
 
-        <div className='grid size-full h-auto grid-cols-7 text-body-1-normal'>
+        <div className='grid size-full h-auto grid-cols-7 grid-rows-6 text-body-1-normal'>
           {prevDates.map((date, index) => (
             <div
               key={`prev-${date}`}
