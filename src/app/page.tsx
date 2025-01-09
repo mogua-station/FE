@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
+import Card from "@/components/common/card/Card";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
-import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
-import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
+import OutlineButton from "@/components/common/buttons/OutlineButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import Calendar from "@/components/common/Calendar";
 import Dropdown from "@/components/common/Dropdown";
 import CommonImageInput from "@/components/common/inputs/ImageUpload";
 import CommonTextInput from "@/components/common/inputs/TextInput";
@@ -13,6 +15,10 @@ import Popover from "@/components/common/Popover";
 import { usePostImage } from "@/hooks/inputs/images/usePostImage";
 import { useFormValidation } from "@/hooks/inputs/useFormValidation";
 import { validationRules } from "@/hooks/inputs/validationRules";
+import Review from "@/components/common/review/Review";
+import { type ReviewInfo } from "@/types/review";
+import { type CardProps } from "@/types/card";
+
 
 export default function Home() {
   const { postImage } = usePostImage(); // uploadError, isUploading 상태는 각자 시안에 맞게 사용하시면 됩니다.
@@ -31,6 +37,124 @@ export default function Home() {
     validationRules,
     ["email", "password", "confirmPassword"],
   );
+
+  const cardList: CardProps[] = [
+    {
+      id: 1,
+      status: "모집중",
+      itemType: "study",
+      title: "모각각코",
+      location: "집",
+      participants: 10,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-07"),
+        endDate: new Date("2025-01-20"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-25"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
+    },
+    {
+      id: 2,
+      status: "모집중",
+      itemType: "study",
+      title: "모집집코",
+      location: "집",
+      participants: 8,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-01-10"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-25"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+    },
+    {
+      id: 3,
+      status: "진행중",
+      itemType: "study",
+      title: "코딩공부",
+      location: "집",
+      participants: 8,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-01-05"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-07"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+    },
+    {
+      id: 4,
+      status: "종료",
+      itemType: "tutoring",
+      title: "게임코칭",
+      location: "pc방",
+      participants: 5,
+      recruitmentPeriod: {
+        startDate: new Date("2025-01-01"),
+        endDate: new Date("2025-01-05"),
+      },
+      eventPeriod: {
+        startDate: new Date("2025-01-07"),
+        endDate: new Date("2025-02-05"),
+      },
+      image:
+        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+      isReview: true,
+    },
+  ];
+  const [selectedDate, setSelectedDate] = useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: null,
+    endDate: null,
+  });
+
+  const comments: ReviewInfo[] = [
+    {
+      rating: 4,
+      review:
+        "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
+      userid: 1,
+      username: "모과",
+      date: new Date(),
+    },
+    {
+      rating: 2,
+      review:
+        "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
+      userid: 2,
+      username: "목목과",
+      userprofile:
+        "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
+      date: new Date(),
+    },
+    {
+      rating: 3,
+      title: "모각코 모임",
+      review:
+        "이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다",
+      userid: 3,
+      username: "모곽",
+      userprofile:
+        "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
+      date: new Date(),
+      isMyReview: true,
+      eventId: 14,
+      eventType: "tutoring",
+    },
+  ];
 
   return (
     <div>
@@ -101,96 +225,89 @@ export default function Home() {
           large
           <div className='size-6 rounded-[6px] border border-white' />
         </SolidButton>
-        <SolidButton>
+        <SolidButton>large</SolidButton>
+
+        <SolidButton size='small'>
           <div className='size-6 rounded-[6px] border border-white' />
-          large
+          <span>small</span>
         </SolidButton>
-        <div className='flex gap-2'>
-          <SolidButton size='small'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton size='small' state='inactive'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton size='small' state='activated'>
-            <span>small</span>
-          </SolidButton>
-        </div>
+        <SolidButton size='small' state='inactive'>
+          <span>small</span>
+        </SolidButton>
+        <SolidButton size='small' state='activated'>
+          <span>small</span>
+        </SolidButton>
 
         <p className='mt-2 text-white'>SolidButton - Secondary</p>
-        <SolidButton hierarchy='secondary'>
+        <SolidButton variant='secondary'>
           large
           <div className='size-6 rounded-[6px] border border-white' />
         </SolidButton>
-        <SolidButton hierarchy='secondary' state='inactive'>
+        <SolidButton variant='secondary' state='inactive'>
           large
         </SolidButton>
-        <SolidButton hierarchy='secondary' state='activated'>
+        <SolidButton variant='secondary' state='activated'>
           large
         </SolidButton>
-        <div className='flex gap-2'>
-          <SolidButton hierarchy='secondary' size='small'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton hierarchy='secondary' size='small' state='inactive'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton hierarchy='secondary' size='small' state='activated'>
-            <span>small</span>
-          </SolidButton>
-        </div>
+        <SolidButton variant='secondary' size='small'>
+          <span>small</span>
+        </SolidButton>
+        <SolidButton variant='secondary' size='small' state='inactive'>
+          <span>small</span>
+        </SolidButton>
+        <SolidButton variant='secondary' size='small' state='activated'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          <span>small</span>
+          <div className='size-6 rounded-[6px] border border-white' />
+        </SolidButton>
 
         <p className='mt-2 text-white'>OutlineButton - Primary</p>
-        <OutlinePrimaryButton>
+        <OutlineButton state='activated'>large</OutlineButton>
+        <OutlineButton>
           <div className='size-6 rounded-[6px] border border-white' />
           large
+        </OutlineButton>
+        <OutlineButton size='small'>small</OutlineButton>
+        <OutlineButton size='small' state='inactive'>
+          small
+        </OutlineButton>
+        <OutlineButton size='small' state='activated'>
           <div className='size-6 rounded-[6px] border border-white' />
-        </OutlinePrimaryButton>
-        <OutlinePrimaryButton>
+          small
           <div className='size-6 rounded-[6px] border border-white' />
-          large
-        </OutlinePrimaryButton>
-        <div className='flex gap-2'>
-          <OutlinePrimaryButton size='small'>
-            <span>small</span>
-          </OutlinePrimaryButton>
-          <OutlinePrimaryButton size='small' state='inactive'>
-            <span>small</span>
-          </OutlinePrimaryButton>
-          <OutlinePrimaryButton size='small' state='activated'>
-            <span>small</span>
-          </OutlinePrimaryButton>
-        </div>
+        </OutlineButton>
 
         <p className='mt-2 text-white'>OutlineButton - Secondary</p>
-        <div className='it flex flex-wrap gap-2'>
-          <OutlineSecondaryButton>large</OutlineSecondaryButton>
-          <OutlineSecondaryButton>
-            <div className='size-6 rounded-[6px] border border-white' />
-            large
-          </OutlineSecondaryButton>
-          <OutlineSecondaryButton>
-            large
-            <div className='size-6 rounded-[6px] border border-white' />
-          </OutlineSecondaryButton>
-          <OutlineSecondaryButton>
-            <div className='size-6 rounded-[6px] border border-white' />
-            large
-            <div className='size-6 rounded-[6px] border border-white' />
-          </OutlineSecondaryButton>
-          <OutlineSecondaryButton size='small'>
-            <div className='size-6 rounded-[6px] border border-white' />
-            large
-            <div className='size-6 rounded-[6px] border border-white' />
-          </OutlineSecondaryButton>
-        </div>
+        <OutlineButton className='h-[54px]' variant='secondary'>
+          new
+        </OutlineButton>
+        <OutlineButton variant='secondary'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          new
+        </OutlineButton>
+        <OutlineButton variant='secondary'>
+          new
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlineButton>
+        <OutlineButton variant='secondary'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          new
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlineButton>
+        <OutlineButton variant='secondary' size='small'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          new
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlineButton>
+
         <p className='mt-2 text-white'>IconButton</p>
         <IconButton>
-          <div className='size-6 rounded-[6px] border border-white' />
+          <KakaoIcon className='size-6' />
         </IconButton>
         <IconButton size='small'>
-          <div className='size-6 rounded-[6px] border border-white' />
+          <KakaoIcon className='size-6' />
         </IconButton>
+
         <p className='mt-2 text-white'>ETCButton</p>
         <ETCButton>
           <div className='size-6 rounded-[6px] border border-white' />
@@ -202,6 +319,12 @@ export default function Home() {
           label
           <div className='size-6 rounded-[6px] border border-white' />
         </ETCButton>
+
+        <p className='mt-2 text-white'>스페샬🥲</p>
+        <SolidButton mode='special'>label</SolidButton>
+        <IconButton mode='special'>
+          <KakaoIcon className='size-6' />
+        </IconButton>
       </div>
 
       {/* 타이포그라피 */}
@@ -294,6 +417,32 @@ export default function Home() {
           <div>버튼</div>
         </Popover>
       </div>
+      <div className='mt-10 px-5'>
+        {cardList.map((item) => {
+          return <Card card={item} />;
+        })}
+      </div>
+
+      {/* calendar */}
+      <div className='mx-auto w-fit bg-gray-900'>
+        <Calendar onDateChange={(date) => setSelectedDate(date)} />
+      </div>
+
+      <div className='flex flex-col items-center gap-4'>
+        <h1>Selected Date</h1>
+        <p>
+          {selectedDate.startDate?.toLocaleDateString()} ~{" "}
+          {selectedDate.endDate?.toLocaleDateString()}
+        </p>
+      </div>
+
+      {/* 브레이크 포인트 */}
+      <div className='bg-gray-200 text-center'>
+        <p className='tablet:hidden'>모바일</p>
+        <p className='hidden tablet:block desktop:hidden'>태블릿</p>
+        <p className='hidden desktop:block'>데스크탑</p>
+      </div>
+
       {/* lorem */}
       <p className='text-body-1-normal'>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
@@ -322,6 +471,12 @@ export default function Home() {
         quam vel eligendi. Fugiat, earum voluptas, eos debitis rerum nostrum
         quis, quaerat odit labore distinctio optio?
       </p>
+
+      <div className='flex flex-col gap-2'>
+        {comments.map((review) => {
+          return <Review reviewinfo={review} />;
+        })}
+      </div>
     </div>
   );
 }
