@@ -16,9 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko-KR' className={pretendard.className}>
-      <body>
+      <body className='flex min-h-[100dvh] flex-col'>
         <Header />
-          <main className='desktop:pb-0 pb-[62px] pt-[56px]'>{children}</main>;
+        <main className='flex flex-1 flex-col pb-[62px] pt-[56px] desktop:pb-0'>
+          {children}
+        </main>
         <NavBar />
       </body>
     </html>
