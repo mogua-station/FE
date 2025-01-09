@@ -1,26 +1,26 @@
 import { useState } from "react";
+import { useIndexedDB } from "./useIndexedDB";
 
 export const usePostImage = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-
+  const { loadImage } = useIndexedDB();
   const postImage = async (endpoint: string) => {
-    // 로컬 스토리지에 저장된 이미지 URL 가져오기
-    // 클라이언트 사이드에서만 localStorage 접근하도록 설정
-    const imageUrl =
-      typeof window !== "undefined"
-        ? localStorage.getItem("uploadedImage")
-        : null;
-    if (!imageUrl) {
+    const storedImageFile = await loadImage();
+    if (!storedImageFile) {
+      setUploadError("이미지가 존재하지 않습니다.");
       return;
     }
     setIsUploading(true);
     setUploadError(null);
+
+    const formData = new FormData();
+    formData.append("file", storedImageFile);
     // 이미지 포스트 요청
     try {
       const res = await fetch(endpoint, {
         method: "POST",
-        body: JSON.stringify({ imageUrl }),
+        body: formData,
         headers: {
           "Content-Type": "application/json",
         },

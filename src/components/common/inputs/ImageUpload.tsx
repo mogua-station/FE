@@ -6,7 +6,7 @@ type ImageuploadProps = {
 };
 
 const CommonImageInput = ({ label }: ImageuploadProps) => {
-  const { previewUrl, handleImageChange, handleImageDelete } = useUploadImage();
+  const { previewUrl, handleImageUpload, handleImageDelete } = useUploadImage();
 
   return (
     <div className='flex flex-col gap-[12px]'>
@@ -48,7 +48,7 @@ const CommonImageInput = ({ label }: ImageuploadProps) => {
         type='file'
         id='fileInput'
         accept='image/*'
-        onChange={handleImageChange}
+        onChange={handleImageUpload}
         className='hidden'
       />
     </div>
