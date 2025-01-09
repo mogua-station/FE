@@ -26,6 +26,10 @@
   .filter-inactive {
     @apply border border-gray-700 bg-gray-900 text-gray-500;
   }
+
+  .caption-stroke {
+    @apply after:content-[''] after:w-[1px] after:h-[8px] after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:bg-gray-700 
+  }
 }
 
 /* 공용 버튼 */
