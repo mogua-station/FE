@@ -28,11 +28,11 @@
   }
 
   .caption-stroke {
-    @apply after:content-[''] after:w-[1px] after:h-[8px] after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:bg-gray-700 
+    @apply after:absolute after:right-0 after:top-1/2 after:h-[8px] after:w-[1px] after:-translate-y-1/2 after:bg-gray-700 after:content-[''];
   }
 
   .comment-overflow {
-    @apply overflow-hidden text-ellipsis whitespace-normal break-keep md:w-[311px] md:whitespace-nowrap;
+    @apply overflow-hidden text-ellipsis whitespace-normal break-keep desktop:w-[311px] desktop:whitespace-nowrap;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
