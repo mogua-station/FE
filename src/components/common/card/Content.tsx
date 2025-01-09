@@ -2,7 +2,7 @@ import { type CardContentProps } from "@/types/card";
 
 export default function Content({ content }: CardContentProps) {
   return (
-    <div className='flex justify-between'>
+    <div className='mt-5 flex justify-between'>
       <div className='flex-col'>
         <span className='mb-1.5 block text-body-1-normal font-medium text-gray-200'>
           {content.title}

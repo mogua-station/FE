@@ -6,6 +6,7 @@ import Content from "./Content";
 import StatusBadge from "./StatusBadge";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmarkActive.svg";
+import SolidButton from "@/components/common/buttons/SolidButton";
 import { type CardInfo } from "@/types/card";
 
 export default function Card({ card }: CardInfo) {
@@ -40,7 +41,7 @@ export default function Card({ card }: CardInfo) {
 
   return (
     <div
-      className='mb-6 flex flex-col gap-5 rounded-[16px] bg-gray-950 p-3'
+      className='mb-6 flex flex-col rounded-[16px] bg-gray-950 p-3'
       onClick={() => handleClickDetail(card.itemType, card.id)}
     >
       <div className='flex justify-between'>
@@ -67,7 +68,11 @@ export default function Card({ card }: CardInfo) {
       <Content content={contentData} />
 
       {/* 버튼 컴포넌트 머지 후 추가 작업필요 */}
-      {card.isReview && <button onClick={handleClickReview}>리뷰 작성</button>}
+      {card.isReview && (
+        <SolidButton className='mt-6' onClick={handleClickReview}>
+          리뷰 작성
+        </SolidButton>
+      )}
     </div>
   );
 }
