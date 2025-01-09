@@ -3,7 +3,7 @@ import CommonImageInput from "@/components/common/inputs/ImageUpload";
 import { useUploadImage } from "@/hooks/inputs/images/useUploadImage";
 import "@testing-library/jest-dom";
 
-jest.mock("@//inputs/images/useUploadImage");
+jest.mock("@/inputs/images/useUploadImage");
 
 describe("CommonImageInput", () => {
   const mockHandleImageChange = jest.fn();
