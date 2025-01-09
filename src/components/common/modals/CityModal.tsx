@@ -62,7 +62,7 @@ export default function CityModal({
 
       <div className='flex h-60 w-[23.4375rem] items-end justify-center gap-[.6875rem] px-5 py-4'>
         <SolidButton
-          hierarchy='secondary'
+          variant='secondary'
           className='w-fit px-6 py-4'
           onClick={handleCityReset}
         >

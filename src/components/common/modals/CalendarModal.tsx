@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import IconButton from "../buttons/IconButton";
 import SolidButton from "../buttons/SolidButton";
 import Calendar from "../Calendar";
 import InfoIcon from "@/assets/images/icons/info.svg";
@@ -13,12 +14,14 @@ const CALENDAR_MODAL_TITLE = "모집 기간";
 function CalendarModal({
   onDateChange,
   isFilter = false,
+  isDark = false,
 }: {
   onDateChange: (dates: {
     startDate: Date | null;
     endDate: Date | null;
   }) => void;
   isFilter?: boolean;
+  isDark?: boolean;
 }) {
   const resetCalendarRef = useRef<(() => void) | undefined>(undefined);
   const { closeModal, unmountModal } = useModal();
@@ -75,16 +78,19 @@ function CalendarModal({
       )}
 
       <div className='flex w-[23.4375rem] justify-center gap-[.6875rem] px-5 py-4'>
-        <SolidButton
-          hierarchy='secondary'
+        <IconButton
+          size='large'
+          variant='secondary'
+          mode={isDark ? "special" : "default"}
           className='w-fit px-6 py-4'
           onClick={handleDateReset}
         >
           <ResetIcon className='size-6 stroke-gray-400' />
-        </SolidButton>
+        </IconButton>
 
         <SolidButton
-          state={isSelecting ? "activated" : "inactive"}
+          state={isSelecting ? "activated" : "default"}
+          mode={!isDark ? "special" : "default"}
           onClick={handleComplete}
         >
           완료

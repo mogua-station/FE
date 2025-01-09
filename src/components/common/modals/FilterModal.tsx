@@ -33,7 +33,7 @@ export default function FilterModal({
       case "상태":
         return <StateModal onStateChange={onStateChange} />;
       case "날짜":
-        return <CalendarModal onDateChange={onDateChange} isFilter />;
+        return <CalendarModal onDateChange={onDateChange} isFilter isDark />;
     }
   };
 
