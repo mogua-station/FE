@@ -20,7 +20,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <main className='desktop:pb-0 pb-[62px] pt-[56px]'>{children}</main>;
+          <main className='pb-[62px] pt-[56px] desktop:pb-0'>{children}</main>;
           <NavBar />
         </Providers>
       </body>

@@ -1,13 +1,13 @@
 "use client";
 
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
-import Card from "@/components/common/card/Card";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
 import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
 import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Calendar from "@/components/common/Calendar";
+import Card from "@/components/common/card/Card";
 import Dropdown from "@/components/common/Dropdown";
 import {
   CALENDAR_MODAL_TITLE,
@@ -15,11 +15,11 @@ import {
 } from "@/components/common/modals/CalendarModal";
 import FilterModal from "@/components/common/modals/FilterModal";
 import Popover from "@/components/common/Popover";
+import Review from "@/components/common/review/Review";
 import useModal from "@/hooks/useModal";
 import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
-import Review from "@/components/common/review/Review";
-import { type ReviewInfo } from "@/types/review";
 import { type CardProps } from "@/types/card";
+import { type ReviewInfo } from "@/types/review";
 
 export default function Home() {
   const cardList: CardProps[] = [
@@ -97,13 +97,6 @@ export default function Home() {
       isReview: true,
     },
   ];
-  const [selectedDate, setSelectedDate] = useState<{
-    startDate: Date | null;
-    endDate: Date | null;
-  }>({
-    startDate: null,
-    endDate: null,
-  });
 
   const comments: ReviewInfo[] = [
     {
@@ -139,7 +132,7 @@ export default function Home() {
       eventType: "tutoring",
     },
   ];
-  
+
   const { selectedDates, setSelectedDates } = useSelectedDateRange();
   const { openModal } = useModal();
 
@@ -158,7 +151,7 @@ export default function Home() {
       children: <FilterModal onDateChange={(date) => setSelectedDates(date)} />,
     });
   };
-  
+
   return (
     <div>
       <h1>møgua project</h1>
