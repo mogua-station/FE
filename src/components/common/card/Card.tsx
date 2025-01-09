@@ -5,7 +5,7 @@ import { useState } from "react";
 import Content from "./Content";
 import StatusBadge from "./StatusBadge";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
-import BookmarkActive from "@/assets/images/icons/bookmarkActive.svg";
+import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { type CardInfo } from "@/types/card";
 
@@ -58,9 +58,9 @@ export default function Card({ card }: CardInfo) {
 
         <button onClick={hadleClickWhishlist}>
           {whishlist ? (
-            <Bookmark className='size-6' />
+            <BookmarkActive className='size-6 text-orange-200' />
           ) : (
-            <BookmarkActive className='size-6' />
+            <Bookmark className='size-6' />
           )}
         </button>
       </div>
