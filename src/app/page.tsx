@@ -4,8 +4,7 @@ import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
-import OutlinePrimaryButton from "@/components/common/buttons/OutlinePrimaryButton";
-import OutlineSecondaryButton from "@/components/common/buttons/OutlineSecondaryButton";
+import OutlineButton from "@/components/common/buttons/OutlineButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Calendar from "@/components/common/Calendar";
 import Card from "@/components/common/card/Card";
@@ -176,96 +175,89 @@ export default function Home() {
           large
           <div className='size-6 rounded-[6px] border border-white' />
         </SolidButton>
-        <SolidButton>
+        <SolidButton>large</SolidButton>
+
+        <SolidButton size='small'>
           <div className='size-6 rounded-[6px] border border-white' />
-          large
+          <span>small</span>
         </SolidButton>
-        <div className='flex gap-2'>
-          <SolidButton size='small'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton size='small' state='inactive'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton size='small' state='activated'>
-            <span>small</span>
-          </SolidButton>
-        </div>
+        <SolidButton size='small' state='inactive'>
+          <span>small</span>
+        </SolidButton>
+        <SolidButton size='small' state='activated'>
+          <span>small</span>
+        </SolidButton>
 
         <p className='mt-2 text-white'>SolidButton - Secondary</p>
-        <SolidButton hierarchy='secondary'>
+        <SolidButton variant='secondary'>
           large
           <div className='size-6 rounded-[6px] border border-white' />
         </SolidButton>
-        <SolidButton hierarchy='secondary' state='inactive'>
+        <SolidButton variant='secondary' state='inactive'>
           large
         </SolidButton>
-        <SolidButton hierarchy='secondary' state='activated'>
+        <SolidButton variant='secondary' state='activated'>
           large
         </SolidButton>
-        <div className='flex gap-2'>
-          <SolidButton hierarchy='secondary' size='small'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton hierarchy='secondary' size='small' state='inactive'>
-            <span>small</span>
-          </SolidButton>
-          <SolidButton hierarchy='secondary' size='small' state='activated'>
-            <span>small</span>
-          </SolidButton>
-        </div>
+        <SolidButton variant='secondary' size='small'>
+          <span>small</span>
+        </SolidButton>
+        <SolidButton variant='secondary' size='small' state='inactive'>
+          <span>small</span>
+        </SolidButton>
+        <SolidButton variant='secondary' size='small' state='activated'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          <span>small</span>
+          <div className='size-6 rounded-[6px] border border-white' />
+        </SolidButton>
 
         <p className='mt-2 text-white'>OutlineButton - Primary</p>
-        <OutlinePrimaryButton>
+        <OutlineButton state='activated'>large</OutlineButton>
+        <OutlineButton>
           <div className='size-6 rounded-[6px] border border-white' />
           large
+        </OutlineButton>
+        <OutlineButton size='small'>small</OutlineButton>
+        <OutlineButton size='small' state='inactive'>
+          small
+        </OutlineButton>
+        <OutlineButton size='small' state='activated'>
           <div className='size-6 rounded-[6px] border border-white' />
-        </OutlinePrimaryButton>
-        <OutlinePrimaryButton>
+          small
           <div className='size-6 rounded-[6px] border border-white' />
-          large
-        </OutlinePrimaryButton>
-        <div className='flex gap-2'>
-          <OutlinePrimaryButton size='small'>
-            <span>small</span>
-          </OutlinePrimaryButton>
-          <OutlinePrimaryButton size='small' state='inactive'>
-            <span>small</span>
-          </OutlinePrimaryButton>
-          <OutlinePrimaryButton size='small' state='activated'>
-            <span>small</span>
-          </OutlinePrimaryButton>
-        </div>
+        </OutlineButton>
 
         <p className='mt-2 text-white'>OutlineButton - Secondary</p>
-        <div className='it flex flex-wrap gap-2'>
-          <OutlineSecondaryButton>large</OutlineSecondaryButton>
-          <OutlineSecondaryButton>
-            <div className='size-6 rounded-[6px] border border-white' />
-            large
-          </OutlineSecondaryButton>
-          <OutlineSecondaryButton>
-            large
-            <div className='size-6 rounded-[6px] border border-white' />
-          </OutlineSecondaryButton>
-          <OutlineSecondaryButton>
-            <div className='size-6 rounded-[6px] border border-white' />
-            large
-            <div className='size-6 rounded-[6px] border border-white' />
-          </OutlineSecondaryButton>
-          <OutlineSecondaryButton size='small'>
-            <div className='size-6 rounded-[6px] border border-white' />
-            large
-            <div className='size-6 rounded-[6px] border border-white' />
-          </OutlineSecondaryButton>
-        </div>
+        <OutlineButton className='h-[54px]' variant='secondary'>
+          new
+        </OutlineButton>
+        <OutlineButton variant='secondary'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          new
+        </OutlineButton>
+        <OutlineButton variant='secondary'>
+          new
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlineButton>
+        <OutlineButton variant='secondary'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          new
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlineButton>
+        <OutlineButton variant='secondary' size='small'>
+          <div className='size-6 rounded-[6px] border border-white' />
+          new
+          <div className='size-6 rounded-[6px] border border-white' />
+        </OutlineButton>
+
         <p className='mt-2 text-white'>IconButton</p>
         <IconButton>
-          <div className='size-6 rounded-[6px] border border-white' />
+          <KakaoIcon className='size-6' />
         </IconButton>
         <IconButton size='small'>
-          <div className='size-6 rounded-[6px] border border-white' />
+          <KakaoIcon className='size-6' />
         </IconButton>
+
         <p className='mt-2 text-white'>ETCButton</p>
         <ETCButton>
           <div className='size-6 rounded-[6px] border border-white' />
@@ -277,6 +269,12 @@ export default function Home() {
           label
           <div className='size-6 rounded-[6px] border border-white' />
         </ETCButton>
+
+        <p className='mt-2 text-white'>스페샬🥲</p>
+        <SolidButton mode='special'>label</SolidButton>
+        <IconButton mode='special'>
+          <KakaoIcon className='size-6' />
+        </IconButton>
       </div>
 
       {/* 타이포그라피 */}
