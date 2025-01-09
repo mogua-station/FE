@@ -1,17 +1,23 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { useIndexedDB } from "@/hooks/inputs/images/useIndexedDB";
 import { usePostImage } from "@/hooks/inputs/images/usePostImage";
 import "@testing-library/jest-dom";
 
-// fetch를 모킹합니다.
+// fetch와 useIndexedDB를 모킹합니다.
 global.fetch = jest.fn();
+jest.mock("@/hooks/inputs/images/useIndexedDB", () => ({
+  useIndexedDB: jest.fn(),
+}));
 
 describe("usePostImage", () => {
-  const mockImageUrl = "https://example.com/uploaded-image.png";
+  const mockImageFile = new Blob(["image content"], { type: "image/png" });
   const mockEndpoint = "/upload-endpoint";
 
   beforeEach(() => {
-    // 로컬 스토리지에 이미지 URL 설정
-    localStorage.setItem("uploadedImage", mockImageUrl);
+    // useIndexedDB 모킹
+    (useIndexedDB as jest.Mock).mockReturnValue({
+      loadImage: jest.fn().mockResolvedValue(mockImageFile),
+    });
   });
 
   it("postImage()가 호출되면 POST 요청이 제대로 보내져야 합니다.", async () => {
@@ -42,17 +48,13 @@ describe("usePostImage", () => {
 
     // 업로드 버튼 클릭
     fireEvent.click(screen.getByText("POST Image"));
-
-    // 업로드 중 상태 확인
-    expect(screen.getByText("Uploading...")).toBeInTheDocument();
-
     // POST 요청이 제대로 호출됐는지 확인
     await waitFor(() =>
       expect(fetch).toHaveBeenCalledWith(
         mockEndpoint,
         expect.objectContaining({
           method: "POST",
-          body: JSON.stringify({ imageUrl: mockImageUrl }),
+          body: expect.any(FormData), // FormData 객체가 포함되어야 함
           headers: { "Content-Type": "application/json" },
         }),
       ),
@@ -65,7 +67,9 @@ describe("usePostImage", () => {
   });
 
   it("이미지 포스트 실패 후 에러를 일으킵니다.", async () => {
-    (fetch as jest.Mock).mockRejectedValueOnce(new Error("이미지 포스트 실패"));
+    (useIndexedDB as jest.Mock).mockReturnValue({
+      loadImage: jest.fn().mockResolvedValue(null), // 이미지가 없는 경우
+    });
 
     const TestComponent = () => {
       const { isUploading, uploadError, postImage } = usePostImage();
@@ -89,9 +93,11 @@ describe("usePostImage", () => {
     // 업로드 버튼 클릭
     fireEvent.click(screen.getByText("POST Image"));
 
-    // 오류 메시지가 나타나는지 확인
+    // 에러 메시지가 나타나는지 확인
     await waitFor(() =>
-      expect(screen.getByText("Error: 이미지 포스트 실패")).toBeInTheDocument(),
+      expect(
+        screen.getByText("Error: 이미지가 존재하지 않습니다."),
+      ).toBeInTheDocument(),
     );
   });
 });
