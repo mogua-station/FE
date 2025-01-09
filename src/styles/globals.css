@@ -2,3 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .filter-sm {
+    @apply mx-auto flex h-11 w-max items-center justify-center rounded-xl px-[0.875rem] py-3 text-body-2-normal font-semibold;
+  }
+
+  .filter-lg {
+    @apply mx-auto flex h-16 w-max items-center justify-center rounded-3xl px-6 py-3 text-heading-1 font-semibold;
+  }
+
+  .filter-default {
+    @apply border border-gray-800 bg-gray-950 text-gray-200;
+  }
+
+  .filter-active {
+    @apply border border-gray-700 bg-gray-700 text-gray-200;
+  }
+
+  .filter-active:hover {
+    @apply border border-gray-700 bg-gray-800 text-gray-200;
+  }
+
+  .filter-inactive {
+    @apply border border-gray-700 bg-gray-900 text-gray-500;
+  }
+
+  .caption-stroke {
+    @apply after:content-[''] after:w-[1px] after:h-[8px] after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:bg-gray-700 
+  }
+}
+
+/* 공용 버튼 */
+@layer components {
+  .btn-base {
+    @apply flex w-full items-center justify-center border;
+  }
+
+  .btn-size-large {
+    @apply max-w-[343px] gap-[10px] rounded-2xl;
+  }
+
+  .btn-size-small {
+    @apply max-h-10 max-w-[109px] gap-1 rounded-[6px] p-[10px];
+  }
+}
