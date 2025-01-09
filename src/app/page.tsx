@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
@@ -19,6 +20,7 @@ import Review from "@/components/common/review/Review";
 import useModal from "@/hooks/useModal";
 import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
 import { type CardProps } from "@/types/card";
+import { type CityType, type StateType } from "@/types/overlay.type";
 import { type ReviewInfo } from "@/types/review";
 
 export default function Home() {
@@ -134,6 +136,8 @@ export default function Home() {
   ];
 
   const { selectedDates, setSelectedDates } = useSelectedDateRange();
+  const [state, setState] = useState<StateType>("ALL");
+  const [city, setCity] = useState<CityType>("ALL");
   const { openModal } = useModal();
 
   const handleOpenModal = () => {
@@ -148,7 +152,13 @@ export default function Home() {
 
   const handleOpenFilterModal = () => {
     openModal({
-      children: <FilterModal onDateChange={(date) => setSelectedDates(date)} />,
+      children: (
+        <FilterModal
+          onDateChange={(date) => setSelectedDates(date)}
+          onStateChange={(state) => setState(state)}
+          onCityChange={(city) => setCity(city)}
+        />
+      ),
     });
   };
 
@@ -387,19 +397,25 @@ export default function Home() {
       </div>
 
       {/* modal */}
-      <button
-        onClick={handleOpenModal}
-        className='h-24 w-40 bg-gray-700 text-center text-gray-100'
-      >
-        Open Modal
-      </button>
+      <div className='flex items-center gap-6'>
+        <button
+          onClick={handleOpenModal}
+          className='h-24 w-40 bg-gray-700 text-center text-gray-100'
+        >
+          Open Modal
+        </button>
 
-      <button
-        onClick={handleOpenFilterModal}
-        className='h-24 w-40 bg-gray-700 text-center text-gray-100'
-      >
-        Open Filter Modal
-      </button>
+        <button
+          onClick={handleOpenFilterModal}
+          className='h-24 w-40 bg-gray-700 text-center text-gray-100'
+        >
+          Open Filter Modal
+        </button>
+
+        <p>{state}</p>
+
+        <p>{city}</p>
+      </div>
 
       {/* lorem */}
       <p className='text-body-1-normal'>
