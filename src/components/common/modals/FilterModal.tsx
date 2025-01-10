@@ -9,10 +9,19 @@ import { type CityType, type StateType } from "@/types/overlay.type";
 type FILTER_STATE = "지역" | "상태" | "날짜";
 
 export default function FilterModal({
+  selectedFilter,
   onDateChange,
   onStateChange,
   onCityChange,
 }: {
+  selectedFilter: {
+    city: CityType;
+    category: StateType;
+    date: {
+      startDate: Date | null;
+      endDate: Date | null;
+    };
+  };
   onDateChange: (dates: {
     startDate: Date | null;
     endDate: Date | null;
@@ -29,11 +38,28 @@ export default function FilterModal({
   const renderFilter = () => {
     switch (filter) {
       case "지역":
-        return <CityModal onCityChange={onCityChange} />;
+        return (
+          <CityModal
+            selectedCity={selectedFilter.city}
+            onCityChange={onCityChange}
+          />
+        );
       case "상태":
-        return <StateModal onStateChange={onStateChange} />;
+        return (
+          <StateModal
+            selectedState={selectedFilter.category}
+            onStateChange={onStateChange}
+          />
+        );
       case "날짜":
-        return <CalendarModal onDateChange={onDateChange} isFilter isDark />;
+        return (
+          <CalendarModal
+            selectedDates={selectedFilter.date}
+            onDateChange={onDateChange}
+            isFilter
+            isDark
+          />
+        );
     }
   };
 
