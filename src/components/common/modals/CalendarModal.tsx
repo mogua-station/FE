@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import IconButton from "../buttons/IconButton";
 import SolidButton from "../buttons/SolidButton";
 import Calendar from "../Calendar";
@@ -12,10 +12,15 @@ import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
 const CALENDAR_MODAL_TITLE = "모집 기간";
 
 function CalendarModal({
+  selectedDates,
   onDateChange,
   isFilter = false,
   isDark = false,
 }: {
+  selectedDates: {
+    startDate: Date | null;
+    endDate: Date | null;
+  };
   onDateChange: (dates: {
     startDate: Date | null;
     endDate: Date | null;
@@ -25,7 +30,12 @@ function CalendarModal({
 }) {
   const resetCalendarRef = useRef<(() => void) | undefined>(undefined);
   const { closeModal, unmountModal } = useModal();
-  const { selectedDates, setSelectedDates } = useSelectedDateRange();
+  const { selectedDates: currentDates, setSelectedDates } =
+    useSelectedDateRange();
+
+  useEffect(() => {
+    setSelectedDates(selectedDates);
+  }, [selectedDates, setSelectedDates]);
 
   const handleDateChange = (dates: {
     startDate: Date | null;
@@ -47,12 +57,13 @@ function CalendarModal({
     unmountModal();
   };
 
-  const isSelecting = !!selectedDates.startDate || !!selectedDates.endDate;
+  const isSelecting = !!currentDates.startDate || !!currentDates.endDate;
 
   return (
     <div className='flex w-full flex-col items-center'>
       <div className='flex w-full flex-col items-center gap-6'>
         <Calendar
+          selectedDates={selectedDates}
           onDateChange={handleDateChange}
           exposeOnDatesReset={(fn) => {
             resetCalendarRef.current = fn;
@@ -61,8 +72,8 @@ function CalendarModal({
 
         <div className='flex w-full items-center justify-center border-t border-gray-700'>
           <div className='h-[3.25rem] w-[23.4375rem] px-5 py-4 text-body-1-normal font-semibold text-gray-400'>
-            {selectedDates.startDate
-              ? `${selectedDates.startDate.toLocaleDateString()} - ${selectedDates.endDate ? selectedDates.endDate.toLocaleDateString() : ""}`
+            {currentDates.startDate
+              ? `${currentDates.startDate.toLocaleDateString()} - ${currentDates.endDate ? currentDates.endDate.toLocaleDateString() : ""}`
               : "기간을 선택해주세요"}
           </div>
         </div>

@@ -1,26 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-
-interface Origin {
-  vertical: "top" | "center" | "bottom";
-  horizontal: "left" | "center" | "right";
-}
-
-type Position = {
-  anchor: Origin;
-  content: Origin;
-};
-
-type PopoverProps = {
-  gapX?: number; // X축 간격
-  gapY?: number; // Y축 간격
-  position?: Position; // 위치 지정
-  onOpen?: () => void; // 열림 콜백
-  onClose?: () => void; // 닫힘 콜백
-  content: React.ReactNode; // 팝오버 내용
-  children: React.ReactNode; // 트리거 요소
-};
+import { type PopoverRenderFn, type PopoverProps } from "@/types/dropdown.type";
 
 export default function Popover({
   gapX = 0,
@@ -39,6 +20,11 @@ export default function Popover({
   const popoverRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState({});
 
+  const closePopover = () => {
+    setIsOpen(false);
+    if (onClose) onClose();
+  };
+
   const togglePopover = () => {
     const nextState = !isOpen;
     setIsOpen(nextState);
@@ -48,14 +34,13 @@ export default function Popover({
 
   const getPopoverStyle = () => {
     if (!triggerRef.current || !popoverRef.current) return {};
-
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const popoverRect = popoverRef.current.getBoundingClientRect();
 
     let top = 0;
     let left = 0;
 
-    // 기본 anchorOrigin 처리
+    // anchor
     switch (position.anchor.vertical) {
       case "top":
         top = 0;
@@ -79,7 +64,7 @@ export default function Popover({
         break;
     }
 
-    // 기본 overlayOrigin 처리
+    // content
     switch (position.content.vertical) {
       case "top":
         top += gapY;
@@ -103,28 +88,33 @@ export default function Popover({
         break;
     }
 
-    setStyle({
-      top,
-      left,
-    });
+    setStyle({ top, left });
   };
 
   useEffect(() => {
-    getPopoverStyle();
+    if (isOpen) {
+      getPopoverStyle();
+    }
   }, [isOpen]);
 
   return (
     <div className='relative inline-block'>
+      {/* 트리거 */}
       <button
+        type='button'
+        ref={triggerRef}
         onClick={togglePopover}
         className='focus:outline-none'
-        ref={triggerRef}
       >
         {children}
       </button>
+
+      {/* 팝오버 */}
       {isOpen && (
         <div className='absolute z-50' ref={popoverRef} style={style}>
-          {content}
+          {typeof content === "function"
+            ? (content as PopoverRenderFn)(closePopover)
+            : content}
         </div>
       )}
     </div>

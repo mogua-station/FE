@@ -2,31 +2,7 @@
 
 import React, { useState } from "react";
 import Popover from "./Popover";
-
-type Align = "LR" | "CC" | "RL" | "LL" | "RR";
-
-type DropdownItem = {
-  label: string; // 항목 텍스트
-  value?: string; // 항목 값
-  onClick?: () => void; // 항목별 클릭 핸들러
-};
-
-type DropdownProps = {
-  align?: Align; // 드롭다운 정렬 방식
-  content: DropdownItem[]; // 드롭다운 항목 배열
-  gapX?: number; // X축 간격
-  gapY?: number; // Y축 간격
-  defaultSelected?: string; // 기본 선택 항목
-  children: React.ReactNode; // 트리거 요소
-};
-
-type VerticalAlign = "bottom" | "top" | "center";
-type HorizontalAlign = "left" | "right" | "center";
-
-type Position = {
-  anchor: { vertical: VerticalAlign; horizontal: HorizontalAlign };
-  content: { vertical: VerticalAlign; horizontal: HorizontalAlign };
-};
+import { type DropdownProps, type Position } from "@/types/dropdown.type";
 
 export default function Dropdown({
   align = "RR",
@@ -40,44 +16,45 @@ export default function Dropdown({
     defaultSelected || null,
   );
 
-  const handleSelect = (label: string, onClick?: () => void) => {
+  const handleSelect = (
+    label: string,
+    value?: string,
+    onClick?: (value: string) => void,
+    closePopover?: () => void,
+  ) => {
     setSelected(label);
-    console.log(label);
-    if (onClick) onClick();
+    if (onClick && value) onClick(value);
+    if (closePopover) closePopover();
   };
 
-  const getPosition = (): Position => {
+  const getPosition = () => {
     switch (align) {
       case "LR":
         return {
           anchor: { vertical: "bottom", horizontal: "left" },
           content: { vertical: "top", horizontal: "right" },
-        };
+        } as Position;
       case "CC":
         return {
           anchor: { vertical: "bottom", horizontal: "center" },
           content: { vertical: "top", horizontal: "center" },
-        };
+        } as Position;
       case "RL":
         return {
           anchor: { vertical: "bottom", horizontal: "right" },
           content: { vertical: "top", horizontal: "left" },
-        };
+        } as Position;
       case "LL":
         return {
           anchor: { vertical: "bottom", horizontal: "left" },
           content: { vertical: "top", horizontal: "left" },
-        };
+        } as Position;
       case "RR":
+      default:
         return {
           anchor: { vertical: "bottom", horizontal: "right" },
           content: { vertical: "top", horizontal: "right" },
-        };
-      default:
-        return {
-          anchor: { vertical: "bottom", horizontal: "center" },
-          content: { vertical: "top", horizontal: "center" },
-        };
+        } as Position;
     }
   };
 
@@ -86,21 +63,25 @@ export default function Dropdown({
       gapX={gapX}
       gapY={gapY}
       position={getPosition()}
-      content={
+      content={(closePopover) => (
         <ul className='min-w-[7.25rem] cursor-pointer rounded-xl border border-gray-800 bg-gray-900'>
           {content.map((item, index) => (
             <li
               key={index}
-              className={`text-body-2-normal ${selected === item.label || selected === item.value ? "text-gray-200" : "text-gray-500"} mx-auto w-max px-[0.875rem] py-3 text-center font-semibold`}
+              className={`text-body-2-normal ${
+                selected === item.label || selected === item.value
+                  ? "text-gray-200"
+                  : "text-gray-500"
+              } mx-auto w-max px-[0.875rem] py-3 text-center font-semibold`}
               onClick={() =>
-                handleSelect(item.value ?? item.label, item.onClick)
+                handleSelect(item.label, item.value, item.onClick, closePopover)
               }
             >
               {item.label}
             </li>
           ))}
         </ul>
-      }
+      )}
     >
       {children}
     </Popover>

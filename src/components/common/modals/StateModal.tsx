@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SolidButton from "../buttons/SolidButton";
 import RecruitingIcon from "@/assets/images/icons/announcement-megaphone.svg";
 import FireIcon from "@/assets/images/icons/fire.svg";
@@ -9,16 +9,22 @@ import useModal from "@/hooks/useModal";
 import { type StateType } from "@/types/overlay.type";
 
 export default function StateModal({
+  selectedState,
   onStateChange,
 }: {
+  selectedState: StateType;
   onStateChange: (state: StateType) => void;
 }) {
   const { closeModal } = useModal();
-  const [selectedState, setSelectedState] = useState<StateType>("ALL");
+  const [currentState, setCurrentState] = useState<StateType>(selectedState);
+
+  useEffect(() => {
+    setCurrentState(selectedState);
+  }, [selectedState]);
 
   const handleStateReset = () => {
     onStateChange("ALL");
-    setSelectedState("ALL");
+    setCurrentState("ALL");
   };
 
   const handleComplete = () => {
@@ -34,7 +40,7 @@ export default function StateModal({
 
   const renderState = (state: StateType) => {
     const selectedStyle =
-      state === selectedState ? "text-orange-300" : "text-gray-400";
+      state === currentState ? "text-orange-300" : "text-gray-400";
 
     const stateIconMap = {
       ALL: <PlanetIcon className={`size-6 ${selectedStyle}`} />,
@@ -45,10 +51,11 @@ export default function StateModal({
 
     return (
       <button
-        className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${state === selectedState ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
+        key={state}
+        className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${state === currentState ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
         onClick={() => {
           onStateChange(state);
-          setSelectedState(state);
+          setCurrentState(state);
         }}
       >
         {stateIconMap[state]}
