@@ -32,10 +32,6 @@ const config: Config = {
       regular: "400",
       light: "300",
     },
-    screens: {
-      tablet: "481px",
-      desktop: "769px",
-    },
     extend: {
       colors: {
         orange: {
