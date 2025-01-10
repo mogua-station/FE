@@ -1,18 +1,31 @@
 import Link from "next/link";
-import Rating from "@/assets/images/icons/rating.svg";
 import { type ContentProps } from "@/types/review";
 
+type RatingStyle = {
+  [key: string]: string;
+};
+
 export default function Content({ review, isOpen }: ContentProps) {
+  const reviewTextStyle: RatingStyle = {
+    그냥그래요: "text-orange-200",
+    괜찮아요: "text-orange-200",
+    추천해요: "text-orange-200",
+  };
+
   return (
     <div className='w-full'>
       <div className='flex'>
-        {Array.from({ length: 5 }, (_, i) =>
-          i + 1 <= review.rating ? (
-            <Rating key={i} className='size-6 text-orange-200' />
-          ) : (
-            <Rating key={i} className='size-6 text-gray-600' />
-          ),
-        )}
+        <span
+          className={`inline-block px-2 py-[3px] text-caption-normal ${reviewTextStyle[review.rating]} rounded-[20px] bg-gray-700`}
+        >
+          {review.rating === "그냥그래요"
+            ? "그냥그래요"
+            : review.rating === "괜찮아요"
+              ? "괜찮아요"
+              : review.rating === "추천해요"
+                ? "추천해요"
+                : ""}
+        </span>
       </div>
 
       {review.isMyReview && (
