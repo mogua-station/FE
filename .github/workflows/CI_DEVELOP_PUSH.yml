@@ -1,0 +1,23 @@
+name: Push Validation
+
+on:
+  push:
+    branches:
+      - 'Develop'
+
+jobs:
+  validate-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build project
+        run: npm run build
