@@ -1,20 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SolidButton from "../buttons/SolidButton";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
 import useModal from "@/hooks/useModal";
 import { type CityType } from "@/types/overlay.type";
 
 export default function CityModal({
+  selectedCity,
   onCityChange,
 }: {
+  selectedCity: CityType;
   onCityChange: (city: CityType) => void;
 }) {
   const { closeModal } = useModal();
-  const [selectedCity, setSelectedCity] = useState<CityType>("ALL");
+  const [currentCity, setCurrentCity] = useState<CityType>(selectedCity);
+
+  useEffect(() => {
+    setCurrentCity(selectedCity);
+  }, [selectedCity]);
 
   const handleCityReset = () => {
     onCityChange("ALL");
-    setSelectedCity("ALL");
+    setCurrentCity("ALL");
   };
 
   const handleComplete = () => {
@@ -34,15 +40,15 @@ export default function CityModal({
 
   const renderCity = (city: CityType) => {
     const selectedStyle =
-      city === selectedCity ? "text-orange-300" : "text-gray-400";
+      city === currentCity ? "text-orange-300" : "text-gray-400";
 
     return (
       <button
         key={city}
-        className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${city === selectedCity ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
+        className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${city === currentCity ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
         onClick={() => {
           onCityChange(city as CityType);
-          setSelectedCity(city as CityType);
+          setCurrentCity(city as CityType);
         }}
       >
         <span
