@@ -48,11 +48,7 @@ export default function Card({ card }: CardInfo) {
         <div className='flex gap-1.5'>
           <StatusBadge
             status={card.status}
-            recruitmentDate={
-              card.status === "모집중"
-                ? card.recruitmentPeriod.endDate
-                : new Date()
-            }
+            recruitmentDate={card.recruitmentPeriod.endDate}
           />
         </div>
 
