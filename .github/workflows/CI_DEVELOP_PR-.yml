@@ -37,6 +37,11 @@ jobs:
           if [ "$approvals" -ge 3 ]; then
             echo "Approval count is sufficient, proceeding with auto-merge."
             echo "approved=true" >> $GITHUB_ENV
+            curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -d '{"labels":["automerge"]}' \
+              "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels"
+
+
           else
             echo "Not enough approvals yet. (needs 3, got $approvals)"
             echo "approved=false" >> $GITHUB_ENV
