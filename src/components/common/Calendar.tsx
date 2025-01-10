@@ -20,14 +20,19 @@ const DATE_STYLE = {
 };
 
 interface CalendarProps {
+  selectedDates?: {
+    startDate: Date | null;
+    endDate: Date | null;
+  };
   onDateChange?: (dates: {
     startDate: Date | null;
     endDate: Date | null;
   }) => void;
-  exposeOnDatesReset?: (fn: () => void) => void; // 추가
+  exposeOnDatesReset?: (fn: () => void) => void;
 }
 
 export default function Calendar({
+  selectedDates,
   onDateChange,
   exposeOnDatesReset,
 }: CalendarProps) {
@@ -45,7 +50,7 @@ export default function Calendar({
     isRangeStart,
     isRangeEnd,
     onDatesReset,
-  } = useCalendar({ onDateChange });
+  } = useCalendar({ selectedDates, onDateChange });
 
   if (exposeOnDatesReset) {
     exposeOnDatesReset(onDatesReset);

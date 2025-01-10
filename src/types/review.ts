@@ -12,10 +12,14 @@ export interface ReviewInfo {
 }
 
 export interface ReviewInfoProps {
-  reviewinfo: ReviewInfo;
+  reviewInfo: ReviewInfo;
 }
 
 export interface ContentProps {
-  review: ReviewInfo;
+  reviewContent: ReviewInfo;
   isOpen: boolean;
+}
+
+export interface RatingStyle {
+  [key: number]: string;
 }
