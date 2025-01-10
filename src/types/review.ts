@@ -1,5 +1,5 @@
 export interface ReviewInfo {
-  rating: string;
+  rating: number;
   title?: string;
   review: string;
   userid: number;
@@ -21,5 +21,5 @@ export interface ContentProps {
 }
 
 export interface RatingStyle {
-  [key: string]: string;
+  [key: number]: string;
 }

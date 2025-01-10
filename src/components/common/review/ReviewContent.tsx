@@ -3,9 +3,9 @@ import { type ContentProps, type RatingStyle } from "@/types/review";
 
 export default function Content({ reviewContent, isOpen }: ContentProps) {
   const reviewTextStyle: RatingStyle = {
-    그냥그래요: "text-purple-200",
-    괜찮아요: "text-blue-200",
-    추천해요: "text-orange-200",
+    0: "text-purple-200",
+    1: "text-blue-200",
+    2: "text-orange-200",
   };
 
   return (
@@ -14,11 +14,11 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
         <span
           className={`inline-block px-2 py-[3px] text-caption-normal ${reviewTextStyle[reviewContent.rating]} rounded-[20px] bg-gray-700`}
         >
-          {reviewContent.rating === "그냥그래요"
+          {reviewContent.rating === 0
             ? "그냥그래요"
-            : reviewContent.rating === "괜찮아요"
+            : reviewContent.rating === 1
               ? "괜찮아요"
-              : reviewContent.rating === "추천해요"
+              : reviewContent.rating === 2
                 ? "추천해요"
                 : ""}
         </span>
