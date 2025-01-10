@@ -446,7 +446,7 @@ export default function Home() {
 
       <div className='flex flex-col gap-2'>
         {comments.map((review) => {
-          return <Review reviewinfo={review} />;
+          return <Review reviewInfo={review} />;
         })}
       </div>
     </div>
