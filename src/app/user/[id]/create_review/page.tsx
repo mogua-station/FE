@@ -17,10 +17,9 @@ export default function CreateReview() {
 
   return (
     <div className='flex flex-1 flex-col bg-black px-4 py-3.5'>
-      <h2 className='mt-5 text-heading-2 font-medium text-gray-200'>
+      <h2 className='mb-[42px] mt-5 text-heading-2 font-medium text-gray-200'>
         모과님 <br /> 이번 모임은 어땠나요?
       </h2>
-      {/* 모임 정보 */}
 
       {/* 모임 평가 */}
       <fieldset>
