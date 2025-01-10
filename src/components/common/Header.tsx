@@ -10,7 +10,7 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className='fixed left-0 top-0 z-[1000] flex w-full items-center justify-center bg-[#0E0E10]'>
+    <header className='fixed left-0 top-0 z-[49] flex w-full items-center justify-center bg-[#0E0E10]'>
       <div className='flex h-[56px] w-full max-w-[1240px] items-center justify-between px-5 py-2.5'>
         <div className='flex items-center gap-12'>
           <h1>
