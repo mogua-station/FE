@@ -7,8 +7,8 @@ type RatingStyle = {
 
 export default function Content({ reviewContent, isOpen }: ContentProps) {
   const reviewTextStyle: RatingStyle = {
-    그냥그래요: "text-orange-200",
-    괜찮아요: "text-orange-200",
+    그냥그래요: "text-purple-200",
+    괜찮아요: "text-blue-200",
     추천해요: "text-orange-200",
   };
 
