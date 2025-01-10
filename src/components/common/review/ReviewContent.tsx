@@ -8,19 +8,15 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
     2: "text-orange-200",
   };
 
+  const ratingArr = ["그냥그래요", "괜찮아요", "추천해요"];
+
   return (
     <div className='w-full'>
       <div className='flex'>
         <span
           className={`inline-block px-2 py-[3px] text-caption-normal ${reviewTextStyle[reviewContent.rating]} rounded-[20px] bg-gray-700`}
         >
-          {reviewContent.rating === 0
-            ? "그냥그래요"
-            : reviewContent.rating === 1
-              ? "괜찮아요"
-              : reviewContent.rating === 2
-                ? "추천해요"
-                : ""}
+          {ratingArr[reviewContent.rating]}
         </span>
       </div>
 
