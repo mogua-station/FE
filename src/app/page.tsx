@@ -101,7 +101,7 @@ export default function Home() {
 
   const comments: ReviewInfo[] = [
     {
-      rating: 4,
+      rating: 0,
       review:
         "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
       userid: 1,
@@ -109,7 +109,7 @@ export default function Home() {
       date: new Date(),
     },
     {
-      rating: 2,
+      rating: 1,
       review:
         "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
       userid: 2,
@@ -119,7 +119,7 @@ export default function Home() {
       date: new Date(),
     },
     {
-      rating: 3,
+      rating: 2,
       title: "모각코 모임",
       review:
         "이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다",
@@ -143,7 +143,10 @@ export default function Home() {
     openModal({
       title: CALENDAR_MODAL_TITLE,
       children: (
-        <CalendarModal onDateChange={(date) => setSelectedDates(date)} />
+        <CalendarModal
+          selectedDates={selectedDates}
+          onDateChange={(date) => setSelectedDates(date)}
+        />
       ),
       isDark: false,
     });
@@ -153,6 +156,7 @@ export default function Home() {
     openModal({
       children: (
         <FilterModal
+          selectedFilter={{ city, state: state, date: selectedDates }}
           onDateChange={(date) => setSelectedDates(date)}
           onStateChange={(state) => setState(state)}
           onCityChange={(city) => setCity(city)}
@@ -446,7 +450,7 @@ export default function Home() {
 
       <div className='flex flex-col gap-2'>
         {comments.map((review) => {
-          return <Review reviewinfo={review} />;
+          return <Review reviewInfo={review} />;
         })}
       </div>
     </div>
