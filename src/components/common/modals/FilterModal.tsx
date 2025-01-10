@@ -16,7 +16,7 @@ export default function FilterModal({
 }: {
   selectedFilter: {
     city: CityType;
-    category: StateType;
+    state: StateType;
     date: {
       startDate: Date | null;
       endDate: Date | null;
@@ -47,7 +47,7 @@ export default function FilterModal({
       case "상태":
         return (
           <StateModal
-            selectedState={selectedFilter.category}
+            selectedState={selectedFilter.state}
             onStateChange={onStateChange}
           />
         );

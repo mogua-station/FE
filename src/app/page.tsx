@@ -143,7 +143,10 @@ export default function Home() {
     openModal({
       title: CALENDAR_MODAL_TITLE,
       children: (
-        <CalendarModal onDateChange={(date) => setSelectedDates(date)} />
+        <CalendarModal
+          selectedDates={selectedDates}
+          onDateChange={(date) => setSelectedDates(date)}
+        />
       ),
       isDark: false,
     });
@@ -153,6 +156,7 @@ export default function Home() {
     openModal({
       children: (
         <FilterModal
+          selectedFilter={{ city, state: state, date: selectedDates }}
           onDateChange={(date) => setSelectedDates(date)}
           onStateChange={(state) => setState(state)}
           onCityChange={(city) => setCity(city)}
