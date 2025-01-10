@@ -29,15 +29,11 @@ export default function StatusBadge({
               </span>
             </span>
             <span className='flex items-center justify-between gap-1.5 rounded-[6px] bg-gray-800 px-2 py-1'>
-              {deadline(recruitmentDate) == 0 ? (
-                <span className='text-caption-normal font-medium text-primary'>
-                  오늘 마감
-                </span>
-              ) : (
-                <span className='text-caption-normal font-medium text-primary'>
-                  {`마감 D-${deadline(recruitmentDate)}`}
-                </span>
-              )}
+              <span className='text-caption-normal font-medium text-primary'>
+                {deadline(recruitmentDate) == 0
+                  ? "오늘 마감"
+                  : `마감 D-${deadline(recruitmentDate)}`}
+              </span>
             </span>
           </div>
         );
