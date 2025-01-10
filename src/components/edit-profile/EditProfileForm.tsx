@@ -1,4 +1,4 @@
-import CountIndicator from "./CountIndicator";
+import CountIndicator from "../common/CountIndicator";
 import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
 import SolidButton from "@/components/common/buttons/SolidButton";

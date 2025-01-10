@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import CountIndicator from "./CountIndicator";
+import CountIndicator from "../common/CountIndicator";
 import Tag from "./Tag";
 import DeleteIcon from "@/assets/images/icons/delete.svg";
 
