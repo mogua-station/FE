@@ -52,3 +52,18 @@
     @apply flex w-full items-center justify-center border;
   }
 }
+
+/* 프로필 수정 페이지 */
+@layer components {
+  .profile-edit-input {
+    @apply rounded-xl border border-gray-800 bg-gray-800 px-4 py-[18px] text-gray-100 disabled:text-gray-500;
+  }
+
+  .profile-edit-label {
+    @apply mb-3 ml-2 mt-8 inline-block text-body-2-normal font-medium text-gray-300;
+  }
+
+  .profile-edit-message {
+    @apply ml-2 mt-2 text-label-normal font-medium text-gray-500;
+  }
+}
