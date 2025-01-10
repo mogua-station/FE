@@ -12,10 +12,10 @@ export default function EditProfile() {
       </h2>
 
       {/* 배너 */}
-      <div className='flex w-full items-center justify-between rounded-2xl bg-gray-800 px-4 py-3 tablet:hidden'>
-        <div className='flex gap-2.5'>
+      <div className='flex w-full items-center justify-between rounded-2xl bg-gray-800 px-4 py-3'>
+        <div className='flex items-center gap-2.5'>
           <InfoIcon className='size-6 text-gray-400' />
-          <p className='max-w-[160px] text-label-reading font-regular text-gray-300'>
+          <p className='max-w-[160px] text-label-reading font-regular text-gray-300 tablet:max-w-full'>
             운영자 문의 후 과외 선생님으로 활동해보세요
           </p>
         </div>
