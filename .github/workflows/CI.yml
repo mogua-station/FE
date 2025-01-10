@@ -1,15 +1,14 @@
 name: CI
 
-on: 
+on:
   pull_request:
     branches:
-      - 'Develop'  # 들여쓰기를 수정했습니다.
+      - 'Develop'
 
 jobs:
-  build: 
+  build:
     runs-on: ubuntu-latest
-
-    steps: 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
         
@@ -22,9 +21,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Merge PR if review approved
-        if: ${{ github.event.pull_request.reviewDecision == 'APPROVED' && github.event.pull_request.approvals >= 3 }}
-        run: |
-          gh pr merge ${{ github.event.pull_request.number }} --merge
+  auto-merge:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.base.ref == 'Develop'
+    steps:
+      - name: Auto-merge on approval
+        uses: pascalgn/automerge-action@v0.15.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: "merge"  # 병합 방법 (merge, squash, rebase)
+          MERGE_COMMIT_MESSAGE: "pull-request-title"  # 병합 시 커밋 메시지
+          MERGE_REQUIRED_APPROVING_REVIEW_COUNT: "3"  # 승인된 리뷰가 3개 이상이어야 병합
