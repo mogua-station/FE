@@ -29,6 +29,7 @@ export default function EmptyState({ variant = "myMeeting" }: EmptyStateProps) {
       marginTop: "mt-[72px] tablet:mt-[104px] desktop:mt-[243px]",
       content: (
         <>
+          <p className={paragraphStyle}>아직 만든 모임이 없어요</p>
           <p className={paragraphStyle}>새로운 모임을 만들어보세요</p>
           <SolidButton className='mt-8'>모임 개설하기</SolidButton>
         </>
