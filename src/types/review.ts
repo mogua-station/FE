@@ -19,3 +19,7 @@ export interface ContentProps {
   reviewContent: ReviewInfo;
   isOpen: boolean;
 }
+
+export interface RatingStyle {
+  [key: string]: string;
+}

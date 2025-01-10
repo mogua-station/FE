@@ -1,9 +1,5 @@
 import Link from "next/link";
-import { type ContentProps } from "@/types/review";
-
-type RatingStyle = {
-  [key: string]: string;
-};
+import { type ContentProps, type RatingStyle } from "@/types/review";
 
 export default function Content({ reviewContent, isOpen }: ContentProps) {
   const reviewTextStyle: RatingStyle = {
