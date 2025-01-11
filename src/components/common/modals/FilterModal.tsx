@@ -4,30 +4,25 @@ import { useState } from "react";
 import { CalendarModal } from "./CalendarModal";
 import CityModal from "./CityModal";
 import StateModal from "./StateModal";
-import { type CityType, type StateType } from "@/types/overlay.type";
+import {
+  type DateType,
+  type CityType,
+  type FilterType,
+  type StateType,
+} from "@/types/meetup.type";
 
 type FILTER_STATE = "지역" | "상태" | "날짜";
 
 export default function FilterModal({
   selectedFilter,
-  onDateChange,
-  onStateChange,
-  onCityChange,
+  onChangeDate,
+  onChangeState,
+  onChangeCity,
 }: {
-  selectedFilter: {
-    city: CityType;
-    state: StateType;
-    date: {
-      startDate: Date | null;
-      endDate: Date | null;
-    };
-  };
-  onDateChange: (dates: {
-    startDate: Date | null;
-    endDate: Date | null;
-  }) => void;
-  onStateChange: (state: StateType) => void;
-  onCityChange: (city: CityType) => void;
+  selectedFilter: FilterType;
+  onChangeDate: (dates: DateType) => void;
+  onChangeState: (state: StateType) => void;
+  onChangeCity: (city: CityType) => void;
 }) {
   const [filter, setFilter] = useState<FILTER_STATE>("지역");
 
@@ -41,21 +36,21 @@ export default function FilterModal({
         return (
           <CityModal
             selectedCity={selectedFilter.city}
-            onCityChange={onCityChange}
+            onCityChange={onChangeCity}
           />
         );
       case "상태":
         return (
           <StateModal
             selectedState={selectedFilter.state}
-            onStateChange={onStateChange}
+            onStateChange={onChangeState}
           />
         );
       case "날짜":
         return (
           <CalendarModal
             selectedDates={selectedFilter.date}
-            onDateChange={onDateChange}
+            onDateChange={onChangeDate}
             isFilter
             isDark
           />

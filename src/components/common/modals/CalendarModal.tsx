@@ -42,7 +42,6 @@ function CalendarModal({
     endDate: Date | null;
   }) => {
     setSelectedDates(dates);
-    onDateChange(dates);
   };
 
   const handleDateReset = () => {
@@ -53,6 +52,7 @@ function CalendarModal({
   };
 
   const handleComplete = () => {
+    onDateChange(currentDates);
     closeModal();
     unmountModal();
   };

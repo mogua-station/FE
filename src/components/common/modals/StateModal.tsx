@@ -6,7 +6,7 @@ import PlanetIcon from "@/assets/images/icons/planet.svg";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
 import HandIcon from "@/assets/images/icons/waving-hand.svg";
 import useModal from "@/hooks/useModal";
-import { type StateType } from "@/types/overlay.type";
+import { type StateType } from "@/types/meetup.type";
 
 export default function StateModal({
   selectedState,
@@ -28,6 +28,7 @@ export default function StateModal({
   };
 
   const handleComplete = () => {
+    onStateChange(currentState);
     closeModal();
   };
 
@@ -54,7 +55,6 @@ export default function StateModal({
         key={state}
         className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${state === currentState ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
         onClick={() => {
-          onStateChange(state);
           setCurrentState(state);
         }}
       >

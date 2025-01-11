@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SolidButton from "../buttons/SolidButton";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
 import useModal from "@/hooks/useModal";
-import { type CityType } from "@/types/overlay.type";
+import { type CityType } from "@/types/meetup.type";
 
 export default function CityModal({
   selectedCity,
@@ -24,6 +24,7 @@ export default function CityModal({
   };
 
   const handleComplete = () => {
+    onCityChange(currentCity);
     closeModal();
   };
 
@@ -47,7 +48,6 @@ export default function CityModal({
         key={city}
         className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${city === currentCity ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
         onClick={() => {
-          onCityChange(city as CityType);
           setCurrentCity(city as CityType);
         }}
       >
