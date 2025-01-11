@@ -30,6 +30,15 @@ function CalendarModal({
     onDateChange(dates);
   };
 
+  const renderDateRangeText = () => {
+    if (!selectedDates.startDate) return "기간을 선택해주세요";
+    const startDateText = selectedDates.startDate.toLocaleDateString();
+    const endDateText = selectedDates.endDate
+      ? selectedDates.endDate.toLocaleDateString()
+      : "";
+    return `${startDateText} - ${endDateText}`;
+  };
+
   return (
     <div className='flex w-full flex-col items-center'>
       <div className='flex w-full flex-col items-center gap-6'>
@@ -43,9 +52,7 @@ function CalendarModal({
 
         <div className='flex w-full items-center justify-center border-t border-gray-700'>
           <div className='h-[3.25rem] w-[23.4375rem] px-5 py-4 text-body-1-normal font-semibold text-gray-400'>
-            {selectedDates.startDate
-              ? `${selectedDates.startDate.toLocaleDateString()} - ${selectedDates.endDate ? selectedDates.endDate.toLocaleDateString() : ""}`
-              : "기간을 선택해주세요"}
+            {renderDateRangeText()}
           </div>
         </div>
       </div>

@@ -16,6 +16,52 @@ import {
   type SortType,
 } from "@/types/meetup.type";
 
+// URL 파라미터를 파싱하는 함수
+const parseURLParams = () => {
+  const params = new URLSearchParams(window.location.search);
+
+  return {
+    meetup: params.get("meetup") as MeetupType,
+    city: params.get("city") as CityType,
+    state: params.get("state") as StateType,
+    startDate: params.get("startDate")
+      ? new Date(params.get("startDate")!)
+      : null,
+    endDate: params.get("endDate") ? new Date(params.get("endDate")!) : null,
+    sort: params.get("sort") as SortType,
+  };
+};
+
+// URL 파라미터를 업데이트하는 함수
+const updateSearchParams = (
+  router: ReturnType<typeof useRouter>,
+  {
+    meetup,
+    filter,
+    sort,
+  }: {
+    meetup: MeetupType;
+    filter: FilterType;
+    sort: SortType;
+  },
+) => {
+  const params = new URLSearchParams();
+  params.append("meetup", meetup);
+
+  if (filter.city !== "ALL") params.append("city", filter.city);
+  if (filter.state !== "ALL") params.append("state", filter.state);
+  if (filter.date.startDate)
+    params.append(
+      "startDate",
+      filter.date.startDate.toISOString().split("T")[0],
+    );
+  if (filter.date.endDate)
+    params.append("endDate", filter.date.endDate.toISOString().split("T")[0]);
+  if (sort !== "latest") params.append("sort", sort);
+
+  router.push(`${window.location.pathname}?${params.toString()}`);
+};
+
 export default function MainNavigation() {
   const router = useRouter();
   const { openModal } = useModal();
@@ -25,110 +71,37 @@ export default function MainNavigation() {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>({
     city: "ALL",
     state: "ALL",
-    date: {
-      startDate: null,
-      endDate: null,
-    },
+    date: { startDate: null, endDate: null },
   });
 
+  // URL 파라미터를 초기 상태로 설정
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-
-    const meetup = params.get("meetup") as MeetupType;
-    const city = params.get("city") as CityType;
-    const state = params.get("state") as StateType;
-    const startDate = params.get("startDate");
-    const endDate = params.get("endDate");
-    const sort = params.get("sort") as SortType;
+    const { meetup, city, state, startDate, endDate, sort } = parseURLParams();
 
     if (meetup) setSelectedMeetup(meetup);
-    if (city) setSelectedFilter((prev) => ({ ...prev, city }));
-    if (state) setSelectedFilter((prev) => ({ ...prev, state }));
-    if (startDate || endDate) {
-      setSelectedFilter((prev) => ({
-        ...prev,
-        date: {
-          startDate: startDate ? new Date(startDate) : null,
-          endDate: endDate ? new Date(endDate) : null,
-        },
-      }));
-    }
+    setSelectedFilter((prev) => ({
+      ...prev,
+      city: city || prev.city,
+      state: state || prev.state,
+      date: { startDate: startDate || null, endDate: endDate || null },
+    }));
     if (sort) setSelectedSort(sort);
   }, []);
 
+  // URL 파라미터 업데이트
   useEffect(() => {
-    setSearchParams({ filter: selectedFilter });
-  }, [selectedFilter, selectedMeetup, selectedSort]);
-
-  const setSearchParams = ({
-    meetup = selectedMeetup,
-    filter = selectedFilter,
-    sort = selectedSort,
-  }: {
-    meetup?: MeetupType;
-    filter?: FilterType;
-    sort?: string;
-  }) => {
-    const params = new URLSearchParams();
-
-    params.append("meetup", meetup);
-
-    if (filter.city !== "ALL") {
-      params.append("city", filter.city);
-    }
-
-    if (filter.state !== "ALL") {
-      params.append("state", filter.state);
-    }
-
-    if (filter.date.startDate) {
-      params.append(
-        "startDate",
-        filter.date.startDate.toISOString().split("T")[0],
-      );
-    }
-
-    if (filter.date.endDate) {
-      params.append("endDate", filter.date.endDate.toISOString().split("T")[0]);
-    }
-
-    if (sort !== "latest") {
-      params.append("sort", sort);
-    }
-
-    router.push(`${window.location.pathname}?${params.toString()}`);
-  };
-
-  const onChangedCity = (value: CityType) => {
-    setSelectedFilter((prevFilter) => {
-      const newFilter = { ...prevFilter, city: value };
-      return newFilter;
+    updateSearchParams(router, {
+      meetup: selectedMeetup,
+      filter: selectedFilter,
+      sort: selectedSort,
     });
-  };
+  }, [selectedMeetup, selectedFilter, selectedSort]);
 
-  const onChangedState = (value: StateType) => {
-    setSelectedFilter((prevFilter) => {
-      const newFilter = { ...prevFilter, state: value };
-      return newFilter;
-    });
-  };
-
-  const onChangedDate = (dates: {
-    startDate: Date | null;
-    endDate: Date | null;
-  }) => {
-    setSelectedFilter((prevFilter) => {
-      const newFilter = { ...prevFilter, date: dates };
-      return newFilter;
-    });
-  };
-
-  const handleChangedMeetup = (value: MeetupType) => {
-    setSelectedMeetup(value);
-  };
-
-  const handleChangedSort = (value: SortType) => {
-    setSelectedSort(value);
+  const handleFilterChange = (
+    key: keyof FilterType,
+    value: string | { startDate: Date | null; endDate: Date | null },
+  ) => {
+    setSelectedFilter((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleOpenFilterModal = () => {
@@ -136,9 +109,9 @@ export default function MainNavigation() {
       children: (
         <FilterModal
           selectedFilter={selectedFilter}
-          onCityChange={(city) => onChangedCity(city)}
-          onStateChange={(category) => onChangedState(category)}
-          onDateChange={(dates) => onChangedDate(dates)}
+          onCityChange={(city) => handleFilterChange("city", city)}
+          onStateChange={(state) => handleFilterChange("state", state)}
+          onDateChange={(dates) => handleFilterChange("date", dates)}
         />
       ),
     });
@@ -146,6 +119,7 @@ export default function MainNavigation() {
 
   return (
     <nav className='flex w-full items-center justify-between'>
+      {/* Meetup Selection Dropdown */}
       <Dropdown
         defaultSelected={selectedMeetup}
         align='LL'
@@ -153,15 +127,30 @@ export default function MainNavigation() {
           {
             label: "스터디",
             value: "study",
-            onClick: (value: string) => {
-              handleChangedMeetup(value as MeetupType);
+            onClick: (value) => {
+              setSelectedMeetup(value as MeetupType);
+              setSelectedFilter((prev) => ({
+                ...prev,
+                city: "ALL",
+                state: "ALL",
+                date: { startDate: null, endDate: null },
+              }));
+              setSelectedSort("latest");
             },
           },
           {
             label: "과외",
             value: "tutoring",
-            onClick: (value: string) =>
-              handleChangedMeetup(value as MeetupType),
+            onClick: (value) => {
+              setSelectedMeetup(value as MeetupType);
+              setSelectedFilter((prev) => ({
+                ...prev,
+                city: "ALL",
+                state: "ALL",
+                date: { startDate: null, endDate: null },
+              }));
+              setSelectedSort("latest");
+            },
           },
         ]}
       >
@@ -173,7 +162,7 @@ export default function MainNavigation() {
         </div>
       </Dropdown>
 
-      {/* Filter & Sort */}
+      {/* Filter & Sort Controls */}
       <div className='flex gap-1.5'>
         <button
           onClick={handleOpenFilterModal}
@@ -188,17 +177,17 @@ export default function MainNavigation() {
             {
               label: "최근 등록순",
               value: "latest",
-              onClick: (value: string) => handleChangedSort(value as SortType),
+              onClick: (value) => setSelectedSort(value as SortType),
             },
             {
               label: "모집 마감 임박순",
               value: "deadline",
-              onClick: (value: string) => handleChangedSort(value as SortType),
+              onClick: (value) => setSelectedSort(value as SortType),
             },
             {
               label: "참여 인원 많은순",
               value: "participant",
-              onClick: (value: string) => handleChangedSort(value as SortType),
+              onClick: (value) => setSelectedSort(value as SortType),
             },
           ]}
         >

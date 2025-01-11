@@ -29,22 +29,18 @@ export default function FilterModal({
   onCityChange: (city: CityType) => void;
 }) {
   const [tab, setTab] = useState<TAB_STATE>("지역");
-  const [tempFilter, setTempFilter] = useState<FilterType>(selectedFilter);
+  const [tempFilter, setTempFilter] = useState<FilterType>({
+    ...selectedFilter,
+  });
   const { closeModal } = useModal();
 
   const handleReset = () => {
-    if (tab === "지역") {
-      setTempFilter({ ...tempFilter, city: "ALL" });
-    }
-    if (tab === "상태") {
-      setTempFilter({ ...tempFilter, state: "ALL" });
-    }
-    if (tab === "날짜") {
-      setTempFilter({
-        ...tempFilter,
-        date: { startDate: null, endDate: null },
-      });
-    }
+    const resetValues: Partial<FilterType> = {
+      지역: { city: "ALL" as CityType },
+      상태: { state: "ALL" as StateType },
+      날짜: { date: { startDate: null, endDate: null } as DateType },
+    }[tab];
+    setTempFilter((prev) => ({ ...prev, ...resetValues }));
   };
 
   const handleComplete = () => {
@@ -54,66 +50,55 @@ export default function FilterModal({
     closeModal();
   };
 
-  const handleFilterChange = (f: TAB_STATE) => {
-    setTab(f);
-  };
-
   const renderFilter = () => {
-    switch (tab) {
-      case "지역":
-        return (
-          <CityModal
-            selectedCity={tempFilter.city}
-            onCityChange={(city) => setTempFilter({ ...tempFilter, city })}
-          />
-        );
-      case "상태":
-        return (
-          <StateModal
-            selectedState={tempFilter.state}
-            onStateChange={(state) => setTempFilter({ ...tempFilter, state })}
-          />
-        );
-      case "날짜":
-        return (
-          <CalendarModal
-            selectedDates={tempFilter.date}
-            onDateChange={(date) => setTempFilter({ ...tempFilter, date })}
-            isFilter
-          />
-        );
-    }
+    const filterComponents = {
+      지역: (
+        <CityModal
+          selectedCity={tempFilter.city}
+          onCityChange={(city) => setTempFilter((prev) => ({ ...prev, city }))}
+        />
+      ),
+      상태: (
+        <StateModal
+          selectedState={tempFilter.state}
+          onStateChange={(state) =>
+            setTempFilter((prev) => ({ ...prev, state }))
+          }
+        />
+      ),
+      날짜: (
+        <CalendarModal
+          selectedDates={tempFilter.date}
+          onDateChange={(date) => setTempFilter((prev) => ({ ...prev, date }))}
+          isFilter
+        />
+      ),
+    };
+    return filterComponents[tab];
   };
-
-  console.log(tempFilter);
 
   const selectedStyle = (f: TAB_STATE) =>
-    tab === f
-      ? "border-b-2 border-gray-200 text-gray-100 transition-all duration-300"
-      : "border-transparent text-gray-500 transition-all duration-300";
+    `border-b-2 px-4 py-3.5 text-body-2-normal font-semibold transition-all duration-300 ${
+      tab === f
+        ? "border-gray-200 text-gray-100"
+        : "border-transparent text-gray-500"
+    }`;
+
+  const tabButtons = ["지역", "상태", "날짜"].map((tabName) => (
+    <button
+      key={tabName}
+      className={`ml-5 h-full ${selectedStyle(tabName as TAB_STATE)}`}
+      onClick={() => setTab(tabName as TAB_STATE)}
+    >
+      {tabName}
+    </button>
+  ));
 
   return (
     <div className='flex min-h-[38.75rem] w-full flex-col'>
       <div className='flex h-12 items-center justify-center gap-4 border-b border-gray-800'>
         <div className='flex w-[23.4375rem] items-center gap-4'>
-          <button
-            className={`ml-5 h-full border-b-2 px-4 py-3.5 text-body-2-normal font-semibold ${selectedStyle("지역")}`}
-            onClick={() => handleFilterChange("지역")}
-          >
-            지역
-          </button>
-          <button
-            className={`h-full border-b-2 px-4 py-3.5 text-body-2-normal font-semibold ${selectedStyle("상태")}`}
-            onClick={() => handleFilterChange("상태")}
-          >
-            상태
-          </button>
-          <button
-            className={`h-full border-b-2 px-4 py-3.5 text-body-2-normal font-semibold ${selectedStyle("날짜")}`}
-            onClick={() => handleFilterChange("날짜")}
-          >
-            날짜
-          </button>
+          {tabButtons}
         </div>
       </div>
 
