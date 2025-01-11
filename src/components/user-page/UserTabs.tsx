@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import MeetingList from "./MeetingList";
+import ReviewTabs from "./ReviewTabs";
 import StudyTypeFilter from "./StudyTypeFilter";
 import TabList from "./TabList";
 import {
@@ -37,6 +38,10 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
     if (tab !== "classReview") {
       setStudyType("study");
     }
+    // myReview 탭이 아닐 때는 reviewTab 초기화
+    if (tab !== "myReview") {
+      setReviewTab("toWrite");
+    }
   };
 
   useEffect(() => {
@@ -69,6 +74,11 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
             onChange={setStudyType}
           />
         )}
+        {currentTab === "myReview" && (
+          <ReviewTabs value={reviewTab} onChange={setReviewTab} />
+        )}
+
+        {/* 데이터 목록 */}
         <MeetingList items={[]} variant={variant} />
       </div>
     </>
