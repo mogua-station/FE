@@ -1,21 +1,55 @@
+import Card from "../common/card/Card";
+import Review from "../common/review/Review";
 import EmptyState from "./EmptyState";
-import { type MeetingListProps } from "@/types/user-page";
+import { type CardProps } from "@/types/card";
+import { type ReviewInfo } from "@/types/review";
+import {
+  type UserPageSection,
+  type MyReviewTab,
+  type EmptyStateVariant,
+} from "@/types/user-page";
+
+interface MeetingListProps {
+  items: CardProps[] | ReviewInfo[];
+  variant: UserPageSection | { type: "myReview"; tab: MyReviewTab };
+}
 
 export default function MeetingList({ items, variant }: MeetingListProps) {
+  const shouldShowMeetingCard =
+    variant === "myMeeting" ||
+    variant === "createdMeeting" ||
+    (typeof variant === "object" &&
+      variant.type === "myReview" &&
+      variant.tab === "toWrite");
+
+  const shouldShowReviewCard =
+    variant === "classReview" ||
+    (typeof variant === "object" &&
+      variant.type === "myReview" &&
+      variant.tab === "written");
+
+  const emptyStateVariant = (
+    typeof variant === "object" ? variant.type : variant
+  ) as EmptyStateVariant;
+
+  if (items.length === 0) {
+    return <EmptyState variant={emptyStateVariant} />;
+  }
+
   return (
-    <>
-      {items.length > 0 ? (
-        <div className='grid grid-cols-1 gap-y-6 rounded-[40px] desktop:grid-cols-2 desktop:gap-x-8'>
-          {items.map((_, idx) => (
-            <div
-              className='h-[182px] rounded-2xl bg-gray-950'
-              key={`meeting-${idx}`}
-            />
-          ))}
-        </div>
-      ) : (
-        <EmptyState variant={variant} />
-      )}
-    </>
+    <ul className='grid gap-4 desktop:gap-6'>
+      {shouldShowMeetingCard &&
+        (items as CardProps[]).map((item) => (
+          <li key={item.id}>
+            <Card card={item} />
+          </li>
+        ))}
+      {shouldShowReviewCard &&
+        (items as ReviewInfo[]).map((item) => (
+          <li key={item.userid}>
+            <Review reviewInfo={item} />
+          </li>
+        ))}
+    </ul>
   );
 }
