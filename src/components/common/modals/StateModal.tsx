@@ -1,11 +1,7 @@
-import { useState, useEffect } from "react";
-import SolidButton from "../buttons/SolidButton";
 import RecruitingIcon from "@/assets/images/icons/announcement-megaphone.svg";
 import FireIcon from "@/assets/images/icons/fire.svg";
 import PlanetIcon from "@/assets/images/icons/planet.svg";
-import ResetIcon from "@/assets/images/icons/reset_thin.svg";
 import HandIcon from "@/assets/images/icons/waving-hand.svg";
-import useModal from "@/hooks/useModal";
 import { type StateType } from "@/types/meetup.type";
 
 export default function StateModal({
@@ -15,23 +11,6 @@ export default function StateModal({
   selectedState: StateType;
   onStateChange: (state: StateType) => void;
 }) {
-  const { closeModal } = useModal();
-  const [currentState, setCurrentState] = useState<StateType>(selectedState);
-
-  useEffect(() => {
-    setCurrentState(selectedState);
-  }, [selectedState]);
-
-  const handleStateReset = () => {
-    onStateChange("ALL");
-    setCurrentState("ALL");
-  };
-
-  const handleComplete = () => {
-    onStateChange(currentState);
-    closeModal();
-  };
-
   const stateMap = {
     ALL: "모든 모임 보기",
     RECRUITING: "모집 중이에요",
@@ -41,7 +20,7 @@ export default function StateModal({
 
   const renderState = (state: StateType) => {
     const selectedStyle =
-      state === currentState ? "text-orange-300" : "text-gray-400";
+      state === selectedState ? "text-orange-300" : "text-gray-400";
 
     const stateIconMap = {
       ALL: <PlanetIcon className={`size-6 ${selectedStyle}`} />,
@@ -53,9 +32,9 @@ export default function StateModal({
     return (
       <button
         key={state}
-        className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${state === currentState ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
+        className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${state === selectedState ? "border-gray-700 bg-gray-900" : "border-gray-800 bg-gray-800"}`}
         onClick={() => {
-          setCurrentState(state);
+          onStateChange(state);
         }}
       >
         {stateIconMap[state]}
@@ -71,20 +50,6 @@ export default function StateModal({
     <div className='flex w-full grow flex-col items-center justify-between'>
       <div className='flex w-full grow flex-col gap-[.6875rem] px-3 pt-4'>
         {Object.keys(stateMap).map((state) => renderState(state as StateType))}
-      </div>
-
-      <div className='flex h-60 w-[23.4375rem] items-end justify-center gap-[.6875rem] px-5 py-4'>
-        <SolidButton
-          variant='secondary'
-          className='w-fit px-6 py-4'
-          onClick={handleStateReset}
-        >
-          <ResetIcon className='size-6 stroke-gray-400' />
-        </SolidButton>
-
-        <SolidButton state='activated' onClick={handleComplete}>
-          완료
-        </SolidButton>
       </div>
     </div>
   );

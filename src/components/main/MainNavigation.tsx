@@ -136,9 +136,9 @@ export default function MainNavigation() {
       children: (
         <FilterModal
           selectedFilter={selectedFilter}
-          onChangeCity={(city) => onChangedCity(city)}
-          onChangeState={(category) => onChangedState(category)}
-          onChangeDate={(dates) => onChangedDate(dates)}
+          onCityChange={(city) => onChangedCity(city)}
+          onStateChange={(category) => onChangedState(category)}
+          onDateChange={(dates) => onChangedDate(dates)}
         />
       ),
     });

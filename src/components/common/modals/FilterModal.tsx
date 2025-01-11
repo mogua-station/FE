@@ -1,9 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import IconButton from "../buttons/IconButton";
+import SolidButton from "../buttons/SolidButton";
 import { CalendarModal } from "./CalendarModal";
 import CityModal from "./CityModal";
 import StateModal from "./StateModal";
+import ResetIcon from "@/assets/images/icons/reset_thin.svg";
+import useModal from "@/hooks/useModal";
 import {
   type DateType,
   type CityType,
@@ -11,55 +15,80 @@ import {
   type StateType,
 } from "@/types/meetup.type";
 
-type FILTER_STATE = "지역" | "상태" | "날짜";
+type TAB_STATE = "지역" | "상태" | "날짜";
 
 export default function FilterModal({
   selectedFilter,
-  onChangeDate,
-  onChangeState,
-  onChangeCity,
+  onDateChange,
+  onStateChange,
+  onCityChange,
 }: {
   selectedFilter: FilterType;
-  onChangeDate: (dates: DateType) => void;
-  onChangeState: (state: StateType) => void;
-  onChangeCity: (city: CityType) => void;
+  onDateChange: (dates: DateType) => void;
+  onStateChange: (state: StateType) => void;
+  onCityChange: (city: CityType) => void;
 }) {
-  const [filter, setFilter] = useState<FILTER_STATE>("지역");
+  const [tab, setTab] = useState<TAB_STATE>("지역");
+  const [tempFilter, setTempFilter] = useState<FilterType>(selectedFilter);
+  const { closeModal } = useModal();
 
-  const handleFilterChange = (f: FILTER_STATE) => {
-    setFilter(f);
+  const handleReset = () => {
+    if (tab === "지역") {
+      setTempFilter({ ...tempFilter, city: "ALL" });
+    }
+    if (tab === "상태") {
+      setTempFilter({ ...tempFilter, state: "ALL" });
+    }
+    if (tab === "날짜") {
+      setTempFilter({
+        ...tempFilter,
+        date: { startDate: null, endDate: null },
+      });
+    }
+  };
+
+  const handleComplete = () => {
+    onCityChange(tempFilter.city);
+    onStateChange(tempFilter.state);
+    onDateChange(tempFilter.date);
+    closeModal();
+  };
+
+  const handleFilterChange = (f: TAB_STATE) => {
+    setTab(f);
   };
 
   const renderFilter = () => {
-    switch (filter) {
+    switch (tab) {
       case "지역":
         return (
           <CityModal
-            selectedCity={selectedFilter.city}
-            onCityChange={onChangeCity}
+            selectedCity={tempFilter.city}
+            onCityChange={(city) => setTempFilter({ ...tempFilter, city })}
           />
         );
       case "상태":
         return (
           <StateModal
-            selectedState={selectedFilter.state}
-            onStateChange={onChangeState}
+            selectedState={tempFilter.state}
+            onStateChange={(state) => setTempFilter({ ...tempFilter, state })}
           />
         );
       case "날짜":
         return (
           <CalendarModal
-            selectedDates={selectedFilter.date}
-            onDateChange={onChangeDate}
+            selectedDates={tempFilter.date}
+            onDateChange={(date) => setTempFilter({ ...tempFilter, date })}
             isFilter
-            isDark
           />
         );
     }
   };
 
-  const selectedStyle = (f: FILTER_STATE) =>
-    filter === f
+  console.log(tempFilter);
+
+  const selectedStyle = (f: TAB_STATE) =>
+    tab === f
       ? "border-b-2 border-gray-200 text-gray-100 transition-all duration-300"
       : "border-transparent text-gray-500 transition-all duration-300";
 
@@ -89,6 +118,33 @@ export default function FilterModal({
       </div>
 
       {renderFilter()}
+
+      <div className='flex w-[23.4375rem] justify-center gap-[.6875rem] px-5 py-4'>
+        <IconButton
+          size='large'
+          variant='secondary'
+          mode='special'
+          className='w-fit px-6 py-4'
+          onClick={handleReset}
+        >
+          <ResetIcon className='size-6 stroke-gray-400' />
+        </IconButton>
+
+        <SolidButton
+          state={
+            tempFilter.city !== "ALL" ||
+            tempFilter.date.startDate ||
+            tempFilter.date.endDate ||
+            tempFilter.state !== "ALL"
+              ? "activated"
+              : "default"
+          }
+          mode='special'
+          onClick={handleComplete}
+        >
+          완료
+        </SolidButton>
+      </div>
     </div>
   );
 }

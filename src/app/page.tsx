@@ -45,7 +45,7 @@ export default async function Home({
         playsInline
       />
 
-      <div className='z-10 mx-auto flex size-full max-w-[1200px] flex-col items-center justify-center gap-8 rounded-[2.5rem] px-4 pt-2 tablet:pt-[3.25rem] desktop:mb-2.5 desktop:mt-8 desktop:bg-gray-950-48 desktop:px-[3.25rem] desktop:py-10'>
+      <div className='z-10 mx-auto flex size-full max-w-[1200px] flex-col items-center justify-center gap-8 rounded-[2.5rem] px-4 pt-2 tablet:pt-[3.25rem] desktop:pb-2.5 desktop:pt-[4.5rem]'>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <MainContentList />
         </HydrationBoundary>
@@ -79,6 +79,6 @@ async function fetchMockData(url: string): Promise<{
         nextPage: isLast ? null : offset + 1,
         isLast,
       });
-    }, 500); // 500ms 딜레이를 가정
+    }, 500);
   });
 }
