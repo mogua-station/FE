@@ -25,7 +25,7 @@ export default function TabList({
 
   return (
     <div
-      className='mt-6 flex w-full desktop:mt-14 desktop:max-w-[343px]'
+      className='my-6 flex w-full desktop:mt-14 desktop:max-w-[343px]'
       role='tablist'
     >
       {tabs.map(({ id, label }) => {

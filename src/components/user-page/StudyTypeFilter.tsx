@@ -29,7 +29,7 @@ export default function StudyTypeFilter({
         STUDY_TYPE_OPTIONS.find((option) => option.value === value)?.label
       }
     >
-      <div className='filter-sm filter-default flex cursor-pointer items-center gap-2.5'>
+      <div className='filter-sm filter-default mb-4 flex cursor-pointer items-center gap-2.5'>
         <span className='text-nowrap'>
           {STUDY_TYPE_OPTIONS.find((option) => option.value === value)?.label}
         </span>

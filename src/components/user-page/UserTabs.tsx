@@ -71,7 +71,6 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
         isInstructor={isInstructor}
       />
       <div
-        className='mt-[23.5px] desktop:mt-8'
         role='tabpanel'
         id={`${currentTab}-panel`}
         aria-labelledby={`${currentTab}-tab`}

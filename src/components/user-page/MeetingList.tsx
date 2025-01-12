@@ -33,7 +33,7 @@ export default function MeetingList({ items, variant }: MeetingListProps) {
   }
 
   return (
-    <ul className='grid gap-4 desktop:gap-6'>
+    <ul className='grid gap-y-6 desktop:grid-cols-2 desktop:gap-x-5'>
       {shouldShowMeetingCard &&
         (items as CardProps[]).map((item) => (
           <li key={item.id}>

@@ -13,7 +13,7 @@ const REVIEW_TABS = [
 export default function ReviewTabs({ value, onChange }: ReviewTabsProps) {
   return (
     <div
-      className='mt-6 flex w-full rounded-xl bg-gray-950 p-[5px]'
+      className='mb-4 mt-2 flex w-full rounded-xl bg-gray-950 p-[5px]'
       role='tablist'
     >
       {REVIEW_TABS.map((tab) => {
