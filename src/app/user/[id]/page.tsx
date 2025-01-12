@@ -13,8 +13,6 @@ export default function UserPage() {
 
         {/* 탭 목록 */}
         <UserTabs isInstructor />
-
-        {/* 모임 목록 */}
       </div>
     </div>
   );
