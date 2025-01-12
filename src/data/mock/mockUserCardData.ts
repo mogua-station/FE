@@ -1,6 +1,7 @@
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
 
+// 목록 O
 export const myStudyList: CardProps[] = [
   {
     id: 1,
@@ -1610,3 +1611,14 @@ export const classReviews: ReviewInfo[] = [
     date: new Date(),
   },
 ];
+
+// 목록 X
+/* export const myStudyList = [];
+export const myTutoringList = [];
+export const reviewableStudyList = [];
+export const reviewableTutoringList = [];
+export const writtenReviews = [];
+export const writtenTutoringReviews = [];
+export const createdStudyList = [];
+export const createdTutoringList = [];
+export const classReviews = []; */

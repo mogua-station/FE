@@ -28,12 +28,8 @@ export default function MeetingList({ items, variant }: MeetingListProps) {
       variant.type === "myReview" &&
       variant.tab === "written");
 
-  const emptyStateVariant = (
-    typeof variant === "object" ? variant.type : variant
-  ) as EmptyStateVariant;
-
   if (items.length === 0) {
-    return <EmptyState variant={emptyStateVariant} />;
+    return <EmptyState variant={variant as EmptyStateVariant} />;
   }
 
   return (
