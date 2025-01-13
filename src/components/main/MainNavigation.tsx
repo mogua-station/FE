@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Dropdown from "../common/Dropdown";
-import FilterModal from "../common/modals/FilterModal";
+import FilterModal from "./modals/FilterModal";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
 import FilterIcon from "@/assets/images/icons/filter.svg";
 import SortIcon from "@/assets/images/icons/sort.svg";

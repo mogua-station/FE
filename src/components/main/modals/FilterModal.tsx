@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import IconButton from "../buttons/IconButton";
-import SolidButton from "../buttons/SolidButton";
-import { CalendarModal } from "./CalendarModal";
+import IconButton from "../../common/buttons/IconButton";
+import SolidButton from "../../common/buttons/SolidButton";
+import { CalendarModal } from "../../common/modals/CalendarModal";
 import CityModal from "./CityModal";
 import StateModal from "./StateModal";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
