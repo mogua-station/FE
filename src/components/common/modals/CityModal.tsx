@@ -25,7 +25,7 @@ export default function CityModal({
 
   return (
     <div className='flex w-full grow flex-col items-center justify-between pt-4'>
-      <div className='grid w-full grid-cols-2 gap-x-[.4375rem] gap-y-[.6875rem] px-3'>
+      <div className='grid w-[23.4375rem] grid-cols-2 gap-x-[.4375rem] gap-y-[.6875rem] px-3'>
         {cities.map(({ key, label }) => (
           <button
             key={key}

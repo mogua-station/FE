@@ -51,7 +51,7 @@ function CalendarModal({
         />
 
         <div className='flex w-full items-center justify-center border-t border-gray-700'>
-          <div className='h-[3.25rem] w-[23.4375rem] px-5 py-4 text-body-1-normal font-semibold text-gray-400'>
+          <div className='h-[3.25rem] w-full min-w-fit max-w-[23.4375rem] px-5 py-4 text-body-1-normal font-semibold text-gray-400'>
             {renderDateRangeText()}
           </div>
         </div>

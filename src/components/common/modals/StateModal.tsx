@@ -41,7 +41,7 @@ export default function StateModal({
 
   return (
     <div className='flex w-full grow flex-col items-center justify-between'>
-      <div className='flex w-full grow flex-col gap-[.6875rem] px-3 pt-4'>
+      <div className='flex w-[23.4375rem] grow flex-col gap-[.6875rem] px-3 pt-4'>
         {states.map(({ key, label, icon: Icon }) => (
           <button
             key={key}

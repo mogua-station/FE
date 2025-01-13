@@ -104,31 +104,33 @@ export default function FilterModal({
 
       {renderFilter()}
 
-      <div className='flex w-[23.4375rem] justify-center gap-[.6875rem] px-5 py-4'>
-        <IconButton
-          size='large'
-          variant='secondary'
-          mode='special'
-          className='w-fit px-6 py-4'
-          onClick={handleReset}
-        >
-          <ResetIcon className='size-6 stroke-gray-400' />
-        </IconButton>
+      <div className='flex w-full justify-center'>
+        <div className='flex w-[23.4375rem] gap-[.6875rem] px-5 py-4'>
+          <IconButton
+            size='large'
+            variant='secondary'
+            mode='special'
+            className='w-fit px-6 py-4'
+            onClick={handleReset}
+          >
+            <ResetIcon className='size-6 stroke-gray-400' />
+          </IconButton>
 
-        <SolidButton
-          state={
-            tempFilter.city !== "ALL" ||
-            tempFilter.date.startDate ||
-            tempFilter.date.endDate ||
-            tempFilter.state !== "ALL"
-              ? "activated"
-              : "default"
-          }
-          mode='special'
-          onClick={handleComplete}
-        >
-          완료
-        </SolidButton>
+          <SolidButton
+            state={
+              tempFilter.city !== "ALL" ||
+              tempFilter.date.startDate ||
+              tempFilter.date.endDate ||
+              tempFilter.state !== "ALL"
+                ? "activated"
+                : "default"
+            }
+            mode='special'
+            onClick={handleComplete}
+          >
+            완료
+          </SolidButton>
+        </div>
       </div>
     </div>
   );
