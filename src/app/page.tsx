@@ -2,23 +2,19 @@
 
 import { useState } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
-import Card from "@/components/common/card/Card";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
 import OutlineButton from "@/components/common/buttons/OutlineButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Calendar from "@/components/common/Calendar";
+import Card from "@/components/common/card/Card";
 import Dropdown from "@/components/common/Dropdown";
 import CommonImageInput from "@/components/common/inputs/ImageUpload";
-import CommonTextInput from "@/components/common/inputs/TextInput";
 import Popover from "@/components/common/Popover";
-import { usePostImage } from "@/hooks/inputs/images/usePostImage";
-import { useFormValidation } from "@/hooks/inputs/useFormValidation";
-import { validationRules } from "@/hooks/inputs/validationRules";
 import Review from "@/components/common/review/Review";
-import { type ReviewInfo } from "@/types/review";
+import { usePostImage } from "@/hooks/inputs/images/usePostImage";
 import { type CardProps } from "@/types/card";
-
+import { type ReviewInfo } from "@/types/review";
 
 export default function Home() {
   const { postImage } = usePostImage(); // uploadError, isUploading 상태는 각자 시안에 맞게 사용하시면 됩니다.
@@ -27,16 +23,6 @@ export default function Home() {
     const endpoint = "/example/uploadImage"; // 각자 서버 엔드포인트 설정해서 사용하시면 됩니다.
     await postImage(endpoint);
   };
-
-  const { values, errors, handleChange, isValidField } = useFormValidation(
-    {
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validationRules,
-    ["email", "password", "confirmPassword"],
-  );
 
   const cardList: CardProps[] = [
     {
@@ -158,51 +144,6 @@ export default function Home() {
 
   return (
     <div>
-      <CommonTextInput
-        label='이메일'
-        placeholder='이메일 주소를 입력하세요'
-        name='email'
-        type='email'
-        onChange={handleChange}
-        value={values.email}
-        error={errors.email}
-        isValid={isValidField("email")}
-        hint={isValidField("email") ? "이메일 형식이 맞습니다." : ""}
-        required={false}
-        layout='2buttons'
-      />
-      <br />
-      <CommonTextInput
-        label='비밀번호'
-        name='password'
-        type='password'
-        value={values.password}
-        onChange={handleChange}
-        error={errors.password}
-        placeholder='******'
-        hint='특수문자 포함 8자 ~ 20자 사이로 입력해주세요.'
-        isValid={isValidField("password")}
-        layout='1button'
-        required={true}
-      />
-      <br />
-      <CommonTextInput
-        label='비밀번호 확인'
-        placeholder='******'
-        name='confirmPassword'
-        type='password'
-        onChange={handleChange}
-        value={values.confirmPassword}
-        error={errors.confirmPassword}
-        isValid={isValidField("confirmPassword")}
-        hint={
-          isValidField("confirmPassword")
-            ? "비밀번호가 일치해요"
-            : "특수문자 포함 8자 ~ 20자 사이로 입력해주세요."
-        }
-        required={false}
-      />
-
       <CommonImageInput label={"프로필 이미지"} />
       <SolidButton
         size='small'
