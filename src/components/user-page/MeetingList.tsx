@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import Card from "../common/card/Card";
 import Review from "../common/review/Review";
@@ -32,6 +32,28 @@ export const MeetingList = ({
       reviewTab,
     });
 
+  const shouldShowMeetingCard = useMemo(
+    () =>
+      tab === "myMeeting" ||
+      tab === "createdMeeting" ||
+      (tab === "myReview" && reviewTab === "toWrite"),
+    [tab, reviewTab],
+  );
+
+  const shouldShowReviewCard = useMemo(
+    () =>
+      tab === "classReview" || (tab === "myReview" && reviewTab === "written"),
+    [tab, reviewTab],
+  );
+
+  const emptyStateVariant = useMemo(
+    () =>
+      (tab === "myReview" && reviewTab
+        ? { type: "myReview", tab: reviewTab }
+        : tab) as EmptyStateVariant,
+    [tab, reviewTab],
+  );
+
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
@@ -39,23 +61,8 @@ export const MeetingList = ({
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (!data?.pages[0]?.items.length) {
-    return (
-      <EmptyState
-        variant={
-          (tab === "myReview" && reviewTab
-            ? { type: "myReview", tab: reviewTab }
-            : tab) as EmptyStateVariant
-        }
-      />
-    );
+    return <EmptyState variant={emptyStateVariant} />;
   }
-
-  const shouldShowMeetingCard =
-    tab === "myMeeting" ||
-    tab === "createdMeeting" ||
-    (tab === "myReview" && reviewTab === "toWrite");
-  const shouldShowReviewCard =
-    tab === "classReview" || (tab === "myReview" && reviewTab === "written");
 
   return (
     <div className='flex flex-col gap-4'>

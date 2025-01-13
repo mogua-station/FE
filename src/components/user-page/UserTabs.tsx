@@ -13,57 +13,69 @@ import {
 } from "@/types/user-page";
 import { getCurrentStudyType, shouldShowFilter } from "@/utils/userPage";
 
-export default function UserTabs({ isInstructor = false }: UserTabsProps) {
-  const [currentTab, setCurrentTab] = useState<UserPageSection>("myMeeting");
-  const [studyType, setStudyType] = useState<StudyType>("study");
-  const [reviewTab, setReviewTab] = useState<MyReviewTab>("toWrite");
+// 초기 상태 상수로 분리
+const INITIAL_STATE = {
+  tab: "myMeeting" as UserPageSection,
+  studyType: "study" as StudyType,
+  reviewTab: "toWrite" as MyReviewTab,
+};
 
-  const handleTabChange = (tab: UserPageSection) => {
-    setCurrentTab(tab);
-    // 탭 변경 시 필터 초기화
-    if (tab === "classReview") {
-      setStudyType("tutoring");
-    } else {
-      setStudyType("study");
-    }
+export default function UserTabs({ isInstructor = false }: UserTabsProps) {
+  // 상태 통합 관리
+  const [filters, setFilters] = useState(INITIAL_STATE);
+  const { tab, studyType, reviewTab } = filters;
+
+  // 핸들러 함수 단순화
+  const handleTabChange = (newTab: UserPageSection) => {
+    setFilters((prev) => ({
+      ...prev,
+      tab: newTab,
+      studyType: newTab === "classReview" ? "tutoring" : "study",
+      reviewTab: "toWrite",
+    }));
   };
 
-  const showStudyTypeFilter = shouldShowFilter(currentTab, isInstructor);
-  const currentStudyType = getCurrentStudyType(
-    currentTab,
-    studyType,
-    isInstructor,
-  );
+  const handleStudyTypeChange = (newStudyType: StudyType) => {
+    setFilters((prev) => ({
+      ...prev,
+      studyType: newStudyType,
+    }));
+  };
+
+  const handleReviewTabChange = (newReviewTab: MyReviewTab) => {
+    setFilters((prev) => ({
+      ...prev,
+      reviewTab: newReviewTab,
+    }));
+  };
+
+  const showStudyTypeFilter = shouldShowFilter(tab, isInstructor);
+  const currentStudyType = getCurrentStudyType(tab, studyType, isInstructor);
 
   return (
     <div className='flex flex-col gap-4'>
       <TabList
-        currentTab={currentTab}
+        currentTab={tab}
         onChange={handleTabChange}
         isInstructor={isInstructor}
       />
 
       {showStudyTypeFilter && (
         <StudyTypeFilter
-          key={currentTab}
+          key={tab}
           value={currentStudyType}
-          onChange={setStudyType}
+          onChange={handleStudyTypeChange}
         />
       )}
 
-      {currentTab === "myReview" && (
-        <ReviewTabs value={reviewTab} onChange={setReviewTab} />
+      {tab === "myReview" && (
+        <ReviewTabs value={reviewTab} onChange={handleReviewTabChange} />
       )}
 
       <MeetingList
-        tab={currentTab}
+        tab={tab}
         studyType={currentStudyType}
-        reviewTab={currentTab === "myReview" ? reviewTab : undefined}
-        variant={
-          currentTab === "myReview"
-            ? { type: "myReview", tab: reviewTab }
-            : currentTab
-        }
+        reviewTab={tab === "myReview" ? reviewTab : undefined}
       />
     </div>
   );
