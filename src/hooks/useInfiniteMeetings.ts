@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   type UserPageSection,
-  type StudyType,
   type MyReviewTab,
+  type StudyType,
 } from "@/types/user-page";
 import { fetchItems } from "@/utils/userPage";
 
@@ -12,21 +12,26 @@ interface UseInfiniteMeetingsProps {
   reviewTab?: MyReviewTab;
 }
 
-export function useInfiniteMeetings({
+export const useInfiniteMeetings = ({
   tab,
   studyType,
   reviewTab,
-}: UseInfiniteMeetingsProps) {
+}: UseInfiniteMeetingsProps) => {
   return useInfiniteQuery({
     queryKey: ["meetings", tab, studyType, reviewTab],
-    queryFn: ({ pageParam }) =>
-      fetchItems({
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await fetchItems({
         tab,
         studyType,
         reviewTab,
-        cursor: pageParam,
-      }),
-    initialPageParam: "1",
-    getNextPageParam: (lastPage) => lastPage.pageInfo.nextCursor,
+        page: pageParam,
+      });
+      return response;
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.isLast) return undefined;
+      return allPages.length + 1;
+    },
+    initialPageParam: 1,
   });
-}
+};

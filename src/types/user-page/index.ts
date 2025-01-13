@@ -52,5 +52,5 @@ export interface FetchConfig {
   tab: UserPageSection;
   studyType: StudyType;
   reviewTab?: MyReviewTab;
-  cursor?: string;
+  page: number;
 }

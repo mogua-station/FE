@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import MeetingList from "./MeetingList";
+import { MeetingList } from "./MeetingList";
 import ReviewTabs from "./ReviewTabs";
 import StudyTypeFilter from "./StudyTypeFilter";
 import TabList from "./TabList";

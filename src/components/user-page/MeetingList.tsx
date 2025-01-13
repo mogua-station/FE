@@ -9,71 +9,71 @@ import { type ReviewInfo } from "@/types/review";
 import {
   type UserPageSection,
   type MyReviewTab,
-  type EmptyStateVariant,
   type StudyType,
+  type EmptyStateVariant,
 } from "@/types/user-page";
 
 interface MeetingListProps {
   tab: UserPageSection;
   studyType: StudyType;
   reviewTab?: MyReviewTab;
-  variant: EmptyStateVariant;
 }
 
-export default function MeetingList({
+export const MeetingList = ({
   tab,
   studyType,
   reviewTab,
-  variant,
-}: MeetingListProps) {
+}: MeetingListProps) => {
   const { ref, inView } = useInView();
-  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteMeetings({
-    tab,
-    studyType,
-    reviewTab,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteMeetings({
+      tab,
+      studyType,
+      reviewTab,
+    });
 
-  // inView 감지시 다음 페이지 로드
   useEffect(() => {
-    if (inView && hasNextPage) {
-      console.log("다음 페이지 로드 중...");
+    if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, hasNextPage, fetchNextPage]);
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // 모임 카드를 보여줄지 리뷰 카드를 보여줄지 결정
+  if (!data?.pages[0]?.items.length) {
+    return (
+      <EmptyState
+        variant={
+          (tab === "myReview" && reviewTab
+            ? { type: "myReview", tab: reviewTab }
+            : tab) as EmptyStateVariant
+        }
+      />
+    );
+  }
+
   const shouldShowMeetingCard =
     tab === "myMeeting" ||
     tab === "createdMeeting" ||
     (tab === "myReview" && reviewTab === "toWrite");
-
-  // 로딩 중이거나 데이터가 없는 경우
-  if (isLoading || !data?.pages[0]?.items.length) {
-    return <EmptyState variant={variant} />;
-  }
+  const shouldShowReviewCard =
+    tab === "classReview" || (tab === "myReview" && reviewTab === "written");
 
   return (
-    <ul className='grid gap-y-6 desktop:grid-cols-2 desktop:gap-x-5'>
-      {data.pages.map((page, pageIndex) =>
-        page.items.map((item, itemIndex) => {
-          const uniqueKey = `${pageIndex}-${itemIndex}-${
-            shouldShowMeetingCard
-              ? (item as CardProps).id
-              : (item as ReviewInfo).userid
-          }`;
-
-          return shouldShowMeetingCard ? (
-            <li key={uniqueKey}>
-              <Card card={item as CardProps} />
-            </li>
-          ) : (
-            <li key={uniqueKey}>
-              <Review reviewInfo={item as ReviewInfo} />
-            </li>
-          );
+    <div className='flex flex-col gap-4'>
+      {data.pages.map((page) =>
+        page.items.map((item) => {
+          if (shouldShowMeetingCard) {
+            const cardItem = item as CardProps;
+            return <Card key={cardItem.id} card={cardItem} />;
+          }
+          if (shouldShowReviewCard) {
+            const reviewItem = item as ReviewInfo;
+            return <Review key={reviewItem.userid} reviewInfo={reviewItem} />;
+          }
+          return null;
         }),
       )}
-      <div ref={ref} className='h-1' arria-hidden='true' />
-    </ul>
+      <div ref={ref} aria-hidden='true' className='h-4' />
+      {isFetchingNextPage && <div>Loading more...</div>}
+    </div>
   );
-}
+};
