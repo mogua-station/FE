@@ -10,10 +10,18 @@ import Calendar from "@/components/common/Calendar";
 import Card from "@/components/common/card/Card";
 import Dropdown from "@/components/common/Dropdown";
 import CommonImageInput from "@/components/common/inputs/ImageUpload";
+import { usePostImage } from "@/hooks/inputs/images/usePostImage";
+import {
+  CALENDAR_MODAL_TITLE,
+  CalendarModal,
+} from "@/components/common/modals/CalendarModal";
+import FilterModal from "@/components/common/modals/FilterModal";
 import Popover from "@/components/common/Popover";
 import Review from "@/components/common/review/Review";
-import { usePostImage } from "@/hooks/inputs/images/usePostImage";
+import useModal from "@/hooks/useModal";
+import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
 import { type CardProps } from "@/types/card";
+import { type CityType, type StateType } from "@/types/overlay.type";
 import { type ReviewInfo } from "@/types/review";
 
 export default function Home() {
@@ -99,17 +107,10 @@ export default function Home() {
       isReview: true,
     },
   ];
-  const [selectedDate, setSelectedDate] = useState<{
-    startDate: Date | null;
-    endDate: Date | null;
-  }>({
-    startDate: null,
-    endDate: null,
-  });
 
   const comments: ReviewInfo[] = [
     {
-      rating: 4,
+      rating: 0,
       review:
         "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
       userid: 1,
@@ -117,7 +118,7 @@ export default function Home() {
       date: new Date(),
     },
     {
-      rating: 2,
+      rating: 1,
       review:
         "좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요 좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요좋은 스터디 였습니다. 다음에 다시 개설되면 참여하고 싶어요",
       userid: 2,
@@ -127,7 +128,7 @@ export default function Home() {
       date: new Date(),
     },
     {
-      rating: 3,
+      rating: 2,
       title: "모각코 모임",
       review:
         "이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다 이 카드는 마이페이지에서의 내가 작성한 리뷰입니다",
@@ -141,6 +142,37 @@ export default function Home() {
       eventType: "tutoring",
     },
   ];
+
+  const { selectedDates, setSelectedDates } = useSelectedDateRange();
+  const [state, setState] = useState<StateType>("ALL");
+  const [city, setCity] = useState<CityType>("ALL");
+  const { openModal } = useModal();
+
+  const handleOpenModal = () => {
+    openModal({
+      title: CALENDAR_MODAL_TITLE,
+      children: (
+        <CalendarModal
+          selectedDates={selectedDates}
+          onDateChange={(date) => setSelectedDates(date)}
+        />
+      ),
+      isDark: false,
+    });
+  };
+
+  const handleOpenFilterModal = () => {
+    openModal({
+      children: (
+        <FilterModal
+          selectedFilter={{ city, state: state, date: selectedDates }}
+          onDateChange={(date) => setSelectedDates(date)}
+          onStateChange={(state) => setState(state)}
+          onCityChange={(city) => setCity(city)}
+        />
+      ),
+    });
+  };
 
   return (
     <div>
@@ -366,14 +398,14 @@ export default function Home() {
 
       {/* calendar */}
       <div className='mx-auto w-fit bg-gray-900'>
-        <Calendar onDateChange={(date) => setSelectedDate(date)} />
+        <Calendar onDateChange={(date) => setSelectedDates(date)} />
       </div>
 
       <div className='flex flex-col items-center gap-4'>
         <h1>Selected Date</h1>
         <p>
-          {selectedDate.startDate?.toLocaleDateString()} ~{" "}
-          {selectedDate.endDate?.toLocaleDateString()}
+          {selectedDates.startDate?.toLocaleDateString()} ~{" "}
+          {selectedDates.endDate?.toLocaleDateString()}
         </p>
       </div>
 
@@ -382,6 +414,27 @@ export default function Home() {
         <p className='tablet:hidden'>모바일</p>
         <p className='hidden tablet:block desktop:hidden'>태블릿</p>
         <p className='hidden desktop:block'>데스크탑</p>
+      </div>
+
+      {/* modal */}
+      <div className='flex items-center gap-6'>
+        <button
+          onClick={handleOpenModal}
+          className='h-24 w-40 bg-gray-700 text-center text-gray-100'
+        >
+          Open Modal
+        </button>
+
+        <button
+          onClick={handleOpenFilterModal}
+          className='h-24 w-40 bg-gray-700 text-center text-gray-100'
+        >
+          Open Filter Modal
+        </button>
+
+        <p>{state}</p>
+
+        <p>{city}</p>
       </div>
 
       {/* lorem */}
@@ -415,7 +468,7 @@ export default function Home() {
 
       <div className='flex flex-col gap-2'>
         {comments.map((review) => {
-          return <Review reviewinfo={review} />;
+          return <Review reviewInfo={review} />;
         })}
       </div>
     </div>

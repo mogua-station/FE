@@ -20,13 +20,22 @@ const DATE_STYLE = {
 };
 
 interface CalendarProps {
+  selectedDates?: {
+    startDate: Date | null;
+    endDate: Date | null;
+  };
   onDateChange?: (dates: {
     startDate: Date | null;
     endDate: Date | null;
   }) => void;
+  exposeOnDatesReset?: (fn: () => void) => void;
 }
 
-export default function Calendar({ onDateChange }: CalendarProps) {
+export default function Calendar({
+  selectedDates,
+  onDateChange,
+  exposeOnDatesReset,
+}: CalendarProps) {
   const {
     year,
     month,
@@ -40,7 +49,12 @@ export default function Calendar({ onDateChange }: CalendarProps) {
     isInRange,
     isRangeStart,
     isRangeEnd,
-  } = useCalendar({ onDateChange });
+    onDatesReset,
+  } = useCalendar({ selectedDates, onDateChange });
+
+  if (exposeOnDatesReset) {
+    exposeOnDatesReset(onDatesReset);
+  }
 
   const getDateWrapperStyles = (
     date: number,
@@ -126,7 +140,7 @@ export default function Calendar({ onDateChange }: CalendarProps) {
           ))}
         </div>
 
-        <div className='grid size-full h-auto grid-cols-7 text-body-1-normal'>
+        <div className='grid size-full h-auto grid-cols-7 grid-rows-6 text-body-1-normal'>
           {prevDates.map((date, index) => (
             <div
               key={`prev-${date}`}
