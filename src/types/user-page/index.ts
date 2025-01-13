@@ -3,7 +3,6 @@ export type UserPageSection =
   | "myReview"
   | "createdMeeting"
   | "classReview";
-
 export type MyReviewTab = "toWrite" | "written";
 export type StudyType = "study" | "tutoring";
 
@@ -36,4 +35,22 @@ export type EmptyStateVariant =
 
 export interface EmptyStateProps {
   variant?: EmptyStateVariant;
+}
+
+//API 관련 타입
+export interface PageInfo {
+  hasNextPage: boolean;
+  nextCursor?: string;
+}
+
+export interface PageResponse<T> {
+  items: T[];
+  pageInfo: PageInfo;
+}
+
+export interface FetchConfig {
+  tab: UserPageSection;
+  studyType: StudyType;
+  reviewTab?: MyReviewTab;
+  cursor?: string;
 }
