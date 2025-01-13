@@ -114,6 +114,7 @@ export default function MainNavigation() {
           onDateChange={(dates) => handleFilterChange("date", dates)}
         />
       ),
+      isDark: true,
     });
   };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import generateCalendar from "@/utils/generateCalendar";
 
 interface UseCalendarProps {
@@ -22,13 +22,6 @@ export function useCalendar({ selectedDates, onDateChange }: UseCalendarProps) {
   const [endDate, setEndDate] = useState<Date | null>(
     selectedDates?.endDate || null,
   );
-
-  useEffect(() => {
-    if (selectedDates) {
-      setStartDate(selectedDates.startDate);
-      setEndDate(selectedDates.endDate);
-    }
-  }, [selectedDates]);
 
   const { prevDates, currentDates, nextDates } = generateCalendar(year, month);
 
@@ -54,22 +47,20 @@ export function useCalendar({ selectedDates, onDateChange }: UseCalendarProps) {
     if (startDate && endDate) {
       setStartDate(selectedDate);
       setEndDate(null);
+      onDateChange?.({ startDate: selectedDate, endDate: null });
     } else if (!startDate) {
       setStartDate(selectedDate);
+      onDateChange?.({ startDate: selectedDate, endDate: null });
     } else {
       if (selectedDate > startDate) {
         setEndDate(selectedDate);
+        onDateChange?.({ startDate, endDate: selectedDate });
       } else {
         setStartDate(selectedDate);
         setEndDate(null);
+        onDateChange?.({ startDate: selectedDate, endDate: null });
       }
     }
-
-    onDateChange?.({
-      startDate: startDate ? startDate : selectedDate,
-      endDate:
-        startDate && selectedDate > startDate && !endDate ? selectedDate : null,
-    });
   };
 
   const isSelected = ({

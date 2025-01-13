@@ -125,7 +125,6 @@ export default function FilterModal({
                 ? "activated"
                 : "default"
             }
-            mode='special'
             onClick={handleComplete}
           >
             완료
