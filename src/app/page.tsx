@@ -9,6 +9,8 @@ import SolidButton from "@/components/common/buttons/SolidButton";
 import Calendar from "@/components/common/Calendar";
 import Card from "@/components/common/card/Card";
 import Dropdown from "@/components/common/Dropdown";
+import CommonImageInput from "@/components/common/inputs/ImageUpload";
+import { usePostImage } from "@/hooks/inputs/images/usePostImage";
 import {
   CALENDAR_MODAL_TITLE,
   CalendarModal,
@@ -23,6 +25,13 @@ import { type CityType, type StateType } from "@/types/overlay.type";
 import { type ReviewInfo } from "@/types/review";
 
 export default function Home() {
+  const { postImage } = usePostImage(); // uploadError, isUploading 상태는 각자 시안에 맞게 사용하시면 됩니다.
+
+  const handleImagePost = async () => {
+    const endpoint = "/example/uploadImage"; // 각자 서버 엔드포인트 설정해서 사용하시면 됩니다.
+    await postImage(endpoint);
+  };
+
   const cardList: CardProps[] = [
     {
       id: 1,
@@ -167,6 +176,16 @@ export default function Home() {
 
   return (
     <div>
+      <CommonImageInput label={"프로필 이미지"} />
+      <SolidButton
+        size='small'
+        state='activated'
+        type='submit'
+        onClick={handleImagePost}
+      >
+        <span>서버에 POST</span>
+      </SolidButton>
+
       <h1>møgua project</h1>
       {/* SVGR */}
       <KakaoIcon className='size-10 text-yellow-400' />
@@ -371,7 +390,6 @@ export default function Home() {
           <div>버튼</div>
         </Popover>
       </div>
-
       <div className='mt-10 px-5'>
         {cardList.map((item) => {
           return <Card card={item} />;
