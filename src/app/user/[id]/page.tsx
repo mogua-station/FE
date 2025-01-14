@@ -1,21 +1,23 @@
 import UserProfile from "@/components/user-page/UserProfile";
 import UserTabs from "@/components/user-page/UserTabs";
-import { type UserProfile as UserProfileType } from "@/types/user-page";
 
-const MOCK_PROFILE: UserProfileType = {
-  userId: 1,
-  email: "mock@mock.com",
-  nickname: "모과씨",
-  profileImg:
-    "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-  qualificationStatus: "QUALIFIED",
-  bio: "안녕하세요, 모과입니다.",
-  userTagList: ["개발자", "프론트엔드", "협업"],
-  ownId: true,
-};
+async function getUserInfo(userId: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.USER_TOKEN_2}`, // 토큰 관리 전략 논의중
+      },
+    },
+  );
 
-export default function UserPage() {
-  const userInfo = MOCK_PROFILE;
+  const { data } = await res.json();
+  return data;
+}
+
+export default async function UserPage({ params }: { params: { id: string } }) {
+  const userId = params.id;
+  const userInfo = await getUserInfo(userId);
 
   return (
     // 가시성을 위해 임시 배경 bg-black으로 설정함 (전체 레이아웃에 배경 넣기 전)

@@ -25,12 +25,12 @@ export default function UserProfile({ userInfo }: UserProfileProps) {
           {bio}
         </p>
         <ul className='flex gap-1' aria-label='자기소개 키워드'>
-          {userTagList.map((tag, idx) => (
+          {userTagList.map((item) => (
             <li
               className='w-fit rounded-md bg-gray-600 px-1.5 py-[3px] text-caption-normal font-medium text-gray-300'
-              key={`tag-${idx}`}
+              key={`tag-${item.tag}`}
             >
-              {tag}
+              {item.tag}
             </li>
           ))}
         </ul>

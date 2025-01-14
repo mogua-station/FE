@@ -6,7 +6,7 @@ export type UserProfile = {
   profileImg: string;
   qualificationStatus: "QUALIFIED" | "UNQUALIFIED";
   bio: string;
-  userTagList: string[];
+  userTagList: Array<{ id: number; tag: string }>;
   ownId: boolean;
 };
 
