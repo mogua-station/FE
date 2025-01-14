@@ -26,7 +26,7 @@ export const MeetingList = ({
 }: MeetingListProps) => {
   const { ref, inView } = useInView();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteMeetings({
       tab,
       studyType,
@@ -68,6 +68,9 @@ export const MeetingList = ({
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  if (isLoading)
+    return <div className='flex justify-center py-4 text-white'>로딩중...</div>;
+
   // 첫 페지이 데이터가 없으면 EmptyState 표시
   if (!data?.pages[0]?.items.length) {
     return <EmptyState variant={emptyStateVariant} />;
@@ -101,9 +104,13 @@ export const MeetingList = ({
             renderItem(item, pageIndex * 10 + itemIndex),
           ),
         )}
+        {isFetchingNextPage && (
+          <div className='col-span-full flex justify-center py-4 text-white'>
+            로딩중...
+          </div>
+        )}
       </div>
       <div ref={ref} aria-hidden='true' className='h-4' />
-      {isFetchingNextPage && <div>Loading more...</div>}
     </div>
   );
 };

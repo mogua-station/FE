@@ -12,6 +12,27 @@ interface UseInfiniteMeetingsProps {
   reviewTab?: MyReviewTab;
 }
 
+/**
+ * 유저페이지 탭 데이터 캐싱 전략
+ *
+ * 1. 기본 동작
+ * - 유저페이지 진입시: refetchOnMount로 인해 새로운 데이터 요청
+ * - 각 탭 방문시: 처음 방문하는 탭은 새로운 데이터 요청, 10분 이내 재방문시 캐시 사용
+ * - 10분 경과 후: 새로운 데이터 요청
+ *
+ * 2. 캐시 무효화 조건
+ * - staleTime(10분) 경과시
+ * - 리뷰 작성 완료시 '내 리뷰' 탭 데이터만 강제 무효화 예정
+ *
+ * 3. 쿼리 설정
+ * refetchOnMount: true     // 유저 페이지 진입시 새로운 요청
+ * staleTime: 10분         // 탭 이동시 10분 동안 캐시 사용
+ * refetchOnWindowFocus: false  // 윈도우 포커스 변경시 요청 안함
+ *
+ * 4. 추후 작업
+ * - 리뷰 작성 API 연동시 '내 리뷰' 탭 데이터 무효화 처리 필요
+ * - 에러 처리 추가
+ */
 export const useInfiniteMeetings = ({
   tab,
   studyType,
@@ -37,9 +58,8 @@ export const useInfiniteMeetings = ({
       return allPages.length + 1;
     },
     initialPageParam: 1,
-    staleTime: 5 * 60 * 1000, // 5분
-    gcTime: 10 * 60 * 1000, // 10분
-    refetchOnMount: true, // 컴포넌트 마운트 시 데이터 재요청
-    refetchOnWindowFocus: false, // 창 포커스 시 데이터 재요청하지 않음
+    refetchOnMount: true,
+    staleTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
   });
 };
