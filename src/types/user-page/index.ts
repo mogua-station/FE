@@ -7,7 +7,7 @@ export type UserProfile = {
   qualificationStatus: "QUALIFIED" | "UNQUALIFIED";
   bio: string;
   userTagList: string[];
-  isOwnId: boolean;
+  ownId: boolean;
 };
 
 // 탭 목록 관련 타입
@@ -20,6 +20,7 @@ export type MyReviewTab = "toWrite" | "written";
 export type StudyType = "study" | "tutoring";
 
 export interface UserTabsProps {
+  ownId: boolean;
   isInstructor?: boolean;
 }
 

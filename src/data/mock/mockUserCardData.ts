@@ -438,7 +438,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 25,
@@ -457,7 +456,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 26,
@@ -476,7 +474,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 27,
@@ -495,7 +492,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 28,
@@ -514,7 +510,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 29,
@@ -533,7 +528,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 30,
@@ -552,7 +546,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 31,
@@ -571,7 +564,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 32,
@@ -590,7 +582,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 33,
@@ -609,7 +600,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
   {
     id: 34,
@@ -628,7 +618,6 @@ export const reviewableStudyList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    isReview: true,
   },
 ];
 export const reviewableTutoringList: CardProps[] = [
@@ -649,7 +638,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 36,
@@ -668,7 +656,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 37,
@@ -687,7 +674,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 38,
@@ -706,7 +692,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 39,
@@ -725,7 +710,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 40,
@@ -744,7 +728,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 41,
@@ -763,7 +746,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 42,
@@ -782,7 +764,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 43,
@@ -801,7 +782,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 44,
@@ -820,7 +800,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
   {
     id: 45,
@@ -839,7 +818,6 @@ export const reviewableTutoringList: CardProps[] = [
     },
     image:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-    isReview: true,
   },
 ];
 export const writtenReviews: ReviewInfo[] = [

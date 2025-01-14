@@ -20,7 +20,10 @@ const INITIAL_STATE = {
   reviewTab: "toWrite" as MyReviewTab, // 리뷰 필터 상태
 };
 
-export default function UserTabs({ isInstructor = false }: UserTabsProps) {
+export default function UserTabs({
+  ownId,
+  isInstructor = false,
+}: UserTabsProps) {
   // 상태 통합 관리
   const [filters, setFilters] = useState(INITIAL_STATE);
   const { tab, studyType, reviewTab } = filters;
@@ -84,6 +87,7 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
         tab={tab}
         studyType={currentStudyType}
         reviewTab={tab === "myReview" ? reviewTab : undefined}
+        ownId={ownId}
       />
     </div>
   );

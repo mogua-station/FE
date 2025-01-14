@@ -11,7 +11,7 @@ const MOCK_PROFILE: UserProfileType = {
   qualificationStatus: "QUALIFIED",
   bio: "안녕하세요, 모과입니다.",
   userTagList: ["개발자", "프론트엔드", "협업"],
-  isOwnId: true,
+  ownId: true,
 };
 
 export default function UserPage() {
@@ -29,6 +29,7 @@ export default function UserPage() {
         <section aria-label='활동 내역'>
           <UserTabs
             isInstructor={userInfo.qualificationStatus === "QUALIFIED"}
+            ownId={userInfo.ownId}
           />
         </section>
       </div>

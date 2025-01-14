@@ -16,12 +16,14 @@ interface MeetingListProps {
   tab: UserPageSection;
   studyType: StudyType;
   reviewTab?: MyReviewTab;
+  ownId: boolean;
 }
 
 export const MeetingList = ({
   tab,
   studyType,
   reviewTab,
+  ownId,
 }: MeetingListProps) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteMeetings({
@@ -70,12 +72,14 @@ export const MeetingList = ({
       index === data.pages.flatMap((page) => page.items).length - 1;
 
     if (shouldShowMeetingCard && "status" in item) {
+      const isReview = tab === "myReview" && reviewTab === "toWrite" && ownId;
+
       return (
         <li
           key={`meeting-${item.id}-${index}`}
           ref={isLastItem ? ref : undefined}
         >
-          <Card card={item as CardProps} />
+          <Card card={{ ...item, isReview }} />
         </li>
       );
     }
