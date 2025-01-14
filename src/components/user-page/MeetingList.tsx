@@ -65,7 +65,7 @@ export const MeetingList = ({
   }
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='grid flex-col gap-4 desktop:grid-cols-2'>
       {data.pages.map((page) =>
         page.items.map((item) => {
           if (shouldShowMeetingCard) {
