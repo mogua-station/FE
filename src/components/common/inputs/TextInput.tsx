@@ -34,7 +34,7 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
                 <label className='select-none text-body-2-normal font-medium text-gray-300'>
                   {props.label}
                   {props.required && (
-                    <span className='ml-1 text-red-500'>*</span>
+                    <span className='ml-[8px] mt-0.5 text-red-500'>*</span>
                   )}
                 </label>
               )}

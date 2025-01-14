@@ -21,7 +21,7 @@ export const selectInputContainerStyle = (
     error ? "border-danger" : value ? "border-primary" : "border-gray-800"
   }`;
 
-export const invisibleInputStyle = `w-full h-[20]px bg-gray-950 focus:outline-none text-body-2-normal font-medium text-gray-200 px-[16px]`;
+export const invisibleInputStyle = `w-full h-[20]px bg-gray-950 focus:outline-none text-body-2-normal font-medium text-gray-200`;
 
 export const hintStyle = (
   error: string | undefined,
