@@ -71,38 +71,41 @@ export const MeetingList = ({
 
     if (shouldShowMeetingCard && "status" in item) {
       return (
-        <div ref={isLastItem ? ref : undefined}>
-          <Card key={`meeting-${item.id}-${index}`} card={item as CardProps} />
-        </div>
+        <li
+          key={`meeting-${item.id}-${index}`}
+          ref={isLastItem ? ref : undefined}
+        >
+          <Card card={item as CardProps} />
+        </li>
       );
     }
     if (shouldShowReviewCard && "userid" in item) {
       return (
-        <div ref={isLastItem ? ref : undefined}>
-          <Review
-            key={`review-${item.userid}-${index}`}
-            reviewInfo={item as ReviewInfo}
-          />
-        </div>
+        <li
+          key={`review-${item.userid}-${index}`}
+          ref={isLastItem ? ref : undefined}
+        >
+          <Review reviewInfo={item as ReviewInfo} />
+        </li>
       );
     }
     return null;
   };
 
   return (
-    <div>
-      <div className='grid flex-col gap-4 desktop:grid-cols-2'>
+    <section aria-label={`${tab} 목록`}>
+      <ul className='grid flex-col gap-4 desktop:grid-cols-2'>
         {data.pages.map((page, pageIndex) =>
           page.items.map((item, itemIndex) =>
             renderItem(item, pageIndex * 10 + itemIndex),
           ),
         )}
         {isFetchingNextPage && (
-          <div className='col-span-full flex justify-center py-4 text-white'>
+          <li className='col-span-full flex justify-center py-4 text-white'>
             로딩중...
-          </div>
+          </li>
         )}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
