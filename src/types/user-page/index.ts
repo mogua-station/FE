@@ -1,3 +1,16 @@
+// 유저 프로필 타입
+export type UserProfile = {
+  userId: number;
+  email: string;
+  nickname: string;
+  profileImg: string;
+  qualificationStatus: "QUALIFIED" | "UNQUALIFIED";
+  bio: string;
+  userTagList: string[];
+  isOwnId: boolean;
+};
+
+// 탭 목록 관련 타입
 export type UserPageSection =
   | "myMeeting"
   | "myReview"
@@ -6,7 +19,6 @@ export type UserPageSection =
 export type MyReviewTab = "toWrite" | "written";
 export type StudyType = "study" | "tutoring";
 
-// 유저 탭
 export interface UserTabsProps {
   isInstructor?: boolean;
 }

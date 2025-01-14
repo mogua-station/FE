@@ -1,22 +1,26 @@
-const MOCK_PROFILE = {
-  userId: 1,
-  nickname: "모과씨",
-  profileImg:
-    "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
-  qualificationStatus: "verified",
-  bio: "안녕하세요, 모과입니다.",
-  userTagList: ["개발자", "프론트엔드", "협업"],
-};
+import { type UserProfile as UserProfileType } from "@/types/user-page";
 
-export default function UserProfile() {
-  const { nickname, profileImg, bio, userTagList } = MOCK_PROFILE;
+interface UserProfileProps {
+  userInfo: UserProfileType;
+}
+
+export default function UserProfile({ userInfo }: UserProfileProps) {
+  const { nickname, profileImg, bio, userTagList, qualificationStatus } =
+    userInfo;
 
   return (
     <div className='flex w-full justify-between rounded-[20px] bg-gray-950 px-5 py-4 desktop:px-9 desktop:py-8'>
       <div>
-        <h2 className='text-heading-2 font-semibold text-gray-100'>
-          {nickname}
-        </h2>
+        <div className='flex items-center gap-1.5'>
+          <h2 className='text-heading-2 font-semibold text-gray-100'>
+            {nickname}
+          </h2>
+          {qualificationStatus === "QUALIFIED" && (
+            <span className='rounded-[20px] bg-gray-700 px-2 py-1 text-caption-normal font-medium text-gray-300'>
+              과외선생님
+            </span>
+          )}
+        </div>
         <p className='mb-4 mt-4 text-label-normal font-regular text-gray-400'>
           {bio}
         </p>
