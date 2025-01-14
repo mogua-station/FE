@@ -82,12 +82,14 @@ export const MeetingList = ({
   };
 
   return (
-    <div className='grid flex-col gap-4 desktop:grid-cols-2'>
-      {data.pages.map((page, pageIndex) =>
-        page.items.map((item, itemIndex) =>
-          renderItem(item, pageIndex * 10 + itemIndex),
-        ),
-      )}
+    <div>
+      <div className='grid flex-col gap-4 desktop:grid-cols-2'>
+        {data.pages.map((page, pageIndex) =>
+          page.items.map((item, itemIndex) =>
+            renderItem(item, pageIndex * 10 + itemIndex),
+          ),
+        )}
+      </div>
       <div ref={ref} aria-hidden='true' className='h-4' />
       {isFetchingNextPage && <div>Loading more...</div>}
     </div>
