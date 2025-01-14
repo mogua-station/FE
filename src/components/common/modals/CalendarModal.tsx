@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import IconButton from "../buttons/IconButton";
 import SolidButton from "../buttons/SolidButton";
-import Calendar from "../Calendar";
+import Calendar from "../calendar/Calendar";
 import InfoIcon from "@/assets/images/icons/info.svg";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
 import useModal from "@/hooks/useModal";
