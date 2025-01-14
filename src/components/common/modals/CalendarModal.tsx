@@ -6,8 +6,8 @@ import SolidButton from "../buttons/SolidButton";
 import Calendar from "../calendar/Calendar";
 import InfoIcon from "@/assets/images/icons/info.svg";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
+import { useSelectedDateRange } from "@/hooks/calendar/useSelectedDateRange";
 import useModal from "@/hooks/useModal";
-import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
 
 const CALENDAR_MODAL_TITLE = "모집 기간";
 
