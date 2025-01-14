@@ -11,7 +11,7 @@ export const CommonNicknameInput = ({
   <CommonTextInput
     required={isRequired}
     name='nickname'
-    label='Nickname'
+    label='닉네임'
     control={control}
     maxLength={8}
     rules={{
