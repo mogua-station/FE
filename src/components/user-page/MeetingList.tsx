@@ -64,20 +64,29 @@ export const MeetingList = ({
     return <EmptyState variant={emptyStateVariant} />;
   }
 
+  const renderItem = (item: CardProps | ReviewInfo, index: number) => {
+    if (shouldShowMeetingCard && "status" in item) {
+      return (
+        <Card key={`meeting-${item.id}-${index}`} card={item as CardProps} />
+      );
+    }
+    if (shouldShowReviewCard && "userid" in item) {
+      return (
+        <Review
+          key={`review-${item.userid}-${index}`}
+          reviewInfo={item as ReviewInfo}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <div className='grid flex-col gap-4 desktop:grid-cols-2'>
-      {data.pages.map((page) =>
-        page.items.map((item) => {
-          if (shouldShowMeetingCard) {
-            const cardItem = item as CardProps;
-            return <Card key={cardItem.id} card={cardItem} />;
-          }
-          if (shouldShowReviewCard) {
-            const reviewItem = item as ReviewInfo;
-            return <Review key={reviewItem.userid} reviewInfo={reviewItem} />;
-          }
-          return null;
-        }),
+      {data.pages.map((page, pageIndex) =>
+        page.items.map((item, itemIndex) =>
+          renderItem(item, pageIndex * 10 + itemIndex),
+        ),
       )}
       <div ref={ref} aria-hidden='true' className='h-4' />
       {isFetchingNextPage && <div>Loading more...</div>}

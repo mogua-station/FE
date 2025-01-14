@@ -32,5 +32,9 @@ export const useInfiniteMeetings = ({
       return allPages.length + 1;
     },
     initialPageParam: 1,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
   });
 };
