@@ -38,14 +38,9 @@ export interface EmptyStateProps {
 }
 
 //API 관련 타입
-export interface PageInfo {
-  hasNextPage: boolean;
-  nextCursor?: string;
-}
-
 export interface PageResponse<T> {
   items: T[];
-  pageInfo: PageInfo;
+  hasNextPage: boolean;
 }
 
 export interface FetchConfig {

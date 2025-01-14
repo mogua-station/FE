@@ -20,16 +20,15 @@ export const useInfiniteMeetings = ({
   return useInfiniteQuery({
     queryKey: ["meetings", tab, studyType, reviewTab],
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await fetchItems({
+      return fetchItems({
         tab,
         studyType,
         reviewTab,
         page: pageParam,
       });
-      return response;
     },
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.isLast) return undefined;
+      if (!lastPage.hasNextPage) return undefined;
       return allPages.length + 1;
     },
     initialPageParam: 1,

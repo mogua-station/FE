@@ -23,21 +23,21 @@ const getMockPage = <T>(
   data: T[],
   page: number = 1,
   limit: number = PAGE_SIZE,
-): { items: T[]; isLast: boolean } => {
+): PageResponse<T> => {
   const start = (page - 1) * limit;
   const end = start + limit;
   const items = data.slice(start, end);
-  const isLast = end >= data.length;
+  const hasNextPage = end < data.length;
 
   return {
     items,
-    isLast,
+    hasNextPage,
   };
 };
 
 interface PageResponse<T> {
   items: T[];
-  isLast: boolean;
+  hasNextPage: boolean;
 }
 
 export const fetchItems = async ({
