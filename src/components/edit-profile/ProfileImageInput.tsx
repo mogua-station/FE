@@ -1,11 +1,15 @@
 import CameraIcon from "@/assets/images/icons/camera.svg";
 
-export default function ProfileImageInput() {
+export default function ProfileImageInput({
+  profileImg,
+}: {
+  profileImg: string;
+}) {
   return (
     <div className='relative mb-6 mt-8'>
       <img
         className='size-20 rounded-full border-4 border-gray-600 object-cover'
-        src='https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg'
+        src={profileImg}
       />
       <input
         className='hidden'

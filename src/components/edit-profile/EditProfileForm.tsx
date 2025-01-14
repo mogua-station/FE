@@ -3,10 +3,27 @@ import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
-export default function EditProfileForm() {
+type UserProfile = {
+  userId: number;
+  email: string;
+  nickname: string;
+  profileImg: string;
+  qualificationStatus: "QUALIFIED" | "UNQUALIFIED";
+  bio: string;
+  userTagList: Array<{ id: number; tag: string }>;
+  ownId: boolean;
+};
+
+interface EditProfileFormProps {
+  userInfo: UserProfile;
+}
+
+export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
+  const { email, nickname, profileImg, bio, userTagList } = userInfo;
+
   return (
     <form className='contents' action=''>
-      <ProfileImageInput />
+      <ProfileImageInput profileImg={profileImg} />
 
       {/* 비밀번호 변경 안내 */}
       <p className='text-label-normal font-regular text-orange-200'>
@@ -23,7 +40,7 @@ export default function EditProfileForm() {
           className='profile-edit-input'
           type='email'
           id='email'
-          value={"user@email.com"}
+          value={email}
           disabled
         />
 
@@ -36,6 +53,7 @@ export default function EditProfileForm() {
           type='text'
           id='username'
           name='nickname'
+          defaultValue={nickname}
           minLength={2}
           maxLength={8}
         />
@@ -51,6 +69,7 @@ export default function EditProfileForm() {
             id='introduction'
             name='bio'
             placeholder='소개를 입력해주세요'
+            defaultValue={bio}
             maxLength={20}
           />
           <div className='absolute bottom-4 right-4 -translate-y-1/2'>
@@ -60,7 +79,7 @@ export default function EditProfileForm() {
         <p className='profile-edit-message'>최대 20자까지 입력 가능해요</p>
 
         {/* 태그 */}
-        <TagInput />
+        <TagInput defaultTags={userTagList} />
       </div>
 
       {/* 수정 완료 버튼 */}

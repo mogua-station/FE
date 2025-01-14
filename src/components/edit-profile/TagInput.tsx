@@ -5,9 +5,15 @@ import CountIndicator from "../common/CountIndicator";
 import Tag from "./Tag";
 import DeleteIcon from "@/assets/images/icons/delete.svg";
 
-export default function TagInput() {
+interface TagInputProps {
+  defaultTags?: Array<{ id: number; tag: string }>;
+}
+
+export default function TagInput({ defaultTags = [] }: TagInputProps) {
   const [inputValue, setInputValue] = useState("");
-  const [tagList, setTagList] = useState<string[]>([]);
+  const [tagList, setTagList] = useState<string[]>(
+    defaultTags.map((item) => item.tag),
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
@@ -54,7 +60,7 @@ export default function TagInput() {
         {/* 태그 목록 */}
         <ul className='flex flex-wrap items-center gap-2'>
           {tagList.map((tag, idx) => (
-            <Tag key={tag} tag={tag}>
+            <Tag key={`tag-${tag}`} tag={tag}>
               <button
                 type='button'
                 aria-label='삭제'
