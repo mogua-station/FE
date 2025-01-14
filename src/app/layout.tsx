@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className='flex min-h-[100dvh] flex-col'>
         <Providers>
           <Header />
-          <main className='flex flex-1 flex-col pb-[62px] pt-[56px] desktop:pb-0'>
+          <main className='flex flex-1 flex-col px-4 pb-[62px] pt-[56px] tablet:px-20 desktop:px-4 desktop:pb-0'>
             {children}
           </main>
           <NavBar />
