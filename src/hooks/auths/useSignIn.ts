@@ -11,10 +11,13 @@ type SignInResult = {
 const useSignIn = () => {
   const router = useRouter();
 
-  const signIn = async (data: {
-    email: string;
-    password: string;
-  }): Promise<SignInResult> => {
+  const signIn = async (
+    data: {
+      email: string;
+      password: string;
+    },
+    options?: { redirect?: boolean },
+  ): Promise<SignInResult> => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/user/sign-in`,
@@ -45,7 +48,9 @@ const useSignIn = () => {
         };
       }
 
-      await router.push("/");
+      if (options?.redirect !== false) {
+        await router.push("/");
+      }
       return { success: true };
     } catch (error: unknown) {
       // error 타입 가드
