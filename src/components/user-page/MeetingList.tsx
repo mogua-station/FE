@@ -94,7 +94,7 @@ export const MeetingList = ({
 
   return (
     <section aria-label={`${tab} 목록`}>
-      <ul className='grid flex-col gap-4 desktop:grid-cols-2'>
+      <ul className='grid flex-col gap-y-6 desktop:grid-cols-2 desktop:gap-x-5'>
         {data.pages.map((page, pageIndex) =>
           page.items.map((item, itemIndex) =>
             renderItem(item, pageIndex * 10 + itemIndex),

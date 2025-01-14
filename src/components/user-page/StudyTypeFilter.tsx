@@ -19,7 +19,7 @@ export default function StudyTypeFilter({
   onChange,
 }: StudyTypeFilterProps) {
   return (
-    <div className='mb-4'>
+    <div className='mb-4 desktop:mb-8'>
       <Dropdown
         align='LL'
         content={STUDY_TYPE_OPTIONS.map((option) => ({

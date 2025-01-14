@@ -25,7 +25,7 @@ export default function TabList({
 
   return (
     <div
-      className='my-6 flex w-full desktop:mt-14 desktop:max-w-[343px]'
+      className='my-6 flex w-full desktop:mb-8 desktop:mt-10 desktop:max-w-[343px]'
       role='tablist'
     >
       {tabs.map(({ id, label }) => {
@@ -36,6 +36,7 @@ export default function TabList({
         return (
           <button
             className={`flex-1 text-nowrap px-4 py-3.5 text-body-2-normal font-semibold ${activeStyle}`}
+            type='button'
             key={`${id}-tab`}
             role='tab'
             aria-selected={currentTab === id}

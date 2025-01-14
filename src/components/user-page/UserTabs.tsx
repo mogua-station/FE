@@ -57,7 +57,7 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
   const currentStudyType = getCurrentStudyType(tab, studyType, isInstructor);
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='flex flex-col'>
       {/* 항상 보이는 메인 탭 목록 */}
       <TabList
         currentTab={tab}
