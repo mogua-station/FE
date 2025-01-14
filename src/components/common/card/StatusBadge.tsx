@@ -9,12 +9,10 @@ export default function StatusBadge({
   recruitmentDate = new Date(),
 }: BadgeProps) {
   const deadline = (date: Date) => {
-    let diffTime;
-    if (recruitmentDate) {
-      diffTime = +date - +new Date();
+    if (!recruitmentDate) return;
 
-      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    }
+    const diffTime = +date - +new Date();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const renderBadge = (status: string) => {
@@ -30,9 +28,11 @@ export default function StatusBadge({
             </span>
             <span className='flex items-center justify-between gap-1.5 rounded-[6px] bg-gray-800 px-2 py-1'>
               <span className='text-caption-normal font-medium text-primary'>
-                {deadline(recruitmentDate) == 0
-                  ? "오늘 마감"
-                  : `마감 D-${deadline(recruitmentDate)}`}
+                <span className='text-caption-normal font-medium text-primary'>
+                  {deadline(recruitmentDate) == 0
+                    ? "오늘 마감"
+                    : `마감 D-${deadline(recruitmentDate)}`}
+                </span>
               </span>
             </span>
           </div>
