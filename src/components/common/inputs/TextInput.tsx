@@ -31,10 +31,10 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           return (
             <div className='flex flex-col gap-[12px]'>
               {props.label && (
-                <label className='select-none text-body-2-normal font-medium text-gray-300'>
+                <label className='ml-[8px] select-none text-body-2-normal font-medium text-gray-300'>
                   {props.label}
                   {props.required && (
-                    <span className='ml-[8px] mt-0.5 text-red-500'>*</span>
+                    <span className='ml-1 mt-0.5 text-red-500'>*</span>
                   )}
                 </label>
               )}
