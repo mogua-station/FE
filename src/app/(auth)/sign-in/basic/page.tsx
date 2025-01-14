@@ -1,27 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import {
   CommonEmailInput,
   CommonPasswordInput,
 } from "@/components/auth/AuthInputs";
 import SolidButton from "@/components/common/buttons/SolidButton";
-
-interface FormData {
-  nickname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import useSignIn from "@/hooks/auths/useSignIn";
+import { type FormData } from "@/types";
 
 const SignInBasicPage = () => {
+  const { signIn } = useSignIn();
+
   const {
     control,
     handleSubmit,
     watch,
-    setValue,
+    setError,
     formState: { isValid },
   } = useForm<FormData>({
     defaultValues: {
@@ -32,23 +28,17 @@ const SignInBasicPage = () => {
   });
 
   const email = watch("email");
-  const password = watch("password");
 
-  useEffect(() => {
-    if (password && password.length > 20) {
-      setValue("password", password.slice(0, 20));
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const result = await signIn(data);
+    if (result?.error) {
+      if (result.error.type === "email") {
+        setError("email", { message: result.error.message });
+        setError("password", { message: result.error.message });
+      } else if (result.error.type === "password") {
+        setError("password", { message: result.error.message });
+      }
     }
-  }, [password, setValue]);
-
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    fetch(`${process.env.NEXT_BASE_URL}/user/sign-in`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
   };
 
   return (

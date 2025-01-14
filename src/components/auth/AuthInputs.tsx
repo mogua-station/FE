@@ -22,7 +22,6 @@ export const CommonNicknameInput = ({
       },
     }}
     hint='최대 8글자까지 입력 가능해요'
-    layout='1button'
   />
 );
 
