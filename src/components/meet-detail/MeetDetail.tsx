@@ -37,7 +37,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
             <div className='meet-info-box flex flex-col gap-8'>
               <div>
                 <div className='flex'>
-                  <StatusBadge status='모집중' />
+                  <StatusBadge status='모집중' recruitmentDate={new Date()} />
                 </div>
 
                 <div className='mt-3'>
@@ -143,7 +143,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
             </div>
           </div>
           {/* 주최자 프로필, 시작 */}
-          <MeetButtonArea meetId={meetInfo.id} author={meetInfo.author} />
+          <MeetButtonArea meetId={meetInfo.id} host={meetInfo.host} />
         </div>
         {/* 리뷰 */}
         <div className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>

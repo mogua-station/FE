@@ -157,7 +157,7 @@ export const meetDetailMock: MeetProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     isWishlist: false,
-    author: {
+    host: {
       userId: 33,
       userName: "모과씨",
       userProfile:
@@ -273,7 +273,7 @@ export const meetDetailMock: MeetProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     isWishlist: false,
-    author: {
+    host: {
       userId: 33,
       userName: "모과씨",
       userProfile:
@@ -389,7 +389,7 @@ export const meetDetailMock: MeetProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     isWishlist: false,
-    author: {
+    host: {
       userId: 33,
       userName: "모과씨",
       userProfile:
@@ -505,7 +505,7 @@ export const meetDetailMock: MeetProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     isWishlist: false,
-    author: {
+    host: {
       userId: 33,
       userName: "모과씨",
       userProfile:

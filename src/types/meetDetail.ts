@@ -1,6 +1,6 @@
 import { type ReviewInfo } from "./review";
 
-export interface AuthorInfo {
+export interface HostInfo {
   userId: number;
   userName: string;
   userProfile: string;
@@ -39,7 +39,7 @@ export interface MeetProps {
   };
   thumbnail?: string;
   isWishlist: false;
-  author: AuthorInfo;
+  host: HostInfo;
   users: UserInfo[];
   reviews: ReviewInfo[];
 }

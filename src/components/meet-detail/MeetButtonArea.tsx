@@ -8,14 +8,14 @@ import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import useAddWishlist from "@/hooks/useToggleWishlist";
-import { type AuthorInfo } from "@/types/meetDetail";
+import { type HostInfo } from "@/types/meetDetail";
 
 export default function MeetButtonArea({
   meetId,
-  author,
+  host,
 }: {
   meetId: number;
-  author: AuthorInfo;
+  host: HostInfo;
 }) {
   //임시 유저 데이터 확인
   const user = null;
@@ -78,17 +78,17 @@ export default function MeetButtonArea({
       </div>
       <button
         className='meet-info-box-small mt-6 flex flex-col gap-4'
-        onClick={(e) => handleClickNavigateUser(e, author.userId)}
+        onClick={(e) => handleClickNavigateUser(e, host.userId)}
       >
         <span className='text-title block'>주최자 프로필</span>
         <div className='meet-info-box-inner-2 w-full'>
           <div className='flex gap-[14px]'>
             <div className='h-[46px] w-[46px] overflow-hidden rounded-[50%] bg-gray-700'>
-              <img src={author.userProfile} alt='유저 프로필' />
+              <img src={host.userProfile} alt='유저 프로필' />
             </div>
             <div>
               <span className='flex items-center gap-[6px] text-body-2-normal font-medium text-gray-300'>
-                {author.userName}
+                {host.userName}
                 <span className='rounded-5 text-gary-300 inline-block rounded-[20px] bg-gray-700 px-2 py-1 text-caption-normal font-medium'>
                   과외선생님
                 </span>
