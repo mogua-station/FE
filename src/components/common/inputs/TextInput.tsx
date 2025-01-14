@@ -1,7 +1,8 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import OutlineButton from "../buttons/OutlineButton";
 import VisibilityToggle from "./VisibilityToggle";
+import OutlineButton from "@/components/common/buttons/OutlineButton";
+import useAuthInput from "@/hooks/inputs/auth/useAuthInput";
 
 import {
   hintStyle,
