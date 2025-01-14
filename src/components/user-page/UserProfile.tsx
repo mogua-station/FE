@@ -12,7 +12,7 @@ export default function UserProfile() {
   const { nickname, profileImg, bio, userTagList } = MOCK_PROFILE;
 
   return (
-    <article className='flex min-w-[343px] justify-between rounded-[20px] bg-gray-950 px-5 py-4 desktop:px-9 desktop:py-8'>
+    <article className='flex w-full justify-between rounded-[20px] bg-gray-950 px-5 py-4 desktop:px-9 desktop:py-8'>
       <div>
         <span className='text-heading-2 font-semibold text-gray-100'>
           {nickname}
