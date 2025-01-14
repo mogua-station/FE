@@ -56,5 +56,8 @@ export const CommonPasswordInput = ({ control }: { control: Control<any> }) => (
       },
     }}
     hint='특수문자 포함 8자 - 20자 사이로 입력해주세요.'
+    onPaste={(e) => e.preventDefault()}
+    onCopy={(e) => e.preventDefault()}
+    onCut={(e) => e.preventDefault()}
   />
 );
