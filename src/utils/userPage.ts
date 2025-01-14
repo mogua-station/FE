@@ -48,6 +48,7 @@ export const fetchItems = async ({
 }: FetchConfig): Promise<PageResponse<CardProps | ReviewInfo>> => {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
+  // tab에 따라 다른 mock 데이터 반환
   switch (tab) {
     case "myMeeting":
       return getMockPage(

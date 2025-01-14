@@ -41,6 +41,8 @@ export default function EmptyState({ variant = "myMeeting" }: EmptyStateProps) {
     },
   };
 
+  // variant에 따라 적절한 설정을 반환
+  // string이면 직접 접근, myReview면 tab 상태까지 확인
   const getConfig = (variant: EmptyStateVariant) => {
     if (typeof variant === "string") {
       return emptyStateConfig[variant];

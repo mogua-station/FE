@@ -15,9 +15,9 @@ import { getCurrentStudyType, shouldShowFilter } from "@/utils/userPage";
 
 // 초기 상태 상수로 분리
 const INITIAL_STATE = {
-  tab: "myMeeting" as UserPageSection,
-  studyType: "study" as StudyType,
-  reviewTab: "toWrite" as MyReviewTab,
+  tab: "myMeeting" as UserPageSection, // 현재 선택된 탭
+  studyType: "study" as StudyType, // 스터디/과외 필터 상태
+  reviewTab: "toWrite" as MyReviewTab, // 리뷰 필터 상태
 };
 
 export default function UserTabs({ isInstructor = false }: UserTabsProps) {
@@ -25,16 +25,17 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
   const [filters, setFilters] = useState(INITIAL_STATE);
   const { tab, studyType, reviewTab } = filters;
 
-  // 핸들러 함수 단순화
+  // 탭 변경시 (예: '내 모임' -> '내 리뷰' 탭 클릭)
   const handleTabChange = (newTab: UserPageSection) => {
     setFilters((prev) => ({
       ...prev,
       tab: newTab,
-      studyType: newTab === "classReview" ? "tutoring" : "study",
-      reviewTab: "toWrite",
+      studyType: newTab === "classReview" ? "tutoring" : "study", // 수강평 탭으로 가면 과외로 설정
+      reviewTab: "toWrite", // 리뷰 필터 상태 초기화
     }));
   };
 
+  // 스터디/과외 필터 변경시
   const handleStudyTypeChange = (newStudyType: StudyType) => {
     setFilters((prev) => ({
       ...prev,
@@ -42,6 +43,7 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
     }));
   };
 
+  // 리뷰 필터 변경시 (작성가능/작성한)
   const handleReviewTabChange = (newReviewTab: MyReviewTab) => {
     setFilters((prev) => ({
       ...prev,
@@ -49,17 +51,21 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
     }));
   };
 
+  // 스터디/과외 필터를 보여줄지 결정
   const showStudyTypeFilter = shouldShowFilter(tab, isInstructor);
+  // 현재 적용할 스터디/과외 타입 결정
   const currentStudyType = getCurrentStudyType(tab, studyType, isInstructor);
 
   return (
     <div className='flex flex-col gap-4'>
+      {/* 항상 보이는 메인 탭 목록 */}
       <TabList
         currentTab={tab}
         onChange={handleTabChange}
         isInstructor={isInstructor}
       />
 
+      {/* 스터디/과외 필터 (조건부 표시) */}
       {showStudyTypeFilter && (
         <StudyTypeFilter
           key={tab}
@@ -68,10 +74,12 @@ export default function UserTabs({ isInstructor = false }: UserTabsProps) {
         />
       )}
 
+      {/* 리뷰 필터 (내 리뷰 탭에서만 표시) */}
       {tab === "myReview" && (
         <ReviewTabs value={reviewTab} onChange={handleReviewTabChange} />
       )}
 
+      {/* 데이터 목록 표시 */}
       <MeetingList
         tab={tab}
         studyType={currentStudyType}
