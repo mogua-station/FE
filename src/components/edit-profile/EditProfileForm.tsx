@@ -164,7 +164,11 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
           />
 
           {/* 태그 */}
-          <TagInput defaultTags={userTagList} onTagsChange={handleTagsChange} />
+          <TagInput
+            defaultTags={userTagList}
+            onTagsChange={handleTagsChange}
+            name='userTag'
+          />
         </div>
 
         {/* 수정 완료 버튼 */}
