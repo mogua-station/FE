@@ -1,4 +1,6 @@
-export type MeetupType = "study" | "tutoring";
+export type MeetupType = "STUDY" | "TUTORING";
+
+export type HybridType = "ONLINE" | "OFFLINE";
 
 export type StateType = "ALL" | "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
 

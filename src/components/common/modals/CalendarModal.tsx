@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import Calendar from "../Calendar";
 import InfoIcon from "@/assets/images/icons/info.svg";
+import Calendar from "@/components/common/calendar/Calendar";
 
 const CALENDAR_MODAL_TITLE = "모집 기간";
 
