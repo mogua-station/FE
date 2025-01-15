@@ -57,13 +57,13 @@ const CommonSelectBox: React.FC<CommonSelectBoxProps> = ({
   ) => (
     <select
       name={selectBoxName}
-      className={`relative flex w-full items-center rounded-[12px] border-2 px-[16px] py-[18px] text-body-2-normal font-medium focus:outline-none ${
+      className={`relative flex w-full items-center rounded-[12px] border-2 bg-gray-950 px-[16px] py-[18px] text-body-2-normal font-medium focus:outline-none ${
         error
           ? "border-danger"
           : selectedValue === ""
             ? "border-gray-800"
             : "border-gray-500"
-      } ${selectedValue !== "" && !error ? "border-primary" : ""} ${selectedValue === "" ? "text-gray-200" : "text-gray-400"}`}
+      } ${selectedValue !== "" && !error ? "border-primary" : ""} ${selectedValue === "" ? "text-gray-400" : "text-gray-200"}`}
       value={selectedValue || ""}
       onChange={onChangeHandler}
       aria-required={props.required}

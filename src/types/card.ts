@@ -17,7 +17,7 @@ export interface CardInfo {
 
 export interface BadgeProps {
   status: string;
-  recruitmentDate: Date;
+  recruitmentDate?: Date;
 }
 
 export interface CardContentProps {
