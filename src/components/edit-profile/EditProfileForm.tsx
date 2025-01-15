@@ -1,5 +1,7 @@
 "use client";
 
+import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
@@ -7,10 +9,10 @@ import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
+import { updateProfile } from "@/app/user/[id]/edit_profile/action";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
 type UserProfile = {
-  userId: number;
   email: string;
   nickname: string;
   profileImg: string;
@@ -22,11 +24,17 @@ type UserProfile = {
 
 interface EditProfileFormProps {
   userInfo: UserProfile;
+  userId: string;
 }
 
-export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
+export default function EditProfileForm({
+  userInfo,
+  userId,
+}: EditProfileFormProps) {
   const { email, nickname, profileImg, bio, userTagList } = userInfo;
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+  const router = useRouter();
 
   const methods = useForm({
     defaultValues: {
@@ -43,13 +51,12 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     watch,
   } = methods;
 
-  // 폼 값들을 실시간으로 감시
   const watchedNickname = watch("nickname");
   const watchedBio = watch("bio");
   const watchedTags = watch("userTagList");
 
   const handleTagsChange = (tags: string[]) => {
-    methods.setValue("userTagList", tags); // React Hook Form으로 태그 업데이트
+    methods.setValue("userTagList", tags);
   };
 
   const getChangedFields = () => {
@@ -60,7 +67,6 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
 
     const requestData: any = {};
 
-    // watch로 실시간 값 비교
     if (watchedNickname !== nickname) {
       requestData.nickname = watchedNickname;
     }
@@ -88,21 +94,36 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     return changes;
   };
 
-  const onSubmit = methods.handleSubmit(() => {
+  const onSubmit = methods.handleSubmit(async () => {
     const changes = getChangedFields();
+    const submitFormData = new FormData();
 
-    if (!changes.formData && !changes.requestData) {
-      alert("변경된 내용이 없습니다.");
-      return;
+    // 변경사항이 없어도 최소한 빈 객체라도 request로 보내기
+    submitFormData.append(
+      "request",
+      new Blob([JSON.stringify(changes.requestData || {})], {
+        type: "application/json",
+      }),
+    );
+
+    // 이미지가 있는 경우에만 추가
+    if (changes.formData) {
+      const imageFile = changes.formData.get("image");
+      if (imageFile) {
+        submitFormData.append("image", imageFile);
+      }
     }
 
-    const submitFormData = changes.formData || new FormData();
-    if (changes.requestData) {
-      submitFormData.append("request", JSON.stringify(changes.requestData));
-    }
+    const result = await updateProfile(submitFormData);
 
-    // API 요청 전 최종 데이터 확인
-    console.log("전송할 데이터:", Object.fromEntries(submitFormData.entries()));
+    if (result.success) {
+      router.replace(`/user/${userId}`);
+      revalidatePath(`/user/${userId}`);
+      revalidatePath(`/user/${userId}/edit_profile`);
+    } else {
+      alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
+      throw new Error(result.error);
+    }
   });
 
   const getButtonState = () => {
@@ -130,8 +151,7 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
           비밀번호 변경
         </p>
 
-        {/* 유저 정보 (twMerge 적용으로 스타일 변경 예정)*/}
-        {/* 이메일: 읽기전용 - 스타일 반영 필요 */}
+        {/* 유저 정보*/}
         <div className='flex w-full flex-col gap-8 *:w-full'>
           <CommonTextInput
             className='cursor-not-allowed bg-gray-800 text-gray-500'
@@ -151,7 +171,6 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             )}
             name='nickname'
             label='닉네임'
-            defaultValue={nickname}
             control={control}
             rules={{
               minLength: {
@@ -172,7 +191,7 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             name='bio'
             label='소개'
             placeholder='소개를 입력해주세요'
-            defaultValue={bio}
+            control={control}
             maxLength={20}
             hint='최대 20자까지 입력 가능해요'
           />

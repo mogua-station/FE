@@ -9,7 +9,7 @@ const userId = 1;
 const NAV_ITEMS = [
   { href: "/", icon: <PlanetIcon />, label: "모임 찾기" },
   { href: "/wishlist", icon: <BookmarkFillIcon />, label: "북마크" },
-  { href: `/users/${userId}`, icon: <UserIcon />, label: "마이 페이지" },
+  { href: `/user/${userId}`, icon: <UserIcon />, label: "마이 페이지" },
 ];
 
 export default function NavBar() {

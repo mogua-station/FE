@@ -45,7 +45,7 @@ export default async function EditProfile({
       </div>
 
       {/* 프로필 수정 폼 */}
-      <EditProfileForm userInfo={userInfo} />
+      <EditProfileForm userInfo={userInfo} userId={userId} />
 
       {/* 로그아웃 | 탈퇴하기 */}
       <div className='flex *:text-label-normal *:font-regular *:text-gray-300'>
