@@ -6,7 +6,7 @@ import ETCButton from "@/components/common/buttons/ETCButton";
 import IconButton from "@/components/common/buttons/IconButton";
 import OutlineButton from "@/components/common/buttons/OutlineButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import Calendar from "@/components/common/Calendar";
+import Calendar from "@/components/common/calendar/Calendar";
 import Card from "@/components/common/card/Card";
 import Dropdown from "@/components/common/Dropdown";
 import CommonImageInput from "@/components/common/inputs/ImageUpload";
@@ -18,8 +18,8 @@ import {
 import FilterModal from "@/components/common/modals/FilterModal";
 import Popover from "@/components/common/Popover";
 import Review from "@/components/common/review/Review";
+import { useSelectedDateRange } from "@/hooks/calendar/useSelectedDateRange";
 import useModal from "@/hooks/useModal";
-import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
 import { type CardProps } from "@/types/card";
 import { type CityType, type StateType } from "@/types/overlay.type";
 import { type ReviewInfo } from "@/types/review";

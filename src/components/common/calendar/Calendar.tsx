@@ -1,12 +1,18 @@
-import ArrowIcon from "@/assets/images/icons/arrow_left.svg";
-import { useCalendar } from "@/hooks/useCalendar";
+import { CalendarDatesGrid } from "./CalendarDatesGrid";
+import { CalendarDaysOfWeek } from "./CalendarDaysOfWeek";
+import { CalendarHeader } from "./CalendarHeader";
+import { useCalendar } from "@/hooks/calendar/useCalendar";
+import type { CalendarProps } from "@/types/date.type";
+import {
+  isNextDisabled,
+  isOutOfRange,
+  isPrevDisabled,
+} from "@/utils/calendarUtils";
 
 const WEEK = {
   style: "flex flex-1 items-center justify-center",
   daysOfWeek: ["일", "월", "화", "수", "목", "금", "토"],
 };
-
-const DATE_ITEM_STYLE = "flex size-10 items-center justify-center text-center";
 
 const DATE_STYLE = {
   base: "flex items-center justify-center h-10 cursor-pointer",
@@ -18,18 +24,6 @@ const DATE_STYLE = {
   selected: "size-10 rounded-full bg-orange-200 text-gray-950",
   inRange: "size-full bg-orange-200/35 text-gray-200",
 };
-
-interface CalendarProps {
-  selectedDates?: {
-    startDate: Date | null;
-    endDate: Date | null;
-  };
-  onDateChange?: (dates: {
-    startDate: Date | null;
-    endDate: Date | null;
-  }) => void;
-  exposeOnDatesReset?: (fn: () => void) => void;
-}
 
 export default function Calendar({
   selectedDates,
@@ -45,11 +39,13 @@ export default function Calendar({
     handlePrevMonth,
     handleNextMonth,
     handleDateClick,
-    isSelected,
     isInRange,
+    isSelected,
     isRangeStart,
     isRangeEnd,
     onDatesReset,
+    minDate,
+    maxDate,
   } = useCalendar({ selectedDates, onDateChange });
 
   if (exposeOnDatesReset) {
@@ -62,7 +58,11 @@ export default function Calendar({
     state: "prev" | "next" | "current" = "current",
   ) => {
     const isPrevNext = state === "prev" || state === "next";
-    const base = `${DATE_STYLE.base} ${isPrevNext ? DATE_STYLE.prevNext : ""}`;
+    const base = `${DATE_STYLE.base} ${isPrevNext ? DATE_STYLE.prevNext : ""}${
+      isOutOfRange(date, state, year, month, minDate, maxDate)
+        ? " cursor-default text-gray-600"
+        : ""
+    }`;
 
     const isLastIndex =
       (state === "current" && index === currentDates.length - 1) ||
@@ -95,7 +95,8 @@ export default function Calendar({
     index: number,
     state: "prev" | "next" | "current" = "current",
   ) => {
-    const base = `${DATE_ITEM_STYLE} relative`;
+    const base =
+      "flex size-10 items-center justify-center text-center relative";
     const selected = isSelected({ date, state }) ? DATE_STYLE.selected : "";
     const inRange = isInRange({ date, state })
       ? `${DATE_STYLE.inRange} ${
@@ -119,56 +120,29 @@ export default function Calendar({
 
   return (
     <div className='flex w-[23rem] flex-col items-center gap-2 p-4 font-medium'>
-      <div className='flex w-full items-center justify-between text-gray-100'>
-        <button className='size-6' onClick={handlePrevMonth}>
-          <ArrowIcon className='size-full text-gray-100 disabled:text-gray-300' />
-        </button>
-        <div className='text-body-1-normal'>
-          {year}년 {month + 1}월
-        </div>
-        <button className='size-6' onClick={handleNextMonth}>
-          <ArrowIcon className='size-full rotate-180 text-gray-100 disabled:text-gray-300' />
-        </button>
-      </div>
+      {/* 헤더 컴포넌트 */}
+      <CalendarHeader
+        year={year}
+        month={month}
+        handlePrevMonth={handlePrevMonth}
+        handleNextMonth={handleNextMonth}
+        isPrevDisabled={isPrevDisabled({ year, month, minDate })}
+        isNextDisabled={isNextDisabled({ year, month, maxDate })}
+      />
 
       <div className='flex w-full flex-col items-center text-gray-200'>
-        <div className='flex h-[2.625rem] w-full justify-between text-caption-normal text-gray-400'>
-          {WEEK.daysOfWeek.map((day) => (
-            <div key={day} className={WEEK.style}>
-              {day}
-            </div>
-          ))}
-        </div>
+        {/* 요일 표시 컴포넌트 */}
+        <CalendarDaysOfWeek style={WEEK.style} daysOfWeek={WEEK.daysOfWeek} />
 
-        <div className='grid size-full h-auto grid-cols-7 grid-rows-6 text-body-1-normal'>
-          {prevDates.map((date, index) => (
-            <div
-              key={`prev-${date}`}
-              className={getDateWrapperStyles(date, index, "prev")}
-              onClick={() => handleDateClick({ date, state: "prev" })}
-            >
-              <div className={getDateStyles(date, index, "prev")}>{date}</div>
-            </div>
-          ))}
-          {currentDates.map((date, index) => (
-            <div
-              key={`current-${date}`}
-              className={getDateWrapperStyles(date, index)}
-              onClick={() => handleDateClick({ date })}
-            >
-              <div className={getDateStyles(date, index)}>{date}</div>
-            </div>
-          ))}
-          {nextDates.map((date, index) => (
-            <div
-              key={`next-${date}`}
-              className={getDateWrapperStyles(date, index, "next")}
-              onClick={() => handleDateClick({ date, state: "next" })}
-            >
-              <div className={getDateStyles(date, index, "next")}>{date}</div>
-            </div>
-          ))}
-        </div>
+        {/* 날짜 그리드 컴포넌트 */}
+        <CalendarDatesGrid
+          prevDates={prevDates}
+          currentDates={currentDates}
+          nextDates={nextDates}
+          getDateWrapperStyles={getDateWrapperStyles}
+          getDateStyles={getDateStyles}
+          handleDateClick={handleDateClick}
+        />
       </div>
     </div>
   );
