@@ -1,15 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CountIndicator from "../common/CountIndicator";
 import Tag from "./Tag";
 import DeleteIcon from "@/assets/images/icons/delete.svg";
 
 interface TagInputProps {
   defaultTags?: Array<{ id: number; tag: string }>;
+  onTagsChange: (tags: string[]) => void;
 }
 
-export default function TagInput({ defaultTags = [] }: TagInputProps) {
+export default function TagInput({
+  defaultTags = [],
+  onTagsChange,
+}: TagInputProps) {
   const [inputValue, setInputValue] = useState("");
   const [tagList, setTagList] = useState<string[]>(
     defaultTags.map((item) => item.tag),
@@ -42,13 +46,17 @@ export default function TagInput({ defaultTags = [] }: TagInputProps) {
 
   const tagInputStyle = tagList.length === 0 ? "ml-2" : "";
 
+  useEffect(() => {
+    onTagsChange(tagList);
+  }, [tagList]);
+
   return (
     <>
       <div className='mt-8'>
         <div className='flex justify-between'>
           <label className='profile-edit-label mt-0'>태그</label>
           {/* 카운트 */}
-          <CountIndicator currentCount={0} maxCount={3} />
+          <CountIndicator currentCount={tagList.length} maxCount={3} />
         </div>
         {/* 폼 데이터 전송을 위한 hidden input */}
         <input
