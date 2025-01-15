@@ -40,7 +40,13 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
   const {
     control,
     formState: { errors },
+    watch,
   } = methods;
+
+  // 폼 값들을 실시간으로 감시
+  const watchedNickname = watch("nickname");
+  const watchedBio = watch("bio");
+  const watchedTags = watch("userTagList");
 
   const handleTagsChange = (tags: string[]) => {
     methods.setValue("userTagList", tags); // React Hook Form으로 태그 업데이트
@@ -52,24 +58,22 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
       requestData?: any;
     } = {};
 
-    const formValues = methods.getValues();
     const requestData: any = {};
 
-    // 단순 비교로 변경
-    if (formValues.nickname !== nickname) {
-      requestData.nickname = formValues.nickname;
+    // watch로 실시간 값 비교
+    if (watchedNickname !== nickname) {
+      requestData.nickname = watchedNickname;
     }
 
-    if (formValues.bio !== bio) {
-      requestData.bio = formValues.bio;
+    if (watchedBio !== bio) {
+      requestData.bio = watchedBio;
     }
 
-    const currentTags = formValues.userTagList;
-    const originalTags = userTagList.map((tag) => tag.tag);
     if (
-      JSON.stringify(currentTags.sort()) !== JSON.stringify(originalTags.sort())
+      JSON.stringify(watchedTags.sort()) !==
+      JSON.stringify(userTagList.map((tag) => tag.tag).sort())
     ) {
-      requestData.userTagList = currentTags;
+      requestData.userTagList = watchedTags;
     }
 
     if (selectedImage) {
@@ -100,6 +104,18 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     // API 요청 전 최종 데이터 확인
     console.log("전송할 데이터:", Object.fromEntries(submitFormData.entries()));
   });
+
+  const getButtonState = () => {
+    // 에러가 있으면 무조건 inactive
+    if (Object.keys(errors).length > 0) return "inactive";
+
+    // 실제 변경사항만 확인
+    const changes = getChangedFields();
+    if (changes.formData || changes.requestData) return "activated";
+
+    // 그 외의 경우는 default
+    return "default";
+  };
 
   return (
     <FormProvider {...methods}>
@@ -136,8 +152,6 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             name='nickname'
             label='닉네임'
             defaultValue={nickname}
-            minLength={2}
-            maxLength={8}
             control={control}
             rules={{
               minLength: {
@@ -172,7 +186,9 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
         </div>
 
         {/* 수정 완료 버튼 */}
-        <SolidButton className='my-14'>수정 완료</SolidButton>
+        <SolidButton className='my-14' state={getButtonState()}>
+          수정 완료
+        </SolidButton>
       </form>
     </FormProvider>
   );
