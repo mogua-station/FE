@@ -70,8 +70,6 @@ async function fetchMockData(url: string): Promise<{
   const slicedData = mockCardData.slice(start, end);
   const isLast = end >= mockCardData.length;
 
-  console.log("server");
-
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
