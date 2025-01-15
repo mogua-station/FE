@@ -51,10 +51,12 @@ export default function TagInput({
   }, [tagList]);
 
   return (
-    <>
-      <div className='mt-8'>
+    <div>
+      <div>
         <div className='flex justify-between'>
-          <label className='profile-edit-label mt-0'>태그</label>
+          <label className='ml-2 select-none text-body-2-normal font-medium text-gray-300'>
+            태그
+          </label>
           {/* 카운트 */}
           <CountIndicator currentCount={tagList.length} maxCount={3} />
         </div>
@@ -66,7 +68,7 @@ export default function TagInput({
         />
 
         {/* 태그 목록 */}
-        <ul className='flex flex-wrap items-center gap-2'>
+        <ul className='flex flex-nowrap items-center gap-2'>
           {tagList.map((tag, idx) => (
             <Tag key={`tag-${tag}`} tag={tag}>
               <button
@@ -93,7 +95,9 @@ export default function TagInput({
 
         {/* 태그 입력 필드 */}
       </div>
-      <p className='profile-edit-message mt-0'>최대 5글자까지 입력 가능해요</p>
-    </>
+      <p className='select-none" ml-2 text-label-normal font-medium text-gray-500'>
+        최대 5글자까지 입력 가능해요
+      </p>
+    </div>
   );
 }

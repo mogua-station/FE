@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
@@ -36,7 +37,10 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     mode: "onChange",
   });
 
-  const { control } = methods;
+  const {
+    control,
+    formState: { errors },
+  } = methods;
 
   const handleTagsChange = (tags: string[]) => {
     methods.setValue("userTagList", tags); // React Hook Form으로 태그 업데이트
@@ -49,17 +53,6 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     } = {};
 
     const formValues = methods.getValues();
-
-    // 디버깅용 로그
-    console.log("수정된 값:", {
-      현재닉네임: formValues.nickname,
-      원래닉네임: nickname,
-      현재bio: formValues.bio,
-      원래bio: bio,
-      현재태그: formValues.userTagList,
-      원래태그: userTagList.map((tag) => tag.tag),
-    });
-
     const requestData: any = {};
 
     // 단순 비교로 변경
@@ -91,14 +84,8 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     return changes;
   };
 
-  const onSubmit = methods.handleSubmit((data) => {
-    console.log("폼 제출 시작");
-    console.log("전체 폼 데이터:", data);
-    console.log("bio 값:", methods.getValues("bio"));
-    console.log("watch bio:", methods.watch("bio"));
-
+  const onSubmit = methods.handleSubmit(() => {
     const changes = getChangedFields();
-    console.log("변경된 필드:", changes);
 
     if (!changes.formData && !changes.requestData) {
       alert("변경된 내용이 없습니다.");
@@ -110,6 +97,7 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
       submitFormData.append("request", JSON.stringify(changes.requestData));
     }
 
+    // API 요청 전 최종 데이터 확인
     console.log("전송할 데이터:", Object.fromEntries(submitFormData.entries()));
   });
 
@@ -128,7 +116,7 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
 
         {/* 유저 정보 (twMerge 적용으로 스타일 변경 예정)*/}
         {/* 이메일: 읽기전용 - 스타일 반영 필요 */}
-        <div className='w-full *:w-full'>
+        <div className='flex w-full flex-col gap-8 *:w-full'>
           <CommonTextInput
             className='cursor-not-allowed bg-gray-800 text-gray-500'
             name='email'
@@ -140,10 +128,16 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
 
           {/* 닉네임 */}
           <CommonTextInput
-            className='bg-gray-800 text-gray-100'
+            className={twMerge(
+              "bg-gray-800 text-gray-100",
+              !errors.nickname &&
+                "border-gray-700 hover:border-gray-700 focus:border-gray-700",
+            )}
             name='nickname'
             label='닉네임'
             defaultValue={nickname}
+            minLength={2}
+            maxLength={8}
             control={control}
             rules={{
               minLength: {
@@ -165,7 +159,6 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             label='소개'
             placeholder='소개를 입력해주세요'
             defaultValue={bio}
-            control={control}
             maxLength={20}
             hint='최대 20자까지 입력 가능해요'
           />
