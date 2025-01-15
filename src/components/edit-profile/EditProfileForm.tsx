@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import CountIndicator from "../common/CountIndicator";
+import { FormProvider, useForm } from "react-hook-form";
+import CommonTextArea from "../common/inputs/TextArea";
+import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
 import SolidButton from "@/components/common/buttons/SolidButton";
@@ -22,54 +24,65 @@ interface EditProfileFormProps {
 }
 
 export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [formData, setFormData] = useState({
-    nickname: userInfo.nickname,
-    bio: userInfo.bio,
-    userTagList: userInfo.userTagList.map((tag) => tag.tag),
-  });
   const { email, nickname, profileImg, bio, userTagList } = userInfo;
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const methods = useForm({
+    defaultValues: {
+      nickname: nickname,
+      bio: bio,
+      userTagList: userTagList.map((tag) => tag.tag),
+    },
+    mode: "onChange",
+  });
+
+  const { control } = methods;
 
   const handleTagsChange = (tags: string[]) => {
-    setFormData((prev) => ({
-      ...prev,
-      userTagList: tags,
-    }));
+    methods.setValue("userTagList", tags); // React Hook Form으로 태그 업데이트
   };
 
   const getChangedFields = () => {
     const changes: {
       formData?: FormData;
-      requestData?: Partial<typeof formData>;
+      requestData?: any;
     } = {};
+
+    const formValues = methods.getValues();
+
+    // 디버깅용 로그
+    console.log("수정된 값:", {
+      현재닉네임: formValues.nickname,
+      원래닉네임: nickname,
+      현재bio: formValues.bio,
+      원래bio: bio,
+      현재태그: formValues.userTagList,
+      원래태그: userTagList.map((tag) => tag.tag),
+    });
+
+    const requestData: any = {};
+
+    // 단순 비교로 변경
+    if (formValues.nickname !== nickname) {
+      requestData.nickname = formValues.nickname;
+    }
+
+    if (formValues.bio !== bio) {
+      requestData.bio = formValues.bio;
+    }
+
+    const currentTags = formValues.userTagList;
+    const originalTags = userTagList.map((tag) => tag.tag);
+    if (
+      JSON.stringify(currentTags.sort()) !== JSON.stringify(originalTags.sort())
+    ) {
+      requestData.userTagList = currentTags;
+    }
 
     if (selectedImage) {
       changes.formData = new FormData();
       changes.formData.append("image", selectedImage);
     }
-
-    const requestData: Partial<typeof formData> = {};
-    const isChanged = {
-      nickname: formData.nickname !== userInfo.nickname,
-      bio: formData.bio !== userInfo.bio,
-      tags:
-        JSON.stringify(formData.userTagList) !==
-        JSON.stringify(userInfo.userTagList.map((tag) => tag.tag)),
-    };
-
-    if (isChanged.nickname) requestData.nickname = formData.nickname;
-    if (isChanged.bio) requestData.bio = formData.bio;
-    if (isChanged.tags) requestData.userTagList = formData.userTagList;
 
     if (Object.keys(requestData).length > 0) {
       changes.requestData = requestData;
@@ -78,10 +91,14 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     return changes;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = methods.handleSubmit((data) => {
+    console.log("폼 제출 시작");
+    console.log("전체 폼 데이터:", data);
+    console.log("bio 값:", methods.getValues("bio"));
+    console.log("watch bio:", methods.watch("bio"));
 
     const changes = getChangedFields();
+    console.log("변경된 필드:", changes);
 
     if (!changes.formData && !changes.requestData) {
       alert("변경된 내용이 없습니다.");
@@ -94,78 +111,72 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     }
 
     console.log("전송할 데이터:", Object.fromEntries(submitFormData.entries()));
-
-    // api 호출 예정
-  };
+  });
 
   return (
-    <form className='contents' onSubmit={handleSubmit}>
-      <ProfileImageInput
-        profileImg={profileImg}
-        onImageSelect={setSelectedImage}
-      />
-
-      {/* 비밀번호 변경 안내 */}
-      <p className='text-label-normal font-regular text-orange-200'>
-        비밀번호 변경
-      </p>
-
-      {/* 유저 정보 (input은 공통 컴포넌트 적용 예상 중) */}
-      <div className='w-full *:w-full'>
-        {/* 이메일 (표시용) */}
-        <label className='profile-edit-label' htmlFor='email'>
-          이메일 주소
-        </label>
-        <input
-          className='profile-edit-input'
-          type='email'
-          id='email'
-          value={email}
-          disabled
+    <FormProvider {...methods}>
+      <form className='contents' onSubmit={onSubmit}>
+        <ProfileImageInput
+          profileImg={profileImg}
+          onImageSelect={setSelectedImage}
         />
 
-        {/* 닉네임 */}
-        <label className='profile-edit-label' htmlFor='username'>
-          닉네임
-        </label>
-        <input
-          className='profile-edit-input'
-          type='text'
-          id='username'
-          name='nickname'
-          defaultValue={nickname}
-          minLength={2}
-          maxLength={8}
-          onChange={handleChange}
-        />
-        <p className='profile-edit-message'>최대 8글자까지 입력 가능해요</p>
+        {/* 비밀번호 변경 안내 */}
+        <p className='text-label-normal font-regular text-orange-200'>
+          비밀번호 변경
+        </p>
 
-        {/* 한 줄 소개 */}
-        <label className='profile-edit-label' htmlFor='introduction'>
-          소개
-        </label>
-        <div className='relative'>
-          <textarea
-            className='h-40 w-full resize-none rounded-xl border border-gray-800 bg-gray-800 px-4 py-[18px] text-gray-100 placeholder:text-body-2-normal placeholder:font-regular'
-            id='introduction'
+        {/* 유저 정보 (twMerge 적용으로 스타일 변경 예정)*/}
+        {/* 이메일: 읽기전용 - 스타일 반영 필요 */}
+        <div className='w-full *:w-full'>
+          <CommonTextInput
+            className='cursor-not-allowed bg-gray-800 text-gray-500'
+            name='email'
+            label='이메일 주소'
+            value={email}
+            control={control}
+            disabled
+          />
+
+          {/* 닉네임 */}
+          <CommonTextInput
+            className='bg-gray-800 text-gray-100'
+            name='nickname'
+            label='닉네임'
+            defaultValue={nickname}
+            control={control}
+            rules={{
+              minLength: {
+                value: 2,
+                message: "닉네임은 2글자 이상이어야 합니다.",
+              },
+              maxLength: {
+                value: 8,
+                message: "닉네임은 8글자를 넘어갈 수 없습니다.",
+              },
+            }}
+            hint='최대 8글자까지 입력 가능해요'
+          />
+
+          {/* 한 줄 소개 */}
+          <CommonTextArea
+            className='h-40 max-h-40 resize-none bg-gray-800 text-gray-100'
             name='bio'
+            label='소개'
             placeholder='소개를 입력해주세요'
             defaultValue={bio}
+            control={control}
             maxLength={20}
-            onChange={handleChange}
+            hint='최대 20자까지 입력 가능해요'
           />
-          <div className='absolute bottom-4 right-4 -translate-y-1/2'>
-            <CountIndicator currentCount={formData.bio.length} maxCount={20} />
-          </div>
+
+          {/* 태그 */}
+          <TagInput defaultTags={userTagList} onTagsChange={handleTagsChange} />
         </div>
-        <p className='profile-edit-message'>최대 20자까지 입력 가능해요</p>
 
-        {/* 태그 */}
-        <TagInput defaultTags={userTagList} onTagsChange={handleTagsChange} />
-      </div>
-
-      {/* 수정 완료 버튼 */}
-      <SolidButton className='my-14'>수정 완료</SolidButton>
-    </form>
+        {/* 수정 완료 버튼 */}
+        <SolidButton className='my-14'>수정 완료</SolidButton>
+      </form>
+    </FormProvider>
   );
 }
