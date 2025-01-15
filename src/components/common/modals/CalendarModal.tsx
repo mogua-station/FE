@@ -1,13 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import IconButton from "../buttons/IconButton";
-import SolidButton from "../buttons/SolidButton";
-import Calendar from "../Calendar";
+import { useRef } from "react";
 import InfoIcon from "@/assets/images/icons/info.svg";
-import ResetIcon from "@/assets/images/icons/reset_thin.svg";
-import useModal from "@/hooks/useModal";
-import { useSelectedDateRange } from "@/hooks/useSelectedDateRange";
+import Calendar from "@/components/common/calendar/Calendar";
 
 const CALENDAR_MODAL_TITLE = "모집 기간";
 
@@ -15,7 +10,6 @@ function CalendarModal({
   selectedDates,
   onDateChange,
   isFilter = false,
-  isDark = false,
 }: {
   selectedDates: {
     startDate: Date | null;
@@ -26,38 +20,24 @@ function CalendarModal({
     endDate: Date | null;
   }) => void;
   isFilter?: boolean;
-  isDark?: boolean;
 }) {
   const resetCalendarRef = useRef<(() => void) | undefined>(undefined);
-  const { closeModal, unmountModal } = useModal();
-  const { selectedDates: currentDates, setSelectedDates } =
-    useSelectedDateRange();
-
-  useEffect(() => {
-    setSelectedDates(selectedDates);
-  }, [selectedDates, setSelectedDates]);
 
   const handleDateChange = (dates: {
     startDate: Date | null;
     endDate: Date | null;
   }) => {
-    setSelectedDates(dates);
     onDateChange(dates);
   };
 
-  const handleDateReset = () => {
-    setSelectedDates({ startDate: null, endDate: null });
-    if (resetCalendarRef.current) {
-      resetCalendarRef.current();
-    }
+  const renderDateRangeText = () => {
+    if (!selectedDates.startDate) return "기간을 선택해주세요";
+    const startDateText = selectedDates.startDate.toLocaleDateString();
+    const endDateText = selectedDates.endDate
+      ? selectedDates.endDate.toLocaleDateString()
+      : "";
+    return `${startDateText} - ${endDateText}`;
   };
-
-  const handleComplete = () => {
-    closeModal();
-    unmountModal();
-  };
-
-  const isSelecting = !!currentDates.startDate || !!currentDates.endDate;
 
   return (
     <div className='flex w-full flex-col items-center'>
@@ -71,10 +51,8 @@ function CalendarModal({
         />
 
         <div className='flex w-full items-center justify-center border-t border-gray-700'>
-          <div className='h-[3.25rem] w-[23.4375rem] px-5 py-4 text-body-1-normal font-semibold text-gray-400'>
-            {currentDates.startDate
-              ? `${currentDates.startDate.toLocaleDateString()} - ${currentDates.endDate ? currentDates.endDate.toLocaleDateString() : ""}`
-              : "기간을 선택해주세요"}
+          <div className='h-[3.25rem] w-full min-w-fit max-w-[23.4375rem] px-5 py-4 text-body-1-normal font-semibold text-gray-400'>
+            {renderDateRangeText()}
           </div>
         </div>
       </div>
@@ -87,26 +65,6 @@ function CalendarModal({
           </div>
         </div>
       )}
-
-      <div className='flex w-[23.4375rem] justify-center gap-[.6875rem] px-5 py-4'>
-        <IconButton
-          size='large'
-          variant='secondary'
-          mode={isDark ? "special" : "default"}
-          className='w-fit px-6 py-4'
-          onClick={handleDateReset}
-        >
-          <ResetIcon className='size-6 stroke-gray-400' />
-        </IconButton>
-
-        <SolidButton
-          state={isSelecting ? "activated" : "default"}
-          mode={!isDark ? "special" : "default"}
-          onClick={handleComplete}
-        >
-          완료
-        </SolidButton>
-      </div>
     </div>
   );
 }

@@ -59,7 +59,7 @@ export default function Modal({
           </div>
 
           <div
-            className={`flex max-h-14 min-h-8 w-full items-center px-5 py-1 ${title ? "justify-between" : "justify-end"}`}
+            className={`flex max-h-14 min-h-8 w-full max-w-[23rem] items-center px-5 py-1 ${title ? "justify-between" : "justify-end"}`}
           >
             {title && (
               <span className='flex h-14 items-center text-body-1-normal font-semibold text-gray-200'>
