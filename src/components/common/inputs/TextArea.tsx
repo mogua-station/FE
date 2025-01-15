@@ -5,6 +5,7 @@ import {
   type RegisterOptions,
   type Control,
 } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 
 export interface TextAreaProps
   extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -27,6 +28,13 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     } = useFormContext();
 
     const error = errors[name];
+
+    const className = twMerge(
+      `flex max-h-[124px] w-full flex-col rounded-[12px] border-2 ${
+        error ? "border-danger" : "border-gray-700"
+      } bg-gray-900 p-[20px] text-body-2-reading font-regular text-gray-200 focus:outline-none overflow:hidden`,
+      props.className,
+    );
 
     return (
       <div className='flex flex-col gap-[8px]'>
@@ -56,10 +64,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   {...field}
                   ref={ref}
                   maxLength={maxLength}
-                  className={`flex max-h-[124px] w-full flex-col rounded-[12px] border-2 ${
-                    error ? "border-danger" : "border-gray-700"
-                  } bg-gray-900 p-[20px] text-body-2-reading font-regular text-gray-200 focus:outline-none`}
-                  style={{ overflowY: "auto" }}
+                  className={className}
                 />
                 <div className='flex justify-between'>
                   {(props.hint || error?.message) && (
