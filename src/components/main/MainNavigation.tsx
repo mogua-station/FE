@@ -1,101 +1,87 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import FilterModal from "./modals/FilterModal";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
 import FilterIcon from "@/assets/images/icons/filter.svg";
-import SortIcon from "@/assets/images/icons/sort.svg";
+import OrderIcon from "@/assets/images/icons/sort.svg";
 import Dropdown from "@/components/common/Dropdown";
 import useModal from "@/hooks/useModal";
 import {
-  type CityType,
+  type LocationType,
   type StateType,
   type FilterType,
   type MeetupType,
-  type SortType,
+  type OrderType,
 } from "@/types/meetup.type";
-
-// URL 파라미터를 파싱하는 함수
-const parseURLParams = () => {
-  const params = new URLSearchParams(window.location.search);
-
-  return {
-    meetup: params.get("meetup") as MeetupType,
-    city: params.get("city") as CityType,
-    state: params.get("state") as StateType,
-    startDate: params.get("startDate")
-      ? new Date(params.get("startDate")!)
-      : null,
-    endDate: params.get("endDate") ? new Date(params.get("endDate")!) : null,
-    sort: params.get("sort") as SortType,
-  };
-};
-
-// URL 파라미터를 업데이트하는 함수
-const updateSearchParams = (
-  router: ReturnType<typeof useRouter>,
-  {
-    meetup,
-    filter,
-    sort,
-  }: {
-    meetup: MeetupType;
-    filter: FilterType;
-    sort: SortType;
-  },
-) => {
-  const params = new URLSearchParams();
-  params.append("meetup", meetup);
-
-  if (filter.city !== "ALL") params.append("city", filter.city);
-  if (filter.state !== "ALL") params.append("state", filter.state);
-  if (filter.date.startDate)
-    params.append(
-      "startDate",
-      filter.date.startDate.toISOString().split("T")[0],
-    );
-  if (filter.date.endDate)
-    params.append("endDate", filter.date.endDate.toISOString().split("T")[0]);
-  if (sort !== "latest") params.append("sort", sort);
-
-  router.push(`${window.location.pathname}?${params.toString()}`);
-};
 
 export default function MainNavigation() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { openModal } = useModal();
 
   const [selectedMeetup, setSelectedMeetup] = useState<MeetupType>("STUDY");
-  const [selectedSort, setSelectedSort] = useState<SortType>("latest");
+  const [selectedOrder, setSelectedOrder] = useState<OrderType>("latest");
   const [selectedFilter, setSelectedFilter] = useState<FilterType>({
-    city: "ALL",
+    location: "ALL",
     state: "ALL",
     date: { startDate: null, endDate: null },
   });
 
   // URL 파라미터를 초기 상태로 설정
   useEffect(() => {
-    const { meetup, city, state, startDate, endDate, sort } = parseURLParams();
+    const type = searchParams.get("type") as MeetupType;
+    const location = searchParams.get("location") as LocationType;
+    const state = searchParams.get("state") as StateType;
+    const startDate = searchParams.get("startDate")
+      ? new Date(searchParams.get("startDate")!)
+      : null;
+    const endDate = searchParams.get("endDate")
+      ? new Date(searchParams.get("endDate")!)
+      : null;
+    const orderBy = searchParams.get("orderBy") as OrderType;
 
-    if (meetup) setSelectedMeetup(meetup);
+    if (type) setSelectedMeetup(type);
     setSelectedFilter((prev) => ({
       ...prev,
-      city: city || prev.city,
+      location: location || prev.location,
       state: state || prev.state,
       date: { startDate: startDate || null, endDate: endDate || null },
     }));
-    if (sort) setSelectedSort(sort);
-  }, []);
+    if (orderBy) setSelectedOrder(orderBy);
+  }, [searchParams]);
 
   // URL 파라미터 업데이트
   useEffect(() => {
-    updateSearchParams(router, {
-      meetup: selectedMeetup,
-      filter: selectedFilter,
-      sort: selectedSort,
-    });
-  }, [selectedMeetup, selectedFilter, selectedSort]);
+    const { location, state, date } = selectedFilter;
+    const { startDate, endDate } = date;
+
+    const queryObject: Record<string, string> = {
+      type: selectedMeetup,
+    };
+
+    if (location !== "ALL") queryObject.location = location;
+    if (state !== "ALL") queryObject.state = state;
+    if (selectedOrder !== "latest") queryObject.orderBy = selectedOrder;
+    if (startDate) {
+      const startYear = startDate.getFullYear();
+      const startMonth = String(startDate.getMonth() + 1).padStart(2, "0");
+      const startDay = String(startDate.getDate()).padStart(2, "0");
+      queryObject.startDate = `${startYear}-${startMonth}-${startDay}`;
+    }
+
+    if (endDate) {
+      const endYear = endDate.getFullYear();
+      const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
+      const endDay = String(endDate.getDate()).padStart(2, "0");
+      queryObject.endDate = `${endYear}-${endMonth}-${endDay}`;
+    }
+
+    const query = new URLSearchParams(queryObject).toString();
+
+    router.replace(`?${query}`);
+  }, [selectedMeetup, selectedFilter, selectedOrder]);
 
   const handleFilterChange = (
     key: keyof FilterType,
@@ -109,7 +95,9 @@ export default function MainNavigation() {
       children: (
         <FilterModal
           selectedFilter={selectedFilter}
-          onCityChange={(city) => handleFilterChange("city", city)}
+          onLocationChange={(location) =>
+            handleFilterChange("location", location)
+          }
           onStateChange={(state) => handleFilterChange("state", state)}
           onDateChange={(dates) => handleFilterChange("date", dates)}
         />
@@ -132,11 +120,11 @@ export default function MainNavigation() {
               setSelectedMeetup(value as MeetupType);
               setSelectedFilter((prev) => ({
                 ...prev,
-                city: "ALL",
+                location: "ALL",
                 state: "ALL",
                 date: { startDate: null, endDate: null },
               }));
-              setSelectedSort("latest");
+              setSelectedOrder("latest");
             },
           },
           {
@@ -146,11 +134,11 @@ export default function MainNavigation() {
               setSelectedMeetup(value as MeetupType);
               setSelectedFilter((prev) => ({
                 ...prev,
-                city: "ALL",
+                location: "ALL",
                 state: "ALL",
                 date: { startDate: null, endDate: null },
               }));
-              setSelectedSort("latest");
+              setSelectedOrder("latest");
             },
           },
         ]}
@@ -163,7 +151,7 @@ export default function MainNavigation() {
         </div>
       </Dropdown>
 
-      {/* Filter & Sort Controls */}
+      {/* Filter & Order Controls */}
       <div className='flex gap-1.5'>
         <button
           onClick={handleOpenFilterModal}
@@ -173,27 +161,27 @@ export default function MainNavigation() {
         </button>
 
         <Dropdown
-          defaultSelected={selectedSort}
+          defaultSelected={selectedOrder}
           content={[
             {
               label: "최근 등록순",
               value: "latest",
-              onClick: (value) => setSelectedSort(value as SortType),
+              onClick: (value) => setSelectedOrder(value as OrderType),
             },
             {
               label: "모집 마감 임박순",
               value: "deadline",
-              onClick: (value) => setSelectedSort(value as SortType),
+              onClick: (value) => setSelectedOrder(value as OrderType),
             },
             {
               label: "참여 인원 많은순",
               value: "participant",
-              onClick: (value) => setSelectedSort(value as SortType),
+              onClick: (value) => setSelectedOrder(value as OrderType),
             },
           ]}
         >
           <div className='filter-sm filter-default z-10 w-[3.25rem] cursor-pointer'>
-            <SortIcon className='size-6 stroke-gray-300' />
+            <OrderIcon className='size-6 stroke-gray-300' />
           </div>
         </Dropdown>
       </div>
