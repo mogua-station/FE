@@ -49,7 +49,9 @@ const SignUPSuccessContent = () => {
 };
 
 export default function SignUpSuccessPage() {
-  <Suspense fallback={<div>Loading...</div>}>
-    <SignUPSuccessContent />;
-  </Suspense>;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignUPSuccessContent />;
+    </Suspense>
+  );
 }
