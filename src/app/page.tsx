@@ -6,7 +6,6 @@ import {
 import MainContentList from "@/components/main/MainContentList";
 import { mockCardData } from "@/data/mockCardData";
 import { type CardProps } from "@/types/card";
-import { cardList, comments } from "@/data/mockList";
 
 export default async function Home({
   searchParams,
