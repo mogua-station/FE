@@ -41,18 +41,14 @@ export default function Card({ card }: CardInfo) {
 
   return (
     <div
-      className='mb-6 flex flex-col rounded-[16px] bg-gray-950 p-3'
+      className='flex flex-col rounded-[16px] bg-gray-950 p-3'
       onClick={() => handleClickDetail(card.itemType, card.id)}
     >
       <div className='flex justify-between'>
         <div className='flex gap-1.5'>
           <StatusBadge
             status={card.status}
-            recruitmentDate={
-              card.status === "모집중"
-                ? card.recruitmentPeriod.endDate
-                : new Date()
-            }
+            recruitmentDate={card.recruitmentPeriod.endDate}
           />
         </div>
 
