@@ -7,6 +7,7 @@ async function getUserInfo(userId: string) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${userId}`,
     {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${process.env.USER_TOKEN_2}`, // 토큰 관리 전략 논의중
       },
@@ -25,7 +26,6 @@ export default async function EditProfile({
 }) {
   const userId = params.id;
   const userInfo = await getUserInfo(userId);
-  console.log(userInfo);
 
   return (
     <div className='flex h-full flex-1 flex-col items-center bg-gray-950 p-4 tablet:px-10 tablet:pb-6'>
