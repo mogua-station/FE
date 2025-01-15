@@ -32,7 +32,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const containerStyle = twMerge(
       `flex max-h-[124px] w-full flex-col rounded-[12px] border-2 ${
         error ? "border-danger" : "border-gray-700"
-      } bg-gray-900 p-[20px] text-body-2-reading font-regular text-gray-200 focus:outline-none overflow:hidden`,
+      } bg-gray-900 px-4 py-[18px] text-body-2-reading font-regular text-gray-200 focus:outline-none overflow:hidden`,
       props.className,
     );
 
