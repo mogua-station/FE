@@ -70,7 +70,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   <div>
                     {(props.hint || error?.message) && (
                       <p
-                        className={`mt-2 select-none text-label-normal font-medium ${
+                        className={`ml-2 mt-2 select-none text-label-normal font-medium ${
                           error ? "text-danger" : "text-gray-500"
                         }`}
                       >

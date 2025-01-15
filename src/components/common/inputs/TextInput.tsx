@@ -77,7 +77,7 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
                 </div>
                 {(props.hint || error?.message) && (
                   <p
-                    className={`text-label-normal font-medium ${hint} select-none`}
+                    className={`ml-2 text-label-normal font-medium ${hint} select-none`}
                   >
                     {error?.message || props.hint}
                   </p>
