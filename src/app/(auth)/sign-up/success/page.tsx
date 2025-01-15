@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import Spacecraft from "@/assets/images/icons/spacecraft.svg";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
@@ -21,29 +22,31 @@ const SignUPSuccessPage = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col items-center justify-center gap-8 bg-gray-950 p-4'>
-      <div>
-        <Spacecraft />
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className='flex h-screen flex-col items-center justify-center gap-8 bg-gray-950 p-4'>
+        <div>
+          <Spacecraft />
+        </div>
+        <div className='flex flex-col items-center justify-center gap-[6px]'>
+          <p className='text-body-1-normal font-semibold text-orange-300'>
+            가입 완료
+          </p>
+          <p className='text-heading-2 font-medium text-gray-100'>
+            {username ? username : "møgua"}님 환영해요!
+          </p>
+        </div>
+        <div className='flex w-full flex-col'>
+          <SolidButton
+            variant='primary'
+            state='activated'
+            size='large'
+            onClick={handleConfirm}
+          >
+            확인
+          </SolidButton>
+        </div>
       </div>
-      <div className='flex flex-col items-center justify-center gap-[6px]'>
-        <p className='text-body-1-normal font-semibold text-orange-300'>
-          가입 완료
-        </p>
-        <p className='text-heading-2 font-medium text-gray-100'>
-          {username ? username : "møgua"}님 환영해요!
-        </p>
-      </div>
-      <div className='flex w-full flex-col'>
-        <SolidButton
-          variant='primary'
-          state='activated'
-          size='large'
-          onClick={handleConfirm}
-        >
-          확인
-        </SolidButton>
-      </div>
-    </div>
+    </Suspense>
   );
 };
 
