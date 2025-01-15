@@ -29,7 +29,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     const error = errors[name];
 
-    const className = twMerge(
+    const containerStyle = twMerge(
       `flex max-h-[124px] w-full flex-col rounded-[12px] border-2 ${
         error ? "border-danger" : "border-gray-700"
       } bg-gray-900 p-[20px] text-body-2-reading font-regular text-gray-200 focus:outline-none overflow:hidden`,
@@ -39,7 +39,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <div className='flex flex-col gap-[8px]'>
         {label && (
-          <label className='select-none text-body-2-normal font-medium text-gray-300'>
+          <label className='ml-2 select-none text-body-2-normal font-medium text-gray-300'>
             {label}
             {required && (
               <span className='ml-[8px] mt-0.5 text-red-500'>*</span>
@@ -64,20 +64,24 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   {...field}
                   ref={ref}
                   maxLength={maxLength}
-                  className={className}
+                  className={containerStyle}
                 />
-                <div className='flex justify-between'>
-                  {(props.hint || error?.message) && (
-                    <p
-                      className={`select-none text-label-normal font-medium ${
-                        error ? "text-danger" : "text-gray-500"
-                      } mt-2`}
-                    >
-                      {(error?.message as string) || props.hint}
-                    </p>
-                  )}
+                <div className='flex flex-row justify-between'>
+                  <div>
+                    {(props.hint || error?.message) && (
+                      <p
+                        className={`mt-2 select-none text-label-normal font-medium ${
+                          error ? "text-danger" : "text-gray-500"
+                        }`}
+                      >
+                        {(error?.message as string) || props.hint}
+                      </p>
+                    )}
+                  </div>
                   <span
-                    className={`text-right text-label-normal font-medium ${error ? "text-danger" : "text-gray-500"}`}
+                    className={`mt-2 text-label-normal font-medium ${
+                      error ? "text-danger" : "text-gray-500"
+                    }`}
                   >
                     {field.value?.length || 0}/{maxLength}
                   </span>
