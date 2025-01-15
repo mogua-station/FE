@@ -2,8 +2,8 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import Card from "../common/card/Card";
 import MainNavigation from "./MainNavigation";
+import Card from "@/components/common/card/Card";
 import { mockCardData } from "@/data/mockCardData";
 import { type CardProps } from "@/types/card";
 

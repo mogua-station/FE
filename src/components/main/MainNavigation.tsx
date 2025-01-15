@@ -2,11 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import Dropdown from "../common/Dropdown";
 import FilterModal from "./modals/FilterModal";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
 import FilterIcon from "@/assets/images/icons/filter.svg";
 import SortIcon from "@/assets/images/icons/sort.svg";
+import Dropdown from "@/components/common/Dropdown";
 import useModal from "@/hooks/useModal";
 import {
   type CityType,
@@ -66,7 +66,7 @@ export default function MainNavigation() {
   const router = useRouter();
   const { openModal } = useModal();
 
-  const [selectedMeetup, setSelectedMeetup] = useState<MeetupType>("study");
+  const [selectedMeetup, setSelectedMeetup] = useState<MeetupType>("STUDY");
   const [selectedSort, setSelectedSort] = useState<SortType>("latest");
   const [selectedFilter, setSelectedFilter] = useState<FilterType>({
     city: "ALL",
@@ -127,7 +127,7 @@ export default function MainNavigation() {
         content={[
           {
             label: "스터디",
-            value: "study",
+            value: "STUDY",
             onClick: (value) => {
               setSelectedMeetup(value as MeetupType);
               setSelectedFilter((prev) => ({
@@ -141,7 +141,7 @@ export default function MainNavigation() {
           },
           {
             label: "과외",
-            value: "tutoring",
+            value: "TUTORING",
             onClick: (value) => {
               setSelectedMeetup(value as MeetupType);
               setSelectedFilter((prev) => ({
@@ -157,7 +157,7 @@ export default function MainNavigation() {
       >
         <div className='filter-sm filter-default min-w-[6.1875rem] gap-2.5'>
           <span className='grow text-body-2-normal font-semibold text-gray-200'>
-            {selectedMeetup === "study" ? "스터디" : "과외"}
+            {selectedMeetup === "STUDY" ? "스터디" : "과외"}
           </span>
           <ArrowDownIcon className='size-6 fill-gray-300' />
         </div>
