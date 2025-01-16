@@ -1,4 +1,5 @@
 import RecruitingIcon from "@/assets/images/icons/announcement-megaphone.svg";
+import BellIcon from "@/assets/images/icons/bell.svg";
 import FireIcon from "@/assets/images/icons/fire.svg";
 import PlanetIcon from "@/assets/images/icons/planet.svg";
 import HandIcon from "@/assets/images/icons/waving-hand.svg";
@@ -21,6 +22,11 @@ export default function StateModal({
       key: "RECRUITING",
       label: "모집 중이에요",
       icon: RecruitingIcon,
+    },
+    {
+      key: "PENDING",
+      label: "시작 전이에요",
+      icon: BellIcon,
     },
     {
       key: "IN_PROGRESS",

@@ -2,7 +2,12 @@ export type MeetupType = "STUDY" | "TUTORING";
 
 export type HybridType = "ONLINE" | "OFFLINE";
 
-export type StateType = "ALL" | "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
+export type StateType =
+  | "ALL"
+  | "RECRUITING"
+  | "PENDING"
+  | "IN_PROGRESS"
+  | "COMPLETED";
 
 export type LocationType =
   | "ALL"
