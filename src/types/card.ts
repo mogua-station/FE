@@ -24,7 +24,7 @@ export interface CardProps {
   thumbnail?: string;
   online: boolean;
   participants: ParticipantInfo[];
-  reviewId?: number; //리뷰 작성 가능한 상태?
+  isReview?: boolean; //리뷰 작성 가능한 상태?
   isMypage?: boolean;
 }
 

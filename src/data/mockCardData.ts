@@ -638,6 +638,6 @@ export const mockCardData: CardProps[] = [
     thumbnail: "https://via.placeholder.com/300x200?text=전문+사진+촬영+과외",
     online: false,
     isMypage: true,
-    reviewId: 24,
+    isReview: true,
   },
 ];

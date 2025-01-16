@@ -74,16 +74,14 @@ export default function Card({ card }: CardInfo) {
       <Content content={contentData} />
 
       {/* 버튼 컴포넌트 머지 후 추가 작업필요 */}
-      {card.isMypage &&
-        card.reviewId != null &&
-        card.status === "COMPLETED" && (
-          <SolidButton
-            className='mt-6'
-            onClick={(e) => handleClickReview(e, card.reviewId as number)}
-          >
-            리뷰 작성
-          </SolidButton>
-        )}
+      {card.isMypage && card.isReview && card.status === "COMPLETED" && (
+        <SolidButton
+          className='mt-6'
+          onClick={(e) => handleClickReview(e, card.meetupId as number)}
+        >
+          리뷰 작성
+        </SolidButton>
+      )}
     </div>
   );
 }
