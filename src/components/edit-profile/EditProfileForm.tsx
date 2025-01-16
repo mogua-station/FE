@@ -11,6 +11,7 @@ import TagInput from "./TagInput";
 import { updateProfile } from "@/app/user/edit_profile/action";
 import { USER_ID } from "@/app/user/edit_profile/page";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import { SYSTEM_ALERTS } from "@/constants/\balerts";
 
 type UserProfile = {
   email: string;
@@ -135,19 +136,17 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
   return (
     <FormProvider {...methods}>
       <form className='contents' onSubmit={onSubmit}>
-        {/* 프로필 이미지 */}
         {/* TODO: IndexedDB용 공용 컴포넌트로 교체 예정 */}
         <ProfileImageInput
           profileImg={profileImg}
           onImageSelect={setSelectedImage}
         />
-
-        {/* 비밀번호 변경 안내 */}
-        <p className='text-label-normal font-regular text-orange-200'>
+        <p
+          className='cursor-pointer text-label-normal font-regular text-orange-200'
+          onClick={() => alert(SYSTEM_ALERTS.IN_PROGRESS)}
+        >
           비밀번호 변경
         </p>
-
-        {/* 유저 정보*/}
         <div className='flex w-full flex-col gap-8 *:w-full'>
           <CommonTextInput
             className='cursor-not-allowed bg-gray-800 text-gray-500'
@@ -157,8 +156,6 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             control={control}
             disabled
           />
-
-          {/* 닉네임 */}
           <CommonTextInput
             className={twMerge(
               "bg-gray-800 text-gray-100",
@@ -180,8 +177,6 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             }}
             hint='최대 8글자까지 입력 가능해요'
           />
-
-          {/* 한 줄 소개 */}
           <CommonTextArea
             className='h-40 max-h-40 resize-none bg-gray-800 text-gray-100'
             name='bio'
@@ -191,16 +186,12 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             maxLength={20}
             hint='최대 20자까지 입력 가능해요'
           />
-
-          {/* 태그 */}
           <TagInput
             defaultTags={userTagList}
             onTagsChange={handleTagsChange}
             name='userTag'
           />
         </div>
-
-        {/* 수정 완료 버튼 */}
         <SolidButton className='my-14' state={getButtonState()}>
           수정 완료
         </SolidButton>

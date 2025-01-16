@@ -1,5 +1,5 @@
-import ArrowIcon from "@/assets/images/icons/arrow_down.svg";
-import InfoIcon from "@/assets/images/icons/info.svg";
+import AccountActionButtons from "@/components/edit-profile/AccountActionButtons";
+import ContactBanner from "@/components/edit-profile/ContactBanner";
 import EditProfileForm from "@/components/edit-profile/EditProfileForm";
 
 export const USER_ID = 32; // TODO: 임시 로그인유저 ID (스토어로 관리 예정)
@@ -25,31 +25,14 @@ export default async function EditProfile() {
   const userInfo = await getUserInfo(USER_ID);
 
   return (
-    <div className='flex h-full flex-1 flex-col items-center bg-gray-950 p-4 tablet:px-10 tablet:pb-6'>
-      <h2 className='w-full px-2 pb-4 text-body-1-reading font-medium text-gray-100 tablet:pt-10'>
-        계정 정보
-      </h2>
-
-      {/* 배너 */}
-      <div className='flex w-full cursor-pointer items-center justify-between rounded-2xl bg-gray-800 px-4 py-3'>
-        <div className='flex items-center gap-2.5'>
-          <InfoIcon className='size-6 text-gray-400' />
-          <p className='max-w-[160px] text-label-reading font-regular text-gray-300 tablet:max-w-full'>
-            운영자 문의 후 과외 선생님으로 활동해보세요
-          </p>
-        </div>
-        <ArrowIcon className='size-6 -rotate-90 text-gray-300' />
-      </div>
-
-      {/* 프로필 수정 폼 */}
-      <EditProfileForm userInfo={userInfo} />
-
-      {/* 로그아웃 | 탈퇴하기 */}
-      <div className='flex *:text-label-normal *:font-regular *:text-gray-300'>
-        <button>로그아웃</button>
-        <div className='before:mx-3 before:inline-block before:h-2.5 before:w-px before:bg-gray-600'>
-          <button>탈퇴하기</button>
-        </div>
+    <div className='flex h-full flex-1 flex-col items-center bg-gray-950'>
+      <div className='flex w-full flex-col items-center bg-gray-900 p-4 tablet:px-10 tablet:pb-6 desktop:my-20 desktop:max-w-[960px] desktop:rounded-[40px]'>
+        <h2 className='w-full px-2 pb-4 text-body-1-reading font-medium text-gray-100 tablet:pt-10'>
+          계정 정보
+        </h2>
+        <ContactBanner />
+        <EditProfileForm userInfo={userInfo} />
+        <AccountActionButtons />
       </div>
     </div>
   );
