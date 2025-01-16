@@ -436,6 +436,14 @@ export const mockCardData: CardProps[] = [
         userId: 5,
         userProfile: "",
       },
+      {
+        userId: 3,
+        userProfile: "",
+      },
+      {
+        userId: 5,
+        userProfile: "",
+      },
     ],
     minParticipants: 4,
     recruitmentStartDate: new Date("2025-01-05"),
@@ -548,6 +556,22 @@ export const mockCardData: CardProps[] = [
     title: "프론트엔드 개발 스터디",
     location: "CAPITAL",
     participants: [
+      {
+        userId: 3,
+        userProfile: "",
+      },
+      {
+        userId: 5,
+        userProfile: "",
+      },
+      {
+        userId: 3,
+        userProfile: "",
+      },
+      {
+        userId: 5,
+        userProfile: "",
+      },
       {
         userId: 3,
         userProfile: "",

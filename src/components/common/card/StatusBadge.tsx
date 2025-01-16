@@ -12,6 +12,8 @@ export default function StatusBadge({ badge }: BadgeInfo) {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
+  console.log(badge.confirm);
+
   const renderBadge = () => {
     switch (badge.status) {
       case "RECRUITING":
@@ -30,7 +32,7 @@ export default function StatusBadge({ badge }: BadgeInfo) {
                   : `마감 D-${deadline(badge.recruitmentEndDate)}`}
               </span>
             </span>
-            {true && (
+            {badge.confirm && (
               <div className='flex gap-1.5'>
                 <span className='flex items-center justify-between rounded-[6px] bg-gray-800 px-2 py-1'>
                   <span className='text-caption-normal font-medium text-primary'>

@@ -54,7 +54,7 @@ export default function Card({ card }: CardInfo) {
             badge={{
               status: card.status,
               recruitmentEndDate: card.recruitmentEndDate,
-              confirm: card.minParticipants < card.participants.length,
+              confirm: card.minParticipants <= card.participants.length,
               isMypage: card.isMypage,
             }}
           />
