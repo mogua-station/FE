@@ -50,6 +50,5 @@ export interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  예시?: string;
-  exampleSelect3?: string;
+  nickname: string;
 }
