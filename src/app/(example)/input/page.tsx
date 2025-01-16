@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import CommonSelectBox from "@/components/common/inputs/SelectBox";
 import CommonTextInput from "@/components/common/inputs/TextInput";
+import withAuth from "@/hoc/withAuth";
 
 interface FormData {
   nickname: string;
@@ -195,4 +196,4 @@ const MyForm = () => {
   );
 };
 
-export default MyForm;
+export default withAuth(MyForm);
