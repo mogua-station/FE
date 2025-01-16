@@ -3,7 +3,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import MainNavigation from "./MainNavigation";
 import Card from "@/components/common/card/Card";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import {
@@ -76,8 +75,6 @@ export default function MainContentList() {
 
   return (
     <>
-      <MainNavigation />
-
       <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
         {data?.pages.map((page) =>
           page.data.map((item, index) => (
