@@ -6,7 +6,7 @@ async function getUserInfo(userId: string) {
     `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${userId}`,
     {
       headers: {
-        Authorization: `Bearer ${process.env.USER_TOKEN_2}`, // 토큰 관리 전략 논의중
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`, // 토큰 관리 전략 논의중
       },
     },
   );
