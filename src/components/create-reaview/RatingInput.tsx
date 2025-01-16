@@ -27,7 +27,7 @@ export default function RatingInput({ value, onChange }: RatingInputProps) {
           </span>
         </p>
       </div>
-      <div className='mt-6 flex justify-center gap-7 text-label-normal font-medium'>
+      <div className='mt-6 flex max-w-[343px] justify-center gap-7 text-label-normal font-medium'>
         {ratingOptions.map((option) => {
           const imageClassName = `size-20 overflow-hidden rounded-3xl border border-gray-600 bg-gray-900 ${
             value === option.value ? "opacity-100" : "opacity-80"
