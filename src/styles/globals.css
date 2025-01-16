@@ -92,3 +92,21 @@
     @apply after:absolute after:-top-8 after:right-0 after:h-5 after:w-5 after:translate-x-3 after:bg-[url('/icons/flag.svg')] after:bg-contain after:bg-no-repeat after:content-[""];
   }
 }
+
+@layer utilities {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}

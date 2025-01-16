@@ -69,7 +69,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 <div className='flex justify-between'>
                   {(props.hint || error?.message) && (
                     <p
-                      className={`select-none text-label-normal font-medium ${
+                      className={`flex-1 select-none text-label-normal font-medium ${
                         error ? "text-danger" : "text-gray-500"
                       } mt-2`}
                     >
@@ -77,7 +77,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     </p>
                   )}
                   <span
-                    className={`text-right text-label-normal font-medium ${error ? "text-danger" : "text-gray-500"}`}
+                    className={`w-full flex-1 text-right text-label-normal font-medium ${error ? "text-danger" : "text-gray-500"}`}
                   >
                     {field.value?.length || 0}/{maxLength}
                   </span>

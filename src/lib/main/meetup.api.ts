@@ -47,3 +47,18 @@ export const getMeetupList = async ({
     isLast: data.additionalData.isLast,
   };
 };
+
+export const createMeetup = async (formData: FormData) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+    },
+    next: {
+      revalidate: 1600,
+    },
+  });
+
+  return await res.json();
+};
