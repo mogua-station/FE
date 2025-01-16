@@ -10,7 +10,7 @@ import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
 import { updateProfile } from "@/app/user/edit_profile/action";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import { SYSTEM_ALERTS } from "@/constants/\balerts";
+import { SYSTEM_ALERTS } from "@/constants/alerts";
 
 type UserProfile = {
   email: string;

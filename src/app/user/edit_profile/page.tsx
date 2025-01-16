@@ -1,26 +1,33 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import AccountActionButtons from "@/components/edit-profile/AccountActionButtons";
 import ContactBanner from "@/components/edit-profile/ContactBanner";
 import EditProfileForm from "@/components/edit-profile/EditProfileForm";
-
-// TODO: 유저 페이지에서 사용하는 로직과 같아 공통으로 분리 예정
-async function getUserInfo(userId: number) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${userId}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${process.env.USER_TOKEN}`, // TODO: 토큰 관리 전략 논의중
-      },
-    },
-  );
-  const { data } = await res.json();
-  return data;
-}
+import { userProfileApi } from "@/lib/userProfile";
 
 // TODO: NavBar 없는 레이아웃 설정 필요
 // TODO: 모바일, 태블릿 UI 구현 완료 (데스크탑 디자인 문의 중)
-export default async function EditProfile() {
-  const userInfo = await getUserInfo(Number(process.env.NEXT_PUBLIC_USER_ID)); // TODO: 임시 로그인유저 ID 사용(스토어로 관리 예정)
+export default function EditProfile() {
+  const userId = Number(process.env.NEXT_PUBLIC_USER_ID); // TODO: 임시 로그인유저 ID 사용(스토어로 관리 예정)
+
+  const {
+    data: userInfo,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["userInfo", userId],
+    queryFn: () => userProfileApi.getUserInfo(userId),
+  });
+
+  if (isLoading) return <div>로딩중...</div>;
+  if (error)
+    return (
+      <div>
+        Error: {error instanceof Error ? error.message : "오류가 발생했습니다"}
+      </div>
+    );
+  if (!userInfo) return <div>사용자 데이터가 없습니다</div>;
 
   return (
     <section className='flex h-full flex-1 flex-col items-center bg-gray-950'>
