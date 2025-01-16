@@ -11,12 +11,16 @@ const getCookie = (name: string): string | null => {
 };
 
 const useCookie = (cookieName: string): string | null => {
-  const [cookieValue, setCookieValue] = useState<string | null>(null);
+  const [cookieValue, setCookieValue] = useState<string | null>(
+    getCookie(cookieName),
+  );
 
   useEffect(() => {
     const cookie = getCookie(cookieName);
-    setCookieValue(cookie);
-  }, [cookieName]);
+    if (cookieValue !== cookie) {
+      setCookieValue(cookie);
+    }
+  }, [cookieName, cookieValue]);
 
   return cookieValue;
 };
