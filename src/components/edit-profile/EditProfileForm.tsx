@@ -9,7 +9,6 @@ import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
 import { updateProfile } from "@/app/user/edit_profile/action";
-import { USER_ID } from "@/app/user/edit_profile/page";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { SYSTEM_ALERTS } from "@/constants/\balerts";
 
@@ -121,7 +120,7 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
     const result = await updateProfile(submitFormData);
 
     if (result.success) {
-      router.replace(`/user/${USER_ID}`); // TODO: 임시 로그인유저 ID 사용(스토어로 관리 예정)
+      router.replace(`/user/${process.env.NEXT_PUBLIC_USER_ID}`); // TODO: 임시 로그인유저 ID 사용(스토어로 관리 예정)
     } else {
       alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
       throw new Error(result.error);

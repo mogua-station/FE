@@ -15,7 +15,7 @@ export async function updateProfile(formData: FormData) {
       {
         method: "PATCH",
         headers: {
-          Authorization: `Bearer ${process.env.USER_TOKEN_2}`, // TODO: 토큰 관리 전략 논의중
+          Authorization: `Bearer ${process.env.USER_TOKEN}`, // TODO: 토큰 관리 전략 논의중
         },
         body: formData,
       },
