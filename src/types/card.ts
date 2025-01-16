@@ -6,7 +6,7 @@ export interface ParticipantInfo {
 export interface CardProps {
   meetupId: number;
   meetingType: "STUDY" | "TUTORING";
-  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "시작 전";
+  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "PENDING";
   location?:
     | "CAPITAL"
     | "DAEJEON"
@@ -33,7 +33,7 @@ export interface CardInfo {
 }
 
 export interface BadgeProps {
-  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "시작 전";
+  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "PENDING";
   recruitmentEndDate: Date;
   confirm: boolean;
   isMypage?: boolean;
