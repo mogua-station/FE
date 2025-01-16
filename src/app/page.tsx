@@ -74,7 +74,9 @@ export default async function Home({
           <MainNavigation />
         </Suspense>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <MainContentList />
+          <Suspense>
+            <MainContentList />
+          </Suspense>
         </HydrationBoundary>
       </div>
     </div>
