@@ -13,7 +13,7 @@ export default function ContactBanner() {
     >
       <div className='flex items-center gap-2.5'>
         <InfoIcon className='size-6 text-gray-400' aria-hidden='true' />
-        <p className='max-w-[160px] text-label-reading font-regular text-gray-300 tablet:max-w-full'>
+        <p className='max-w-[160px] text-start text-label-reading font-regular text-gray-300 tablet:max-w-full'>
           운영자 문의 후 과외 선생님으로 활동해보세요
         </p>
       </div>
