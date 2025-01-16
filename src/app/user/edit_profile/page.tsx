@@ -25,7 +25,7 @@ export default async function EditProfile() {
   const userInfo = await getUserInfo(USER_ID);
 
   return (
-    <div className='flex h-full flex-1 flex-col items-center bg-gray-950'>
+    <section className='flex h-full flex-1 flex-col items-center bg-gray-950'>
       <div className='flex w-full flex-col items-center bg-gray-900 p-4 tablet:px-10 tablet:pb-6 desktop:my-20 desktop:max-w-[960px] desktop:rounded-[40px]'>
         <h2 className='w-full px-2 pb-4 text-body-1-reading font-medium text-gray-100 tablet:pt-10'>
           계정 정보
@@ -34,6 +34,6 @@ export default async function EditProfile() {
         <EditProfileForm userInfo={userInfo} />
         <AccountActionButtons />
       </div>
-    </div>
+    </section>
   );
 }
