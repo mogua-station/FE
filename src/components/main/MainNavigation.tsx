@@ -54,13 +54,13 @@ export default function MainNavigation() {
 
   // URL 파라미터 업데이트
   useEffect(() => {
+    const type = selectedMeetup;
     const { location, state, date } = selectedFilter;
     const { startDate, endDate } = date;
 
-    const queryObject: Record<string, string> = {
-      type: selectedMeetup,
-    };
+    const queryObject: Record<string, string> = {};
 
+    if (type !== "STUDY") queryObject.type = type;
     if (location !== "ALL") queryObject.location = location;
     if (state !== "ALL") queryObject.state = state;
     if (selectedOrder !== "latest") queryObject.orderBy = selectedOrder;

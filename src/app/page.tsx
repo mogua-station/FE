@@ -14,10 +14,6 @@ export default async function Home({
 }) {
   const queryClient = new QueryClient();
 
-  if (!searchParams.type) {
-    searchParams = { ...searchParams, type: "STUDY" };
-  }
-
   try {
     await queryClient.prefetchInfiniteQuery({
       queryKey: [

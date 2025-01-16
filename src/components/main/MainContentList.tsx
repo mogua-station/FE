@@ -47,7 +47,7 @@ export default function MainContentList() {
       getNextPageParam: (lastPage) =>
         !lastPage.isLast ? lastPage.nextPage : undefined,
       initialPageParam: 0,
-      retry: false,
+      retry: 1,
     });
 
   // 무한 스크롤 관찰자 설정
