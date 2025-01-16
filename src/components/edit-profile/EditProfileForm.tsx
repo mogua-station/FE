@@ -93,6 +93,13 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
 
   const onSubmit = methods.handleSubmit(async () => {
     const changes = getChangedFields();
+
+    // 변경사항이 없으면 얼리 리턴
+    if (!changes.formData && !changes.requestData) {
+      alert("변경된 내용이 없습니다.");
+      return;
+    }
+
     const submitFormData = new FormData();
 
     // 변경사항이 없어도 최소한 빈 객체라도 request로 보내기
