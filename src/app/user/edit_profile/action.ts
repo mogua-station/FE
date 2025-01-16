@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 export async function updateProfile(formData: FormData) {
   try {
     // 실제 요청 데이터 확인
@@ -13,7 +15,7 @@ export async function updateProfile(formData: FormData) {
       {
         method: "PATCH",
         headers: {
-          Authorization: `Bearer ${process.env.USER_TOKEN_2}`,
+          Authorization: `Bearer ${process.env.USER_TOKEN_2}`, // TODO: 토큰 관리 전략 논의중
         },
         body: formData,
       },
@@ -33,6 +35,10 @@ export async function updateProfile(formData: FormData) {
     }
 
     const data = await res.json();
+
+    revalidatePath("/user/[id]");
+    revalidatePath("/user/edit_profile");
+
     return { success: true, data };
   } catch (error) {
     // 구체적인 에러 로깅

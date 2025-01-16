@@ -1,6 +1,5 @@
 "use client";
 
-import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -9,7 +8,8 @@ import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
-import { updateProfile } from "@/app/user/[id]/edit_profile/action";
+import { updateProfile } from "@/app/user/edit_profile/action";
+import { USER_ID } from "@/app/user/edit_profile/page";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
 type UserProfile = {
@@ -24,13 +24,9 @@ type UserProfile = {
 
 interface EditProfileFormProps {
   userInfo: UserProfile;
-  userId: string;
 }
 
-export default function EditProfileForm({
-  userInfo,
-  userId,
-}: EditProfileFormProps) {
+export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
   const { email, nickname, profileImg, bio, userTagList } = userInfo;
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
@@ -117,9 +113,7 @@ export default function EditProfileForm({
     const result = await updateProfile(submitFormData);
 
     if (result.success) {
-      router.replace(`/user/${userId}`);
-      revalidatePath(`/user/${userId}`);
-      revalidatePath(`/user/${userId}/edit_profile`);
+      router.replace(`/user/${USER_ID}`); // TODO: 임시 로그인유저 ID 사용(스토어로 관리 예정)
     } else {
       alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
       throw new Error(result.error);
@@ -141,6 +135,8 @@ export default function EditProfileForm({
   return (
     <FormProvider {...methods}>
       <form className='contents' onSubmit={onSubmit}>
+        {/* 프로필 이미지 */}
+        {/* TODO: IndexedDB용 공용 컴포넌트로 교체 예정 */}
         <ProfileImageInput
           profileImg={profileImg}
           onImageSelect={setSelectedImage}

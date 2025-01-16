@@ -1,15 +1,13 @@
 import NavMenuItem from "./NavMenuItem";
+import { USER_ID } from "@/app/user/edit_profile/page";
 import BookmarkFillIcon from "@/assets/images/icons/bookmark_fill.svg";
 import PlanetIcon from "@/assets/images/icons/planet.svg";
 import UserIcon from "@/assets/images/icons/user.svg";
 
-// 임시 로그인유저 아이디
-const userId = 1;
-
 const NAV_ITEMS = [
   { href: "/", icon: <PlanetIcon />, label: "모임 찾기" },
   { href: "/wishlist", icon: <BookmarkFillIcon />, label: "북마크" },
-  { href: `/user/${userId}`, icon: <UserIcon />, label: "마이 페이지" },
+  { href: `/user/${USER_ID}`, icon: <UserIcon />, label: "마이 페이지" },
 ];
 
 export default function NavBar() {
