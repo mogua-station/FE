@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import CommonTextArea from "../common/inputs/TextArea";
@@ -11,6 +11,7 @@ import TagInput from "./TagInput";
 import { updateProfile } from "@/app/user/edit_profile/action";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { SYSTEM_ALERTS } from "@/constants/alerts";
+import { userProfileApi } from "@/lib/userProfile";
 
 type UserProfile = {
   email: string;
@@ -22,24 +23,51 @@ type UserProfile = {
   ownId: boolean;
 };
 
-interface EditProfileFormProps {
-  userInfo: UserProfile;
-}
+type FormValues = {
+  nickname: string;
+  bio: string;
+  userTagList: string[];
+};
 
-export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
-  const { email, nickname, profileImg, bio, userTagList } = userInfo;
+export default function EditProfileForm() {
+  const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const router = useRouter();
-
-  const methods = useForm({
+  const methods = useForm<FormValues>({
     defaultValues: {
-      nickname: nickname,
-      bio: bio,
-      userTagList: userTagList.map((tag) => tag.tag),
+      nickname: "",
+      bio: "",
+      userTagList: [],
     },
     mode: "onChange",
   });
+
+  useEffect(() => {
+    userProfileApi
+      .getUserInfo(Number(process.env.NEXT_PUBLIC_USER_ID))
+      .then((data) => {
+        setUserInfo(data);
+        methods.reset({
+          nickname: data.nickname,
+          bio: data.bio,
+          userTagList: data.userTagList.map(
+            (tag: { id: number; tag: string }) => tag.tag,
+          ),
+        });
+      })
+      .catch(console.error);
+  }, [methods]);
+
+  if (!userInfo) {
+    return (
+      <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
+        로딩중...
+      </div>
+    ); // 또는 스켈레톤/스피너
+  }
+
+  const { email, profileImg } = userInfo;
 
   const {
     control,
@@ -63,17 +91,17 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
 
     const requestData: any = {};
 
-    if (watchedNickname !== nickname) {
+    if (watchedNickname !== userInfo.nickname) {
       requestData.nickname = watchedNickname;
     }
 
-    if (watchedBio !== bio) {
+    if (watchedBio !== userInfo.bio) {
       requestData.bio = watchedBio;
     }
 
     if (
       JSON.stringify(watchedTags.sort()) !==
-      JSON.stringify(userTagList.map((tag) => tag.tag).sort())
+      JSON.stringify(userInfo.userTagList.map((tag) => tag.tag).sort())
     ) {
       requestData.userTagList = watchedTags;
     }
@@ -193,7 +221,7 @@ export default function EditProfileForm({ userInfo }: EditProfileFormProps) {
             hint='최대 20자까지 입력 가능해요'
           />
           <TagInput
-            defaultTags={userTagList}
+            defaultTags={userInfo.userTagList}
             onTagsChange={handleTagsChange}
             name='userTag'
           />
