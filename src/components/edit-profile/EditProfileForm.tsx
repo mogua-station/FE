@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -8,7 +9,6 @@ import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
-import { updateProfile } from "@/app/user/edit_profile/action";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { SYSTEM_ALERTS } from "@/constants/alerts";
 import { userProfileApi } from "@/lib/userProfile";
@@ -34,6 +34,8 @@ export default function EditProfileForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const methods = useForm<FormValues>({
     defaultValues: {
       nickname: "",
@@ -41,6 +43,18 @@ export default function EditProfileForm() {
       userTagList: [],
     },
     mode: "onChange",
+  });
+
+  const mutation = useMutation({
+    mutationFn: userProfileApi.updateProfile,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
+      router.replace(`/user/${process.env.NEXT_PUBLIC_USER_ID}`);
+    },
+    onError: (err) => {
+      alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
+      console.error(err);
+    },
   });
 
   useEffect(() => {
@@ -118,7 +132,7 @@ export default function EditProfileForm() {
     return changes;
   };
 
-  const onSubmit = methods.handleSubmit(async () => {
+  const onSubmit = methods.handleSubmit(() => {
     const changes = getChangedFields();
 
     // 변경사항이 없으면 얼리 리턴
@@ -145,19 +159,13 @@ export default function EditProfileForm() {
       }
     }
 
-    const result = await updateProfile(submitFormData);
-
-    if (result.success) {
-      router.replace(`/user/${process.env.NEXT_PUBLIC_USER_ID}`); // TODO: 임시 로그인유저 ID 사용(스토어로 관리 예정)
-    } else {
-      alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
-      throw new Error(result.error);
-    }
+    mutation.mutate(submitFormData);
   });
 
   const getButtonState = () => {
     // 에러가 있으면 무조건 inactive
     if (Object.keys(errors).length > 0) return "inactive";
+    if (mutation.isPending) return "inactive";
 
     // 실제 변경사항만 확인
     const changes = getChangedFields();
@@ -227,7 +235,7 @@ export default function EditProfileForm() {
           />
         </div>
         <SolidButton className='my-14' state={getButtonState()}>
-          수정 완료
+          {mutation.isPending ? "수정 중..." : "수정 완료"}
         </SolidButton>
       </form>
     </FormProvider>
