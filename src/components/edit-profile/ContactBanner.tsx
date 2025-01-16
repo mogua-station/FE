@@ -2,7 +2,7 @@
 
 import ArrowIcon from "@/assets/images/icons/arrow_down.svg";
 import InfoIcon from "@/assets/images/icons/info.svg";
-import { SYSTEM_ALERTS } from "@/constants/\balerts";
+import { SYSTEM_ALERTS } from "@/constants/alerts";
 
 export default function ContactBanner() {
   return (

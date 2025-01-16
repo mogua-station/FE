@@ -1,6 +1,6 @@
 "use client";
 
-import { SYSTEM_ALERTS } from "@/constants/\balerts";
+import { SYSTEM_ALERTS } from "@/constants/alerts";
 
 export default function AccountActionButtons() {
   return (
