@@ -1,24 +1,22 @@
-import { type ReviewInfo } from "./review";
-
-export interface HostInfo {
+export interface ParticipantInfo {
   userId: number;
-  userName: string;
   userProfile: string;
 }
 
-export interface UserInfo {
-  userId: number;
-  userName: string;
-  userProfile: string;
+export interface ClientInfo {
+  meetupId: number;
+  hostId: number;
+  hostNickname: string;
+  participants: ParticipantInfo[];
+  stauts: "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
 }
 
 export interface MeetProps {
-  id: number;
+  meetupId: number;
   meetingType: "STUDY" | "TUTORING";
-  isOnline: false;
-  meetingState: "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
+  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
   location:
-    | "Capital"
+    | "CAPITAL"
     | "DAEJEON"
     | "JEONJU"
     | "GWANGJU"
@@ -29,19 +27,15 @@ export interface MeetProps {
   content: string;
   maxParticipants: number;
   minParticipants: number;
-  recruitmentDate: {
-    startDate: Date;
-    endDate: Date;
-  };
-  meetingDate: {
-    startDate: Date;
-    endDate: Date;
-  };
+  recruitmentStartDate: Date;
+  recruitmentEndDate: Date;
+  meetingStartDate: Date;
+  meetingEndDate: Date;
   thumbnail?: string;
-  isWishlist: false;
-  host: HostInfo;
-  users: UserInfo[];
-  reviews: ReviewInfo[];
+  hostId: number;
+  hostNickname: string;
+  online: boolean;
+  participants: ParticipantInfo[];
 }
 
 export interface MeetInfo {
