@@ -47,34 +47,31 @@ export interface MeetupQueryType {
 }
 
 export interface MeetupPromiseType {
-  data: MeetupResponseType[];
+  data: MeetupListResponseType[];
   additionalData: {
     nextPage: number | null;
     isLast: boolean;
   };
 }
 
-export interface MeetupResponseType {
-  id: number;
-  meetingType: MeetupType;
-  isOnline: boolean;
-  meetingState: StateType;
-  location: LocationType;
+export interface MeetupListResponseType {
+  meetupId: number;
   title: string;
+  meetingType: MeetupType;
+  location: LocationType;
   content: string;
-  thumbnail: string;
-  maxParticipants: number;
-  minParticipants: number;
   recruitmentStartDate: string;
   recruitmentEndDate: string;
   meetingStartDate: string;
   meetingEndDate: string;
-  isWishlist: boolean;
-  hostId?: number;
-  Participants?: {
-    id: number;
-    name: string;
-    profileImage: string;
+  maxParticipants: number;
+  minParticipants: number;
+  thumbnail: string;
+  participants: {
+    userId: number;
+    profileImageUrl: string;
   }[];
-  participantCount: number;
+  status: StateType;
+  online: boolean;
+  isWishlist: boolean;
 }

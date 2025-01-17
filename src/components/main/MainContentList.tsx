@@ -78,25 +78,35 @@ export default function MainContentList() {
     <>
       <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
         {data?.pages.map((page) =>
-          page.data.map((item, index) => (
+          page.data.map((item) => (
             <Card
-              key={index}
+              key={item.meetupId}
               card={{
-                id: item.id,
+                meetupId: item.meetupId,
+                meetingType: item.meetingType,
+                status: item.status as
+                  | "RECRUITING"
+                  | "BEFORE_START"
+                  | "IN_PROGRESS"
+                  | "COMPLETED",
                 title: item.title,
-                image: item.thumbnail,
-                location: item.location,
-                recruitmentPeriod: {
-                  startDate: new Date(item.recruitmentStartDate),
-                  endDate: new Date(item.recruitmentEndDate),
-                },
-                eventPeriod: {
-                  startDate: new Date(item.meetingStartDate),
-                  endDate: new Date(item.meetingEndDate),
-                },
-                participants: item.maxParticipants,
-                status: item.meetingState,
-                itemType: item.meetingType,
+                location: item.location as
+                  | "CAPITAL"
+                  | "DAEJEON"
+                  | "JEONJU"
+                  | "GWANGJU"
+                  | "BUSAN"
+                  | "DAEGU"
+                  | "GANGNEUNG"
+                  | undefined,
+                participants: item.participants,
+                thumbnail: item.thumbnail,
+                online: item.online,
+                recruitmentStartDate: new Date(item.recruitmentStartDate),
+                minParticipants: item.minParticipants,
+                recruitmentEndDate: new Date(item.recruitmentEndDate),
+                meetingStartDate: new Date(item.meetingStartDate),
+                meetingEndDate: new Date(item.meetingEndDate),
               }}
             />
           )),

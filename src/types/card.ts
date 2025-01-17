@@ -1,14 +1,31 @@
+export interface ParticipantInfo {
+  userId: number;
+  profileImageUrl: string;
+}
+
 export interface CardProps {
-  id: number;
-  status: string;
-  itemType: string;
+  meetupId: number;
+  meetingType: "STUDY" | "TUTORING";
+  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
+  location?:
+    | "CAPITAL"
+    | "DAEJEON"
+    | "JEONJU"
+    | "GWANGJU"
+    | "BUSAN"
+    | "DAEGU"
+    | "GANGNEUNG";
   title: string;
-  location: string;
-  participants: number;
-  recruitmentPeriod: { startDate: Date; endDate: Date };
-  eventPeriod: { startDate: Date; endDate: Date };
-  image?: string;
+  minParticipants: number;
+  recruitmentStartDate: Date;
+  recruitmentEndDate: Date;
+  meetingStartDate: Date;
+  meetingEndDate: Date;
+  thumbnail?: string;
+  online: boolean;
+  participants: ParticipantInfo[];
   isReview?: boolean; //리뷰 작성 가능한 상태?
+  isMypage?: boolean;
 }
 
 export interface CardInfo {
@@ -16,8 +33,14 @@ export interface CardInfo {
 }
 
 export interface BadgeProps {
-  status: string;
-  recruitmentDate?: Date;
+  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
+  recruitmentEndDate: Date;
+  confirm: boolean;
+  isMypage?: boolean;
+}
+
+export interface BadgeInfo {
+  badge: BadgeProps;
 }
 
 export interface CardContentProps {
@@ -26,8 +49,10 @@ export interface CardContentProps {
     | "title"
     | "location"
     | "participants"
-    | "recruitmentPeriod"
-    | "eventPeriod"
-    | "image"
+    | "recruitmentStartDate"
+    | "recruitmentEndDate"
+    | "meetingStartDate"
+    | "meetingEndDate"
+    | "thumbnail"
   >;
 }
