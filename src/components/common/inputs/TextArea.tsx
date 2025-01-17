@@ -47,7 +47,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           <label className='ml-[8px] select-none text-body-2-normal font-medium text-gray-300'>
             {label}
             {required && (
-              <span className='ml-[8px] mt-0.5 text-red-500'>*</span>
+              <span className='text-body-2-noreal ml-[2px] mt-0.5 font-medium text-danger'>*</span>
             )}
           </label>
         )}

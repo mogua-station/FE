@@ -1,5 +1,6 @@
 import React from "react";
 import { Controller } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 import VisibilityToggle from "./VisibilityToggle";
 import OutlineButton from "@/components/common/buttons/OutlineButton";
 import useAuthInput from "@/hooks/inputs/auth/useAuthInput";
@@ -27,20 +28,23 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
             field.value,
             field.value && !error,
           );
+
+          const className = twMerge(containerStyle, props.className);
+
           const hint = hintStyle(error?.message, field.value && !error, name);
           return (
             <div className='flex flex-col gap-[12px]'>
               {props.label && (
-                <label className='select-none text-body-2-normal font-medium text-gray-300'>
+                <label className='ml-[8px] select-none text-body-2-normal font-medium text-gray-300'>
                   {props.label}
                   {props.required && (
-                    <span className='ml-1 text-red-500'>*</span>
+                    <span className='ml-1 mt-0.5 text-red-500'>*</span>
                   )}
                 </label>
               )}
               <div className='flex flex-col gap-[8px]'>
                 <div className='flex items-center gap-[8px]'>
-                  <div className={containerStyle}>
+                  <div className={className}>
                     <input
                       {...field}
                       {...props}
