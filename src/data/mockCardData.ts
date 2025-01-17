@@ -10,15 +10,15 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 7,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -38,11 +38,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -62,11 +62,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -86,11 +86,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -111,11 +111,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -136,11 +136,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -161,11 +161,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -186,11 +186,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -211,11 +211,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -236,11 +236,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -261,11 +261,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -285,11 +285,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -310,11 +310,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -334,11 +334,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -358,11 +358,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -382,11 +382,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -406,11 +406,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -430,19 +430,19 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -462,11 +462,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -486,11 +486,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -510,11 +510,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -534,11 +534,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -558,27 +558,27 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -598,11 +598,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
@@ -623,11 +623,11 @@ export const mockCardData: CardProps[] = [
     participants: [
       {
         userId: 3,
-        userProfile: "",
+        profileImageUrl: "",
       },
       {
         userId: 5,
-        userProfile: "",
+        profileImageUrl: "",
       },
     ],
     minParticipants: 4,
