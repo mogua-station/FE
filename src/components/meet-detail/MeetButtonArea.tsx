@@ -77,8 +77,9 @@ const fetchJoinMeet = async (id: number) => {
       const response = (error as any).response;
       if (response.status === 403) alert("사용자 인증 오류 발생");
       if (response.status === 404) alert("잘못된 경로 요청");
-      if (response.status === 400) alert("잘못된 데이터 요청");
+      if (response.status === 400) alert(response.message);
       if (response.status === 500) alert("네트워크 오류");
+      console.log(response);
     }
 
     throw error;
@@ -112,8 +113,10 @@ const fetchLeaveMeet = async (id: number) => {
       const response = (error as any).response;
       if (response.status === 403) alert("사용자 인증 오류 발생");
       if (response.status === 404) alert("잘못된 경로 요청");
-      if (response.status === 400) alert("잘못된 데이터 요청");
+      if (response.status === 400) alert(response.message);
       if (response.status === 500) alert("네트워크 오류");
+
+      console.log(response);
     }
 
     throw error;
@@ -129,7 +132,7 @@ export default function MeetButtonArea({
   const user = null;
 
   //임시 내 유저 아이디
-  const joinId = 7;
+  const joinId = 3;
 
   //지금 페이지가 북마크가 되어있느지 확인
   const [bookmark, setBookmark] = useState<boolean | null>(null);
@@ -196,6 +199,10 @@ export default function MeetButtonArea({
     }
   }, [user, setBookmark]);
 
+  useEffect(() => {
+    console.log(clientInfo.participants);
+  }, [clientInfo.participants]);
+
   if (isLoading) {
     <div>로딩중..</div>;
   }
@@ -229,12 +236,15 @@ export default function MeetButtonArea({
         {joinButton && clientInfo.stauts === "RECRUITING" ? (
           <SolidButton
             mode='special'
-            onClick={() => leaveMutate.mutate(joinId)}
+            onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
           >
             신청 취소하기
           </SolidButton>
         ) : (
-          <SolidButton mode='special' onClick={() => joinMutate.mutate(joinId)}>
+          <SolidButton
+            mode='special'
+            onClick={() => joinMutate.mutate(clientInfo.meetupId)}
+          >
             모임 신청하기
           </SolidButton>
         )}

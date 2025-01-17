@@ -1,5 +1,4 @@
 import MeetDetail from "@/components/meet-detail/MeetDetail";
-import { participants } from "@/data/mockList";
 
 export default async function Meet({ params }: { params: { id: number } }) {
   const { id } = params;
@@ -20,12 +19,7 @@ export default async function Meet({ params }: { params: { id: number } }) {
       console.error(error);
     });
 
-  return (
-    <MeetDetail
-      meetInfo={{
-        ...res.data,
-        participants: participants,
-      }}
-    />
-  );
+  console.log(res.data);
+
+  return <MeetDetail meetInfo={res.data} />;
 }

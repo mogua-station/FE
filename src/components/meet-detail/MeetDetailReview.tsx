@@ -55,7 +55,8 @@ export default function MeetDetailReview({
     <div className='flex flex-col gap-2'>
       <div className='flex flex-col gap-4'>
         <span className='text-title'>
-          리뷰 <span className='text-title text-blue-300'>16</span>
+          리뷰{" "}
+          <span className='text-title text-blue-300'>{reviews.length}</span>
         </span>
         <div className='flex flex-col gap-6'>
           {comment.map((review, index) => {
