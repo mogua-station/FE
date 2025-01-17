@@ -16,9 +16,11 @@ export default function Card({ card }: CardInfo) {
     title: card.title,
     location: card.location,
     participants: card.participants,
-    recruitmentPeriod: card.recruitmentPeriod,
-    eventPeriod: card.eventPeriod,
-    image: card.image,
+    recruitmentStartDate: card.recruitmentStartDate,
+    recruitmentEndDate: card.recruitmentEndDate,
+    meetingStartDate: card.meetingStartDate,
+    meetingEndDate: card.meetingEndDate,
+    thumbnail: card.thumbnail,
   };
 
   const [whishlist, setWhishlist] = useState(false);
@@ -31,41 +33,52 @@ export default function Card({ card }: CardInfo) {
   };
 
   const handleClickDetail = (type: string, id: number): void => {
-    router.push(`/${type}/${id}`);
+    const lowerCase = type.toLowerCase();
+    router.push(`/${lowerCase}/${id}`);
   };
 
-  const handleClickReview = (e: React.MouseEvent) => {
+  const handleClickReview = (e: React.MouseEvent, meetUpId: number) => {
     e.stopPropagation();
-    alert("리뷰 작성");
+
+    alert(`${meetUpId} 리뷰 작성`);
   };
 
   return (
     <div
       className='flex flex-col rounded-[16px] bg-gray-950 p-3'
-      onClick={() => handleClickDetail(card.itemType, card.id)}
+      onClick={() => handleClickDetail(card.meetingType, card.meetupId)}
     >
       <div className='flex justify-between'>
         <div className='flex gap-1.5'>
           <StatusBadge
-            status={card.status}
-            recruitmentDate={card.recruitmentPeriod.endDate}
+            badge={{
+              status: card.status,
+              recruitmentEndDate: card.recruitmentEndDate,
+              confirm: card.minParticipants <= card.participants.length,
+              isMypage: card.isMypage,
+            }}
           />
         </div>
 
-        <button onClick={hadleClickWhishlist}>
-          {whishlist ? (
-            <BookmarkActive className='size-6 text-orange-200' />
-          ) : (
-            <Bookmark className='size-6' />
-          )}
-        </button>
+        {!card.isMypage && (
+          <button onClick={hadleClickWhishlist}>
+            {whishlist ? (
+              <BookmarkActive className='size-6 text-orange-200' />
+            ) : (
+              <Bookmark className='size-6' />
+            )}
+          </button>
+        )}
       </div>
 
       <Content content={contentData} />
 
       {/* 버튼 컴포넌트 머지 후 추가 작업필요 */}
-      {card.isReview && (
-        <SolidButton className='mt-6' onClick={handleClickReview}>
+      {card.isMypage && card.isReview && card.status === "COMPLETED" && (
+        <SolidButton
+          className='mt-6'
+          onClick={(e) => handleClickReview(e, card.meetupId as number)}
+        >
           리뷰 작성
         </SolidButton>
       )}

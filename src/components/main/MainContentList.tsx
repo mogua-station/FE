@@ -122,7 +122,7 @@ export default function MainContentList() {
       <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
         {data?.pages.map((page) =>
           page.data.map((item: CardProps) => (
-            <Card key={item.id} card={item} />
+            <Card key={item.meetupId} card={item} />
           )),
         )}
       </section>
