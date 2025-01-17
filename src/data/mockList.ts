@@ -4,77 +4,68 @@ import { type ReviewInfo } from "@/types/review";
 
 export const cardList: CardProps[] = [
   {
-    id: 1,
-    status: "모집중",
-    itemType: "study",
+    meetupId: 1,
+    status: "IN_PROGRESS",
+    meetingType: "STUDY",
     title: "모각각코",
-    location: "집",
-    participants: 10,
-    recruitmentPeriod: {
-      startDate: new Date("2025-01-07"),
-      endDate: new Date("2025-01-20"),
-    },
-    eventPeriod: {
-      startDate: new Date("2025-01-25"),
-      endDate: new Date("2025-02-05"),
-    },
-    image:
+    location: "CAPITAL",
+    participants: [],
+    minParticipants: 4,
+    recruitmentStartDate: new Date("2025-01-01"),
+    recruitmentEndDate: new Date("2025-01-05"),
+    meetingStartDate: new Date("2025-01-15"),
+    meetingEndDate: new Date("2025-02-05"),
+    thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
+    online: false,
   },
   {
-    id: 2,
-    status: "모집중",
-    itemType: "study",
+    meetupId: 2,
+    status: "RECRUITING",
+    meetingType: "STUDY",
     title: "모집집코",
-    location: "집",
-    participants: 8,
-    recruitmentPeriod: {
-      startDate: new Date("2025-01-01"),
-      endDate: new Date("2025-01-10"),
-    },
-    eventPeriod: {
-      startDate: new Date("2025-01-25"),
-      endDate: new Date("2025-02-05"),
-    },
-    image:
+    location: "CAPITAL",
+    participants: [],
+    minParticipants: 4,
+    recruitmentStartDate: new Date("2025-01-01"),
+    recruitmentEndDate: new Date("2025-01-20"),
+    meetingStartDate: new Date("2025-01-25"),
+    meetingEndDate: new Date("2025-02-05"),
+    thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+    online: true,
   },
   {
-    id: 3,
-    status: "진행중",
-    itemType: "study",
+    meetupId: 3,
+    status: "RECRUITING",
+    meetingType: "STUDY",
     title: "코딩공부",
-    location: "집",
-    participants: 8,
-    recruitmentPeriod: {
-      startDate: new Date("2025-01-01"),
-      endDate: new Date("2025-01-05"),
-    },
-    eventPeriod: {
-      startDate: new Date("2025-01-07"),
-      endDate: new Date("2025-02-05"),
-    },
-    image:
+    location: "CAPITAL",
+    participants: [],
+    minParticipants: 4,
+    recruitmentStartDate: new Date("2025-01-01"),
+    recruitmentEndDate: new Date("2025-01-20"),
+    meetingStartDate: new Date("2025-01-25"),
+    meetingEndDate: new Date("2025-02-05"),
+    thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
+    online: true,
   },
   {
-    id: 4,
-    status: "종료",
-    itemType: "tutoring",
+    meetupId: 4,
+    status: "COMPLETED",
+    meetingType: "TUTORING",
     title: "게임코칭",
-    location: "pc방",
-    participants: 5,
-    recruitmentPeriod: {
-      startDate: new Date("2025-01-01"),
-      endDate: new Date("2025-01-05"),
-    },
-    eventPeriod: {
-      startDate: new Date("2025-01-07"),
-      endDate: new Date("2025-02-05"),
-    },
-    image:
+    location: "CAPITAL",
+    participants: [],
+    minParticipants: 4,
+    recruitmentStartDate: new Date("2025-01-01"),
+    recruitmentEndDate: new Date("2025-01-10"),
+    meetingStartDate: new Date("2025-01-11"),
+    meetingEndDate: new Date("2025-01-15"),
+    thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    isReview: true,
+    online: false,
   },
 ];
 
