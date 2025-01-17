@@ -12,8 +12,6 @@ export default function StatusBadge({ badge }: BadgeInfo) {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
-  console.log(badge.confirm);
-
   const renderBadge = () => {
     switch (badge.status) {
       case "RECRUITING":

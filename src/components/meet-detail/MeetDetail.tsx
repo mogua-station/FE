@@ -1,4 +1,5 @@
 import ArrowRight from "@/assets/images/icons/arrow_right.svg";
+import StatusBadge from "@/components/common/card/StatusBadge";
 import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
 import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
 import { reviews } from "@/data/mockList";
@@ -42,15 +43,6 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
     stauts: meetInfo.status,
   };
 
-  // const badgeStatus = {
-  //   status: clientInfo.stauts,
-  //   recruitmentDate:
-  //     clientInfo.stauts === "RECRUITING"
-  //       ? meetInfo.recruitmentStartDate
-  //       : new Date(),
-  //   confirm: meetInfo.minParticipants < meetInfo.participants.length,
-  // };
-
   return (
     <div className='relative mx-auto w-full max-w-[1200px] bg-gray-950 py-[60px] desktop:bg-[unset] desktop:py-[74px]'>
       <div className='fixed left-1/2 z-10 -mt-[38px] block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:hidden'>
@@ -80,7 +72,17 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
             {/* 스터디디 제목 정보 */}
             <div className='meet-info-box flex flex-col gap-8'>
               <div>
-                <div className='flex'></div>
+                <div className='flex gap-1.5'>
+                  <StatusBadge
+                    badge={{
+                      status: meetInfo.status,
+                      recruitmentEndDate: meetInfo.recruitmentEndDate,
+                      confirm:
+                        meetInfo.minParticipants <=
+                        meetInfo.participants.length,
+                    }}
+                  />
+                </div>
 
                 <div className='mt-3'>
                   <div></div>
