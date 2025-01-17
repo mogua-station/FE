@@ -1,4 +1,9 @@
-import { type Control } from "react-hook-form";
+import { useEffect } from "react";
+import {
+  type UseFormWatch,
+  type Control,
+  type UseFormSetValue,
+} from "react-hook-form";
 import CommonImageInput from "../common/inputs/ImageUpload";
 import CommonSelectBox from "../common/inputs/SelectBox";
 import CommonTextArea from "../common/inputs/TextArea";
@@ -9,10 +14,22 @@ import { type MeetupFormType } from "@/types/meetup.type";
 export default function FormSectionLeft({
   setImage,
   control,
+  watch,
+  setValue,
 }: {
   setImage: (image: File | null) => void;
   control: Control<MeetupFormType>;
+  watch: UseFormWatch<MeetupFormType>;
+  setValue: UseFormSetValue<MeetupFormType>;
 }) {
+  const isOnline = watch("isOnline");
+
+  useEffect(() => {
+    if (isOnline) {
+      setValue("location", null);
+    }
+  }, [isOnline, setValue]);
+
   return (
     <section className='flex flex-1 flex-col gap-10'>
       <CommonTextInput
@@ -24,9 +41,11 @@ export default function FormSectionLeft({
           required: "제목을 입력해주세요.",
         }}
       />
-      <div className='relative h-fit w-full'>
+      <div
+        className={`relative h-fit w-full overflow-hidden transition-[max-height] duration-500 ease-in-out ${isOnline ? "max-h-0" : "max-h-screen"}`}
+      >
         <CommonSelectBox
-          required={true}
+          required={!isOnline}
           control={control}
           name='location'
           label='장소'
@@ -41,7 +60,7 @@ export default function FormSectionLeft({
           ]}
           layout='1col'
           rules={{
-            required: "장소를 선택해주세요.",
+            required: !isOnline ? "장소를 선택해주세요." : undefined,
           }}
         />
 

@@ -13,7 +13,7 @@ export default function CreateForm() {
     defaultValues: {
       title: "",
       meetingType: "STUDY",
-      location: null,
+      location: "",
       content: "",
       recruitmentStartDate: new Date(),
       recruitmentEndDate: null,
@@ -74,11 +74,11 @@ export default function CreateForm() {
 
   const isSubmitDisabled =
     watch("title") === "" ||
-    (watch("isOnline") === false && watch("location") === null) ||
     watch("content") === "" ||
     watch("recruitmentEndDate") === null ||
     watch("meetingStartDate") === null ||
-    watch("meetingEndDate") === null;
+    watch("meetingEndDate") === null ||
+    (watch("isOnline") === false && watch("location") === null);
 
   return (
     <FormProvider {...methods}>
@@ -86,7 +86,12 @@ export default function CreateForm() {
         onSubmit={handleSubmit(onSubmit)}
         className='z-10 mx-4 my-6 flex flex-col gap-10 desktop:my-8 desktop:flex-row desktop:gap-9'
       >
-        <FormSectionLeft setImage={setImage} control={control} />
+        <FormSectionLeft
+          setImage={setImage}
+          control={control}
+          watch={watch}
+          setValue={setValue}
+        />
         <FormSectionRight
           watch={watch}
           setValue={setValue}
