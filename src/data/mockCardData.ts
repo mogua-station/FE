@@ -591,7 +591,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 24,
-    status: "PENDING",
+    status: "BEFORE_START",
     meetingType: "STUDY",
     title: "백엔드 개발 스터디",
     location: "CAPITAL",

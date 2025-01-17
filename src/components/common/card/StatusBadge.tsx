@@ -51,7 +51,7 @@ export default function StatusBadge({ badge }: BadgeInfo) {
           </div>
         );
 
-      case "PENDING":
+      case "BEFORE_START":
         return (
           <div className='flex gap-1.5'>
             <span className='flex items-center justify-between rounded-[6px] bg-gray-800 px-2 py-1'>
