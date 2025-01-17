@@ -23,17 +23,17 @@ export default function MainContentList() {
   const startQuery = searchParams.get("startDate") ?? undefined;
   const endQuery = searchParams.get("endDate") ?? undefined;
 
+  const queryKey = ["meetup"];
+  if (typeQuery) queryKey.push(typeQuery);
+  if (stateQuery) queryKey.push(stateQuery);
+  if (locationQuery) queryKey.push(locationQuery);
+  if (startQuery) queryKey.push(startQuery);
+  if (endQuery) queryKey.push(endQuery);
+
   // 무한 스크롤을 통한 데이터 불러오기
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: [
-        "meetup",
-        typeQuery,
-        stateQuery,
-        locationQuery,
-        startQuery,
-        endQuery,
-      ],
+      queryKey,
       queryFn: ({ pageParam = 0 }) =>
         getMeetupList({
           page: pageParam,

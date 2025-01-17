@@ -17,15 +17,15 @@ export default async function Home({
   const queryClient = new QueryClient();
 
   try {
+    const queryKey = ["meetup"];
+    if (searchParams.type) queryKey.push(searchParams.type);
+    if (searchParams.state) queryKey.push(searchParams.state);
+    if (searchParams.location) queryKey.push(searchParams.location);
+    if (searchParams.startDate) queryKey.push(searchParams.startDate);
+    if (searchParams.endDate) queryKey.push(searchParams.endDate);
+
     await queryClient.prefetchInfiniteQuery({
-      queryKey: [
-        "meetup",
-        searchParams.type,
-        searchParams.state,
-        searchParams.location,
-        searchParams.startDate,
-        searchParams.endDate,
-      ],
+      queryKey,
       queryFn: ({ pageParam = 0 }) =>
         getMeetupList({
           page: pageParam,
