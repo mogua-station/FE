@@ -3,6 +3,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+import CardSkeleton from "./CardSkeleton";
 import Card from "@/components/common/card/Card";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import {
@@ -102,8 +103,14 @@ export default function MainContentList() {
         )}
       </section>
 
-      <div ref={loadMoreRef} className='flex justify-center py-4 text-gray-200'>
-        {isFetchingNextPage && <p>로딩 중...</p>}
+      <div
+        ref={loadMoreRef}
+        className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
+      >
+        {isFetchingNextPage &&
+          Array.from({ length: 10 }).map((_, index) => (
+            <CardSkeleton key={index} />
+          ))}
       </div>
     </>
   );
