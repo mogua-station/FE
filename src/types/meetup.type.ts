@@ -5,7 +5,7 @@ export type HybridType = "ONLINE" | "OFFLINE";
 export type StateType =
   | "ALL"
   | "RECRUITING"
-  | "PENDING"
+  | "BEFORE_START"
   | "IN_PROGRESS"
   | "COMPLETED";
 

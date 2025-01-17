@@ -24,7 +24,7 @@ export default function StateModal({
       icon: RecruitingIcon,
     },
     {
-      key: "PENDING",
+      key: "BEFORE_START",
       label: "시작 전이에요",
       icon: BellIcon,
     },
