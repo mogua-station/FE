@@ -9,7 +9,7 @@ export default function UserProfile({ userInfo }: UserProfileProps) {
     userInfo;
 
   return (
-    <div className='flex w-full justify-between rounded-[20px] bg-gray-950 px-5 py-4 desktop:px-9 desktop:py-8'>
+    <div className='flex min-h-[130px] w-full justify-between rounded-[20px] bg-gray-950 px-5 py-4 desktop:px-9 desktop:py-8'>
       <div>
         <div className='flex items-center gap-1.5'>
           <h2 className='text-heading-2 font-semibold text-gray-100'>
