@@ -24,26 +24,11 @@ export default function TagInput({
   const {
     control,
     formState: { errors },
-    setError,
     clearErrors,
   } = useFormContext();
 
   const tagInputStyle = tagList.length === 0 ? "ml-2" : "";
   const hintMessageStyle = errors[name] ? "text-danger" : "text-gray-500";
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setInputValue(newValue);
-
-    if (newValue.length > 5) {
-      setError(name, {
-        type: "maxLength",
-        message: "태그는 5글자를 넘어갈 수 없습니다.",
-      });
-    } else {
-      clearErrors(name);
-    }
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
@@ -79,7 +64,13 @@ export default function TagInput({
     <Controller
       name={name}
       control={control}
-      render={() => (
+      rules={{
+        maxLength: {
+          value: 5,
+          message: "태그는 5글자를 넘어갈 수 없습니다.",
+        },
+      }}
+      render={({ field }) => (
         <div>
           <div className='flex justify-between'>
             <label className='ml-2 select-none text-body-2-normal font-medium text-gray-300'>
@@ -108,13 +99,16 @@ export default function TagInput({
             <input
               className={`my-5 bg-transparent align-middle text-body-2-normal font-medium text-gray-100 outline-none placeholder:text-body-2-reading placeholder:font-regular placeholder:text-gray-400 disabled:hidden disabled:cursor-not-allowed ${tagInputStyle}`}
               type='text'
-              name='userTag'
+              {...field}
               placeholder='# 태그추가'
               value={inputValue}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                field.onChange(e);
+              }}
               onKeyDown={handleKeyDown}
               disabled={tagList.length >= 3}
-              maxLength={6}
+              maxLength={5}
             />
           </ul>
 
