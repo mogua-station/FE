@@ -3,7 +3,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import CardSkeleton from "./CardSkeleton";
+import CardSkeleton from "../common/skeleton/CardSkeleton";
 import Card from "@/components/common/card/Card";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import {
