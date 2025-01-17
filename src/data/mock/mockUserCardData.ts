@@ -1,8 +1,9 @@
-import { type CardProps } from "@/types/card";
-import { type ReviewInfo } from "@/types/review";
+// import { type CardProps } from "@/types/card";
+// import { type ReviewInfo } from "@/types/review";
 
 // 목록 O
-export const myStudyList: CardProps[] = [
+// 카트 컴포넌트 수정 후 타입 불일치로 에러나는 상태 (실제 api 연결로 변경해보면 될듯)
+/* export const myStudyList: CardProps[] = [
   {
     id: 1,
     status: "진행중",
@@ -1588,10 +1589,10 @@ export const classReviews: ReviewInfo[] = [
     userprofile: "/images/temp.png",
     date: new Date(),
   },
-];
+]; */
 
 // 목록 X
-/* export const myStudyList = [];
+export const myStudyList = [];
 export const myTutoringList = [];
 export const reviewableStudyList = [];
 export const reviewableTutoringList = [];
@@ -1599,4 +1600,4 @@ export const writtenReviews = [];
 export const writtenTutoringReviews = [];
 export const createdStudyList = [];
 export const createdTutoringList = [];
-export const classReviews = []; */
+export const classReviews = [];
