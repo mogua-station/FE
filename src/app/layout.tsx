@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import Providers from "./providers/Providers";
 import Header from "@/components/common/Header";
 import NavBar from "@/components/common/nav-bar/NavBar";
+import InitializeUser from "@/hooks/auths/InitializeUser";
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
@@ -19,8 +20,9 @@ export default function RootLayout({
     <html lang='ko-KR' className={pretendard.className}>
       <body className='flex min-h-[100dvh] flex-col'>
         <Providers>
+          <InitializeUser />
           <Header />
-          <main className='flex flex-1 flex-col px-4 pb-[62px] pt-[56px] tablet:px-20 desktop:px-4 desktop:pb-0'>
+          <main className='flex flex-1 flex-col pb-[62px] pt-[56px] tablet:px-20 desktop:pb-0'>
             {children}
           </main>
           <NavBar />
