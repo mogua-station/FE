@@ -5,6 +5,7 @@ import { type SubmitHandler, useForm, FormProvider } from "react-hook-form";
 import CommonSelectBox from "@/components/common/inputs/SelectBox";
 import CommonTextArea from "@/components/common/inputs/TextArea";
 import CommonTextInput from "@/components/common/inputs/TextInput";
+import withAuth from "@/hoc/withAuth";
 
 interface FormData {
   nickname: string;
@@ -210,4 +211,4 @@ const MyForm = () => {
   );
 };
 
-export default MyForm;
+export default withAuth(MyForm);

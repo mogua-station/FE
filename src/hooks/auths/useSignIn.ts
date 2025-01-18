@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import useUserStore from "@/store/auth/useUserStore";
 
 type SignInResult = {
   success?: boolean;
@@ -10,6 +11,7 @@ type SignInResult = {
 
 const useSignIn = () => {
   const router = useRouter();
+  const setUser = useUserStore((state) => state.setUser);
 
   const signIn = async (
     data: {
@@ -26,6 +28,7 @@ const useSignIn = () => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify(data),
         },
       );
@@ -46,6 +49,16 @@ const useSignIn = () => {
             message: responseData.message || "로그인에 실패했습니다.",
           },
         };
+      }
+
+      const token = response.headers.get("Authorization")?.split(" ")[1];
+      if (token) {
+        document.cookie = `accessToken=${token}; path=/; max-age=${process.env.TOKEN_EXPIRY};`; // 추후 수정
+
+        // Zustand store에 유저 정보 저장
+        setUser(responseData.data.user);
+      } else {
+        throw new Error("토큰이 없습니다.");
       }
 
       if (options?.redirect !== false) {
