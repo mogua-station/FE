@@ -23,8 +23,8 @@ export default function Content({ content }: CardContentProps) {
               모집
             </span>
             <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>
-              {content.recruitmentPeriod.startDate.toLocaleDateString("ko-KR")}{" "}
-              - {content.recruitmentPeriod.endDate.toLocaleDateString("ko-KR")}
+              {/* {content.recruitmentPeriod.startDate.toLocaleDateString("ko-KR")}{" "} */}
+              {/* - {content.recruitmentPeriod.endDate.toLocaleDateString("ko-KR")} */}
             </span>
           </div>
           <div className='flex'>
@@ -34,8 +34,8 @@ export default function Content({ content }: CardContentProps) {
               참여
             </span>
             <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>
-              {content.eventPeriod.startDate.toLocaleDateString("ko-KR")} -{" "}
-              {content.eventPeriod.endDate.toLocaleDateString("ko-KR")}
+              {/* {content.eventPeriod.startDate.toLocaleDateString("ko-KR")} -{" "}
+              {content.eventPeriod.endDate.toLocaleDateString("ko-KR")} */}
             </span>
           </div>
         </div>
