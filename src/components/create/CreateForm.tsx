@@ -1,10 +1,13 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import SolidButton from "../common/buttons/SolidButton";
 import FormSectionLeft from "./FormSectionLeft";
 import FormSectionRight from "./FormSectionRight";
+import useModal from "@/hooks/useModal";
 import { createMeetup } from "@/lib/main/meetup.api";
 import type { MeetupFormType } from "@/types/meetup.type";
 
@@ -32,14 +35,67 @@ export default function CreateForm() {
 
   const [dateError, setDateError] = useState<string | null>(null);
 
+  const { openModal, closeModal } = useModal();
+  const router = useRouter();
+
   const createMeetupMutation = useMutation({
     mutationFn: createMeetup,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSuccess: (data: any) => {
       console.log("Meetup created successfully:", data);
+
+      openModal({
+        hasCloseBtn: false,
+        children: (
+          <div className='flex w-[17.6875rem] flex-col items-center p-6'>
+            <p className='pb-3 text-heading-2 font-medium text-gray-100'>
+              모임 개설 완료
+            </p>
+            <p className='pb-6 text-body-2-normal font-medium text-gray-400'>
+              모임 개설이 완료되었어요
+            </p>
+            <div className='flex w-full gap-[.4375rem]'>
+              <SolidButton
+                onClick={() => {
+                  closeModal();
+                  router.push("/");
+                }}
+              >
+                목록으로
+              </SolidButton>
+              <SolidButton
+                onClick={() => {
+                  closeModal();
+                  router.push(`/study/${data.data.meetupId}`);
+                }}
+                state='activated'
+              >
+                보러가기
+              </SolidButton>
+            </div>
+          </div>
+        ),
+      });
     },
     onError: (error: Error) => {
       console.error("Error creating meetup:", error);
+
+      openModal({
+        hasCloseBtn: false,
+        children: (
+          <div className='flex w-[17.6875rem] flex-col items-center p-6'>
+            <p className='pb-3 text-heading-2 font-medium text-gray-100'>
+              모임 개설 실패패
+            </p>
+            <p className='pb-6 text-body-2-normal font-medium text-gray-400'>
+              모임 개설 중 오류가 발생했어요.
+            </p>
+            <div className='flex w-full gap-[.4375rem]'>
+              <SolidButton onClick={() => closeModal()}>닫기</SolidButton>
+            </div>
+          </div>
+        ),
+      });
     },
   });
 
