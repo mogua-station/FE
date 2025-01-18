@@ -5,6 +5,7 @@ import { type SubmitHandler, useForm, FormProvider } from "react-hook-form";
 import CommonSelectBox from "@/components/common/inputs/SelectBox";
 import CommonTextArea from "@/components/common/inputs/TextArea";
 import CommonTextInput from "@/components/common/inputs/TextInput";
+import withAuth from "@/hoc/withAuth";
 
 interface FormData {
   nickname: string;
@@ -64,6 +65,7 @@ const MyForm = () => {
           rules={{ required: "필수 항목입니다." }}
           required={true}
           hint='힌트입니다.'
+          placeholder='안녕'
         />
         <CommonTextInput
           required={true}
@@ -209,4 +211,4 @@ const MyForm = () => {
   );
 };
 
-export default MyForm;
+export default withAuth(MyForm);
