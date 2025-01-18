@@ -1,8 +1,9 @@
+"use client";
+
 import AccountActionButtons from "@/components/edit-profile/AccountActionButtons";
 import ContactBanner from "@/components/edit-profile/ContactBanner";
 import EditProfileForm from "@/components/edit-profile/EditProfileForm";
 
-// TODO: NavBar 없는 레이아웃 설정 필요
 export default function EditProfile() {
   return (
     <section className='flex h-full flex-1 flex-col items-center bg-gray-950'>

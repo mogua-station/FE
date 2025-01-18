@@ -1,8 +1,7 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { CommonNicknameInput } from "../auth/AuthInputs";
@@ -12,17 +11,9 @@ import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { SYSTEM_ALERTS } from "@/constants/alerts";
-import { userProfileApi } from "@/lib/userProfile";
-
-type UserProfile = {
-  email: string;
-  nickname: string;
-  profileImg: string;
-  qualificationStatus: "QUALIFIED" | "UNQUALIFIED";
-  bio: string;
-  userTagList: Array<{ id: number; tag: string }>;
-  ownId: boolean;
-};
+import useCookie from "@/hooks/auths/useTokenState";
+import { useGetProfile, useUpdateProfile } from "@/hooks/user/useProfile";
+import useUserStore from "@/store/auth/useUserStore";
 
 type FormValues = {
   nickname: string;
@@ -30,63 +21,46 @@ type FormValues = {
   userTagList: string[];
 };
 
-/**
- * TODO:
- * 1. 코드 정리 필요 (프로필 수정 액션은 별도의 훅으로 분리하고 UI만 여기서 다루는 것이 좋다는 의견)
- */
 export default function EditProfileForm() {
-  const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
+  const token = useCookie("accessToken");
+  const { user, setUser } = useUserStore();
   const router = useRouter();
-  const queryClient = useQueryClient();
+
+  const { data: userInfo, isLoading, error } = useGetProfile(user!.id, token!);
+
+  const updateProfileMutation = useUpdateProfile();
 
   const methods = useForm<FormValues>({
-    defaultValues: {
-      nickname: "",
-      bio: "",
-      userTagList: [],
-    },
+    values: userInfo
+      ? {
+          nickname: userInfo.nickname,
+          bio: userInfo.bio,
+          userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
+        }
+      : {
+          nickname: "",
+          bio: "",
+          userTagList: [],
+        },
     mode: "onChange",
   });
 
-  const mutation = useMutation({
-    mutationFn: userProfileApi.updateProfile,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
-      router.replace(`/user/${process.env.NEXT_PUBLIC_USER_ID}`);
-    },
-    onError: (err) => {
-      alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
-      console.error(err);
-    },
-  });
-
-  useEffect(() => {
-    userProfileApi
-      .getUserInfo(Number(process.env.NEXT_PUBLIC_USER_ID))
-      .then((data) => {
-        setUserInfo(data);
-        methods.reset({
-          nickname: data.nickname,
-          bio: data.bio,
-          userTagList: data.userTagList.map(
-            (tag: { id: number; tag: string }) => tag.tag,
-          ),
-        });
-      })
-      .catch(console.error);
-  }, [methods]);
-
-  if (!userInfo) {
+  if (isLoading || !userInfo) {
     return (
       <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
         로딩중...
       </div>
-    ); // 또는 스켈레톤/스피너
+    );
   }
 
-  const { email, profileImg } = userInfo;
+  if (error) {
+    return (
+      <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
+        프로필을 불러오는데 실패했습니다. 다시 시도해주세요.
+      </div>
+    );
+  }
 
   const {
     control,
@@ -103,8 +77,10 @@ export default function EditProfileForm() {
   };
 
   const getChangedFields = () => {
+    if (!userInfo) return null;
+
     const changes: {
-      formData?: FormData;
+      image?: File;
       requestData?: any;
     } = {};
 
@@ -119,15 +95,16 @@ export default function EditProfileForm() {
     }
 
     if (
-      JSON.stringify(watchedTags.sort()) !==
-      JSON.stringify(userInfo.userTagList.map((tag) => tag.tag).sort())
+      watchedTags &&
+      userInfo?.userTagList &&
+      JSON.stringify([...watchedTags].sort()) !==
+        JSON.stringify(userInfo.userTagList.map((tag) => tag.tag).sort())
     ) {
       requestData.userTagList = watchedTags;
     }
 
     if (selectedImage) {
-      changes.formData = new FormData();
-      changes.formData.append("image", selectedImage);
+      changes.image = selectedImage;
     }
 
     if (Object.keys(requestData).length > 0) {
@@ -138,17 +115,18 @@ export default function EditProfileForm() {
   };
 
   const onSubmit = methods.handleSubmit(() => {
-    const changes = getChangedFields();
+    if (!token || !user) return;
 
-    // 변경사항이 없으면 얼리 리턴
-    if (!changes.formData && !changes.requestData) {
+    const changes = getChangedFields();
+    if (!changes) return;
+
+    if (!changes.image && !changes.requestData) {
       alert("변경된 내용이 없습니다.");
       return;
     }
 
     const submitFormData = new FormData();
 
-    // 변경사항이 없어도 최소한 빈 객체라도 request로 보내기
     submitFormData.append(
       "request",
       new Blob([JSON.stringify(changes.requestData || {})], {
@@ -156,34 +134,43 @@ export default function EditProfileForm() {
       }),
     );
 
-    // 이미지가 있는 경우에만 추가
-    if (changes.formData) {
-      const imageFile = changes.formData.get("image");
-      if (imageFile) {
-        submitFormData.append("image", imageFile);
-      }
+    if (changes.image) {
+      submitFormData.append("image", changes.image);
     }
 
-    mutation.mutate(submitFormData);
+    updateProfileMutation.mutate(
+      { formData: submitFormData, token },
+      {
+        onSuccess: () => {
+          setUser({
+            ...user,
+            name: watchedNickname || user.name,
+            imageUrl: userInfo.profileImg || user.imageUrl,
+          });
+          router.push(`/user/${user.id}`);
+        },
+        onError: () => {
+          alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
+        },
+      },
+    );
   });
 
+  const { email, profileImg } = userInfo;
+
   const getButtonState = () => {
-    // 에러가 있으면 무조건 inactive
     if (Object.keys(errors).length > 0) return "inactive";
-    if (mutation.isPending) return "inactive";
+    if (updateProfileMutation.isPending) return "inactive";
 
-    // 실제 변경사항만 확인
     const changes = getChangedFields();
-    if (changes.formData || changes.requestData) return "activated";
+    if (changes?.image || changes?.requestData) return "activated";
 
-    // 그 외의 경우는 default
     return "default";
   };
 
   return (
     <FormProvider {...methods}>
       <form className='contents' onSubmit={onSubmit}>
-        {/* TODO: IndexedDB용 공용 컴포넌트로 교체 예정 */}
         <ProfileImageInput
           profileImg={profileImg}
           onImageSelect={setSelectedImage}
@@ -228,7 +215,7 @@ export default function EditProfileForm() {
           />
         </div>
         <SolidButton className='my-14' state={getButtonState()}>
-          {mutation.isPending ? "수정 중..." : "수정 완료"}
+          {updateProfileMutation.isPending ? "수정 중..." : "수정 완료"}
         </SolidButton>
       </form>
     </FormProvider>
