@@ -4,11 +4,14 @@ import CommonTextInput from "@/components/common/inputs/TextInput";
 export const CommonNicknameInput = ({
   control,
   isRequired,
+  className,
 }: {
   control: Control<any>;
   isRequired: boolean;
+  className?: string;
 }) => (
   <CommonTextInput
+    className={className}
     required={isRequired}
     name='nickname'
     label='닉네임'
@@ -16,6 +19,10 @@ export const CommonNicknameInput = ({
     maxLength={8}
     rules={{
       ...(isRequired && { required: "닉네임은 필수 항목입니다." }),
+      minLength: {
+        value: 2,
+        message: "닉네임은 2글자 이상이어야 합니다.",
+      },
       maxLength: {
         value: 8,
         message: "닉네임은 8글자를 넘어갈 수 없습니다.",

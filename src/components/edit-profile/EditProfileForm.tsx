@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
+import { CommonNicknameInput } from "../auth/AuthInputs";
 import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
@@ -29,6 +30,10 @@ type FormValues = {
   userTagList: string[];
 };
 
+/**
+ * TODO:
+ * 1. 코드 정리 필요 (프로필 수정 액션은 별도의 훅으로 분리하고 UI만 여기서 다루는 것이 좋다는 의견)
+ */
 export default function EditProfileForm() {
   const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -198,29 +203,17 @@ export default function EditProfileForm() {
             control={control}
             disabled
           />
-          <CommonTextInput
+          <CommonNicknameInput
             className={twMerge(
-              "bg-gray-800 text-gray-100",
-              !errors.nickname &&
-                "border-gray-700 hover:border-gray-700 focus:border-gray-700",
+              "border-transparent bg-gray-800 text-gray-100",
+              errors.nickname && "border-danger",
             )}
-            name='nickname'
-            label='닉네임'
             control={control}
-            rules={{
-              minLength: {
-                value: 2,
-                message: "닉네임은 2글자 이상이어야 합니다.",
-              },
-              maxLength: {
-                value: 8,
-                message: "닉네임은 8글자를 넘어갈 수 없습니다.",
-              },
-            }}
-            hint='최대 8글자까지 입력 가능해요'
+            isRequired={false}
           />
           <CommonTextArea
-            className='h-40 max-h-40 resize-none bg-gray-800 text-gray-100'
+            containerStyle='bg-gray-800'
+            formStyle='bg-gray-800 text-gray-100 h-40'
             name='bio'
             label='소개'
             placeholder='소개를 입력해주세요'
