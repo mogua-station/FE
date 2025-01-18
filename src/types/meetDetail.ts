@@ -8,6 +8,7 @@ export interface ClientInfo {
   hostId: number;
   hostNickname: string;
   participants: ParticipantInfo[];
+  minParticipants: number;
   stauts: "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
 }
 

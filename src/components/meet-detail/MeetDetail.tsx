@@ -40,6 +40,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
     hostId: meetInfo.hostId,
     hostNickname: meetInfo.hostNickname,
     participants: meetInfo.participants,
+    minParticipants: meetInfo.minParticipants,
     stauts: meetInfo.status,
   };
 

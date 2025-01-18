@@ -79,7 +79,6 @@ const fetchJoinMeet = async (id: number) => {
       if (response.status === 404) alert("잘못된 경로 요청");
       if (response.status === 400) alert(response.message);
       if (response.status === 500) alert("네트워크 오류");
-      console.log(response);
     }
 
     throw error;
@@ -115,8 +114,6 @@ const fetchLeaveMeet = async (id: number) => {
       if (response.status === 404) alert("잘못된 경로 요청");
       if (response.status === 400) alert(response.message);
       if (response.status === 500) alert("네트워크 오류");
-
-      console.log(response);
     }
 
     throw error;
@@ -129,18 +126,59 @@ export default function MeetButtonArea({
   clientInfo: ClientInfo;
 }) {
   //임시 유저 데이터 확인
-  const user = null;
+  const user = 3;
 
-  //임시 내 유저 아이디
-  const joinId = 3;
+  const router = useRouter();
+  const toggleWishlist = useAddWishlist();
 
   //지금 페이지가 북마크가 되어있느지 확인
   const [bookmark, setBookmark] = useState<boolean | null>(null);
-  const [joinButton, setJoinButton] = useState<boolean>(() => {
-    const join =
-      clientInfo.participants.filter((item) => item.userId === joinId).length >
-      0;
-    return join;
+  const [joinButton, setJoinButton] = useState<JSX.Element | undefined>(() => {
+    if (user == null) {
+      return (
+        <SolidButton mode='special' onClick={() => handleClickJoin()}>
+          모임 신청하기
+        </SolidButton>
+      );
+    }
+
+    //내가 개설한 모임의 상세에 들어갔을 때
+    if (clientInfo.hostId === user && clientInfo.stauts === "RECRUITING") {
+      if (clientInfo.participants.length >= clientInfo.minParticipants) {
+        return (
+          <SolidButton mode='special' disabled>
+            개설확정된 모임이에요
+          </SolidButton>
+        );
+      } else {
+        return (
+          <SolidButton mode='special' onClick={() => {}}>
+            모임 취소하기
+          </SolidButton>
+        );
+      }
+    }
+
+    //모임 참여 여부에 따른 버튼렌더링
+    if (
+      clientInfo.participants.some((item) => item.userId === user) &&
+      clientInfo.stauts === "RECRUITING"
+    ) {
+      return (
+        <SolidButton
+          mode='special'
+          onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
+        >
+          신청 취소하기
+        </SolidButton>
+      );
+    } else {
+      return (
+        <SolidButton mode='special' onClick={() => handleClickJoin()}>
+          모임 신청하기
+        </SolidButton>
+      );
+    }
   });
 
   const { data: hostData, isLoading } = useQuery({
@@ -150,9 +188,6 @@ export default function MeetButtonArea({
       return host.data;
     },
   });
-
-  const toggleWishlist = useAddWishlist();
-  const router = useRouter();
 
   const handleClickAreaButton = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
@@ -166,10 +201,19 @@ export default function MeetButtonArea({
     router.push(`/user/${id}`);
   };
 
+  const handleClickJoin = () => {
+    if (user === null) {
+      alert("로그인 해주세요");
+    } else {
+      joinMutate.mutate(clientInfo.meetupId);
+    }
+  };
+
   const joinMutate = useMutation({
     mutationFn: (id: number) => fetchJoinMeet(id),
     onSuccess: () => {
       alert("모임 신청이 완료되었습니다.");
+      router.refresh();
     },
   });
 
@@ -177,17 +221,57 @@ export default function MeetButtonArea({
     mutationFn: (id: number) => fetchLeaveMeet(id),
     onSuccess: () => {
       alert("신청 취소가 완료되었습니다.");
+      router.refresh();
     },
   });
 
   //참여자가 변경될 때 마다
   useEffect(() => {
-    const join =
-      clientInfo.participants.filter((item) => item.userId === joinId).length >
-      0;
+    if (user == null) {
+      setJoinButton(
+        <SolidButton mode='special' onClick={() => handleClickJoin()}>
+          모임 신청하기
+        </SolidButton>,
+      );
+    }
 
-    setJoinButton(join);
-  }, [clientInfo.participants]);
+    if (clientInfo.hostId === user && clientInfo.stauts === "RECRUITING") {
+      if (clientInfo.participants.length >= clientInfo.minParticipants) {
+        setJoinButton(
+          <SolidButton mode='special' disabled>
+            개설확정된 모임이에요
+          </SolidButton>,
+        );
+      } else {
+        setJoinButton(
+          <SolidButton mode='special' onClick={() => {}}>
+            모임 취소하기
+          </SolidButton>,
+        );
+      }
+    }
+
+    //모임 참여 여부에 따른 버튼렌더링
+    if (
+      clientInfo.participants.some((item) => item.userId === user) &&
+      clientInfo.stauts === "RECRUITING"
+    ) {
+      setJoinButton(
+        <SolidButton
+          mode='special'
+          onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
+        >
+          신청 취소하기
+        </SolidButton>,
+      );
+    } else {
+      setJoinButton(
+        <SolidButton mode='special' onClick={() => handleClickJoin()}>
+          모임 신청하기
+        </SolidButton>,
+      );
+    }
+  }, [clientInfo.participants, user]);
 
   //븍마크 확인
   useEffect(() => {
@@ -198,10 +282,6 @@ export default function MeetButtonArea({
       }
     }
   }, [user, setBookmark]);
-
-  useEffect(() => {
-    console.log(clientInfo.participants);
-  }, [clientInfo.participants]);
 
   if (isLoading) {
     <div>로딩중..</div>;
@@ -233,21 +313,7 @@ export default function MeetButtonArea({
             <Bookmark className='size-6' />
           )}
         </IconButton>
-        {joinButton && clientInfo.stauts === "RECRUITING" ? (
-          <SolidButton
-            mode='special'
-            onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-          >
-            신청 취소하기
-          </SolidButton>
-        ) : (
-          <SolidButton
-            mode='special'
-            onClick={() => joinMutate.mutate(clientInfo.meetupId)}
-          >
-            모임 신청하기
-          </SolidButton>
-        )}
+        {joinButton}
       </div>
       <button
         className='meet-info-box-small mt-6 flex flex-col gap-4'
