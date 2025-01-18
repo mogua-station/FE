@@ -212,8 +212,8 @@ export default function EditProfileForm() {
             isRequired={false}
           />
           <CommonTextArea
-            containerStyle='bg-gray-800'
-            formStyle='bg-gray-800 text-gray-100 h-40'
+            containerClassName='bg-gray-800'
+            formClassName='bg-gray-800 text-gray-100 h-40'
             name='bio'
             label='소개'
             placeholder='소개를 입력해주세요'

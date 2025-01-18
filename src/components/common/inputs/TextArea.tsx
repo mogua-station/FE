@@ -18,13 +18,23 @@ export interface TextAreaProps
   rules?: RegisterOptions;
   control?: Control<any>;
   maxLength?: number;
-  containerStyle?: string;
-  formStyle?: string;
+  containerClassName?: string;
+  formClassName?: string;
 }
 
 const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   (
-    { label, required, name, rules, control, maxLength = 300, ...props },
+    {
+      label,
+      required,
+      name,
+      rules,
+      control,
+      maxLength = 300,
+      containerClassName,
+      formClassName,
+      ...props
+    },
     ref,
   ) => {
     const {
@@ -36,12 +46,12 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const containerStyle = twMerge(
       `flex max-h-[160px] w-full flex-col rounded-[12px] border bg-gray-900 px-[16px] py-[18px]`,
       error ? "border-danger" : "border-gray-700",
-      props.containerStyle,
+      containerClassName,
     );
 
     const formStyle = twMerge(
       `select-none max-h-[124px] text-body-2-reading font-regular bg-gray-900 text-gray-200 placeholder-gray-400 focus:outline-none overflow:hidden resize-none`,
-      props.formStyle,
+      formClassName,
     );
 
     return (
