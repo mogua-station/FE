@@ -1,6 +1,33 @@
 import { type CardContentProps } from "@/types/card";
 
 export default function Content({ content }: CardContentProps) {
+  const locationFormat = (): string => {
+    switch (content.location) {
+      case "CAPITAL":
+        return "수도권";
+
+      case "DAEJEON":
+        return "대전광역시";
+
+      case "DAEGU":
+        return "대구광역시";
+
+      case "GWANGJU":
+        return "광주광역시";
+
+      case "BUSAN":
+        return "부산광역시";
+
+      case "JEONJU":
+        return "전주시";
+
+      case "GANGNEUNG":
+        return "강릉시";
+    }
+
+    return "";
+  };
+
   return (
     <div className='mt-5 flex justify-between'>
       <div className='flex-col'>
@@ -11,9 +38,9 @@ export default function Content({ content }: CardContentProps) {
           <span
             className={`caption-stroke relative inline-block pr-2 text-label-reading font-regular text-gray-400`}
           >
-            {content.location}
+            {locationFormat()}
           </span>
-          <span className='inline-block pl-2 text-label-reading font-regular text-gray-400'>{`${content.participants}명 참여`}</span>
+          <span className='inline-block pl-2 text-label-reading font-regular text-gray-400'>{`${content.participants.length}명 참여`}</span>
         </div>
         <div className='flex flex-col gap-1'>
           <div className='flex'>
@@ -23,8 +50,8 @@ export default function Content({ content }: CardContentProps) {
               모집
             </span>
             <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>
-              {/* {content.recruitmentPeriod.startDate.toLocaleDateString("ko-KR")}{" "} */}
-              {/* - {content.recruitmentPeriod.endDate.toLocaleDateString("ko-KR")} */}
+              {content.recruitmentStartDate.toLocaleDateString("ko-KR")} -{" "}
+              {content.recruitmentEndDate.toLocaleDateString("ko-KR")}
             </span>
           </div>
           <div className='flex'>
@@ -34,8 +61,8 @@ export default function Content({ content }: CardContentProps) {
               참여
             </span>
             <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>
-              {/* {content.eventPeriod.startDate.toLocaleDateString("ko-KR")} -{" "}
-              {content.eventPeriod.endDate.toLocaleDateString("ko-KR")} */}
+              {content.meetingStartDate.toLocaleDateString("ko-KR")} -{" "}
+              {content.meetingEndDate.toLocaleDateString("ko-KR")}
             </span>
           </div>
         </div>
@@ -43,7 +70,7 @@ export default function Content({ content }: CardContentProps) {
       <div className='flex flex-col justify-end'>
         <img
           className='h-20 w-20 rounded-[8px] object-cover'
-          src={content.image ? content.image : ""}
+          src={content.thumbnail ? content.thumbnail : ""}
           alt='모임 이미지'
         />
       </div>

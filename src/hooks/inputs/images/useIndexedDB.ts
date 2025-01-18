@@ -1,63 +1,75 @@
-import { openDB } from "idb";
+import { openDB, type IDBPDatabase } from "idb";
+
+const DB_NAME = "image-store";
+const STORE_NAME = "images";
+const DB_VERSION = 1;
+
+let db: IDBPDatabase | null = null;
+
+const initDB = async () => {
+  if (db) return db;
+
+  db = await openDB(DB_NAME, DB_VERSION, {
+    upgrade(db) {
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
+    },
+  });
+  return db;
+};
 
 export const useIndexedDB = () => {
   const storeImage = async (file: File) => {
     try {
-      const db = await openDB("image-store", 1, {
-        upgrade(db) {
-          if (!db.objectStoreNames.contains("images")) {
-            // 'images' 객체 저장소가 없으면 새로 생성
-            db.createObjectStore("images", {
-              keyPath: "id",
-              autoIncrement: true,
-            });
-          }
-        },
-      });
-      const transaction = db.transaction("images", "readwrite");
-      const store = transaction.objectStore("images");
+      const db = await initDB();
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      const store = tx.objectStore(STORE_NAME);
       const imageData = {
         id: Date.now(),
         file,
       };
 
       await store.put(imageData);
-      await transaction.oncomplete;
+      await tx.done;
     } catch (error) {
-      console.log("이미지 저장 오류:", error);
+      console.error("이미지 저장 오류:", error);
+      throw error;
     }
   };
 
-  // 이미지 불러오기
   const loadImage = async () => {
     try {
-      const db = await openDB("image-store", 1);
-      const transaction = db.transaction("images", "readonly");
-      const store = transaction.objectStore("images");
+      const db = await initDB();
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const store = tx.objectStore(STORE_NAME);
 
       const allImages = await store.getAll();
+      await tx.done;
       return allImages.length > 0 ? allImages[0].file : null;
     } catch (error) {
       console.error("IndexedDB 불러오기 오류:", error);
-      return null;
+      throw error;
     }
   };
 
-  // 이미지 삭제
   const deleteImage = async () => {
     try {
-      const db = await openDB("image-store", 1);
-      const transaction = db.transaction("images", "readwrite");
-      const store = transaction.objectStore("images");
+      const db = await initDB();
+      const tx = db.transaction(STORE_NAME, "readwrite");
+      const store = tx.objectStore(STORE_NAME);
 
       const images = await store.getAll();
       if (images.length > 0) {
-        const imageId = images[0].id;
-        await store.delete(imageId);
-        await transaction.oncomplete;
+        await store.delete(images[0].id);
       }
+      await tx.done;
     } catch (error) {
-      console.log("이미지 삭제 오류:", error);
+      console.error("이미지 삭제 오류:", error);
+      throw error;
     }
   };
 

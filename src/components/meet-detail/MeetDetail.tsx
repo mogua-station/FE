@@ -1,5 +1,4 @@
 import ArrowRight from "@/assets/images/icons/arrow_right.svg";
-import StatusBadge from "@/components/common/card/StatusBadge";
 import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
 import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
 import { type MeetInfo } from "@/types/meetDetail";
@@ -36,9 +35,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
             {/* 스터디디 제목 정보 */}
             <div className='meet-info-box flex flex-col gap-8'>
               <div>
-                <div className='flex'>
-                  <StatusBadge status='모집중' recruitmentDate={new Date()} />
-                </div>
+                <div className='flex'></div>
 
                 <div className='mt-3'>
                   <div></div>
