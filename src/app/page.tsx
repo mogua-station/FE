@@ -9,6 +9,8 @@ import MainNavigation from "@/components/main/MainNavigation";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import { type MeetupQueryType } from "@/types/meetup.type";
 
+export const dynamic = "force-dynamic"; // 동적 렌더링 강제
+
 export default async function Home({
   searchParams,
 }: {
