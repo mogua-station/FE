@@ -9,7 +9,7 @@ import SolidButton from "@/components/common/buttons/SolidButton";
 const SignUPSuccessContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const username = searchParams.get("username");
+  const username = searchParams?.get("username");
 
   // url에 페이지 도메인 작성해서 접근하는 것 방지
   if (!username) {
