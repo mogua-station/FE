@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
@@ -11,9 +10,7 @@ import ProfileImageInput from "./ProfileImageInput";
 import TagInput from "./TagInput";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { SYSTEM_ALERTS } from "@/constants/alerts";
-import useCookie from "@/hooks/auths/useTokenState";
-import { useGetProfile, useUpdateProfile } from "@/hooks/user/useProfile";
-import useUserStore from "@/store/auth/useUserStore";
+import { useEditProfile } from "@/hooks/user/useEditProfile";
 
 type FormValues = {
   nickname: string;
@@ -23,13 +20,8 @@ type FormValues = {
 
 export default function EditProfileForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const token = useCookie("accessToken");
-  const { user, setUser } = useUserStore();
-  const router = useRouter();
-
-  const { data: userInfo, isLoading, error } = useGetProfile(user!.id, token!);
-
-  const updateProfileMutation = useUpdateProfile();
+  const { userInfo, isLoading, error, handleProfileUpdate, isUpdating } =
+    useEditProfile();
 
   const methods = useForm<FormValues>({
     values: userInfo
@@ -46,6 +38,7 @@ export default function EditProfileForm() {
     mode: "onChange",
   });
 
+  // 로딩 처리
   if (isLoading || !userInfo) {
     return (
       <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
@@ -54,6 +47,7 @@ export default function EditProfileForm() {
     );
   }
 
+  // 에러 처리
   if (error) {
     return (
       <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
@@ -62,6 +56,7 @@ export default function EditProfileForm() {
     );
   }
 
+  // form 관련 로직
   const {
     control,
     formState: { errors },
@@ -77,8 +72,6 @@ export default function EditProfileForm() {
   };
 
   const getChangedFields = () => {
-    if (!userInfo) return null;
-
     const changes: {
       image?: File;
       requestData?: any;
@@ -96,7 +89,7 @@ export default function EditProfileForm() {
 
     if (
       watchedTags &&
-      userInfo?.userTagList &&
+      userInfo.userTagList &&
       JSON.stringify([...watchedTags].sort()) !==
         JSON.stringify(userInfo.userTagList.map((tag) => tag.tag).sort())
     ) {
@@ -115,8 +108,6 @@ export default function EditProfileForm() {
   };
 
   const onSubmit = methods.handleSubmit(() => {
-    if (!token || !user) return;
-
     const changes = getChangedFields();
     if (!changes) return;
 
@@ -126,7 +117,6 @@ export default function EditProfileForm() {
     }
 
     const submitFormData = new FormData();
-
     submitFormData.append(
       "request",
       new Blob([JSON.stringify(changes.requestData || {})], {
@@ -138,29 +128,15 @@ export default function EditProfileForm() {
       submitFormData.append("image", changes.image);
     }
 
-    updateProfileMutation.mutate(
-      { formData: submitFormData, token },
-      {
-        onSuccess: () => {
-          setUser({
-            ...user,
-            name: watchedNickname || user.name,
-            imageUrl: userInfo.profileImg || user.imageUrl,
-          });
-          router.push(`/user/${user.id}`);
-        },
-        onError: () => {
-          alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
-        },
-      },
-    );
+    handleProfileUpdate(submitFormData);
   });
 
   const { email, profileImg } = userInfo;
 
+  // 버튼 상태 관리
   const getButtonState = () => {
     if (Object.keys(errors).length > 0) return "inactive";
-    if (updateProfileMutation.isPending) return "inactive";
+    if (isUpdating) return "inactive";
 
     const changes = getChangedFields();
     if (changes?.image || changes?.requestData) return "activated";
@@ -215,7 +191,7 @@ export default function EditProfileForm() {
           />
         </div>
         <SolidButton className='my-14' state={getButtonState()}>
-          {updateProfileMutation.isPending ? "수정 중..." : "수정 완료"}
+          {isUpdating ? "수정 중..." : "수정 완료"}
         </SolidButton>
       </form>
     </FormProvider>
