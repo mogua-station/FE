@@ -25,6 +25,8 @@ export const useGetProfile = (userId: number, token: string) => {
       const { data } = await res.json();
       return data as UserProfile;
     },
+    enabled: userId > 0 && !!token,
+    staleTime: Infinity,
   });
 };
 

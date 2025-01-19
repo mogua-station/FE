@@ -20,8 +20,7 @@ type FormValues = {
 
 export default function EditProfileForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const { userInfo, isLoading, error, handleProfileUpdate, isUpdating } =
-    useEditProfile();
+  const { userInfo, error, handleProfileUpdate, isUpdating } = useEditProfile();
 
   const methods = useForm<FormValues>({
     values: userInfo
@@ -38,13 +37,9 @@ export default function EditProfileForm() {
     mode: "onChange",
   });
 
-  // 로딩 처리
-  if (isLoading || !userInfo) {
-    return (
-      <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
-        로딩중...
-      </div>
-    );
+  // userInfo가 없을 때는 빈 화면 표시
+  if (!userInfo) {
+    return <div className='min-h-[calc(100vh-64px)]' />;
   }
 
   // 에러 처리
@@ -131,8 +126,6 @@ export default function EditProfileForm() {
     handleProfileUpdate(submitFormData);
   });
 
-  const { email, profileImg } = userInfo;
-
   // 버튼 상태 관리
   const getButtonState = () => {
     if (Object.keys(errors).length > 0) return "inactive";
@@ -148,7 +141,7 @@ export default function EditProfileForm() {
     <FormProvider {...methods}>
       <form className='contents' onSubmit={onSubmit}>
         <ProfileImageInput
-          profileImg={profileImg}
+          profileImg={userInfo.profileImg}
           onImageSelect={setSelectedImage}
         />
         <p
@@ -162,7 +155,7 @@ export default function EditProfileForm() {
             className='cursor-not-allowed bg-gray-800 text-gray-500'
             name='email'
             label='이메일 주소'
-            value={email}
+            value={userInfo.email}
             control={control}
             disabled
           />
