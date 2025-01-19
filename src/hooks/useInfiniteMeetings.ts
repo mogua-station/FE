@@ -10,6 +10,8 @@ interface UseInfiniteMeetingsProps {
   tab: UserPageSection;
   studyType: StudyType;
   reviewTab?: MyReviewTab;
+  userId: string;
+  currentUserId: string;
 }
 
 /**
@@ -37,10 +39,12 @@ export const useInfiniteMeetings = ({
   tab,
   studyType,
   reviewTab,
+  userId,
+  currentUserId,
 }: UseInfiniteMeetingsProps) => {
   return useInfiniteQuery({
     // 캐시키: 값들이 변경되면 데이터를 다시 불러옴
-    queryKey: ["meetings", tab, studyType, reviewTab],
+    queryKey: ["meetings", tab, studyType, reviewTab, userId],
 
     // 데이터 가져오는 함수 (현재는 fetchItems에서 mock 데이터 사용 중)
     queryFn: async ({ pageParam = 1 }) => {
@@ -49,6 +53,8 @@ export const useInfiniteMeetings = ({
         studyType,
         reviewTab,
         page: pageParam,
+        userId,
+        currentUserId,
       });
     },
 

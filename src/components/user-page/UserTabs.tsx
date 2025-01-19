@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { MeetingList } from "./MeetingList";
 import ReviewTabs from "./ReviewTabs";
@@ -24,6 +25,9 @@ export default function UserTabs({
   ownId,
   isInstructor = false,
 }: UserTabsProps) {
+  const params = useParams();
+  const userId = params.id as string;
+
   // 상태 통합 관리
   const [filters, setFilters] = useState(INITIAL_STATE);
   const { tab, studyType, reviewTab } = filters;
@@ -88,6 +92,7 @@ export default function UserTabs({
         studyType={currentStudyType}
         reviewTab={tab === "myReview" ? reviewTab : undefined}
         ownId={ownId}
+        userId={userId}
       />
     </div>
   );
