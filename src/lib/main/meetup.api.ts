@@ -1,7 +1,7 @@
 import type {
   MeetupPromiseType,
   MeetupQueryType,
-  MeetupResponseType,
+  MeetupListResponseType,
 } from "@/types/meetup.type";
 
 export const getMeetupList = async ({
@@ -14,7 +14,7 @@ export const getMeetupList = async ({
   startDate,
   endDate,
 }: MeetupQueryType): Promise<{
-  data: MeetupResponseType[];
+  data: MeetupListResponseType[];
   nextPage: number | null;
   isLast: boolean;
 }> => {

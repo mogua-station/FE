@@ -3,6 +3,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+import CardSkeleton from "../common/skeleton/CardSkeleton";
 import Card from "@/components/common/card/Card";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import {
@@ -22,17 +23,17 @@ export default function MainContentList() {
   const startQuery = searchParams.get("startDate") ?? undefined;
   const endQuery = searchParams.get("endDate") ?? undefined;
 
+  const queryKey = ["meetup"];
+  if (typeQuery) queryKey.push(typeQuery);
+  if (stateQuery) queryKey.push(stateQuery);
+  if (locationQuery) queryKey.push(locationQuery);
+  if (startQuery) queryKey.push(startQuery);
+  if (endQuery) queryKey.push(endQuery);
+
   // 무한 스크롤을 통한 데이터 불러오기
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: [
-        "meetup",
-        typeQuery,
-        stateQuery,
-        locationQuery,
-        startQuery,
-        endQuery,
-      ],
+      queryKey,
       queryFn: ({ pageParam = 0 }) =>
         getMeetupList({
           page: pageParam,
@@ -77,33 +78,49 @@ export default function MainContentList() {
     <>
       <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
         {data?.pages.map((page) =>
-          page.data.map((item, index) => (
+          page.data.map((item) => (
             <Card
-              key={index}
+              key={item.meetupId}
               card={{
-                id: item.id,
+                meetupId: item.meetupId,
+                meetingType: item.meetingType,
+                status: item.status as
+                  | "RECRUITING"
+                  | "BEFORE_START"
+                  | "IN_PROGRESS"
+                  | "COMPLETED",
                 title: item.title,
-                image: item.thumbnail,
-                location: item.location,
-                recruitmentPeriod: {
-                  startDate: new Date(item.recruitmentStartDate),
-                  endDate: new Date(item.recruitmentEndDate),
-                },
-                eventPeriod: {
-                  startDate: new Date(item.meetingStartDate),
-                  endDate: new Date(item.meetingEndDate),
-                },
-                participants: item.maxParticipants,
-                status: item.meetingState,
-                itemType: item.meetingType,
+                location: item.location as
+                  | "CAPITAL"
+                  | "DAEJEON"
+                  | "JEONJU"
+                  | "GWANGJU"
+                  | "BUSAN"
+                  | "DAEGU"
+                  | "GANGNEUNG"
+                  | undefined,
+                participants: item.participants,
+                thumbnail: item.thumbnail,
+                online: item.online,
+                recruitmentStartDate: new Date(item.recruitmentStartDate),
+                minParticipants: item.minParticipants,
+                recruitmentEndDate: new Date(item.recruitmentEndDate),
+                meetingStartDate: new Date(item.meetingStartDate),
+                meetingEndDate: new Date(item.meetingEndDate),
               }}
             />
           )),
         )}
       </section>
 
-      <div ref={loadMoreRef} className='flex justify-center py-4 text-gray-200'>
-        {isFetchingNextPage && <p>로딩 중...</p>}
+      <div
+        ref={loadMoreRef}
+        className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
+      >
+        {isFetchingNextPage &&
+          Array.from({ length: 10 }).map((_, index) => (
+            <CardSkeleton key={index} />
+          ))}
       </div>
     </>
   );

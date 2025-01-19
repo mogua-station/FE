@@ -17,10 +17,10 @@ import {
 import Popover from "@/components/common/Popover";
 import Review from "@/components/common/review/Review";
 import FilterModal from "@/components/main/modals/FilterModal";
+import { cardList } from "@/data/mockList";
 import { useSelectedDateRange } from "@/hooks/calendar/useSelectedDateRange";
 import { usePostImage } from "@/hooks/inputs/images/usePostImage";
 import useModal from "@/hooks/useModal";
-import { type CardProps } from "@/types/card";
 import { type LocationType, type StateType } from "@/types/meetup.type";
 import { type ReviewInfo } from "@/types/review";
 
@@ -31,82 +31,6 @@ export default function Home() {
     const endpoint = "/example/uploadImage"; // 각자 서버 엔드포인트 설정해서 사용하시면 됩니다.
     await postImage(endpoint);
   };
-
-  const cardList: CardProps[] = [
-    {
-      id: 1,
-      status: "모집중",
-      itemType: "study",
-      title: "모각각코",
-      location: "집",
-      participants: 10,
-      recruitmentPeriod: {
-        startDate: new Date("2025-01-07"),
-        endDate: new Date("2025-01-20"),
-      },
-      eventPeriod: {
-        startDate: new Date("2025-01-25"),
-        endDate: new Date("2025-02-05"),
-      },
-      image:
-        "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    },
-    {
-      id: 2,
-      status: "모집중",
-      itemType: "study",
-      title: "모집집코",
-      location: "집",
-      participants: 8,
-      recruitmentPeriod: {
-        startDate: new Date("2025-01-01"),
-        endDate: new Date("2025-01-10"),
-      },
-      eventPeriod: {
-        startDate: new Date("2025-01-25"),
-        endDate: new Date("2025-02-05"),
-      },
-      image:
-        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    },
-    {
-      id: 3,
-      status: "진행중",
-      itemType: "study",
-      title: "코딩공부",
-      location: "집",
-      participants: 8,
-      recruitmentPeriod: {
-        startDate: new Date("2025-01-01"),
-        endDate: new Date("2025-01-05"),
-      },
-      eventPeriod: {
-        startDate: new Date("2025-01-07"),
-        endDate: new Date("2025-02-05"),
-      },
-      image:
-        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    },
-    {
-      id: 4,
-      status: "종료",
-      itemType: "tutoring",
-      title: "게임코칭",
-      location: "pc방",
-      participants: 5,
-      recruitmentPeriod: {
-        startDate: new Date("2025-01-01"),
-        endDate: new Date("2025-01-05"),
-      },
-      eventPeriod: {
-        startDate: new Date("2025-01-07"),
-        endDate: new Date("2025-02-05"),
-      },
-      image:
-        "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-      isReview: true,
-    },
-  ];
 
   const comments: ReviewInfo[] = [
     {
