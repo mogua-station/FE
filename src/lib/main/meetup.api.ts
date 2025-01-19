@@ -1,3 +1,4 @@
+import useCookie from "@/hooks/auths/useTokenState";
 import type {
   MeetupPromiseType,
   MeetupQueryType,
@@ -49,11 +50,13 @@ export const getMeetupList = async ({
 };
 
 export const createMeetup = async (formData: FormData) => {
+  const accessToken = useCookie("accessToken");
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups`, {
     method: "POST",
     body: formData,
     headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${accessToken}`,
     },
     next: {
       revalidate: 1600,

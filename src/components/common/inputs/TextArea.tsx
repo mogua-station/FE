@@ -32,7 +32,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const error = errors[name];
 
     const containerStyle = twMerge(
-      `flex max-h-[160px] w-full flex-col rounded-[12px] border-1 ${
+      `flex max-h-[160px] w-full flex-col rounded-[12px] border ${
         error ? "border-danger" : "border-gray-700"
       } bg-gray-900 px-[16px] py-[18px]   `,
       props.className,

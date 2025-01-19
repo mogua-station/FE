@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type {
   Control,
   UseFormReturn,
@@ -15,11 +16,6 @@ interface FormSectionRightProps {
   control: Control<MeetupFormType>;
   methods: UseFormReturn<MeetupFormType>;
   isSubmitDisabled: boolean;
-  dateError: string;
-  validateDates: (
-    recruitmentEndDate: Date | null,
-    meetingStartDate: Date | null,
-  ) => void;
 }
 
 export default function FormSectionRight({
@@ -28,9 +24,24 @@ export default function FormSectionRight({
   control,
   methods,
   isSubmitDisabled,
-  dateError,
-  validateDates,
 }: FormSectionRightProps) {
+  const [dateError, setDateError] = useState<string | undefined>(undefined);
+
+  const validateDates = (
+    recruitmentEndDate: Date | null,
+    meetingStartDate: Date | null,
+  ) => {
+    if (
+      recruitmentEndDate &&
+      meetingStartDate &&
+      meetingStartDate < recruitmentEndDate
+    ) {
+      setDateError("진행 기간은 모집 기간보다 과거일 수 없습니다.");
+    } else {
+      setDateError(undefined);
+    }
+  };
+
   return (
     <section className='flex flex-1 flex-col gap-10'>
       <MeetingTypeSection
