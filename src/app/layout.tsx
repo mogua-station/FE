@@ -22,7 +22,7 @@ export default function RootLayout({
         <Providers>
           <InitializeUser />
           <Header />
-          <main className='flex flex-1 flex-col pb-[62px] pt-[56px] tablet:px-20 desktop:pb-0'>
+          <main className='relative flex flex-1 flex-col pb-[62px] pt-[56px] tablet:px-20 desktop:pb-0'>
             {children}
           </main>
           <NavBar />

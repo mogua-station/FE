@@ -1,11 +1,11 @@
-import { type CityType } from "@/types/meetup.type";
+import { type LocationType } from "@/types/meetup.type";
 
-export default function CityModal({
-  selectedCity,
-  onCityChange,
+export default function LocationModal({
+  selectedLocation,
+  onLocationChange,
 }: {
-  selectedCity: CityType;
-  onCityChange: (city: CityType) => void;
+  selectedLocation: LocationType;
+  onLocationChange: (location: LocationType) => void;
 }) {
   const cities = [
     { key: "ALL", label: "전체" },
@@ -18,8 +18,8 @@ export default function CityModal({
     { key: "GANGNEUNG", label: "강릉" },
   ];
 
-  const getButtonStyle = (city: string) =>
-    city === selectedCity
+  const getButtonStyle = (location: string) =>
+    location === selectedLocation
       ? "border-gray-700 bg-gray-900 text-orange-300"
       : "border-gray-800 bg-gray-800 text-gray-400";
 
@@ -32,7 +32,7 @@ export default function CityModal({
             className={`flex h-16 w-full items-center gap-2.5 rounded-2xl border px-6 py-4 ${getButtonStyle(
               key,
             )}`}
-            onClick={() => onCityChange(key as CityType)}
+            onClick={() => onLocationChange(key as LocationType)}
           >
             <span className='w-full text-center text-body-2-normal font-medium'>
               {label}
