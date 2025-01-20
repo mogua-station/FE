@@ -1,3 +1,9 @@
+import {
+  type Control,
+  type UseFormSetValue,
+  type UseFormWatch,
+} from "react-hook-form";
+
 export type MeetupType = "STUDY" | "TUTORING";
 
 export type HybridType = "ONLINE" | "OFFLINE";
@@ -74,4 +80,24 @@ export interface MeetupListResponseType {
   status: StateType;
   online: boolean;
   isWishlist: boolean;
+}
+
+export interface MeetupFormType {
+  title: string;
+  meetingType: MeetupType;
+  location: LocationType | null | "";
+  content: string;
+  recruitmentStartDate: Date;
+  recruitmentEndDate: Date | null;
+  meetingStartDate: Date | null;
+  meetingEndDate: Date | null;
+  maxParticipants: number;
+  minParticipants: number;
+  isOnline: boolean;
+}
+
+export interface BaseFormProps {
+  control: Control<MeetupFormType>;
+  watch: UseFormWatch<MeetupFormType>;
+  setValue: UseFormSetValue<MeetupFormType>;
 }

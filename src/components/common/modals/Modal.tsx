@@ -9,6 +9,7 @@ import {
 
 export default function Modal({
   title,
+  hasCloseBtn = true,
   children,
   isDark = true,
   ...props
@@ -58,19 +59,22 @@ export default function Modal({
             <div className='h-[0.3125rem] w-16 rounded-full bg-black tablet:hidden' />
           </div>
 
-          <div
-            className={`flex max-h-14 min-h-8 w-full max-w-[23rem] items-center px-5 py-1 ${title ? "justify-between" : "justify-end"}`}
-          >
-            {title && (
-              <span className='flex h-14 items-center text-body-1-normal font-semibold text-gray-200'>
-                {title}
-              </span>
-            )}
-
-            <button onClick={close} className='size-6'>
-              <DeleteIcon className='fill-gray-200' />
-            </button>
-          </div>
+          {(title || hasCloseBtn) && (
+            <div
+              className={`flex max-h-14 min-h-8 w-full max-w-[23rem] items-center px-5 py-1 ${title ? "justify-between" : "justify-end"}`}
+            >
+              {title && (
+                <span className='flex h-14 items-center text-body-1-normal font-semibold text-gray-200'>
+                  {title}
+                </span>
+              )}
+              {hasCloseBtn && (
+                <button onClick={close} className='size-6'>
+                  <DeleteIcon className='fill-gray-200' />
+                </button>
+              )}
+            </div>
+          )}
 
           <div className='w-full grow pb-4'>{children}</div>
         </div>

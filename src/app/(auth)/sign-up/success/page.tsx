@@ -9,7 +9,7 @@ import SolidButton from "@/components/common/buttons/SolidButton";
 const SignUPSuccessContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const username = searchParams.get("username");
+  const username = searchParams?.get("username");
 
   // url에 페이지 도메인 작성해서 접근하는 것 방지
   if (!username) {
@@ -22,27 +22,46 @@ const SignUPSuccessContent = () => {
   };
 
   return (
-    <div className='flex h-screen flex-col items-center justify-center gap-8 bg-gray-950 p-4'>
-      <div>
-        <Spacecraft />
-      </div>
-      <div className='flex flex-col items-center justify-center gap-[6px]'>
-        <p className='text-body-1-normal font-semibold text-orange-300'>
-          가입 완료
-        </p>
-        <p className='text-heading-2 font-medium text-gray-100'>
-          {username ? username : "møgua"}님 환영해요!
-        </p>
-      </div>
-      <div className='flex w-full flex-col'>
-        <SolidButton
-          variant='primary'
-          state='activated'
-          size='large'
-          onClick={handleConfirm}
-        >
-          확인
-        </SolidButton>
+    <div className='relative flex h-[calc(100vh-52px)] flex-col overflow-hidden bg-gray-950'>
+      {/* 배경 비디오 */}
+      <video
+        className='absolute inset-0 hidden h-full w-full object-cover tablet:block'
+        src='/videos/background.mp4'
+        loop
+        autoPlay
+        muted
+        preload='auto'
+        playsInline
+      />
+
+      <div className='flex h-full flex-col items-center justify-center'>
+        {/* 컨텐츠 영역 */}
+        <div className='z-10 mx-auto flex flex-col items-center justify-center gap-8 p-4 tablet:h-[70%] tablet:w-[90%] tablet:rounded-[2.5rem] tablet:bg-gray-950/[0.48] tablet:px-6 desktop:w-[60%]'>
+          {/* 이미지 및 텍스트 */}
+          <div className='flex flex-col items-center justify-center gap-4'>
+            <div>
+              <Spacecraft />
+            </div>
+            <p className='text-body-1-normal font-semibold text-orange-300'>
+              가입 완료
+            </p>
+            <p className='text-heading-2 font-medium text-gray-100'>
+              {username || "møgua"}님 환영해요!
+            </p>
+          </div>
+
+          {/* 버튼 */}
+          <div className='absolute bottom-0 left-0 right-0 p-4 tablet:relative tablet:w-[60%]'>
+            <SolidButton
+              variant='primary'
+              state='activated'
+              size='large'
+              onClick={handleConfirm}
+            >
+              확인
+            </SolidButton>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -51,7 +70,7 @@ const SignUPSuccessContent = () => {
 export default function SignUpSuccessPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <SignUPSuccessContent />;
+      <SignUPSuccessContent />
     </Suspense>
   );
 }
