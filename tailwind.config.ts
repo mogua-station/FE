@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
@@ -99,6 +100,22 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities, addVariant }) => {
+      // 스크롤바 숨김
+      addUtilities({
+        ".scrollbar-hide": {
+          "scrollbar-width": "none",
+          "-ms-overflow-style": "none",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+      });
+      // 스크롤바 커스텀
+      addVariant("scrollbar", "&::-webkit-scrollbar");
+      addVariant("scrollbar-thumb", "&::-webkit-scrollbar-thumb");
+    }),
+  ],
 };
 export default config;
