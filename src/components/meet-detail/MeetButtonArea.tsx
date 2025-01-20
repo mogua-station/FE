@@ -9,7 +9,7 @@ import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useAddWishlist from "@/hooks/useToggleWishlist";
+import useToggleWishlist from "@/hooks/useToggleWishlist";
 import { type ClientInfo } from "@/types/meetDetail";
 
 interface UserTag {
@@ -126,10 +126,10 @@ export default function MeetButtonArea({
   clientInfo: ClientInfo;
 }) {
   //임시 유저 데이터 확인
-  const user = 3;
+  const user = null;
 
   const router = useRouter();
-  const toggleWishlist = useAddWishlist();
+  const toggleWishlist = useToggleWishlist();
 
   //지금 페이지가 북마크가 되어있느지 확인
   const [bookmark, setBookmark] = useState<boolean | null>(null);

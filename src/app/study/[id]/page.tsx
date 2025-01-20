@@ -3,7 +3,7 @@ import MeetDetail from "@/components/meet-detail/MeetDetail";
 export default async function Meet({ params }: { params: { id: number } }) {
   const { id } = params;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`, {
     headers: {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
     },

@@ -8,10 +8,14 @@ import {
 } from "@/components/auth/AuthInputs";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import useSignIn from "@/hooks/auths/useSignIn";
+import { fetchUserWishlist } from "@/lib/wishlist/wishlistApi";
+import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type FormData } from "@/types";
+import { type CardProps } from "@/types/card";
 
 const SignInBasicPage = () => {
   const { signIn } = useSignIn();
+  const { setUserWishlist } = useUserWishlist();
 
   const {
     control,
@@ -31,6 +35,7 @@ const SignInBasicPage = () => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const result = await signIn(data);
+
     if (result?.error) {
       if (result.error.type === "email") {
         setError("email", { message: result.error.message });
@@ -38,6 +43,18 @@ const SignInBasicPage = () => {
       } else if (result.error.type === "password") {
         setError("password", { message: result.error.message });
       }
+    }
+
+    //로그인이 성공했을 때 찜하기를 가져와서 젼역 상태관리에 추가
+    if (result.success) {
+      const userInfo = localStorage.getItem("user");
+      const userParse = userInfo ? JSON.parse(userInfo) : null;
+
+      const wishlistResponse = await fetchUserWishlist(userParse.userId);
+
+      const arr = wishlistResponse.data.map((item: CardProps) => item.meetupId);
+
+      setUserWishlist(arr);
     }
   };
 

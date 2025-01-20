@@ -76,7 +76,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                 <div className='flex gap-1.5'>
                   <StatusBadge
                     badge={{
-                      status: meetInfo.status,
+                      meetupStatus: meetInfo.status,
                       recruitmentEndDate: meetInfo.recruitmentEndDate,
                       confirm:
                         meetInfo.minParticipants <=
