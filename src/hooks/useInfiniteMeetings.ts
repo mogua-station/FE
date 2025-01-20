@@ -58,7 +58,13 @@ export const useInfiniteMeetings = ({
 }: UseInfiniteMeetingsProps) => {
   const token = process.env.NEXT_PUBLIC_USER_TOKEN || "";
 
-  return useInfiniteQuery({
+  return useInfiniteQuery<
+    PageResponse<CardProps | ReviewInfo>,
+    Error,
+    { pages: PageResponse<CardProps | ReviewInfo>[] },
+    [string, UserPageSection, StudyType, MyReviewTab | undefined, string],
+    number
+  >({
     queryKey: ["meetings", tab, studyType, reviewTab, userId],
     queryFn: async ({ pageParam = 1 }) => {
       const type = studyType === "study" ? "STUDY" : "TUTORING";

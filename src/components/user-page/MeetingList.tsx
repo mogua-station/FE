@@ -86,7 +86,7 @@ export const MeetingList = ({
     const isLastItem =
       index === data.pages.flatMap((page) => page.items).length - 1;
 
-    if (shouldShowMeetingCard && "status" in item) {
+    if (shouldShowMeetingCard && isMeetingCard(item)) {
       const isReview = tab === "myReview" && reviewTab === "toWrite" && ownId;
 
       return (
@@ -98,13 +98,13 @@ export const MeetingList = ({
         </li>
       );
     }
-    if (shouldShowReviewCard && "userid" in item) {
+    if (shouldShowReviewCard && isReviewInfo(item)) {
       return (
         <li
           key={`review-${item.userid}-${index}`}
           ref={isLastItem ? ref : undefined}
         >
-          <Review reviewInfo={item as ReviewInfo} />
+          <Review reviewInfo={item} />
         </li>
       );
     }
@@ -128,3 +128,12 @@ export const MeetingList = ({
     </section>
   );
 };
+
+// 타입 가드 함수
+function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
+  return "meetupId" in item && "status" in item;
+}
+
+function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {
+  return "userid" in item && "review" in item;
+}
