@@ -31,7 +31,7 @@ export default function TabList({
       {tabs.map(({ id, label }) => {
         const activeStyle =
           currentTab === id
-            ? "text-gray-100 border-b-2 desktop:border-none border-gray-200"
+            ? "text-gray-100 border-b-2 border-gray-200"
             : "text-gray-500";
         return (
           <button
