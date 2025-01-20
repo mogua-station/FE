@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko-KR' className={pretendard.className}>
-      <body className='flex min-h-[100dvh] flex-col'>
+      <body className='flex min-h-[100dvh] flex-col bg-gray-950'>
         <Providers>
           <InitializeUser />
           <Header />
