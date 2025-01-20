@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .filter-sm {
+    @apply flex h-11 w-max items-center justify-center rounded-xl px-3.5 py-3 text-body-2-normal font-semibold;
+  }
+
+  .filter-lg {
+    @apply flex h-16 w-max items-center justify-center rounded-3xl px-6 py-3 text-heading-1 font-semibold;
+  }
+
+  .filter-default {
+    @apply border border-gray-800 bg-gray-950 text-gray-200;
+  }
+
+  .filter-active {
+    @apply border border-gray-700 bg-gray-700 text-gray-200;
+  }
+
+  .filter-active:hover {
+    @apply border border-gray-700 bg-gray-800 text-gray-200;
+  }
+
+  .filter-inactive {
+    @apply border border-gray-700 bg-gray-900 text-gray-500;
+  }
+
+  .caption-stroke {
+    @apply after:absolute after:right-0 after:top-1/2 after:h-[8px] after:w-[1px] after:-translate-y-1/2 after:bg-gray-700 after:content-[''];
+  }
+
+  .comment-overflow {
+    @apply overflow-hidden text-ellipsis whitespace-normal break-keep desktop:w-[311px] desktop:whitespace-nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  @media (min-width: 1201px) {
+    .comment-overflow {
+      -webkit-line-clamp: unset;
+      display: block;
+    }
+  }
+}
+
+/* 공용 버튼 */
+@layer components {
+  .btn-base {
+    @apply flex w-full items-center justify-center border;
+  }
+}
+
+/* 모임 상세 */
+@layer components {
+  @media (min-width: 1201px) {
+    .meet-info-box {
+      @apply desktop:rounded-[40px] desktop:bg-gray-950-48 desktop:px-8 desktop:py-7;
+    }
+    .meet-info-box-small {
+      @apply desktop:rounded-[24px] desktop:bg-gray-950-48 desktop:p-6;
+    }
+  }
+
+  .meet-info-box-inner-1 {
+    @apply rounded-[12px] border-gray-800 bg-gray-900 p-5 desktop:bg-gray-950;
+  }
+
+  .meet-info-box-inner-1-caption {
+    @apply rounded-[12px] border-[1px] border-solid border-gray-800 bg-gray-950 p-5 desktop:border-gray-800;
+  }
+
+  .meet-info-box-inner-2 {
+    @apply rounded-[12px] bg-gray-900 p-5;
+  }
+
+  .text-title {
+    @apply text-body-1-normal font-medium text-gray-200;
+  }
+
+  .text-caption {
+    @apply text-body-2-normal font-regular text-gray-200;
+  }
+
+  .text-body {
+    @apply text-label-normal font-regular;
+  }
+
+  .join-flag {
+    @apply after:absolute after:-top-8 after:right-0 after:h-5 after:w-5 after:translate-x-3 after:bg-[url('/icons/flag.svg')] after:bg-contain after:bg-no-repeat after:content-[""];
+  }
+}
+
+@layer utilities {
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  @keyframes slide-in {
+    from {
+      max-height: 0;
+      opacity: 0;
+    }
+    to {
+      max-height: 500px; /* Adjust based on content */
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-out {
+    from {
+      max-height: 500px; /* Adjust based on content */
+      opacity: 1;
+    }
+    to {
+      max-height: 0;
+      opacity: 0;
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.5s forwards;
+  }
+
+  .animate-slide-out {
+    animation: slide-out 0.5s forwards;
+  }
+}

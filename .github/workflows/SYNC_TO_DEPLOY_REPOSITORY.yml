@@ -2,7 +2,7 @@ name: Synchronize to forked repo
 on:
   push:
     branches:
-      - Develop
+      - main
 
 jobs:
   sync:
@@ -15,8 +15,7 @@ jobs:
         with: 
           token: ${{ secrets.GITHUBACTIONKEY }}
           fetch-depth: 0
-          ref: Develop
-
+          ref: main
       - name: Add remote-url
         run: |
           git remote add forked-repo https://joshuayeyo:${{ secrets.GITHUBACTIONKEY }}@github.com/joshuayeyo/mogua
