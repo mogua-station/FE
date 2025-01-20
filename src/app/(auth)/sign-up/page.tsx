@@ -40,7 +40,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className='relative flex h-[calc(100vh-52px)] flex-col overflow-hidden bg-gray-950 p-4'>
+    <div className='relative flex grow flex-col bg-gray-950'>
       <video
         className='absolute inset-0 hidden h-full w-full object-cover tablet:block'
         src='/videos/background.mp4'
@@ -50,54 +50,48 @@ const SignUpPage = () => {
         preload='auto'
         playsInline
       />
-      <div className='flex h-full flex-col tablet:items-center tablet:justify-center'>
-        <div className='z-10 flex flex-col gap-[12px] bg-gray-950 tablet:w-[90%] tablet:rounded-[2.5rem] tablet:bg-gray-950/[0.48] tablet:px-[40px] tablet:py-[56px] desktop:w-[40%]'>
-          <div className='flex flex-col justify-center gap-[10px]'>
-            <p className='select-none text-title-1 font-medium text-gray-100'>
-              반가워요!
-            </p>
-            <p className='select-none text-body-2-normal font-medium text-gray-400'>
+      <div className='flex h-screen flex-col items-center tablet:justify-center'>
+        <div className='z-10 flex h-auto w-[100%] flex-col gap-[24px] bg-gray-950 p-4 tablet:m-20 tablet:w-[90%] tablet:rounded-[40px] tablet:px-[40px] tablet:py-[56px] desktop:w-[40%]'>
+          <div>
+            <p className='text-title-1 font-medium text-gray-100'>반가워요!</p>
+            <p className='text-body-2-normal font-medium text-gray-400'>
               모과와 함께 나에게 맞는 행성을 찾아보세요!
             </p>
           </div>
-          <div className='flex w-full flex-col justify-center'>
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
-              <div className='flex flex-col gap-[16px]'>
-                <CommonNicknameInput control={control} isRequired={false} />
-                <CommonEmailInput control={control} email={email} />
-                <CommonPasswordInput control={control} />
-                <CommonConfirmPasswordInput
-                  control={control}
-                  password={password}
-                  confirmPassword={confirmPassword ?? ""}
-                />
-              </div>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <div className='flex flex-col gap-[16px]'>
+              <CommonNicknameInput control={control} isRequired={false} />
+              <CommonEmailInput control={control} email={email} />
+              <CommonPasswordInput control={control} />
+              <CommonConfirmPasswordInput
+                control={control}
+                password={password}
+                confirmPassword={confirmPassword ?? ""}
+              />
+            </div>
 
-              <div className='mt-[30px] flex flex-col'>
-                <div className='flex flex-row justify-center gap-[4px]'>
-                  <p className='select-none text-label-normal font-regular text-gray-400'>
-                    이미 계정이 있으신가요?
-                  </p>
-                  <Link
-                    href='/sign-in/basic'
-                    className='text-label-normal font-medium text-orange-200 underline'
-                  >
-                    로그인하기
-                  </Link>
-                </div>
+            <div className='mt-[30px] flex flex-col'>
+              <div className='flex flex-row justify-center gap-[4px]'>
+                <p className='text-label-normal font-regular text-gray-400'>
+                  이미 계정이 있으신가요?
+                </p>
+                <Link
+                  href='/sign-in/basic'
+                  className='text-label-normal font-medium text-orange-200 underline'
+                >
+                  로그인하기
+                </Link>
               </div>
-              <div className='absolute bottom-0 left-0 right-0 flex w-full items-center justify-center p-4 tablet:relative tablet:mt-4'>
-                <div className='w-full'>
-                  <SolidButton
-                    type='submit'
-                    state={isValid ? "activated" : "default"}
-                  >
-                    가입완료
-                  </SolidButton>
-                </div>
-              </div>
-            </form>
-          </div>
+            </div>
+            <div className='mt-[30px]'>
+              <SolidButton
+                type='submit'
+                state={isValid ? "activated" : "default"}
+              >
+                가입완료
+              </SolidButton>
+            </div>
+          </form>
         </div>
       </div>
     </div>
