@@ -19,6 +19,16 @@ export default function RootLayout({
   return (
     <html lang='ko-KR' className={pretendard.className}>
       <body className='flex min-h-[100dvh] flex-col bg-gray-950'>
+        {/* 배경 비디오 임시설정 */}
+        <video
+          className='fixed inset-0 -z-10 size-full object-cover'
+          src='/videos/background.mp4'
+          loop
+          autoPlay
+          muted
+          preload='auto'
+          playsInline
+        />
         <Providers>
           <InitializeUser />
           <Header />

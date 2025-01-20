@@ -4,6 +4,7 @@ import NavMenuItem from "./NavMenuItem";
 import BookmarkFillIcon from "@/assets/images/icons/bookmark_fill.svg";
 import PlanetIcon from "@/assets/images/icons/planet.svg";
 import UserIcon from "@/assets/images/icons/user.svg";
+
 import useUserStore from "@/store/auth/useUserStore";
 
 export default function NavBar() {
