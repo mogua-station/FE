@@ -1,10 +1,25 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { userContentApi } from "@/lib/user/userContent";
+import { type CardProps } from "@/types/card";
+import { type ReviewInfo } from "@/types/review";
 import {
   type UserPageSection,
   type MyReviewTab,
   type StudyType,
+  type ParticipatingMeetup,
+  type CreatedMeetup,
+  type EligibleReview,
+  type WrittenReview,
+  type ApiResponse,
+  type PageResponse,
 } from "@/types/user-page";
-import { fetchItems } from "@/utils/userPage";
+import {
+  mapParticipatingMeetupToCard,
+  mapCreatedMeetupToCard,
+  mapEligibleReviewToCard,
+  mapWrittenReviewToReviewInfo,
+  transformPageResponse,
+} from "@/utils/userContentMapper";
 
 interface UseInfiniteMeetingsProps {
   tab: UserPageSection;
@@ -40,32 +55,90 @@ export const useInfiniteMeetings = ({
   studyType,
   reviewTab,
   userId,
-  currentUserId,
 }: UseInfiniteMeetingsProps) => {
+  const token = process.env.NEXT_PUBLIC_USER_TOKEN || "";
+
   return useInfiniteQuery({
-    // 캐시키: 값들이 변경되면 데이터를 다시 불러옴
     queryKey: ["meetings", tab, studyType, reviewTab, userId],
-
-    // 데이터 가져오는 함수 (현재는 fetchItems에서 mock 데이터 사용 중)
     queryFn: async ({ pageParam = 1 }) => {
-      return fetchItems({
-        tab,
-        studyType,
-        reviewTab,
-        page: pageParam,
-        userId,
-        currentUserId,
-      });
-    },
+      const type = studyType === "study" ? "STUDY" : "TUTORING";
 
-    // 다음 페이지 존재 여부 확인
-    getNextPageParam: (lastPage, allPages) => {
+      switch (tab) {
+        case "myMeeting": {
+          const response = await userContentApi.getParticipating(
+            userId,
+            type,
+            token,
+            pageParam - 1,
+          );
+          const result =
+            (await response.json()) as ApiResponse<ParticipatingMeetup>;
+          return transformPageResponse(result, mapParticipatingMeetupToCard);
+        }
+
+        case "createdMeeting": {
+          const response = await userContentApi.getCreated(
+            userId,
+            type,
+            token,
+            pageParam - 1,
+          );
+          const result = (await response.json()) as ApiResponse<CreatedMeetup>;
+          return transformPageResponse(result, (item) =>
+            mapCreatedMeetupToCard(item, type),
+          );
+        }
+
+        case "myReview": {
+          const status = reviewTab === "toWrite" ? "eligible" : "written";
+          const response = await userContentApi.getWritten(
+            userId,
+            type,
+            status,
+            token,
+            pageParam - 1,
+          );
+
+          if (status === "eligible") {
+            const result =
+              (await response.json()) as ApiResponse<EligibleReview>;
+            return transformPageResponse(result, (item) =>
+              mapEligibleReviewToCard(item, type),
+            );
+          } else {
+            const result =
+              (await response.json()) as ApiResponse<WrittenReview>;
+            return transformPageResponse(result, (item) => ({
+              ...mapWrittenReviewToReviewInfo(item),
+              eventType: type.toLowerCase(),
+            }));
+          }
+        }
+
+        case "classReview": {
+          const response = await userContentApi.getReceived(
+            userId,
+            token,
+            pageParam - 1,
+          );
+          const result = (await response.json()) as ApiResponse<WrittenReview>;
+          return transformPageResponse(result, (item) => ({
+            ...mapWrittenReviewToReviewInfo(item),
+            eventType: "tutoring",
+          }));
+        }
+
+        default:
+          throw new Error("Invalid tab");
+      }
+    },
+    getNextPageParam: (lastPage: PageResponse<CardProps | ReviewInfo>) => {
       if (!lastPage.hasNextPage) return undefined;
-      return allPages.length + 1;
+      return lastPage.items.length > 0 ? lastPage.items.length + 1 : undefined;
     },
     initialPageParam: 1,
     refetchOnMount: true,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 10, // 10분
     refetchOnWindowFocus: false,
   });
 };

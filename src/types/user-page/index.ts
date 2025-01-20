@@ -10,6 +10,35 @@ export type UserProfile = {
   ownId: boolean;
 };
 
+// 공통 상수 타입
+export type MeetingType = "STUDY" | "TUTORING";
+export type MeetingStatus =
+  | "RECRUITING"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "BEFORE_START";
+export type Location =
+  | "CAPITAL"
+  | "DAEJEON"
+  | "JEONJU"
+  | "GWANGJU"
+  | "BUSAN"
+  | "DAEGU"
+  | "GANGNEUNG";
+
+// 기본 모임 정보
+interface BaseMeetup {
+  meetupId: number;
+  title: string;
+  location: Location;
+  recruitmentStartDate: string;
+  recruitmentEndDate: string;
+  meetingStartDate: string;
+  meetingEndDate: string;
+  thumbnail: string;
+  online: boolean;
+}
+
 // 탭 목록 관련 타입
 export type UserPageSection =
   | "myMeeting"
@@ -76,82 +105,32 @@ export interface ApiResponse<T> {
   };
 }
 
-export interface ParticipatingMeetup {
-  meetupId: number;
-  title: string;
-  meetingType: "STUDY" | "TUTORING";
-  location:
-    | "CAPITAL"
-    | "DAEJEON"
-    | "JEONJU"
-    | "GWANGJU"
-    | "BUSAN"
-    | "DAEGU"
-    | "GANGNEUNG";
+export interface ParticipatingMeetup extends BaseMeetup {
+  meetingType: MeetingType;
   content: string;
-  recruitmentStartDate: string;
-  recruitmentEndDate: string;
-  meetingStartDate: string;
-  meetingEndDate: string;
   maxParticipants: number;
   minParticipants: number;
-  thumbnail: string;
   hostNickname: string;
   hostId: number;
   participants: Array<{
     userId: number;
     profileImageUrl: string;
   }>;
-  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
-  online: boolean;
+  status: MeetingStatus;
 }
 
-export interface CreatedMeetup {
-  meetupId: number;
-  meetupStatus: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
-  location:
-    | "CAPITAL"
-    | "DAEJEON"
-    | "JEONJU"
-    | "GWANGJU"
-    | "BUSAN"
-    | "DAEGU"
-    | "GANGNEUNG";
-  title: string;
-  recruitmentStartDate: string;
-  recruitmentEndDate: string;
-  meetingStartDate: string;
-  meetingEndDate: string;
-  thumbnail: string;
+export interface CreatedMeetup extends BaseMeetup {
+  meetupStatus: MeetingStatus;
   participants: number;
-  online: boolean;
 }
 
-// 작성 가능한 리뷰 API 응답 타입
-export interface EligibleReview {
-  meetupId: number;
-  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
-  location:
-    | "CAPITAL"
-    | "DAEJEON"
-    | "JEONJU"
-    | "GWANGJU"
-    | "BUSAN"
-    | "DAEGU"
-    | "GANGNEUNG";
-  title: string;
+export interface EligibleReview extends BaseMeetup {
+  status: MeetingStatus;
   maxParticipants: number;
   minParticipants: number;
-  recruitmentStartDate: string;
-  recruitmentEndDate: string;
-  meetingStartDate: string;
-  meetingEndDate: string;
-  thumbnail: string;
   participantsCount: number;
-  online: boolean;
 }
 
-// 작성한 리뷰 API 응답 타입
 export interface WrittenReview {
   userId: number;
   nickname: string;
@@ -159,7 +138,7 @@ export interface WrittenReview {
   rating: 0 | 1 | 2;
   id: number;
   meetupId: number;
-  meetingType: "STUDY" | "TUTORING";
+  meetingType: MeetingType;
   title: string;
   content: string;
   meetingEndDate: string;
