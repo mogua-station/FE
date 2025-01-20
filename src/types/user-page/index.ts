@@ -50,8 +50,8 @@ export type StudyType = "study" | "tutoring";
 
 export interface UserTabsProps {
   userId: string;
-  ownId: boolean;
   isInstructor?: boolean;
+  token: string;
 }
 
 // EmptyState 공통 타입
@@ -117,7 +117,7 @@ export interface ParticipatingMeetup extends BaseMeetup {
     userId: number;
     profileImageUrl: string;
   }>;
-  status: MeetingStatus;
+  meetupStatus: MeetingStatus;
 }
 
 export interface CreatedMeetup extends BaseMeetup {
