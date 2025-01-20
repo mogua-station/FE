@@ -39,14 +39,6 @@ export const MeetingList = ({
       currentUserId: currentUser?.id || "",
     });
 
-  // 데이터 로깅
-  console.log(`[${tab}] API 응답 데이터:`, {
-    탭: tab,
-    스터디타입: studyType,
-    리뷰탭: reviewTab,
-    데이터: data?.pages,
-  });
-
   const { ref } = useInView({
     onChange: (inView) => {
       if (inView && hasNextPage && !isFetchingNextPage) {
