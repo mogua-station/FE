@@ -5,6 +5,7 @@ export type OverlayController = {
 
 export type ModalInterface = {
   title?: string;
+  hasCloseBtn?: boolean;
   children: React.ReactNode;
   isDark?: boolean;
 };
