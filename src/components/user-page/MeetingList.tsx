@@ -13,19 +13,21 @@ import {
 } from "@/types/user-page";
 
 interface MeetingListProps {
+  userId: string;
   tab: UserPageSection;
   studyType: StudyType;
   reviewTab?: MyReviewTab;
-  userId: string;
   isMe: boolean;
+  token: string;
 }
 
 export const MeetingList = ({
+  userId,
   tab,
   studyType,
   reviewTab,
-  userId,
   isMe,
+  token,
 }: MeetingListProps) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteMeetings({
@@ -34,6 +36,7 @@ export const MeetingList = ({
       reviewTab,
       userId,
       currentUserId: userId,
+      token,
     });
 
   const { ref } = useInView({
