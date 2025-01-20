@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
 interface User {
-  id: string;
+  userId: number;
   email: string;
-  nickname: string;
-  imageUrl: string;
+  name: string;
+  profileImg: string;
 }
 
 interface UserState {

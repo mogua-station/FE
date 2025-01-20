@@ -8,7 +8,9 @@ const isProtectedPath = (path: string) => {
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("accessToken");
-  const isAuthPage = request.nextUrl.pathname === "/sign-in";
+  const isAuthPage = ["/sign-in", "/sign-in/basic", "/sign-up"].includes(
+    request.nextUrl.pathname,
+  );
   // 인증 필요한 페이지 env로 관리
   const isProtectedPage = isProtectedPath(request.nextUrl.pathname);
 

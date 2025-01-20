@@ -42,39 +42,62 @@ const SignInBasicPage = () => {
   };
 
   return (
-    <div className='flex h-full flex-col gap-[24px] bg-gray-950'>
-      <div>
-        <p className='heading-2 font-medium text-gray-100'>로그인</p>
-      </div>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <CommonEmailInput control={control} email={email} />
-        <CommonPasswordInput control={control} />
-        <div>
-          <div className='flex flex-row items-center justify-center gap-[12px]'>
-            <Link
-              href='/sign-up'
-              className='text-label-normal font-regular text-gray-300'
-            >
-              회원가입 하기
-            </Link>
-            <p className='text-label-normal font-regular text-gray-600'>|</p>
-            <Link
-              href='#'
-              className='text-label-normal font-regular text-gray-300'
-            >
-              비밀번호 찾기
-            </Link>
-          </div>
-          <div>
-            <SolidButton
-              type='submit'
-              state={isValid ? "activated" : "default"}
-            >
-              로그인
-            </SolidButton>
+    <div className='relative flex grow flex-col bg-gray-950'>
+      <video
+        className='absolute inset-0 hidden h-full w-full object-cover tablet:block'
+        src='/videos/background.mp4'
+        loop
+        autoPlay
+        muted
+        preload='auto'
+        playsInline
+      />
+      <div className='flex h-screen flex-col items-center justify-center'>
+        <div className='z-10 flex h-[50%] w-full flex-col items-center justify-center gap-[24px] bg-gray-950/[0.48] p-4 tablet:m-20 tablet:w-[90%] tablet:rounded-[40px] tablet:px-[40px] tablet:py-[56px] desktop:w-[40%]'>
+          <div className='flex w-full flex-col gap-[24px]'>
+            <div className='ml-2 flex flex-row'>
+              <p className='heading-2 select-none font-medium text-gray-100'>
+                로그인
+              </p>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+              <div className='flex flex-col gap-[80px]'>
+                <div className='flex flex-col gap-[24px]'>
+                  <CommonEmailInput control={control} email={email} />
+                  <CommonPasswordInput control={control} />
+                </div>
+                <div className='flex flex-col gap-[28px]'>
+                  <div className='flex flex-row items-center justify-center gap-[12px]'>
+                    <Link
+                      href='/sign-up'
+                      className='text-label-normal font-regular text-gray-300'
+                    >
+                      회원가입 하기
+                    </Link>
+                    <p className='text-label-normal font-regular text-gray-600'>
+                      |
+                    </p>
+                    <Link
+                      href='#'
+                      className='text-label-normal font-regular text-gray-300'
+                    >
+                      비밀번호 찾기
+                    </Link>
+                  </div>
+                  <div>
+                    <SolidButton
+                      type='submit'
+                      state={isValid ? "activated" : "default"}
+                    >
+                      로그인
+                    </SolidButton>
+                  </div>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
