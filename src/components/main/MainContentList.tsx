@@ -84,7 +84,7 @@ export default function MainContentList() {
               card={{
                 meetupId: item.meetupId,
                 meetingType: item.meetingType,
-                status: item.status as
+                status: item.meetupStatus as
                   | "RECRUITING"
                   | "BEFORE_START"
                   | "IN_PROGRESS"
