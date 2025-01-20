@@ -22,6 +22,14 @@ export default function Card({ card }: CardInfo) {
   const router = useRouter();
   const { userWishlist, setUserWishlist } = useUserWishlist();
   const queryClient = useQueryClient();
+  // 찜 리스트 쿼리를 무효화하여 GET 요청 재실행
+  const toggleWishlist = useToggleWishlist();
+  const myWishlist =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("wishlist") || "[]")
+      : [];
+  const [wishlist, setWishlist] = useState<number[]>([]);
+  console.log(wishlist);
 
   const contentData = {
     title: card.title,
@@ -33,14 +41,6 @@ export default function Card({ card }: CardInfo) {
     meetingEndDate: card.meetingEndDate,
     thumbnail: card.thumbnail,
   };
-
-  // 찜 리스트 쿼리를 무효화하여 GET 요청 재실행
-  const toggleWishlist = useToggleWishlist();
-  const myWishlist =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("wishlist") || "[]")
-      : [];
-  const [wishlist, setWishlist] = useState<number[]>(myWishlist);
 
   const deleteMutation = useMutation({
     mutationFn: (meetupId: number) => deleteUserWishList(meetupId),
@@ -86,22 +86,21 @@ export default function Card({ card }: CardInfo) {
       }
     } else {
       //모집중일 때만 가능
-      // if (card.meetupStatus === "RECRUITING") {
-      toggleWishlist(card.meetupId);
+      if (card.meetupStatus === "RECRUITING") {
+        toggleWishlist(card.meetupId);
 
-      //toggleWishlist는 로컬 스토리지에 아이디를 추가 또는 삭제
-      const storage = JSON.parse(localStorage.getItem("wishlist") || "[]");
+        //toggleWishlist는 로컬 스토리지에 아이디를 추가 또는 삭제
+        const storage = JSON.parse(localStorage.getItem("wishlist") || "[]");
 
-      console.log(myWishlist != storage);
+        if (myWishlist != storage) setWishlist(storage);
 
-      if (myWishlist != storage) setWishlist(storage);
-
-      if (card.callback != null) {
-        card.callback();
+        if (card.callback != null) {
+          card.callback();
+          router.refresh();
+        }
+      } else {
+        alert("모집중인 모임만 가능합니다");
       }
-      // } else {
-      //   alert("모집중인 모임만 가능합니다");
-      // }
     }
   };
 
@@ -118,7 +117,19 @@ export default function Card({ card }: CardInfo) {
 
   useEffect(() => {
     queryClient.refetchQueries({ queryKey: ["wishlist"] });
+    setWishlist(myWishlist);
   }, []);
+
+  useEffect(() => {
+    if (user === null) {
+      // user가 null일 경우, localStorage에서 wishlist를 가져와서 상태를 설정
+      const myWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      setWishlist(myWishlist);
+    } else {
+      // user가 있을 경우, userWishlist 상태를 그대로 사용
+      setWishlist(userWishlist);
+    }
+  }, [user, userWishlist]);
 
   return (
     <div
