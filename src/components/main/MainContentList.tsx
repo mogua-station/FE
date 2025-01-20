@@ -1,94 +1,53 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import MainNavigation from "./MainNavigation";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
+import CardSkeleton from "../common/skeleton/CardSkeleton";
 import Card from "@/components/common/card/Card";
-import { mockCardData } from "@/data/mockCardData";
-import { type CardProps } from "@/types/card";
-
-// 목 데이터를 fetch를 통해 반환하는 가상 API
-async function fetchMockData(url: string): Promise<{
-  data: CardProps[];
-  nextPage: number | null;
-  isLast: boolean;
-}> {
-  const urlParams = new URLSearchParams(url.split("?")[1]);
-  const offset = Number(urlParams.get("offset")) || 0;
-  const ITEMS_PER_PAGE = 10;
-
-  const start = offset * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
-
-  const slicedData = mockCardData.slice(start, end);
-  const isLast = end >= mockCardData.length;
-
-  console.log("client");
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        data: slicedData,
-        nextPage: isLast ? null : offset + 1,
-        isLast,
-      });
-    }, 500);
-  });
-}
+import { getMeetupList } from "@/lib/main/meetup.api";
+import {
+  type LocationType,
+  type MeetupType,
+  type StateType,
+} from "@/types/meetup.type";
 
 export default function MainContentList() {
   const loadMoreRef = useRef<HTMLDivElement>(null); // 무한 스크롤 관찰자
-  const [searchParams, setSearchParams] = useState<URLSearchParams | null>(
-    null,
-  );
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    setSearchParams(new URLSearchParams(window.location.search));
-  }, []);
+  const typeQuery = (searchParams.get("type") as MeetupType) ?? undefined;
+  const stateQuery = (searchParams.get("state") as StateType) ?? undefined;
+  const locationQuery =
+    (searchParams.get("location") as LocationType) ?? undefined;
+  const startQuery = searchParams.get("startDate") ?? undefined;
+  const endQuery = searchParams.get("endDate") ?? undefined;
 
-  const stateQuery = searchParams?.get("state") ?? undefined;
-  const cityQuery = searchParams?.get("city") ?? undefined;
-  const startQuery = searchParams?.get("startDate") ?? undefined;
-  const endQuery = searchParams?.get("endDate") ?? undefined;
-
-  const getMeetupList = async ({
-    offset = 0,
-    state,
-    city,
-    startDate,
-    endDate,
-  }: {
-    offset?: number;
-    state?: string;
-    city?: string;
-    startDate?: string;
-    endDate?: string;
-  }) => {
-    const parameters = new URLSearchParams({ offset: offset.toString() });
-
-    if (state) parameters.append("state", state);
-    if (city) parameters.append("city", city);
-    if (startDate) parameters.append("startDate", startDate);
-    if (endDate) parameters.append("endDate", endDate);
-
-    return fetchMockData(`/api/meetup?${parameters.toString()}`);
-  };
+  const queryKey = ["meetup"];
+  if (typeQuery) queryKey.push(typeQuery);
+  if (stateQuery) queryKey.push(stateQuery);
+  if (locationQuery) queryKey.push(locationQuery);
+  if (startQuery) queryKey.push(startQuery);
+  if (endQuery) queryKey.push(endQuery);
 
   // 무한 스크롤을 통한 데이터 불러오기
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["meetup"],
+      queryKey,
       queryFn: ({ pageParam = 0 }) =>
         getMeetupList({
-          offset: pageParam,
+          page: pageParam,
+          limit: 10,
+          type: typeQuery,
           state: stateQuery,
-          city: cityQuery,
+          location: locationQuery,
           startDate: startQuery,
           endDate: endQuery,
         }),
       getNextPageParam: (lastPage) =>
         !lastPage.isLast ? lastPage.nextPage : undefined,
       initialPageParam: 0,
+      retry: 1,
     });
 
   // 무한 스크롤 관찰자 설정
@@ -117,18 +76,51 @@ export default function MainContentList() {
 
   return (
     <>
-      <MainNavigation />
-
       <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
         {data?.pages.map((page) =>
-          page.data.map((item: CardProps) => (
-            <Card key={item.meetupId} card={item} />
+          page.data.map((item) => (
+            <Card
+              key={item.meetupId}
+              card={{
+                meetupId: item.meetupId,
+                meetingType: item.meetingType,
+                status: item.status as
+                  | "RECRUITING"
+                  | "BEFORE_START"
+                  | "IN_PROGRESS"
+                  | "COMPLETED",
+                title: item.title,
+                location: item.location as
+                  | "CAPITAL"
+                  | "DAEJEON"
+                  | "JEONJU"
+                  | "GWANGJU"
+                  | "BUSAN"
+                  | "DAEGU"
+                  | "GANGNEUNG"
+                  | undefined,
+                participants: item.participants,
+                thumbnail: item.thumbnail,
+                online: item.online,
+                recruitmentStartDate: new Date(item.recruitmentStartDate),
+                minParticipants: item.minParticipants,
+                recruitmentEndDate: new Date(item.recruitmentEndDate),
+                meetingStartDate: new Date(item.meetingStartDate),
+                meetingEndDate: new Date(item.meetingEndDate),
+              }}
+            />
           )),
         )}
       </section>
 
-      <div ref={loadMoreRef} className='flex justify-center py-4 text-gray-200'>
-        {isFetchingNextPage && <p>로딩 중...</p>}
+      <div
+        ref={loadMoreRef}
+        className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
+      >
+        {isFetchingNextPage &&
+          Array.from({ length: 10 }).map((_, index) => (
+            <CardSkeleton key={index} />
+          ))}
       </div>
     </>
   );

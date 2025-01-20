@@ -89,13 +89,13 @@ const CommonSelectBox: React.FC<CommonSelectBoxProps> = ({
   return (
     <div className='flex w-full flex-col gap-[12px]'>
       {label && (
-        <label className='select-none text-body-2-normal font-medium text-gray-300'>
+        <label className='ml-2 select-none text-body-2-normal font-medium text-gray-300'>
           {label}
           {props.required && <span className='ml-1 text-danger'>*</span>}
         </label>
       )}
       <div
-        className={`grid h-[54px] w-full gap-4 ${layout === "2cols" ? "grid-cols-2" : "grid-cols-1"}`}
+        className={`grid min-h-[54px] w-full gap-4 ${layout === "2cols" ? "grid-cols-2" : "grid-cols-1"}`}
       >
         {layout === "2cols" ? (
           <>
