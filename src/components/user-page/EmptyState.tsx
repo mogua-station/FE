@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SolidButton from "../common/buttons/SolidButton";
 import EmptyImage from "@/assets/images/icons/empty.svg";
 import {
@@ -31,7 +32,9 @@ export default function EmptyState({ variant = "myMeeting" }: EmptyStateProps) {
         <>
           <p className={paragraphStyle}>아직 만든 모임이 없어요</p>
           <p className={paragraphStyle}>새로운 모임을 만들어보세요</p>
-          <SolidButton className='mt-8'>모임 개설하기</SolidButton>
+          <Link href='/create'>
+            <SolidButton className='mt-8'>모임 개설하기</SolidButton>
+          </Link>
         </>
       ),
     },
