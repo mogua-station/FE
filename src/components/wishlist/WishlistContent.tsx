@@ -6,16 +6,17 @@ import Card from "@/components/common/card/Card";
 import CardSkeleton from "@/components/common/card/CardSkeleton";
 import useIntersectionObserver from "@/hooks/useInterSectionObserve";
 import { fetchWishlist } from "@/lib/wishlist/wishlistApi";
-import { type CardProps2 } from "@/types/card";
+import useUserStore from "@/store/auth/useUserStore";
+import { type CardProps } from "@/types/card";
 
 export default function WishlistNotLogged() {
-  const [list, setList] = useState<CardProps2[] | null>(null);
+  const [list, setList] = useState<CardProps[] | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, { threshold: 0.5 });
   const isPageEnd = !!pageRef?.isIntersecting;
 
   //임시 유저 정보
-  const user = null;
+  const { user } = useUserStore();
 
   const {
     data: meetupList,
@@ -27,7 +28,7 @@ export default function WishlistNotLogged() {
   } = useInfiniteQuery({
     queryKey: ["wishlist"],
     queryFn: ({ pageParam }) =>
-      fetchWishlist({ pageParms: pageParam, userId: user }),
+      fetchWishlist({ pageParms: pageParam, userId: user?.userId || null }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage instanceof Error || !lastPage.data) {
@@ -54,8 +55,8 @@ export default function WishlistNotLogged() {
     return (
       <div className='w-full'>
         <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
-          {Array.from({ length: 8 }).map(() => {
-            return <CardSkeleton />;
+          {Array.from({ length: 8 }).map((_, index) => {
+            return <CardSkeleton key={index} />;
           })}
         </section>
       </div>
@@ -65,15 +66,14 @@ export default function WishlistNotLogged() {
   return (
     <div className='w-full'>
       <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
-        {list?.map((meet: CardProps2, index: number) => {
-          console.log(meet);
+        {list?.map((meet: CardProps, index: number) => {
           return (
             <Card
               key={index}
               card={{
                 meetupId: meet.meetupId,
                 meetingType: meet.meetingType,
-                meetupStatus: meet.status,
+                meetupStatus: meet.meetupStatus,
                 location: meet.location,
                 title: meet.title,
                 minParticipants: 20,

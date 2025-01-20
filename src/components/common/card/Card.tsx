@@ -1,8 +1,8 @@
 "use client";
 
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Content from "./Content";
 import StatusBadge from "./StatusBadge";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
@@ -13,11 +13,14 @@ import {
   deleteUserWishList,
   addUserWishlist,
 } from "@/lib/wishlist/wishlistApi";
-import { type CardInfo, type CardProps, type CacheResult } from "@/types/card";
+import useUserStore from "@/store/auth/useUserStore";
+import useUserWishlist from "@/store/wishlist/useUserWishlist";
+import { type CardInfo } from "@/types/card";
 
 export default function Card({ card }: CardInfo) {
-  const user = null;
+  const { user } = useUserStore();
   const router = useRouter();
+  const { userWishlist, setUserWishlist } = useUserWishlist();
   const queryClient = useQueryClient();
 
   const contentData = {
@@ -41,8 +44,13 @@ export default function Card({ card }: CardInfo) {
 
   const deleteMutation = useMutation({
     mutationFn: (meetupId: number) => deleteUserWishList(meetupId),
-    onSuccess: () => {
+    onSuccess: (variables) => {
       alert("찜하기가 취소되었습니다.");
+      const updatedArray = userWishlist.filter(
+        (item: number) => item !== variables,
+      );
+      setUserWishlist(updatedArray);
+      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
       if (card.callback != null) {
         card.callback();
       }
@@ -51,8 +59,11 @@ export default function Card({ card }: CardInfo) {
 
   const addMutation = useMutation({
     mutationFn: (meetupId: number) => addUserWishlist(meetupId),
-    onSuccess: () => {
+    onSuccess: (variables) => {
       alert("찜하기가 완료되었습니다.");
+      const updatedArray = [...userWishlist, variables];
+      setUserWishlist(updatedArray);
+      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
       if (card.callback != null) {
         card.callback();
       }
@@ -63,38 +74,34 @@ export default function Card({ card }: CardInfo) {
     //부모로 이벤트 전달 막기
     e.stopPropagation();
 
-    //유저 정보가 있을 때때
+    //유저 정보가 있을 때
     if (user != null) {
-      const cachedData: CacheResult | undefined = queryClient.getQueryData([
-        "wishlist",
-      ]);
-
-      if (cachedData === undefined) return;
-
-      const isIncludeArr = cachedData.pages.map((item) =>
-        item.data.some((meet: CardProps) => meet.meetupId === card.meetupId),
-      );
+      const isIncludeArr = userWishlist.includes(card.meetupId);
 
       //찜하기를 클릭했을 때 이미 찜하기에 등록 된 데이터
-      if (isIncludeArr.includes(true)) {
+      if (isIncludeArr) {
         deleteMutation.mutate(card.meetupId);
       } else {
         addMutation.mutate(card.meetupId);
       }
     } else {
       //모집중일 때만 가능
-      if (card.meetupStatus === "RECRUITING") {
-        toggleWishlist(card.meetupId);
+      // if (card.meetupStatus === "RECRUITING") {
+      toggleWishlist(card.meetupId);
 
-        //toggleWishlist는 로컬 스토리지에 아이디를 추가 또는 삭제
-        const storage = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      //toggleWishlist는 로컬 스토리지에 아이디를 추가 또는 삭제
+      const storage = JSON.parse(localStorage.getItem("wishlist") || "[]");
 
-        if (myWishlist != storage) setWishlist(storage);
+      console.log(myWishlist != storage);
 
-        if (card.callback != null) {
-          card.callback();
-        }
+      if (myWishlist != storage) setWishlist(storage);
+
+      if (card.callback != null) {
+        card.callback();
       }
+      // } else {
+      //   alert("모집중인 모임만 가능합니다");
+      // }
     }
   };
 
@@ -108,6 +115,10 @@ export default function Card({ card }: CardInfo) {
 
     alert(`${meetUpId} 리뷰 작성`);
   };
+
+  useEffect(() => {
+    queryClient.refetchQueries({ queryKey: ["wishlist"] });
+  }, []);
 
   return (
     <div
@@ -129,7 +140,7 @@ export default function Card({ card }: CardInfo) {
         {!card.isMypage && (
           <button onClick={(e) => hadleClickWhishlist(e)}>
             {user != null ? (
-              card.isWishlist ? (
+              userWishlist.includes(card.meetupId) ? (
                 <BookmarkActive className='size-6 text-orange-200' />
               ) : (
                 <Bookmark className='size-6' />

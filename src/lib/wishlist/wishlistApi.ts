@@ -1,4 +1,18 @@
-import { type CardProps2 } from "@/types/card";
+import { type CardProps } from "@/types/card";
+
+export const fetchUserWishlist = async (userId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+      },
+      cache: "no-store",
+    },
+  );
+
+  return response.json();
+};
 
 //사용자의 찜 목록을 가져오는 함수
 export const fetchWishlist = async ({
@@ -12,10 +26,10 @@ export const fetchWishlist = async ({
   if (userId != null) {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/wishlist/${userId}?page=${pageParms}&limit=8`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&limit=8`,
         {
           headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN_SECOND}`,
+            Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
           },
           cache: "no-store",
         },
@@ -35,7 +49,7 @@ export const fetchWishlist = async ({
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/meetups/list`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/list`,
       {
         cache: "no-store",
       },
@@ -50,8 +64,8 @@ export const fetchWishlist = async ({
 
     //전체 리스트에서 로컬스토리지에 들어가있는 id만 필터링
     const filteredList = meetupList.filter(
-      (item: CardProps2) =>
-        arr.includes(item.meetupId) && item.status === "RECRUITING",
+      (item: CardProps) =>
+        arr.includes(item.meetupId) && item.meetupStatus === "RECRUITING",
     );
 
     const startIndex = pageParms * 8;
@@ -71,11 +85,11 @@ export const fetchWishlist = async ({
 export const deleteUserWishList = async (meetupId: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/wishlist/${meetupId}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${meetupId}`,
       {
         method: "Delete",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN_SECOND}`,
+          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
         },
       },
     );
@@ -95,11 +109,11 @@ export const deleteUserWishList = async (meetupId: number) => {
 export const addUserWishlist = async (meetupId: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/wishlist/${meetupId}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${meetupId}`,
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN_SECOND}`,
+          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
         },
       },
     );

@@ -40,29 +40,6 @@ export interface CardProps {
   >;
 }
 
-export interface CardProps2 {
-  meetupId: number;
-  meetingType: "STUDY" | "TUTORING";
-  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
-  location?:
-    | "CAPITAL"
-    | "DAEJEON"
-    | "JEONJU"
-    | "GWANGJU"
-    | "BUSAN"
-    | "DAEGU"
-    | "GANGNEUNG";
-  title: string;
-  minParticipants: number;
-  recruitmentStartDate: Date;
-  recruitmentEndDate: Date;
-  meetingStartDate: Date;
-  meetingEndDate: Date;
-  thumbnail?: string;
-  online: boolean;
-  participants: ParticipantInfo[];
-}
-
 export interface CardInfo {
   card: CardProps;
 }
