@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Edit from "@/assets/images/icons/edit.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
 import SearchIcon from "@/assets/images/icons/search-thin.svg";
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <header className='fixed left-0 top-0 z-[49] flex w-full items-center justify-center bg-[#0E0E10]'>
@@ -58,7 +59,7 @@ export default function Header() {
               <button>
                 <SearchIcon className='text-gray-200' />
               </button>
-              <button>
+              <button onClick={() => router.push("/create")}>
                 <PlusIcon className='text-gray-200' />
               </button>
             </div>
