@@ -215,20 +215,34 @@ export const fetchItems = async ({
   // 수강평 탭일 경우 실제 API 호출
   if (tab === "classReview") {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/user/${userId}/reviews/TUTORING/written?page=${page - 1}&limit=${PAGE_SIZE}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-          },
+      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/user/${userId}/reviews/received?page=${page - 1}&limit=${PAGE_SIZE}`;
+      console.log("[수강평 API 요청]", {
+        url,
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
         },
-      );
+      });
+
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
+        },
+      });
+
+      console.log("[수강평 API 응답 상태]", {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+      });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error("[수강평 API 에러]", errorText);
         throw new Error("Failed to fetch class reviews");
       }
 
       const result: ApiResponse<WrittenReview> = await response.json();
+      console.log("[수강평 API 응답 데이터]", result);
 
       return {
         items: result.data.map((item) => ({
