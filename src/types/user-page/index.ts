@@ -117,7 +117,7 @@ export interface ParticipatingMeetup extends BaseMeetup {
     userId: number;
     profileImageUrl: string;
   }>;
-  status: MeetingStatus;
+  meetupStatus: MeetingStatus;
 }
 
 export interface CreatedMeetup extends BaseMeetup {
