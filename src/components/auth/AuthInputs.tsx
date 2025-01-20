@@ -17,6 +17,7 @@ export const CommonNicknameInput = ({
     label='닉네임'
     control={control}
     maxLength={8}
+    placeholder='닉네임을 입력해주세요'
     rules={{
       ...(isRequired && { required: "닉네임은 필수 항목입니다." }),
       minLength: {
@@ -108,6 +109,7 @@ export const CommonConfirmPasswordInput = ({
     name='confirmPassword'
     label='비밀번호 확인'
     type='password'
+    placeholder='*****'
     control={control}
     minLength={6}
     maxLength={20}
