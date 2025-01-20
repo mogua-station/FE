@@ -18,7 +18,7 @@ jobs:
           ref: main
       - name: Add remote-url
         run: |
-          git remote add forked-repo https://joshuayeyo:${{ secrets.GITHUBACTIONKEY }}@github.com/joshuayeyo/mogua
+          git remote add forked-repo https://joshuayeyo:${{ secrets.GITHUBACTIONKEY }}@github.com/joshuayeyo/mogua_FE
           git config user.name joshuayeyo
           git config user.email chiikawayeyo@gmail.com
       
