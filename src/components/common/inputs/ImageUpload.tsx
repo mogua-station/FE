@@ -1,12 +1,21 @@
+import { useEffect } from "react";
 import UploadIcon from "@/assets/images/icons/camera.svg";
 import { useUploadImage } from "@/hooks/inputs/images/useUploadImage";
 
 type ImageuploadProps = {
   label: string;
+  onImageChange?: (file: File | null) => void;
 };
 
-const CommonImageInput = ({ label }: ImageuploadProps) => {
-  const { previewUrl, handleImageUpload, handleImageDelete } = useUploadImage();
+const CommonImageInput = ({ label, onImageChange }: ImageuploadProps) => {
+  const { image, previewUrl, handleImageUpload, handleImageDelete } =
+    useUploadImage();
+
+  useEffect(() => {
+    if (onImageChange && image) {
+      onImageChange(image);
+    }
+  }, [image, onImageChange]);
 
   return (
     <div className='flex flex-col gap-[12px]'>
@@ -19,6 +28,7 @@ const CommonImageInput = ({ label }: ImageuploadProps) => {
 
       {/* 이미지 업로드 버튼 */}
       <button
+        type='button'
         className='group relative flex h-[120px] w-[120px] items-center justify-center rounded-[12px] border border-gray-800 bg-gray-900'
         onClick={() => document.getElementById("fileInput")?.click()}
       >
@@ -33,7 +43,10 @@ const CommonImageInput = ({ label }: ImageuploadProps) => {
             {/* hover 시에만 보이도록 설정 */}
             <div
               className='absolute left-12 top-12 z-10 hidden h-[24px] w-[24px] items-center justify-center rounded-[7px] bg-[#28292E] p-1 text-center text-label-normal font-semibold text-[#C4C4C4] group-hover:block'
-              onClick={handleImageDelete}
+              onClick={async (data) => {
+                await handleImageDelete(data);
+                if (onImageChange) onImageChange(null);
+              }}
             >
               X
             </div>

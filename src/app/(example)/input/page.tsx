@@ -64,6 +64,7 @@ const MyForm = () => {
           rules={{ required: "필수 항목입니다." }}
           required={true}
           hint='힌트입니다.'
+          placeholder='안녕'
         />
         <CommonTextInput
           required={true}

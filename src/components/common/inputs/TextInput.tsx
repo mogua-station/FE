@@ -29,7 +29,8 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
             field.value && !error,
           );
 
-          const className = twMerge(containerStyle, props.className);
+          const containerClassName = twMerge(containerStyle, props.className);
+          const formClassName = twMerge(invisibleInputStyle, props.className);
 
           const hint = hintStyle(error?.message, field.value && !error, name);
           return (
@@ -44,7 +45,7 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
               )}
               <div className='flex flex-col gap-[8px]'>
                 <div className='flex items-center gap-[8px]'>
-                  <div className={className}>
+                  <div className={containerClassName}>
                     <input
                       {...field}
                       {...props}
@@ -53,7 +54,7 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
                         if (typeof ref === "function") ref(e);
                         else if (ref) ref.current = e;
                       }}
-                      className={invisibleInputStyle}
+                      className={formClassName}
                       type={inputType}
                       autoComplete='new-password'
                     />
@@ -76,7 +77,7 @@ const CommonTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
                 </div>
                 {(props.hint || error?.message) && (
                   <p
-                    className={`text-label-normal font-medium ${hint} select-none`}
+                    className={`ml-2 text-label-normal font-medium ${hint} select-none`}
                   >
                     {error?.message || props.hint}
                   </p>

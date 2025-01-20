@@ -16,7 +16,7 @@ export const useUploadImage = () => {
       }
     };
     loadImageFromIDB();
-  }, [loadImage]);
+  }, []);
 
   // 이미지 선택 처리
   const handleImageUpload = async (

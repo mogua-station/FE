@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     screens: {
       tablet: "481px",
-      desktop: "769px",
+      desktop: "1201px",
     },
     fontSize: {
       "title-1": ["24px", "32px"],

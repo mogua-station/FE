@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import CityModal from "./CityModal";
+import LocationModal from "./LocationModal";
 import StateModal from "./StateModal";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
 import IconButton from "@/components/common/buttons/IconButton";
@@ -10,7 +10,7 @@ import { CalendarModal } from "@/components/common/modals/CalendarModal";
 import useModal from "@/hooks/useModal";
 import {
   type DateType,
-  type CityType,
+  type LocationType,
   type FilterType,
   type StateType,
 } from "@/types/meetup.type";
@@ -21,12 +21,12 @@ export default function FilterModal({
   selectedFilter,
   onDateChange,
   onStateChange,
-  onCityChange,
+  onLocationChange,
 }: {
   selectedFilter: FilterType;
   onDateChange: (dates: DateType) => void;
   onStateChange: (state: StateType) => void;
-  onCityChange: (city: CityType) => void;
+  onLocationChange: (location: LocationType) => void;
 }) {
   const [tab, setTab] = useState<TAB_STATE>("지역");
   const [tempFilter, setTempFilter] = useState<FilterType>({
@@ -36,7 +36,7 @@ export default function FilterModal({
 
   const handleReset = () => {
     const resetValues: Partial<FilterType> = {
-      지역: { city: "ALL" as CityType },
+      지역: { location: "ALL" as LocationType },
       상태: { state: "ALL" as StateType },
       날짜: { date: { startDate: null, endDate: null } as DateType },
     }[tab];
@@ -44,7 +44,7 @@ export default function FilterModal({
   };
 
   const handleComplete = () => {
-    onCityChange(tempFilter.city);
+    onLocationChange(tempFilter.location);
     onStateChange(tempFilter.state);
     onDateChange(tempFilter.date);
     closeModal();
@@ -53,9 +53,11 @@ export default function FilterModal({
   const renderFilter = () => {
     const filterComponents = {
       지역: (
-        <CityModal
-          selectedCity={tempFilter.city}
-          onCityChange={(city) => setTempFilter((prev) => ({ ...prev, city }))}
+        <LocationModal
+          selectedLocation={tempFilter.location}
+          onLocationChange={(location) =>
+            setTempFilter((prev) => ({ ...prev, location }))
+          }
         />
       ),
       상태: (
@@ -118,7 +120,7 @@ export default function FilterModal({
 
           <SolidButton
             state={
-              tempFilter.city !== "ALL" ||
+              tempFilter.location !== "ALL" ||
               tempFilter.date.startDate ||
               tempFilter.date.endDate ||
               tempFilter.state !== "ALL"
