@@ -80,6 +80,7 @@ export const mapEligibleReviewToCard = (
     }),
     status: review.status,
     isMypage: true,
+    isReview: true,
   };
 };
 

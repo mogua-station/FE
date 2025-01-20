@@ -49,6 +49,7 @@ export type MyReviewTab = "toWrite" | "written";
 export type StudyType = "study" | "tutoring";
 
 export interface UserTabsProps {
+  userId: string;
   ownId: boolean;
   isInstructor?: boolean;
 }

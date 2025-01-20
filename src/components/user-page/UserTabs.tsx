@@ -1,11 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useState } from "react";
 import { MeetingList } from "./MeetingList";
 import ReviewTabs from "./ReviewTabs";
 import StudyTypeFilter from "./StudyTypeFilter";
 import TabList from "./TabList";
+import useUserStore from "@/store/auth/useUserStore";
 import {
   type UserPageSection,
   type MyReviewTab,
@@ -22,11 +22,11 @@ const INITIAL_STATE = {
 };
 
 export default function UserTabs({
-  ownId,
+  userId,
   isInstructor = false,
 }: UserTabsProps) {
-  const params = useParams();
-  const userId = params.id as string;
+  const currentUser = useUserStore((state) => state.user);
+  const isMe = currentUser?.userId?.toString() === userId;
 
   // 상태 통합 관리
   const [filters, setFilters] = useState(INITIAL_STATE);
@@ -88,11 +88,11 @@ export default function UserTabs({
 
       {/* 데이터 목록 표시 */}
       <MeetingList
+        userId={userId}
         tab={tab}
         studyType={currentStudyType}
         reviewTab={tab === "myReview" ? reviewTab : undefined}
-        ownId={ownId}
-        userId={userId}
+        isMe={isMe}
       />
     </div>
   );

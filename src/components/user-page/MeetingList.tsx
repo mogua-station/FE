@@ -3,7 +3,6 @@ import Card from "../common/card/Card";
 import Review from "../common/review/Review";
 import EmptyState from "./EmptyState";
 import { useInfiniteMeetings } from "@/hooks/useInfiniteMeetings";
-import useUserStore from "@/store/auth/useUserStore";
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
 import {
@@ -17,26 +16,24 @@ interface MeetingListProps {
   tab: UserPageSection;
   studyType: StudyType;
   reviewTab?: MyReviewTab;
-  ownId: boolean;
   userId: string;
+  isMe: boolean;
 }
 
 export const MeetingList = ({
   tab,
   studyType,
   reviewTab,
-  ownId,
   userId,
+  isMe,
 }: MeetingListProps) => {
-  const currentUser = useUserStore((state) => state.user);
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteMeetings({
       tab,
       studyType,
       reviewTab,
       userId,
-      currentUserId: currentUser?.id || "",
+      currentUserId: userId,
     });
 
   const { ref } = useInView({
@@ -79,7 +76,8 @@ export const MeetingList = ({
       index === data.pages.flatMap((page) => page.items).length - 1;
 
     if (shouldShowMeetingCard && isMeetingCard(item)) {
-      const isReview = tab === "myReview" && reviewTab === "toWrite" && ownId;
+      const isReview =
+        tab === "myReview" && reviewTab === "toWrite" && isMe && item.isReview;
 
       return (
         <li
