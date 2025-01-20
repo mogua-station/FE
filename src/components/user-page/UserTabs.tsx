@@ -24,11 +24,10 @@ const INITIAL_STATE = {
 export default function UserTabs({
   userId,
   isInstructor = false,
+  token,
 }: UserTabsProps) {
   const currentUser = useUserStore((state) => state.user);
   const isMe = currentUser?.userId?.toString() === userId;
-
-  // 상태 통합 관리
   const [filters, setFilters] = useState(INITIAL_STATE);
   const { tab, studyType, reviewTab } = filters;
 
@@ -93,6 +92,7 @@ export default function UserTabs({
         studyType={currentStudyType}
         reviewTab={tab === "myReview" ? reviewTab : undefined}
         isMe={isMe}
+        token={token}
       />
     </div>
   );

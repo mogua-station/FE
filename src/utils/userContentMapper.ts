@@ -26,7 +26,7 @@ export const mapParticipatingMeetupToCard = (
     thumbnail: meetup.thumbnail,
     online: meetup.online,
     participants: meetup.participants,
-    status: meetup.status,
+    status: meetup.meetupStatus,
     isMypage: true,
   };
 };
