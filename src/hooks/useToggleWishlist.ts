@@ -17,6 +17,8 @@ export default function useToggleWishlist() {
         wishlist.push(id);
 
         localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+        alert("찜하기가 완료되었습니다.");
         return true;
       } else {
         const idx = wishlist.indexOf(id);
@@ -24,6 +26,8 @@ export default function useToggleWishlist() {
         wishlist.splice(idx, 1);
 
         localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+        alert("찜하기가 취소되었습니다.");
         return false;
       }
     }
