@@ -1,3 +1,5 @@
+import useCookie from "@/hooks/auths/useTokenState";
+import { fetcher } from "@/lib/user/clientFetch";
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
 import {
@@ -31,7 +33,7 @@ const mapParticipatingMeetupToCard = (
     thumbnail: meetup.thumbnail,
     online: meetup.online,
     participants: meetup.participants,
-    status: meetup.status,
+    status: meetup.meetupStatus,
     isMypage: true,
   };
 };
@@ -112,18 +114,21 @@ export const fetchItems = async ({
   page,
   userId,
 }: FetchConfig): Promise<PageResponse<CardProps | ReviewInfo>> => {
+  const token = useCookie("accessToken");
+
+  if (!token) {
+    throw new Error("No token available");
+  }
+
   // 내 모임 탭일 경우 실제 API 호출
   if (tab === "myMeeting") {
     try {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/user/${userId}/meetups/participating/${type}?page=${page - 1}&limit=${PAGE_SIZE}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-          },
-        },
+      const response = await fetcher(
+        `/user/${userId}/meetups/participating/${type}?page=${page - 1}&limit=${PAGE_SIZE}`,
+        token,
+        { auth: true },
       );
 
       if (!response.ok) {
@@ -146,13 +151,10 @@ export const fetchItems = async ({
   if (tab === "createdMeeting") {
     try {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/user/${userId}/meetups/created/${type}?page=${page - 1}&limit=${PAGE_SIZE}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-          },
-        },
+      const response = await fetcher(
+        `/user/${userId}/meetups/created/${type}?page=${page - 1}&limit=${PAGE_SIZE}`,
+        token,
+        { auth: true },
       );
 
       if (!response.ok) {
@@ -179,13 +181,10 @@ export const fetchItems = async ({
       const type = studyType === "study" ? "STUDY" : "TUTORING";
       const status = reviewTab === "toWrite" ? "eligible" : "written";
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/user/${userId}/reviews/${type}/${status}?page=${page - 1}&limit=${PAGE_SIZE}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-          },
-        },
+      const response = await fetcher(
+        `/user/${userId}/reviews/${type}/${status}?page=${page - 1}&limit=${PAGE_SIZE}`,
+        token,
+        { auth: true },
       );
 
       if (!response.ok) {
@@ -215,19 +214,15 @@ export const fetchItems = async ({
   // 수강평 탭일 경우 실제 API 호출
   if (tab === "classReview") {
     try {
-      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/user/${userId}/reviews/received?page=${page - 1}&limit=${PAGE_SIZE}`;
+      const url = `/user/${userId}/reviews/received?page=${page - 1}&limit=${PAGE_SIZE}`;
       console.log("[수강평 API 요청]", {
         url,
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-        },
-      });
+      const response = await fetcher(url, token, { auth: true });
 
       console.log("[수강평 API 응답 상태]", {
         status: response.status,
