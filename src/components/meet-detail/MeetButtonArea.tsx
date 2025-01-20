@@ -7,7 +7,7 @@ import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useAddWishlist from "@/hooks/useToggleWishlist";
+import useToggleWishlist from "@/hooks/useToggleWishlist";
 import { type HostInfo } from "@/types/meetDetail";
 
 export default function MeetButtonArea({
@@ -33,7 +33,7 @@ export default function MeetButtonArea({
     }
   }, [user, setBookmark]);
 
-  const toggleWishlist = useAddWishlist();
+  const toggleWishlist = useToggleWishlist();
   const router = useRouter();
 
   const handleClickAreaButton = (e: React.MouseEvent, id: number) => {
