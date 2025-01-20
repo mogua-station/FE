@@ -29,7 +29,6 @@ export default function Card({ card }: CardInfo) {
       ? JSON.parse(localStorage.getItem("wishlist") || "[]")
       : [];
   const [wishlist, setWishlist] = useState<number[]>([]);
-  console.log(wishlist);
 
   const contentData = {
     title: card.title,
