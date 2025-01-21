@@ -105,18 +105,8 @@ export const mapWrittenReviewToReviewInfo = (
 export const transformPageResponse = <T, U>(
   response: ApiResponse<T>,
   mapper: (item: T) => U,
-): PageResponse<U> => {
-  console.log("[무한스크롤] API 응답 전체", response);
-  console.log("[무한스크롤] API 응답 데이터", {
-    totalElements: response.data.length,
-    isLast: response.additionalData.isLast,
-    nextPage: response.additionalData.nextPage,
-    data: response.data,
-  });
-
-  return {
-    items: response.data.map(mapper),
-    hasNextPage: !response.additionalData.isLast,
-    nextPage: response.additionalData.nextPage,
-  };
-};
+): PageResponse<U> => ({
+  items: response.data.map(mapper),
+  hasNextPage: !response.additionalData.isLast,
+  nextPage: response.additionalData.nextPage,
+});

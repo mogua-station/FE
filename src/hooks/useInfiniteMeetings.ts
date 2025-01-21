@@ -48,7 +48,6 @@ export const useInfiniteMeetings = ({
     queryFn: async ({ pageParam = 1 }) => {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
       const page = pageParam - 1;
-      console.log(`[무한스크롤] ${tab} 데이터 요청 - 페이지: ${page}`);
 
       try {
         switch (tab) {
@@ -73,11 +72,6 @@ export const useInfiniteMeetings = ({
             );
             const result =
               (await response.json()) as ApiResponse<CreatedMeetup>;
-            console.log("[만든 모임 API 응답]", {
-              data: result.data,
-              isLast: result.additionalData.isLast,
-              nextPage: result.additionalData.nextPage,
-            });
             return transformPageResponse(result, (item) =>
               mapCreatedMeetupToCard(item, type),
             );
