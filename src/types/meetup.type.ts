@@ -77,7 +77,7 @@ export interface MeetupListResponseType {
     userId: number;
     profileImageUrl: string;
   }[];
-  status: StateType;
+  meetupStatus: StateType;
   online: boolean;
   isWishlist: boolean;
 }

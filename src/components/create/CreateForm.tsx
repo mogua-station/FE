@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import FormSectionLeft from "./FormSectionLeft";
@@ -30,11 +30,13 @@ export default function CreateForm() {
   const { control, handleSubmit, watch, setValue } = methods;
   const [image, setImage] = useState<File | null>(null);
   const { openModal } = useModal();
+  const queryClient = useQueryClient();
 
   const createMeetupMutation = useMutation({
     mutationFn: createMeetup,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["meetup"] });
       openModal({
         hasCloseBtn: false,
         children: <SuccessModal data={data} />,

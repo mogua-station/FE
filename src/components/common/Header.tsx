@@ -51,7 +51,7 @@ export default function Header() {
 
         <div>
           {pathname.includes("user") ? (
-            <button>
+            <button onClick={() => router.push("/user/edit_profile")}>
               <Edit className='text-gray-200' />
             </button>
           ) : (
