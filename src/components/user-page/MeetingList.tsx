@@ -1,6 +1,7 @@
 import { useInView } from "react-intersection-observer";
 import Card from "../common/card/Card";
 import Review from "../common/review/Review";
+import SkeletonList from "../common/skeleton/SkeletonList";
 import EmptyState from "./EmptyState";
 import { useInfiniteMeetings } from "@/hooks/useInfiniteMeetings";
 import { type CardProps } from "@/types/card";
@@ -65,8 +66,9 @@ export const MeetingList = ({
       : tab
   ) as EmptyStateVariant; // 그 외에는 탭 정보만 전달
 
-  if (isLoading)
-    return <div className='flex justify-center py-4 text-white'>로딩중...</div>;
+  if (isLoading) {
+    return <SkeletonList base={3} tablet={3} desktop={8} />;
+  }
 
   // 첫 페지이 데이터가 없으면 EmptyState 표시
   if (!data?.pages[0]?.items.length) {
@@ -113,11 +115,7 @@ export const MeetingList = ({
             return renderItem(item, globalIndex);
           }),
         )}
-        {isFetchingNextPage && (
-          <li className='col-span-full flex justify-center py-4 text-white'>
-            로딩중...
-          </li>
-        )}
+        {isFetchingNextPage && <SkeletonList base={3} tablet={3} desktop={4} />}
       </ul>
     </section>
   );
