@@ -50,7 +50,7 @@ const CommonTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     );
 
     const formStyle = twMerge(
-      `select-none max-h-[124px] text-body-2-reading font-regular bg-gray-900 text-gray-200 placeholder-gray-400 focus:outline-none overflow:hidden resize-none`,
+      `select-none max-h-[124px] text-body-2-reading font-regular bg-gray-900 text-gray-200 placeholder-gray-400 focus:outline-none overflow:hidden resize-none scrollbar:bg-transparent scrollbar-thumb:bg-gray-600 scrollbar:w-1 scrollbar:rounded-full scrollbar-thumb:rounded-full`,
       formClassName,
     );
 
