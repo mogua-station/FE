@@ -33,7 +33,7 @@ const mapParticipatingMeetupToCard = (
     thumbnail: meetup.thumbnail,
     online: meetup.online,
     participants: meetup.participants,
-    status: meetup.meetupStatus,
+    meetupStatus: meetup.meetupStatus,
     isMypage: true,
   };
 };
@@ -59,7 +59,7 @@ const mapCreatedMeetupToCard = (
       userId: 0,
       profileImageUrl: "",
     }),
-    status: meetup.meetupStatus,
+    meetupStatus: meetup.meetupStatus,
     isMypage: true,
   };
 };
@@ -85,7 +85,7 @@ const mapEligibleReviewToCard = (
       userId: 0,
       profileImageUrl: "",
     }),
-    status: review.status,
+    meetupStatus: review.status,
     isMypage: true,
   };
 };
