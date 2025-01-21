@@ -1,9 +1,9 @@
-import useCookie from "@/hooks/auths/useTokenState";
 import type {
   MeetupPromiseType,
   MeetupQueryType,
   MeetupListResponseType,
 } from "@/types/meetup.type";
+import { getAccessToken } from "@/utils/cookie";
 
 export const getMeetupList = async ({
   page = 0,
@@ -50,7 +50,11 @@ export const getMeetupList = async ({
 };
 
 export const createMeetup = async (formData: FormData) => {
-  const accessToken = useCookie("accessToken");
+  const accessToken = getAccessToken();
+
+  if (!accessToken) {
+    throw new Error("Access token is not found");
+  }
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups`, {
     method: "POST",
@@ -62,6 +66,10 @@ export const createMeetup = async (formData: FormData) => {
       revalidate: 1600,
     },
   });
+
+  if (!res.ok) {
+    throw new Error("Failed to create meetup");
+  }
 
   return await res.json();
 };
