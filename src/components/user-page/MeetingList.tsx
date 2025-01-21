@@ -13,19 +13,21 @@ import {
 } from "@/types/user-page";
 
 interface MeetingListProps {
+  userId: string;
   tab: UserPageSection;
   studyType: StudyType;
   reviewTab?: MyReviewTab;
-  userId: string;
   isMe: boolean;
+  token: string;
 }
 
 export const MeetingList = ({
+  userId,
   tab,
   studyType,
   reviewTab,
-  userId,
   isMe,
+  token,
 }: MeetingListProps) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteMeetings({
@@ -34,6 +36,7 @@ export const MeetingList = ({
       reviewTab,
       userId,
       currentUserId: userId,
+      token,
     });
 
   const { ref } = useInView({
@@ -67,7 +70,7 @@ export const MeetingList = ({
 
   // 첫 페지이 데이터가 없으면 EmptyState 표시
   if (!data?.pages[0]?.items.length) {
-    return <EmptyState variant={emptyStateVariant} />;
+    return <EmptyState variant={emptyStateVariant} isMe={isMe} />;
   }
 
   // 카드 렌더링

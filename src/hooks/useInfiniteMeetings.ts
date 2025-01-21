@@ -27,6 +27,7 @@ interface UseInfiniteMeetingsProps {
   reviewTab?: MyReviewTab;
   userId: string;
   currentUserId: string;
+  token: string;
 }
 
 export const useInfiniteMeetings = ({
@@ -34,9 +35,8 @@ export const useInfiniteMeetings = ({
   studyType,
   reviewTab,
   userId,
+  token,
 }: UseInfiniteMeetingsProps) => {
-  const token = process.env.NEXT_PUBLIC_USER_TOKEN || "";
-
   return useInfiniteQuery<
     PageResponse<CardProps | ReviewInfo>,
     Error,
@@ -48,73 +48,82 @@ export const useInfiniteMeetings = ({
     queryFn: async ({ pageParam = 1 }) => {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
 
-      switch (tab) {
-        case "myMeeting": {
-          const response = await userContentApi.getParticipating(
-            userId,
-            type,
-            token,
-            pageParam - 1,
-          );
-          const result =
-            (await response.json()) as ApiResponse<ParticipatingMeetup>;
-          return transformPageResponse(result, mapParticipatingMeetupToCard);
-        }
-
-        case "createdMeeting": {
-          const response = await userContentApi.getCreated(
-            userId,
-            type,
-            token,
-            pageParam - 1,
-          );
-          const result = (await response.json()) as ApiResponse<CreatedMeetup>;
-          return transformPageResponse(result, (item) =>
-            mapCreatedMeetupToCard(item, type),
-          );
-        }
-
-        case "myReview": {
-          const status = reviewTab === "toWrite" ? "eligible" : "written";
-          const response = await userContentApi.getWritten(
-            userId,
-            type,
-            status,
-            token,
-            pageParam - 1,
-          );
-
-          if (status === "eligible") {
-            const result =
-              (await response.json()) as ApiResponse<EligibleReview>;
-            return transformPageResponse(result, (item) =>
-              mapEligibleReviewToCard(item, type),
+      try {
+        switch (tab) {
+          case "myMeeting": {
+            const response = await userContentApi.getParticipating(
+              userId,
+              type,
+              token,
+              pageParam - 1,
             );
-          } else {
+            const result =
+              (await response.json()) as ApiResponse<ParticipatingMeetup>;
+            return transformPageResponse(result, mapParticipatingMeetupToCard);
+          }
+
+          case "createdMeeting": {
+            const response = await userContentApi.getCreated(
+              userId,
+              type,
+              token,
+              pageParam - 1,
+            );
+            const result =
+              (await response.json()) as ApiResponse<CreatedMeetup>;
+            return transformPageResponse(result, (item) =>
+              mapCreatedMeetupToCard(item, type),
+            );
+          }
+
+          case "myReview": {
+            const status = reviewTab === "toWrite" ? "eligible" : "written";
+            const response = await userContentApi.getWritten(
+              userId,
+              type,
+              status,
+              token,
+              pageParam - 1,
+            );
+
+            if (status === "eligible") {
+              const result =
+                (await response.json()) as ApiResponse<EligibleReview>;
+              return transformPageResponse(result, (item) =>
+                mapEligibleReviewToCard(item, type),
+              );
+            } else {
+              const result =
+                (await response.json()) as ApiResponse<WrittenReview>;
+              return transformPageResponse(result, (item) => ({
+                ...mapWrittenReviewToReviewInfo(item),
+                eventType: type.toLowerCase(),
+              }));
+            }
+          }
+
+          case "classReview": {
+            const response = await userContentApi.getReceived(
+              userId,
+              token,
+              pageParam - 1,
+            );
             const result =
               (await response.json()) as ApiResponse<WrittenReview>;
             return transformPageResponse(result, (item) => ({
               ...mapWrittenReviewToReviewInfo(item),
-              eventType: type.toLowerCase(),
+              eventType: "tutoring",
             }));
           }
-        }
 
-        case "classReview": {
-          const response = await userContentApi.getReceived(
-            userId,
-            token,
-            pageParam - 1,
-          );
-          const result = (await response.json()) as ApiResponse<WrittenReview>;
-          return transformPageResponse(result, (item) => ({
-            ...mapWrittenReviewToReviewInfo(item),
-            eventType: "tutoring",
-          }));
+          default:
+            throw new Error("Invalid tab");
         }
-
-        default:
-          throw new Error("Invalid tab");
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(`Error fetching ${tab} data:`, error.message);
+        }
+        throw error;
       }
     },
     getNextPageParam: (lastPage: PageResponse<CardProps | ReviewInfo>) => {

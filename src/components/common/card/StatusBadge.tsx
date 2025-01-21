@@ -8,14 +8,12 @@ export default function StatusBadge({ badge }: BadgeInfo) {
   const deadline = (date: Date) => {
     if (!badge.recruitmentEndDate) return;
 
-    const diffTime = +date - +new Date();
+    const diffTime = +new Date(date) - +new Date();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
-  console.log(badge.confirm);
-
   const renderBadge = () => {
-    switch (badge.status) {
+    switch (badge.meetupStatus) {
       case "RECRUITING":
         return (
           <div className='flex gap-1.5'>
@@ -27,7 +25,7 @@ export default function StatusBadge({ badge }: BadgeInfo) {
             </span>
             <span className='flex items-center justify-between rounded-[6px] bg-gray-800 px-2 py-1'>
               <span className='text-caption-normal font-medium text-primary'>
-                {deadline(badge.recruitmentEndDate) == 0
+                {deadline(badge.recruitmentEndDate) == 1
                   ? "오늘 마감"
                   : `마감 D-${deadline(badge.recruitmentEndDate)}`}
               </span>

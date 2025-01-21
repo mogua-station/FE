@@ -1,16 +1,25 @@
 export const dynamic = "force-dynamic";
 
+import { cookies } from "next/headers";
 import UserProfile from "@/components/user-page/UserProfile";
 import UserTabs from "@/components/user-page/UserTabs";
 
 async function getUserInfo(userId: string) {
   try {
+    const cookieStore = cookies();
+    const token = cookieStore.get("accessToken")?.value;
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${userId}`,
       {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-        },
+        headers,
         cache: "no-store",
       },
     );
@@ -30,6 +39,8 @@ async function getUserInfo(userId: string) {
 export default async function UserPage({ params }: { params: { id: string } }) {
   try {
     const userId = params.id;
+    const cookieStore = cookies();
+    const token = cookieStore.get("accessToken")?.value || "";
     const userInfo = await getUserInfo(userId);
 
     return (
@@ -44,7 +55,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
             <UserTabs
               userId={userId}
               isInstructor={userInfo.qualificationStatus === "QUALIFIED"}
-              ownId={userInfo.ownId}
+              token={token}
             />
           </section>
         </div>
