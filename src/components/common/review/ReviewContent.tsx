@@ -27,8 +27,6 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
           </span>
           <span className='inline-block pl-2 text-label-reading font-regular text-gray-400'>
             {new Date().toLocaleDateString("ko-KR")}
-            {` <= `}
-            {`이건 백/디와 상의가 필요할것 같습니다.`}
           </span>
         </div>
       )}

@@ -125,6 +125,7 @@ export default function MeetButtonArea({
     },
   });
 
+
   const handleClickToggleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
 

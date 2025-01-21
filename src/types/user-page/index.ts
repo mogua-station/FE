@@ -78,6 +78,7 @@ export type EmptyStateVariant =
 
 export interface EmptyStateProps {
   variant?: EmptyStateVariant;
+  isMe?: boolean;
 }
 
 //API 관련 타입

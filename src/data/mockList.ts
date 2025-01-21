@@ -5,7 +5,7 @@ import { type ReviewInfo } from "@/types/review";
 export const cardList: CardProps[] = [
   {
     meetupId: 1,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "STUDY",
     title: "모각각코",
     location: "CAPITAL",
@@ -21,7 +21,7 @@ export const cardList: CardProps[] = [
   },
   {
     meetupId: 2,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "STUDY",
     title: "모집집코",
     location: "CAPITAL",
@@ -37,7 +37,7 @@ export const cardList: CardProps[] = [
   },
   {
     meetupId: 3,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "STUDY",
     title: "코딩공부",
     location: "CAPITAL",
@@ -53,7 +53,7 @@ export const cardList: CardProps[] = [
   },
   {
     meetupId: 4,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "TUTORING",
     title: "게임코칭",
     location: "CAPITAL",
