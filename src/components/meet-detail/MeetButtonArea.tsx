@@ -4,12 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import ArrowRight from "@/assets/images/icons/arrow_right.svg";
+import ShareMeetUpButton from "./ShareMeetUpButton";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import useToggleWishlist from "@/hooks/useToggleWishlist";
+import {
+  fetchHostData,
+  fetchJoinMeet,
+  fetchLeaveMeet,
+} from "@/lib/meetDetail/meetDetailApi";
+import useUserStore from "@/store/auth/useUserStore";
+import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type ClientInfo } from "@/types/meetDetail";
 
 interface UserTag {
@@ -17,116 +24,14 @@ interface UserTag {
   tag: string;
 }
 
-const fetchHostData = async (hostId: number) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/profile/${hostId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-        },
-      },
-    );
-
-    if (!res.ok) {
-      //catch문에 error 응답객체 전달
-      const error = new Error("API 요청 에러");
-      (error as any).response = res;
-      throw error;
-    }
-
-    return res.json();
-  } catch (error) {
-    // 에러 객체의 response (API 응답 객체)에 접근 가능
-    if ((error as any).response) {
-      const response = (error as any).response;
-      if (response.status === 403) alert("사용자 인증 오류 발생");
-      if (response.status === 404) alert("잘못된 경로 요청");
-      if (response.status === 400) alert("잘못된 데이터 요청");
-      if (response.status === 500) alert("네트워크 오류");
-    }
-
-    throw error;
-  }
-};
-
-//모임 신청
-const fetchJoinMeet = async (id: number) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}/join`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-        },
-      },
-    );
-
-    if (!res.ok) {
-      //catch문에 error 응답객체 전달
-      const error = new Error("API 요청 에러");
-      (error as any).response = res;
-      throw error;
-    }
-
-    return res.json();
-  } catch (error) {
-    // 에러 객체의 response (API 응답 객체)에 접근 가능
-    if ((error as any).response) {
-      const response = (error as any).response;
-      if (response.status === 403) alert("사용자 인증 오류 발생");
-      if (response.status === 404) alert("잘못된 경로 요청");
-      if (response.status === 400) alert(response.message);
-      if (response.status === 500) alert("네트워크 오류");
-    }
-
-    throw error;
-  }
-};
-
-//모임 탈퇴
-const fetchLeaveMeet = async (id: number) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}/leave`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-        },
-      },
-    );
-
-    if (!res.ok) {
-      //catch문에 error 응답객체 전달
-      const error = new Error("API 요청 에러");
-      (error as any).response = res;
-      throw error;
-    }
-
-    return res.json();
-  } catch (error) {
-    // 에러 객체의 response (API 응답 객체)에 접근 가능
-    if ((error as any).response) {
-      const response = (error as any).response;
-      if (response.status === 403) alert("사용자 인증 오류 발생");
-      if (response.status === 404) alert("잘못된 경로 요청");
-      if (response.status === 400) alert(response.message);
-      if (response.status === 500) alert("네트워크 오류");
-    }
-
-    throw error;
-  }
-};
-
 export default function MeetButtonArea({
   clientInfo,
 }: {
   clientInfo: ClientInfo;
 }) {
   //임시 유저 데이터 확인
-  const user = null;
+  const { user } = useUserStore();
+  const { userWishlist } = useUserWishlist();
 
   const router = useRouter();
   const toggleWishlist = useToggleWishlist();
@@ -143,7 +48,10 @@ export default function MeetButtonArea({
     }
 
     //내가 개설한 모임의 상세에 들어갔을 때
-    if (clientInfo.hostId === user && clientInfo.stauts === "RECRUITING") {
+    if (
+      clientInfo.hostId === user.userId &&
+      clientInfo.meetupStatus === "RECRUITING"
+    ) {
       if (clientInfo.participants.length >= clientInfo.minParticipants) {
         return (
           <SolidButton mode='special' disabled>
@@ -161,8 +69,8 @@ export default function MeetButtonArea({
 
     //모임 참여 여부에 따른 버튼렌더링
     if (
-      clientInfo.participants.some((item) => item.userId === user) &&
-      clientInfo.stauts === "RECRUITING"
+      clientInfo.participants.some((item) => item.userId === user.userId) &&
+      clientInfo.meetupStatus === "RECRUITING"
     ) {
       return (
         <SolidButton
@@ -189,11 +97,14 @@ export default function MeetButtonArea({
     },
   });
 
-  const handleClickAreaButton = (e: React.MouseEvent, id: number) => {
+  const handleClickAreaButton = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    const isBookmarked = toggleWishlist(id);
-    setBookmark(isBookmarked);
+    if (user != null) {
+      const isBookmarked = toggleWishlist(clientInfo.meetupId);
+      setBookmark(isBookmarked);
+    } else {
+    }
   };
 
   const handleClickNavigateUser = (e: React.MouseEvent, id: number) => {
@@ -235,7 +146,10 @@ export default function MeetButtonArea({
       );
     }
 
-    if (clientInfo.hostId === user && clientInfo.stauts === "RECRUITING") {
+    if (
+      clientInfo.hostId === user?.userId &&
+      clientInfo.meetupStatus === "RECRUITING"
+    ) {
       if (clientInfo.participants.length >= clientInfo.minParticipants) {
         setJoinButton(
           <SolidButton mode='special' disabled>
@@ -253,8 +167,8 @@ export default function MeetButtonArea({
 
     //모임 참여 여부에 따른 버튼렌더링
     if (
-      clientInfo.participants.some((item) => item.userId === user) &&
-      clientInfo.stauts === "RECRUITING"
+      clientInfo.participants.some((item) => item.userId === user?.userId) &&
+      clientInfo.meetupStatus === "RECRUITING"
     ) {
       setJoinButton(
         <SolidButton
@@ -280,6 +194,10 @@ export default function MeetButtonArea({
       if (wishlist.includes(clientInfo.meetupId)) {
         setBookmark(true);
       }
+    } else {
+      if (userWishlist.includes(clientInfo.meetupId)) {
+        setBookmark(true);
+      }
     }
   }, [user, setBookmark]);
 
@@ -289,23 +207,12 @@ export default function MeetButtonArea({
 
   return (
     <div className='flex flex-1 flex-col'>
-      <button className='relative hidden gap-[15px] rounded-[16px] bg-gray-800 p-3 desktop:flex'>
-        <div className='overflow-hidden rounded-[50%] bg-gray-600'>
-          <img src='/images/share_character.png' alt='캐릭터 이미지' />
-        </div>
-        <div className='flex flex-col justify-between'>
-          <p className='text-body text-gray-300'>친구와 함께 참여해보세요</p>
-          <p className='text-left text-body-2-normal font-bold text-gray-100'>
-            모임 공유하기
-          </p>
-        </div>
-        <ArrowRight className='absolute right-10 top-1/2 size-6 -translate-y-1/2 text-gray-400' />
-      </button>
+      <ShareMeetUpButton />
       <div className='meet-info-box-small fixed bottom-0 left-0 z-50 mt-8 flex w-full gap-2 bg-gray-950 p-5 desktop:static desktop:bg-[unset] desktop:p-0'>
         <IconButton
           mode='special'
           className='w-[72px]'
-          onClick={(e) => handleClickAreaButton(e, clientInfo.meetupId)}
+          onClick={handleClickAreaButton}
         >
           {bookmark ? (
             <BookmarkActive className='size-6 text-orange-200' />

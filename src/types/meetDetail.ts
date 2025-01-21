@@ -9,13 +9,13 @@ export interface ClientInfo {
   hostNickname: string;
   participants: ParticipantInfo[];
   minParticipants: number;
-  stauts: "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
+  meetupStatus: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
 }
 
 export interface MeetProps {
   meetupId: number;
   meetingType: "STUDY" | "TUTORING";
-  status: "RECRUITING" | "IN_PROGRESS" | "COMPLETED";
+  meetupStatus: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
   location:
     | "CAPITAL"
     | "DAEJEON"
