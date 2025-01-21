@@ -51,9 +51,6 @@ export const useInfiniteMeetings = ({
       try {
         switch (tab) {
           case "myMeeting": {
-            console.log(
-              `[참여중인 모임 요청] userId: ${userId}, type: ${type}, page: ${pageParam - 1}`,
-            );
             const response = await userContentApi.getParticipating(
               userId,
               type,
@@ -62,14 +59,10 @@ export const useInfiniteMeetings = ({
             );
             const result =
               (await response.json()) as ApiResponse<ParticipatingMeetup>;
-            console.log("[참여중인 모임 응답]", result);
             return transformPageResponse(result, mapParticipatingMeetupToCard);
           }
 
           case "createdMeeting": {
-            console.log(
-              `[만든 모임 요청] userId: ${userId}, type: ${type}, page: ${pageParam - 1}`,
-            );
             const response = await userContentApi.getCreated(
               userId,
               type,
@@ -78,7 +71,6 @@ export const useInfiniteMeetings = ({
             );
             const result =
               (await response.json()) as ApiResponse<CreatedMeetup>;
-            console.log("[만든 모임 응답]", result);
             return transformPageResponse(result, (item) =>
               mapCreatedMeetupToCard(item, type),
             );
@@ -86,9 +78,6 @@ export const useInfiniteMeetings = ({
 
           case "myReview": {
             const status = reviewTab === "toWrite" ? "eligible" : "written";
-            console.log(
-              `[리뷰 요청] userId: ${userId}, type: ${type}, status: ${status}, page: ${pageParam - 1}`,
-            );
             const response = await userContentApi.getWritten(
               userId,
               type,
@@ -100,14 +89,12 @@ export const useInfiniteMeetings = ({
             if (status === "eligible") {
               const result =
                 (await response.json()) as ApiResponse<EligibleReview>;
-              console.log("[작성 가능한 리뷰 응답]", result);
               return transformPageResponse(result, (item) =>
                 mapEligibleReviewToCard(item, type),
               );
             } else {
               const result =
                 (await response.json()) as ApiResponse<WrittenReview>;
-              console.log("[작성한 리뷰 응답]", result);
               return transformPageResponse(result, (item) => ({
                 ...mapWrittenReviewToReviewInfo(item),
                 eventType: type.toLowerCase(),
@@ -116,9 +103,6 @@ export const useInfiniteMeetings = ({
           }
 
           case "classReview": {
-            console.log(
-              `[수강평 요청] userId: ${userId}, page: ${pageParam - 1}`,
-            );
             const response = await userContentApi.getReceived(
               userId,
               token,
@@ -126,7 +110,6 @@ export const useInfiniteMeetings = ({
             );
             const result =
               (await response.json()) as ApiResponse<WrittenReview>;
-            console.log("[수강평 응답]", result);
             return transformPageResponse(result, (item) => ({
               ...mapWrittenReviewToReviewInfo(item),
               eventType: "tutoring",
