@@ -41,7 +41,7 @@ export default function MeetButtonArea({
   const queryClient = useQueryClient();
 
   //지금 페이지가 북마크가 되어있느지 확인
-  const [bookmark, setBookmark] = useState<boolean | null>(null);
+  const [isBookmark, setIsBookmark] = useState<boolean | null>(null);
   const [joinButton, setJoinButton] = useState<JSX.Element | undefined>(() => {
     if (user == null) {
       return (
@@ -134,18 +134,18 @@ export default function MeetButtonArea({
       //찜하기를 클릭했을 때 이미 찜하기에 등록 된 데이터
       if (isIncludeArr) {
         deleteMutation.mutate(clientInfo.meetupId);
-        setBookmark(false);
+        setIsBookmark(false);
       } else {
         addMutation.mutate(clientInfo.meetupId);
-        setBookmark(true);
+        setIsBookmark(true);
       }
     } else {
       if (clientInfo.meetupStatus === "RECRUITING") {
         const isBookmarked = toggleWishlist(clientInfo.meetupId);
         if (isBookmarked) {
-          setBookmark(true);
+          setIsBookmark(true);
         } else {
-          setBookmark(false);
+          setIsBookmark(false);
         }
 
         router.refresh();
@@ -240,14 +240,14 @@ export default function MeetButtonArea({
     if (!user) {
       const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
       if (wishlist.includes(clientInfo.meetupId)) {
-        setBookmark(true);
+        setIsBookmark(true);
       }
     } else {
       if (userWishlist.includes(clientInfo.meetupId)) {
-        setBookmark(true);
+        setIsBookmark(true);
       }
     }
-  }, [user, setBookmark]);
+  }, [user, setIsBookmark]);
 
   if (isLoading) {
     <div>로딩중..</div>;
@@ -262,7 +262,7 @@ export default function MeetButtonArea({
           className='w-[72px]'
           onClick={handleClickToggleWishlist}
         >
-          {bookmark ? (
+          {isBookmark ? (
             <BookmarkActive className='size-6 text-orange-200' />
           ) : (
             <Bookmark className='size-6' />

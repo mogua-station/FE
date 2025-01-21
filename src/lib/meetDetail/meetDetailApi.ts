@@ -1,6 +1,6 @@
 export const fetchHostData = async (hostId: number) => {
   try {
-    const res = await fetch(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/user/profile/${hostId}`,
       {
         headers: {
@@ -9,14 +9,14 @@ export const fetchHostData = async (hostId: number) => {
       },
     );
 
-    if (!res.ok) {
+    if (!response.ok) {
       //catch문에 error 응답객체 전달
       const error = new Error("API 요청 에러");
-      (error as any).response = res;
+      (error as any).response = response;
       throw error;
     }
 
-    return res.json();
+    return response.json();
   } catch (error) {
     // 에러 객체의 response (API 응답 객체)에 접근 가능
     if ((error as any).response) {
@@ -34,7 +34,7 @@ export const fetchHostData = async (hostId: number) => {
 //모임 신청
 export const fetchJoinMeet = async (id: number) => {
   try {
-    const res = await fetch(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}/join`,
       {
         method: "POST",
@@ -44,14 +44,14 @@ export const fetchJoinMeet = async (id: number) => {
       },
     );
 
-    if (!res.ok) {
+    if (!response.ok) {
       //catch문에 error 응답객체 전달
       const error = new Error("API 요청 에러");
-      (error as any).response = res;
+      (error as any).response = response;
       throw error;
     }
 
-    return res.json();
+    return response.json();
   } catch (error) {
     // 에러 객체의 response (API 응답 객체)에 접근 가능
     if ((error as any).response) {
@@ -69,7 +69,7 @@ export const fetchJoinMeet = async (id: number) => {
 //모임 탈퇴
 export const fetchLeaveMeet = async (id: number) => {
   try {
-    const res = await fetch(
+    const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}/leave`,
       {
         method: "DELETE",
@@ -79,14 +79,14 @@ export const fetchLeaveMeet = async (id: number) => {
       },
     );
 
-    if (!res.ok) {
+    if (!response.ok) {
       //catch문에 error 응답객체 전달
       const error = new Error("API 요청 에러");
-      (error as any).response = res;
+      (error as any).response = response;
       throw error;
     }
 
-    return res.json();
+    return response.json();
   } catch (error) {
     // 에러 객체의 response (API 응답 객체)에 접근 가능
     if ((error as any).response) {
@@ -97,6 +97,29 @@ export const fetchLeaveMeet = async (id: number) => {
       if (response.status === 500) alert("네트워크 오류");
     }
 
+    throw error;
+  }
+};
+
+export const fetchMeetupData = async (id: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
+        },
+        cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 };
