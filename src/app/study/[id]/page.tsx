@@ -20,7 +20,5 @@ export default async function Meet({ params }: { params: { id: number } }) {
       console.error(error);
     });
 
-  console.log(res);
-
   return <MeetDetail meetInfo={res.data} />;
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ShareMeetUpButton from "./ShareMeetUpButton";
@@ -15,6 +14,10 @@ import {
   fetchJoinMeet,
   fetchLeaveMeet,
 } from "@/lib/meetDetail/meetDetailApi";
+import {
+  deleteUserWishList,
+  addUserWishlist,
+} from "@/lib/wishlist/wishlistApi";
 import useUserStore from "@/store/auth/useUserStore";
 import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type ClientInfo } from "@/types/meetDetail";
@@ -31,10 +34,11 @@ export default function MeetButtonArea({
 }) {
   //임시 유저 데이터 확인
   const { user } = useUserStore();
-  const { userWishlist } = useUserWishlist();
+  const { userWishlist, setUserWishlist } = useUserWishlist();
 
   const router = useRouter();
   const toggleWishlist = useToggleWishlist();
+  const queryClient = useQueryClient();
 
   //지금 페이지가 북마크가 되어있느지 확인
   const [bookmark, setBookmark] = useState<boolean | null>(null);
@@ -97,13 +101,51 @@ export default function MeetButtonArea({
     },
   });
 
-  const handleClickAreaButton = (e: React.MouseEvent) => {
+  const deleteMutation = useMutation({
+    mutationFn: (meetupId: number) => deleteUserWishList(meetupId),
+    onSuccess: (variables) => {
+      alert("찜하기가 취소되었습니다.");
+      const updatedArray = userWishlist.filter(
+        (item: number) => item !== variables,
+      );
+      setUserWishlist(updatedArray);
+      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
+      router.refresh();
+    },
+  });
+
+  const addMutation = useMutation({
+    mutationFn: (meetupId: number) => addUserWishlist(meetupId),
+    onSuccess: (variables) => {
+      alert("찜하기가 완료되었습니다.");
+      const updatedArray = [...userWishlist, variables];
+      setUserWishlist(updatedArray);
+      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
+      router.refresh();
+    },
+  });
+
+  const handleClickToggleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (user != null) {
-      const isBookmarked = toggleWishlist(clientInfo.meetupId);
-      setBookmark(isBookmarked);
+      const isIncludeArr = userWishlist.includes(clientInfo.meetupId);
+
+      //찜하기를 클릭했을 때 이미 찜하기에 등록 된 데이터
+      if (isIncludeArr) {
+        deleteMutation.mutate(clientInfo.meetupId);
+      } else {
+        addMutation.mutate(clientInfo.meetupId);
+      }
     } else {
+      if (clientInfo.meetupStatus === "RECRUITING") {
+        const isBookmarked = toggleWishlist(clientInfo.meetupId);
+        setBookmark(isBookmarked);
+
+        router.refresh();
+      } else {
+        alert("모집중인 모임만 가능합니다");
+      }
     }
   };
 
@@ -212,7 +254,7 @@ export default function MeetButtonArea({
         <IconButton
           mode='special'
           className='w-[72px]'
-          onClick={handleClickAreaButton}
+          onClick={handleClickToggleWishlist}
         >
           {bookmark ? (
             <BookmarkActive className='size-6 text-orange-200' />

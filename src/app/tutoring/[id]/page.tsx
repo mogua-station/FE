@@ -3,10 +3,11 @@ import MeetDetail from "@/components/meet-detail/MeetDetail";
 export default async function Meet({ params }: { params: { id: number } }) {
   const { id } = params;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`, {
     headers: {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
     },
+    cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
   })
     .then((res) => {
       if (!res.ok) {
@@ -18,8 +19,6 @@ export default async function Meet({ params }: { params: { id: number } }) {
     .catch((error) => {
       console.error(error);
     });
-
-  console.log(res.data);
 
   return <MeetDetail meetInfo={res.data} />;
 }
