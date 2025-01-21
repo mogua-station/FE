@@ -4,7 +4,7 @@ export const fetchHostData = async (hostId: number) => {
       `${process.env.NEXT_PUBLIC_API_URL}/user/profile/${hostId}`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
+          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
         },
       },
     );
@@ -39,7 +39,7 @@ export const fetchJoinMeet = async (id: number) => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
+          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
         },
       },
     );
@@ -74,7 +74,7 @@ export const fetchLeaveMeet = async (id: number) => {
       {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
+          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
         },
       },
     );
