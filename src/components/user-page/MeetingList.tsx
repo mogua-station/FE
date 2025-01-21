@@ -124,7 +124,7 @@ export const MeetingList = ({
 
 // 타입 가드 함수
 function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
-  return "meetupId" in item && "status" in item;
+  return "meetupId" in item && "meetupStatus" in item;
 }
 
 function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {
