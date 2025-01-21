@@ -108,4 +108,5 @@ export const transformPageResponse = <T, U>(
 ): PageResponse<U> => ({
   items: response.data.map(mapper),
   hasNextPage: !response.additionalData.isLast,
+  nextPage: response.additionalData.nextPage,
 });

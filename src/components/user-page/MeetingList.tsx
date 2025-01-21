@@ -108,9 +108,10 @@ export const MeetingList = ({
     <section aria-label={`${tab} 목록`}>
       <ul className='grid flex-col gap-y-6 desktop:grid-cols-2 desktop:gap-x-5'>
         {data.pages.map((page, pageIndex) =>
-          page.items.map((item, itemIndex) =>
-            renderItem(item, pageIndex * 10 + itemIndex),
-          ),
+          page.items.map((item, itemIndex) => {
+            const globalIndex = pageIndex * page.items.length + itemIndex;
+            return renderItem(item, globalIndex);
+          }),
         )}
         {isFetchingNextPage && (
           <li className='col-span-full flex justify-center py-4 text-white'>
@@ -124,7 +125,7 @@ export const MeetingList = ({
 
 // 타입 가드 함수
 function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
-  return "meetupId" in item && "status" in item;
+  return "meetupId" in item && "meetupStatus" in item;
 }
 
 function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {

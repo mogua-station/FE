@@ -1,6 +1,5 @@
 import { fetcher } from "./clientFetch";
-
-const PAGE_SIZE = 10;
+import { PAGE_SIZE } from "@/constants/pagination";
 
 export const userContentApi = {
   getReceived: (userId: string, token: string, page: number) =>
