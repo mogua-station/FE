@@ -132,7 +132,7 @@ export default function Card({ card }: CardInfo) {
 
   return (
     <div
-      className='flex h-[182px] flex-col rounded-[16px] bg-gray-950 p-3'
+      className='flex flex-col rounded-[16px] bg-gray-950 p-3'
       onClick={() => handleClickDetail(card.meetingType, card.meetupId)}
     >
       <div className='flex justify-between'>
