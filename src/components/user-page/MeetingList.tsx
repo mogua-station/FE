@@ -70,7 +70,7 @@ export const MeetingList = ({
 
   // 첫 페지이 데이터가 없으면 EmptyState 표시
   if (!data?.pages[0]?.items.length) {
-    return <EmptyState variant={emptyStateVariant} />;
+    return <EmptyState variant={emptyStateVariant} isMe={isMe} />;
   }
 
   // 카드 렌더링
