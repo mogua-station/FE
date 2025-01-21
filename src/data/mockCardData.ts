@@ -3,7 +3,7 @@ import { type CardProps } from "@/types/card";
 export const mockCardData: CardProps[] = [
   {
     meetupId: 1,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "STUDY",
     title: "영어 회화 스터디",
     location: "DAEGU",
@@ -31,7 +31,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 2,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "TUTORING",
     title: "프로그래밍 개인 과외",
     location: "CAPITAL",
@@ -55,7 +55,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 3,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "STUDY",
     title: "수학 문제 풀이 스터디",
     location: "CAPITAL",
@@ -79,7 +79,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 4,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "TUTORING",
     title: "초등학교 과학 과외",
     location: "CAPITAL",
@@ -104,7 +104,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 5,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "STUDY",
     title: "웹 개발 스터디",
     location: "CAPITAL",
@@ -129,7 +129,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 6,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "STUDY",
     title: "프랑스어 스터디",
     location: "CAPITAL",
@@ -154,7 +154,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 7,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "TUTORING",
     title: "고등학교 수학 과외",
     location: "DAEGU",
@@ -179,7 +179,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 8,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "STUDY",
     title: "글쓰기 워크숍",
     location: "DAEJEON",
@@ -204,7 +204,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 9,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "TUTORING",
     title: "기초 일본어 과외",
     location: "GWANGJU",
@@ -229,7 +229,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 10,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "STUDY",
     title: "데이터 분석 스터디",
     location: "BUSAN",
@@ -254,7 +254,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 11,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "TUTORING",
     title: "중학교 영어 과외",
     location: "JEONJU",
@@ -278,7 +278,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 12,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "STUDY",
     title: "인공지능 기초 스터디",
     location: "DAEJEON",
@@ -303,7 +303,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 13,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "TUTORING",
     title: "대학교 논문 첨삭",
     location: "CAPITAL",
@@ -327,7 +327,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 14,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "STUDY",
     title: "기초 피트니스 그룹",
     location: "CAPITAL",
@@ -351,7 +351,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 15,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "STUDY",
     title: "비즈니스 영어 회화",
     location: "CAPITAL",
@@ -375,7 +375,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 16,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "TUTORING",
     title: "기초 회계 과외",
     location: "GANGNEUNG",
@@ -399,7 +399,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 17,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "STUDY",
     title: "영화 감상 및 토론",
     location: "CAPITAL",
@@ -423,7 +423,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 18,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "TUTORING",
     title: "중급 중국어 회화",
     location: "CAPITAL",
@@ -455,7 +455,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 19,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "STUDY",
     title: "헬스 트레이닝 그룹",
     location: "CAPITAL",
@@ -479,7 +479,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 20,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "STUDY",
     title: "창업 아이디어 개발",
     location: "CAPITAL",
@@ -503,7 +503,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 21,
-    status: "RECRUITING",
+    meetupStatus: "RECRUITING",
     meetingType: "STUDY",
     title: "비즈니스 전략 스터디",
     location: "CAPITAL",
@@ -527,7 +527,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 22,
-    status: "IN_PROGRESS",
+    meetupStatus: "IN_PROGRESS",
     meetingType: "TUTORING",
     title: "전문 사진 촬영 과외",
     location: "CAPITAL",
@@ -551,7 +551,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 23,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "STUDY",
     title: "프론트엔드 개발 스터디",
     location: "CAPITAL",
@@ -591,7 +591,7 @@ export const mockCardData: CardProps[] = [
   },
   {
     meetupId: 24,
-    status: "BEFORE_START",
+    meetupStatus: "BEFORE_START",
     meetingType: "STUDY",
     title: "백엔드 개발 스터디",
     location: "CAPITAL",
@@ -616,7 +616,7 @@ export const mockCardData: CardProps[] = [
 
   {
     meetupId: 25,
-    status: "COMPLETED",
+    meetupStatus: "COMPLETED",
     meetingType: "STUDY",
     title: "백엔드 개발 스터디2",
     location: "CAPITAL",
