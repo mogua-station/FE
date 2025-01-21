@@ -8,6 +8,7 @@ import MainContentList from "@/components/main/MainContentList";
 import MainNavigation from "@/components/main/MainNavigation";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import { type MeetupQueryType } from "@/types/meetup.type";
+import { generateQueryKey } from "@/utils/meetup.queryKey";
 
 export const dynamic = "force-dynamic"; // 동적 렌더링 강제
 
@@ -19,12 +20,7 @@ export default async function Home({
   const queryClient = new QueryClient();
 
   try {
-    const queryKey = ["meetup"];
-    if (searchParams.type) queryKey.push(searchParams.type);
-    if (searchParams.state) queryKey.push(searchParams.state);
-    if (searchParams.location) queryKey.push(searchParams.location);
-    if (searchParams.startDate) queryKey.push(searchParams.startDate);
-    if (searchParams.endDate) queryKey.push(searchParams.endDate);
+    const queryKey = generateQueryKey(searchParams);
 
     await queryClient.prefetchInfiniteQuery({
       queryKey,

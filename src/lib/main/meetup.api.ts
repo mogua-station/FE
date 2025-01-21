@@ -42,6 +42,18 @@ export const getMeetupList = async ({
 
   const data: MeetupPromiseType = await res.json();
 
+  if (!res.ok) {
+    throw new Error("Failed to fetch meetup list");
+  }
+
+  if (data.data.length === 0) {
+    return {
+      data: [],
+      nextPage: null,
+      isLast: true,
+    };
+  }
+
   return {
     data: data.data,
     nextPage: data.additionalData.nextPage,
