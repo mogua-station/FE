@@ -47,6 +47,8 @@ export const useInfiniteMeetings = ({
     queryKey: ["meetings", tab, studyType, reviewTab, userId],
     queryFn: async ({ pageParam = 1 }) => {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
+      const page = pageParam - 1;
+      console.log(`[무한스크롤] ${tab} 데이터 요청 - 페이지: ${page}`);
 
       try {
         switch (tab) {
@@ -55,7 +57,7 @@ export const useInfiniteMeetings = ({
               userId,
               type,
               token,
-              pageParam - 1,
+              page,
             );
             const result =
               (await response.json()) as ApiResponse<ParticipatingMeetup>;
@@ -67,10 +69,15 @@ export const useInfiniteMeetings = ({
               userId,
               type,
               token,
-              pageParam - 1,
+              page,
             );
             const result =
               (await response.json()) as ApiResponse<CreatedMeetup>;
+            console.log("[만든 모임 API 응답]", {
+              data: result.data,
+              isLast: result.additionalData.isLast,
+              nextPage: result.additionalData.nextPage,
+            });
             return transformPageResponse(result, (item) =>
               mapCreatedMeetupToCard(item, type),
             );
@@ -83,7 +90,7 @@ export const useInfiniteMeetings = ({
               type,
               status,
               token,
-              pageParam - 1,
+              page,
             );
 
             if (status === "eligible") {
@@ -106,7 +113,7 @@ export const useInfiniteMeetings = ({
             const response = await userContentApi.getReceived(
               userId,
               token,
-              pageParam - 1,
+              page,
             );
             const result =
               (await response.json()) as ApiResponse<WrittenReview>;
@@ -126,9 +133,12 @@ export const useInfiniteMeetings = ({
         throw error;
       }
     },
-    getNextPageParam: (lastPage: PageResponse<CardProps | ReviewInfo>) => {
-      if (!lastPage.hasNextPage || lastPage.nextPage === -1) return undefined;
-      return lastPage.nextPage;
+    getNextPageParam: (
+      lastPage: PageResponse<CardProps | ReviewInfo>,
+      pages,
+    ) => {
+      if (!lastPage.hasNextPage) return undefined;
+      return pages.length + 1;
     },
     initialPageParam: 1,
     refetchOnMount: false,

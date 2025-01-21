@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from "@/constants/pagination";
 import useCookie from "@/hooks/auths/useTokenState";
 import { fetcher } from "@/lib/user/clientFetch";
 import { type CardProps } from "@/types/card";
@@ -13,8 +14,6 @@ import {
   type EligibleReview,
   type WrittenReview,
 } from "@/types/user-page";
-
-const PAGE_SIZE = 10;
 
 // API 응답을 CardProps로 변환하는 함수
 const mapParticipatingMeetupToCard = (

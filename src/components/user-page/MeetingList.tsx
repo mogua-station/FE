@@ -108,9 +108,10 @@ export const MeetingList = ({
     <section aria-label={`${tab} 목록`}>
       <ul className='grid flex-col gap-y-6 desktop:grid-cols-2 desktop:gap-x-5'>
         {data.pages.map((page, pageIndex) =>
-          page.items.map((item, itemIndex) =>
-            renderItem(item, pageIndex * 10 + itemIndex),
-          ),
+          page.items.map((item, itemIndex) => {
+            const globalIndex = pageIndex * page.items.length + itemIndex;
+            return renderItem(item, globalIndex);
+          }),
         )}
         {isFetchingNextPage && (
           <li className='col-span-full flex justify-center py-4 text-white'>
