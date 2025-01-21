@@ -134,13 +134,19 @@ export default function MeetButtonArea({
       //찜하기를 클릭했을 때 이미 찜하기에 등록 된 데이터
       if (isIncludeArr) {
         deleteMutation.mutate(clientInfo.meetupId);
+        setBookmark(false);
       } else {
         addMutation.mutate(clientInfo.meetupId);
+        setBookmark(true);
       }
     } else {
       if (clientInfo.meetupStatus === "RECRUITING") {
         const isBookmarked = toggleWishlist(clientInfo.meetupId);
-        setBookmark(isBookmarked);
+        if (isBookmarked) {
+          setBookmark(true);
+        } else {
+          setBookmark(false);
+        }
 
         router.refresh();
       } else {
