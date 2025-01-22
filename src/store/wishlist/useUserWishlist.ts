@@ -5,7 +5,7 @@ interface UserWishlist {
   setUserWishlist: (updatedWishlist: number[]) => void;
 }
 
-const useUserStore = create<UserWishlist>((set) => ({
+const useUserWishlist = create<UserWishlist>((set) => ({
   userWishlist: [], // 초기 상태로 빈 배열 설정
   setUserWishlist: (updatedWishlist) => {
     set(() => ({
@@ -14,4 +14,4 @@ const useUserStore = create<UserWishlist>((set) => ({
   },
 }));
 
-export default useUserStore;
+export default useUserWishlist;

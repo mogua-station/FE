@@ -30,15 +30,18 @@ export default function InitializeUser() {
           useUserStore.getState().setUser(JSON.parse(user));
 
           setUserId(JSON.parse(user).userId);
+          console.log(123);
+          localStorage.setItem("wishlist", JSON.stringify([]));
         }
       }
     }
   }, []);
 
   useEffect(() => {
-    if (data) {
+    if (data != null) {
       const ids = data.data.map((item: CardProps) => item.meetupId);
       setUserWishlist(ids);
+      localStorage.setItem("wishlist", JSON.stringify([]));
     }
   }, [data]);
 

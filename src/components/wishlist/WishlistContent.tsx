@@ -15,7 +15,6 @@ export default function WishlistNotLogged() {
   const pageRef = useIntersectionObserver(ref, { threshold: 0.5 });
   const isPageEnd = !!pageRef?.isIntersecting;
 
-  //임시 유저 정보
   const { user } = useUserStore();
 
   const {
@@ -28,7 +27,10 @@ export default function WishlistNotLogged() {
   } = useInfiniteQuery({
     queryKey: ["wishlist"],
     queryFn: ({ pageParam }) =>
-      fetchWishlist({ pageParms: pageParam, userId: user?.userId || null }),
+      fetchWishlist({
+        pageParms: pageParam,
+        userId: user != null ? user.userId : null,
+      }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage instanceof Error || !lastPage.data) {

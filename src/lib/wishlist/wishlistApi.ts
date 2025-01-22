@@ -1,11 +1,12 @@
 import { type CardProps } from "@/types/card";
+import { getAccessToken } from "@/utils/cookie";
 
 export const fetchUserWishlist = async (userId: number) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}`,
     {
       headers: {
-        Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+        Authorization: `Bearer ${getAccessToken()}`,
       },
       cache: "no-store",
     },
@@ -29,7 +30,7 @@ export const fetchWishlist = async ({
         `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&limit=8`,
         {
           headers: {
-            Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+            Authorization: `Bearer ${getAccessToken()}`,
           },
           cache: "no-store",
         },
@@ -89,7 +90,7 @@ export const deleteUserWishList = async (meetupId: number) => {
       {
         method: "Delete",
         headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       },
     );
@@ -113,7 +114,7 @@ export const addUserWishlist = async (meetupId: number) => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       },
     );
