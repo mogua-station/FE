@@ -84,12 +84,13 @@ export default function Home() {
   };
 
   const handleOpenFilterModal = () => {
-    modal.open(() => (
+    modal.open(({ close }) => (
       <FilterModal
         selectedFilter={{ location: city, state: state, date: selectedDates }}
         onDateChange={(date) => setSelectedDates(date)}
         onStateChange={(state) => setState(state)}
         onLocationChange={(city) => setCity(city)}
+        closeModal={close}
       />
     ));
   };
