@@ -1,3 +1,5 @@
+import { type ReviewInfo, type MeetupReviewProps } from "@/types/review";
+
 export const fetchHostData = async (hostId: number) => {
   try {
     const response = await fetch(
@@ -106,9 +108,6 @@ export const fetchMeetupData = async (id: number) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`,
       {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_USER_TOKEN}`,
-        },
         cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
       },
     );
@@ -118,6 +117,40 @@ export const fetchMeetupData = async (id: number) => {
     }
 
     return response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const fetchMeetupReview = async ({
+  pageParams = 0,
+  meetupId,
+}: MeetupReviewProps) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${meetupId}/reviews`,
+      {
+        cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const reviewData = await response.json();
+    const reviewArr = reviewData.data;
+
+    const pageSize = 3;
+    const start = pageParams * pageSize;
+    const end = start + pageSize;
+    const data: ReviewInfo[] = reviewArr.slice(start, end);
+
+    return {
+      data: data,
+      page: pageParams,
+    };
   } catch (error) {
     console.error(error);
     throw error;

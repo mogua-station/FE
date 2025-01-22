@@ -1,43 +1,32 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Review from "@/components/common/review/Review";
+import { fetchMeetupReview } from "@/lib/meetDetail/meetDetailApi";
 import { type ReviewInfo } from "@/types/review";
 
 export default function MeetDetailReview({
+  meetupId,
   reviews,
 }: {
+  meetupId: number;
   reviews: ReviewInfo[];
 }) {
   const [comment, setComment] = useState<ReviewInfo[]>([]);
 
   const { data, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery({
-    queryKey: ["comment"],
-    queryFn: ({ pageParam }) => fetchComment({ pageParams: pageParam }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
+    queryKey: ["review", meetupId],
+    queryFn: ({ pageParam }) =>
+      fetchMeetupReview({ pageParams: pageParam, meetupId: meetupId }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPage) => {
       const totalFetched = lastPage.page * 3;
+      console.log(allPage);
       return totalFetched < reviews.length ? lastPage.page + 1 : undefined;
     },
   });
-
-  // fetchComment를 useCallback으로 감싸기
-  const fetchComment = useCallback(
-    async ({ pageParams = 1 }: { pageParams: number }) => {
-      const pageSize = 3;
-      const start = (pageParams - 1) * pageSize;
-      const end = start + pageSize;
-      const data: ReviewInfo[] = reviews.slice(start, end);
-
-      return {
-        data: data,
-        page: pageParams,
-      };
-    },
-    [reviews], // 의존성 배열: comments가 변경될 때만 새 함수 생성
-  );
 
   const handleClickNextComment = () => {
     fetchNextPage();
@@ -45,8 +34,6 @@ export default function MeetDetailReview({
 
   useEffect(() => {
     if (data?.pages.flatMap((ele) => ele.data) == null) return;
-
-    console.log(hasNextPage);
 
     setComment(data?.pages.flatMap((ele) => ele.data));
   }, [data]);

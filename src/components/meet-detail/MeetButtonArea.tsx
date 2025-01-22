@@ -42,55 +42,64 @@ export default function MeetButtonArea({
 
   //지금 페이지가 북마크가 되어있느지 확인
   const [isBookmark, setIsBookmark] = useState<boolean | null>(null);
-  const [joinButton, setJoinButton] = useState<JSX.Element | undefined>(() => {
-    if (user == null) {
+  const [joinButton, setJoinButton] = useState<JSX.Element | null>(() => {
+    if (clientInfo.meetupStatus === "COMPLETED") {
       return (
-        <SolidButton mode='special' onClick={() => handleClickJoin()}>
-          모임 신청하기
+        <SolidButton mode='special' disabled>
+          종료된 모임이에요
         </SolidButton>
       );
     }
-
-    //내가 개설한 모임의 상세에 들어갔을 때
-    if (
-      clientInfo.hostId === user.userId &&
-      clientInfo.meetupStatus === "RECRUITING"
-    ) {
-      if (clientInfo.participants.length >= clientInfo.minParticipants) {
-        return (
-          <SolidButton mode='special' disabled>
-            개설확정된 모임이에요
-          </SolidButton>
-        );
-      } else {
-        return (
-          <SolidButton mode='special' onClick={() => {}}>
-            모임 취소하기
-          </SolidButton>
-        );
-      }
-    }
-
-    //모임 참여 여부에 따른 버튼렌더링
-    if (
-      clientInfo.participants.some((item) => item.userId === user.userId) &&
-      clientInfo.meetupStatus === "RECRUITING"
-    ) {
+    if (user === null) {
       return (
-        <SolidButton
-          mode='special'
-          onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-        >
-          신청 취소하기
+        <SolidButton mode='special' onClick={() => handleClickJoin()}>
+          모임 신청하기
         </SolidButton>
       );
     } else {
-      return (
-        <SolidButton mode='special' onClick={() => handleClickJoin()}>
-          모임 신청하기
-        </SolidButton>
-      );
+      //내가 주최자 일 때
+      if (clientInfo.hostId === user.userId) {
+        //모집 중일 때때
+        if (clientInfo.meetupStatus === "RECRUITING") {
+          if (clientInfo.participants.length >= clientInfo.minParticipants) {
+            return (
+              <SolidButton mode='special' disabled>
+                개설확정된 모임이에요
+              </SolidButton>
+            );
+          } else {
+            return (
+              <SolidButton mode='special' onClick={() => {}}>
+                모임 취소하기
+              </SolidButton>
+            );
+          }
+        }
+      } else {
+        //주최자가 아니면서 참여 여부에 따른 버튼 렌더링
+        if (
+          clientInfo.participants.some((item) => item.userId === user.userId) &&
+          clientInfo.meetupStatus === "RECRUITING"
+        ) {
+          return (
+            <SolidButton
+              mode='special'
+              onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
+            >
+              신청 취소하기
+            </SolidButton>
+          );
+        } else {
+          return (
+            <SolidButton mode='special' onClick={() => handleClickJoin()}>
+              모임 신청하기
+            </SolidButton>
+          );
+        }
+      }
     }
+
+    return null;
   });
 
   const { data: hostData, isLoading } = useQuery({
@@ -186,52 +195,63 @@ export default function MeetButtonArea({
 
   //참여자가 변경될 때 마다
   useEffect(() => {
-    if (user == null) {
+    if (clientInfo.meetupStatus === "COMPLETED") {
       setJoinButton(
-        <SolidButton mode='special' onClick={() => handleClickJoin()}>
-          모임 신청하기
-        </SolidButton>,
-      );
-    }
-
-    if (
-      clientInfo.hostId === user?.userId &&
-      clientInfo.meetupStatus === "RECRUITING"
-    ) {
-      if (clientInfo.participants.length >= clientInfo.minParticipants) {
-        setJoinButton(
-          <SolidButton mode='special' disabled>
-            개설확정된 모임이에요
-          </SolidButton>,
-        );
-      } else {
-        setJoinButton(
-          <SolidButton mode='special' onClick={() => {}}>
-            모임 취소하기
-          </SolidButton>,
-        );
-      }
-    }
-
-    //모임 참여 여부에 따른 버튼렌더링
-    if (
-      clientInfo.participants.some((item) => item.userId === user?.userId) &&
-      clientInfo.meetupStatus === "RECRUITING"
-    ) {
-      setJoinButton(
-        <SolidButton
-          mode='special'
-          onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-        >
-          신청 취소하기
+        <SolidButton mode='special' disabled>
+          종료된 모임이에요
         </SolidButton>,
       );
     } else {
-      setJoinButton(
-        <SolidButton mode='special' onClick={() => handleClickJoin()}>
-          모임 신청하기
-        </SolidButton>,
-      );
+      if (user === null) {
+        setJoinButton(
+          <SolidButton mode='special' onClick={() => handleClickJoin()}>
+            모임 신청하기
+          </SolidButton>,
+        );
+      } else {
+        //내가 주최자 일 때
+        if (clientInfo.hostId === user.userId) {
+          //모집 중일 때
+          if (clientInfo.meetupStatus === "RECRUITING") {
+            if (clientInfo.participants.length >= clientInfo.minParticipants) {
+              setJoinButton(
+                <SolidButton mode='special' disabled>
+                  개설확정된 모임이에요
+                </SolidButton>,
+              );
+            } else {
+              setJoinButton(
+                <SolidButton mode='special' onClick={() => {}}>
+                  모임 취소하기
+                </SolidButton>,
+              );
+            }
+          }
+        } else {
+          //주최자가 아니면서 참여 여부에 따른 버튼 렌더링
+          if (
+            clientInfo.participants.some(
+              (item) => item.userId === user.userId,
+            ) &&
+            clientInfo.meetupStatus === "RECRUITING"
+          ) {
+            setJoinButton(
+              <SolidButton
+                mode='special'
+                onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
+              >
+                신청 취소하기
+              </SolidButton>,
+            );
+          } else {
+            setJoinButton(
+              <SolidButton mode='special' onClick={() => handleClickJoin()}>
+                모임 신청하기
+              </SolidButton>,
+            );
+          }
+        }
+      }
     }
   }, [clientInfo.participants, user]);
 

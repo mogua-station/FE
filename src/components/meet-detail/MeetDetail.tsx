@@ -186,7 +186,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
         </div>
         {/* 리뷰 */}
         <div className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
-          <MeetDetailReview reviews={reviews} />
+          <MeetDetailReview meetupId={meetInfo.meetupId} reviews={reviews} />
         </div>
       </div>
     </div>
