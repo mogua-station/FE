@@ -74,9 +74,6 @@ export const createMeetup = async (formData: FormData) => {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-    next: {
-      revalidate: 1600,
-    },
   });
 
   if (!res.ok) {

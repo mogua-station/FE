@@ -53,8 +53,14 @@ export default function CreateForm() {
   const onSubmit: SubmitHandler<MeetupFormType> = async (data) => {
     try {
       const formData = new FormData();
-      formData.append("request", JSON.stringify(data));
-      formData.append("image", image || "");
+      const jsonBlob = new Blob([JSON.stringify(data)], {
+        type: "application/json",
+      });
+      formData.append("request", jsonBlob);
+
+      if (image) {
+        formData.append("image", image);
+      }
 
       await createMeetupMutation.mutateAsync(formData);
     } catch (error) {
