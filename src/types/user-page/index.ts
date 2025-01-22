@@ -149,3 +149,15 @@ export interface WrittenReview {
   reviewThumbnail?: string; // 수강평 API 응답용
   reviewDate: string;
 }
+
+// 타입가드 함수
+import { type CardProps } from "@/types/card";
+import { type ReviewInfo } from "@/types/review";
+
+export function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
+  return "meetupId" in item && "meetupStatus" in item;
+}
+
+export function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {
+  return "userId" in item && "review" in item;
+}

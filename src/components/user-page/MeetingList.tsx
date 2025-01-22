@@ -11,6 +11,8 @@ import {
   type MyReviewTab,
   type StudyType,
   type EmptyStateVariant,
+  isMeetingCard,
+  isReviewInfo,
 } from "@/types/user-page";
 
 interface MeetingListProps {
@@ -120,12 +122,3 @@ export const MeetingList = ({
     </section>
   );
 };
-
-// 타입 가드 함수
-function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
-  return "meetupId" in item && "meetupStatus" in item;
-}
-
-function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {
-  return "userid" in item && "review" in item;
-}
