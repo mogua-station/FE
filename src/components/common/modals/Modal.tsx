@@ -2,10 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import DeleteIcon from "@/assets/images/icons/delete.svg";
-import {
-  type ModalInterface,
-  type OverlayController,
-} from "@/types/overlay.type";
+import type { ModalInterface, OverlayController } from "@/types/overlay.type";
 
 export default function ModalBase({
   title,
@@ -19,45 +16,43 @@ export default function ModalBase({
   unmount,
 }: OverlayController & ModalInterface) {
   const [isVisible, setIsVisible] = useState(false);
-  const preventDefault = useCallback((e: Event) => e.preventDefault(), []);
+
+  const preventDefault = useCallback((e: Event) => {
+    e.preventDefault();
+  }, []);
 
   useEffect(() => {
-    if (isOpen) {
-      setIsVisible(true);
-    } else {
+    if (!isOpen) {
+      // 모달이 닫힐 때 페이드아웃 시키고, 일정 시간이 지나면 unmount
       setIsVisible(false);
-      const timer = setTimeout(() => {
-        unmount();
-      }, 300);
+      const timer = setTimeout(unmount, 300);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, unmount]);
 
-  useEffect(() => {
-    if (!isOpen) return;
+    // 모달이 열릴 때 페이드인
+    setIsVisible(true);
 
+    // 스크롤 차단
     window.addEventListener("wheel", preventDefault, { passive: false });
     window.addEventListener("touchmove", preventDefault, { passive: false });
 
-    return () => {
-      window.removeEventListener("wheel", preventDefault);
-      window.removeEventListener("touchmove", preventDefault);
-    };
-  }, [isOpen, preventDefault]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
+    // 뒤로가기 방지 (pushState 후 popstate가 발생하면 모달 닫기)
+    history.pushState(null, "", location.href);
     const preventGoBack = () => {
       history.go(1);
       close();
     };
-
-    history.pushState(null, "", location.href);
     window.addEventListener("popstate", preventGoBack);
-    return () => window.removeEventListener("popstate", preventGoBack);
-  }, [isOpen, close]);
 
+    // 언마운트 또는 모달 닫힐 때 정리
+    return () => {
+      window.removeEventListener("wheel", preventDefault);
+      window.removeEventListener("touchmove", preventDefault);
+      window.removeEventListener("popstate", preventGoBack);
+    };
+  }, [isOpen, close, unmount, preventDefault]);
+
+  // 오버레이 클릭 시 닫기
   const handleOverlayClick = () => {
     if (!disableOverlayClick) close();
   };
@@ -87,6 +82,7 @@ export default function ModalBase({
               />
             )}
           </div>
+
           {(title || hasCloseBtn) && (
             <div
               className={`flex max-h-14 min-h-8 w-full items-center px-5 py-1 ${
@@ -105,6 +101,7 @@ export default function ModalBase({
               )}
             </div>
           )}
+
           <div className='w-full grow pb-4'>{children}</div>
         </div>
       </div>

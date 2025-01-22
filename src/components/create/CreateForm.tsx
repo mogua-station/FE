@@ -39,6 +39,7 @@ export default function CreateForm() {
       modal.open(({ close }) => <SuccessModal data={data} close={close} />, {
         hasCloseBtn: false,
         isBottom: false,
+        disableOverlayClick: true,
       });
     },
     onError: () => {
