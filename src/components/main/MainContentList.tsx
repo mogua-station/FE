@@ -1,16 +1,20 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
+import SolidButton from "../common/buttons/SolidButton";
 import CardSkeleton from "../common/skeleton/CardSkeleton";
+import EmptyImage from "@/assets/images/icons/empty.svg";
 import Card from "@/components/common/card/Card";
 import { getMeetupList } from "@/lib/main/meetup.api";
-import {
-  type LocationType,
-  type MeetupType,
-  type StateType,
+import type {
+  OrderType,
+  LocationType,
+  MeetupType,
+  StateType,
 } from "@/types/meetup.type";
+import { generateQueryKey } from "@/utils/meetup.queryKey";
 
 export default function MainContentList() {
   const loadMoreRef = useRef<HTMLDivElement>(null); // 무한 스크롤 관찰자
@@ -22,13 +26,16 @@ export default function MainContentList() {
     (searchParams.get("location") as LocationType) ?? undefined;
   const startQuery = searchParams.get("startDate") ?? undefined;
   const endQuery = searchParams.get("endDate") ?? undefined;
+  const orderByQuery = (searchParams.get("orderBy") as OrderType) ?? undefined;
 
-  const queryKey = ["meetup"];
-  if (typeQuery) queryKey.push(typeQuery);
-  if (stateQuery) queryKey.push(stateQuery);
-  if (locationQuery) queryKey.push(locationQuery);
-  if (startQuery) queryKey.push(startQuery);
-  if (endQuery) queryKey.push(endQuery);
+  const queryKey = generateQueryKey({
+    type: typeQuery,
+    state: stateQuery,
+    location: locationQuery,
+    startDate: startQuery,
+    endDate: endQuery,
+    orderBy: orderByQuery,
+  });
 
   // 무한 스크롤을 통한 데이터 불러오기
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -38,6 +45,7 @@ export default function MainContentList() {
         getMeetupList({
           page: pageParam,
           limit: 10,
+          orderBy: orderByQuery,
           type: typeQuery,
           state: stateQuery,
           location: locationQuery,
@@ -73,6 +81,9 @@ export default function MainContentList() {
       }
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (!data || data.pages[0].data.length === 0)
+    return <MainContentEmpty isSearching={queryKey.length > 1} />;
 
   return (
     <>
@@ -123,5 +134,32 @@ export default function MainContentList() {
           ))}
       </div>
     </>
+  );
+}
+
+function MainContentEmpty({ isSearching = false }: { isSearching?: boolean }) {
+  const router = useRouter();
+
+  return (
+    <div className='flex h-[50vh] flex-col items-center justify-center gap-4'>
+      <EmptyImage />
+      <p className='text-center text-body-1-reading text-gray-500'>
+        {isSearching
+          ? "조건에 맞는 모임이 없어요"
+          : "아직 개설된 모임이 없어요"}
+      </p>
+      {!isSearching && (
+        <div className='flex flex-col items-center gap-8'>
+          <SolidButton
+            size='small'
+            onClick={() => {
+              router.push("/create");
+            }}
+          >
+            모임 개설하기
+          </SolidButton>
+        </div>
+      )}
+    </div>
   );
 }

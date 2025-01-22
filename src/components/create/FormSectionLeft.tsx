@@ -51,12 +51,13 @@ export default function FormSectionLeft({
           label='장소'
           placeholder='장소를 선택해주세요.'
           options={[
-            { label: "서울", value: "서울" },
-            { label: "대전", value: "대전" },
-            { label: "광주", value: "광주" },
-            { label: "부산", value: "부산" },
-            { label: "대구", value: "대구" },
-            { label: "강릉", value: "강릉" },
+            { label: "수도권", value: "CAPITAL" },
+            { label: "대전", value: "DAEJEON" },
+            { label: "전주", value: "JEONJU" },
+            { label: "광주", value: "GWANGJU" },
+            { label: "부산", value: "BUSAN" },
+            { label: "대구", value: "DAEGU" },
+            { label: "강릉", value: "GANGNEUNG" },
           ]}
           layout='1col'
           rules={{
