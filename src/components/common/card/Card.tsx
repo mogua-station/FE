@@ -111,7 +111,7 @@ export default function Card({ card }: CardInfo) {
   const handleClickReview = (e: React.MouseEvent, meetUpId: number) => {
     e.stopPropagation();
 
-    alert(`${meetUpId} 리뷰 작성`);
+    router.push(`/user/create_review?meetupId=${meetUpId}`);
   };
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export default function Card({ card }: CardInfo) {
 
   return (
     <div
-      className='flex flex-col rounded-[16px] bg-gray-950 p-3 cursor-pointer'
+      className='flex cursor-pointer flex-col rounded-[16px] bg-gray-950 p-3'
       onClick={() => handleClickDetail(card.meetingType, card.meetupId)}
     >
       <div className='flex justify-between'>

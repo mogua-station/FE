@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
@@ -10,14 +11,19 @@ interface ReviewFormData {
   rating: number;
   content: string;
   thumbnail: File | null;
+  meetupId: number;
 }
 
 export default function CreateReviewForm() {
+  const searchParams = useSearchParams();
+  const meetUpId = searchParams.get("meetupId");
+
   const methods = useForm<ReviewFormData>({
     defaultValues: {
       rating: -1,
       content: "",
       thumbnail: null,
+      meetupId: Number(meetUpId),
     },
   });
 
