@@ -1,65 +1,119 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
 import RatingInput from "@/components/create-reaview/RatingInput";
 import ReviewImageInput from "@/components/create-reaview/ReviewImageInput";
+import useCookie from "@/hooks/auths/useTokenState";
+import { fetcher } from "@/lib/user/clientFetch";
+import useUserStore from "@/store/auth/useUserStore";
 
 interface ReviewFormData {
   rating: number;
   content: string;
-  thumbnail: File | null;
+  image: File | null;
   meetupId: number;
 }
 
 export default function CreateReviewForm() {
   const searchParams = useSearchParams();
   const meetUpId = searchParams.get("meetupId");
+  const token = useCookie("accessToken");
+  const { user } = useUserStore();
+  const router = useRouter();
+
+  if (!meetUpId) {
+    router.replace("/");
+    return null;
+  }
 
   const methods = useForm<ReviewFormData>({
     defaultValues: {
       rating: -1,
       content: "",
-      thumbnail: null,
+      image: null,
       meetupId: Number(meetUpId),
     },
+    mode: "onChange",
   });
 
-  const { handleSubmit, setValue, watch, formState } = methods;
-  const { isSubmitting } = formState;
+  const {
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { isSubmitting },
+  } = methods;
 
-  // 필수 입력값들 감시
   const rating = watch("rating");
   const content = watch("content");
+  const isFormValid = rating !== -1 && content.trim() !== "";
 
-  // 버튼 상태 계산
-  const isFormValid = rating !== -1 && content.trim().length > 0;
-  const buttonState = isSubmitting
-    ? "inactive"
-    : !isFormValid
-      ? "inactive"
-      : "activated";
+  const createReviewMutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      if (!token) throw new Error("로그인이 필요합니다.");
+
+      const res = await fetcher("/reviews", token, {
+        method: "POST",
+        body: formData,
+        auth: true,
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        console.error("서버 응답 에러:", errorData);
+        throw new Error("리뷰 작성에 실패했습니다.");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      router.replace(`/user/${user?.userId}`);
+    },
+    onError: (error) => {
+      // TODO: 에러 처리 (예: 토스트 메시지 등)
+      console.error("리뷰 작성 중 오류 발생:", error);
+    },
+  });
 
   const handleRatingChange = (value: number) => {
     setValue("rating", value);
   };
 
   const handleImageSelect = (image: File | null) => {
-    setValue("thumbnail", image);
+    setValue("image", image);
   };
 
-  const onSubmit = (data: ReviewFormData) => {
-    // TODO: API 연결
-    console.log("제출된 데이터:", data);
-  };
+  const onSubmit = handleSubmit(async (data) => {
+    const formData = new FormData();
+
+    const requestData = {
+      meetupId: Number(data.meetupId),
+      rating: data.rating,
+      content: data.content,
+    };
+
+    formData.append(
+      "request",
+      new Blob([JSON.stringify(requestData)], { type: "application/json" }),
+    );
+
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+
+    await createReviewMutation.mutateAsync(formData);
+  });
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div className='flex flex-col gap-12'>
-          <RatingInput value={rating} onChange={handleRatingChange} />
+          <RatingInput
+            value={methods.watch("rating")}
+            onChange={handleRatingChange}
+          />
           <CommonTextArea
             formClassName='h-40'
             required={true}
@@ -70,8 +124,12 @@ export default function CreateReviewForm() {
           />
           <ReviewImageInput onImageSelect={handleImageSelect} />
         </div>
-        <SolidButton type='submit' className='mt-10' state={buttonState}>
-          작성 완료
+        <SolidButton
+          type='submit'
+          className='mt-10'
+          state={isSubmitting || !isFormValid ? "inactive" : "activated"}
+        >
+          {isSubmitting ? "작성 중..." : "작성 완료"}
         </SolidButton>
       </form>
     </FormProvider>

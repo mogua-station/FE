@@ -12,8 +12,11 @@ export default function ReviewImageInput({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { previewUrl, handleImageUpload, handleImageDelete } =
-    useSimpleImageUpload();
+  const {
+    previewUrl,
+    handleImageUpload: handleImagePreview,
+    handleImageDelete,
+  } = useSimpleImageUpload();
 
   const handleCameraclick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -23,6 +26,12 @@ export default function ReviewImageInput({
     } else {
       inputRef.current?.click();
     }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    handleImagePreview(e);
+    onImageSelect(file);
   };
 
   return (
