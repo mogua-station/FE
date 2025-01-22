@@ -12,6 +12,8 @@ const modal = {
    * @param {string} [options.title=""] - 모달 제목입니다.
    * @param {boolean} [options.hasCloseBtn=true] - 모달에 닫기 버튼을 표시할지 여부를 결정합니다.
    * @param {boolean} [options.isDark=false] - 모달의 배경을 어둡게 표시할지 여부를 결정합니다.
+   * @param {boolean} [options.disableOverlayClick=false] - 모달 외부를 클릭하여 모달을 닫을 수 있는지 여부를 결정합니다.
+   * @param {boolean} [options.isBottom=false] - 모달을 화면 하단에 표시할지 여부를 결정합니다.
    */
   open: (
     renderChildren: (props: OverlayController) => JSX.Element,
