@@ -5,10 +5,12 @@ import { usePathname, useRouter } from "next/navigation";
 import Edit from "@/assets/images/icons/edit.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
 import SearchIcon from "@/assets/images/icons/search-thin.svg";
+import useUserStore from "@/store/auth/useUserStore";
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
+  const { user } = useUserStore();
 
   return (
     <header className='fixed left-0 top-0 z-[49] flex w-full items-center justify-center bg-[#0E0E10]'>
@@ -39,7 +41,7 @@ export default function Header() {
               </li>
               <li>
                 <Link
-                  href={`/user/${""}`}
+                  href={`${user != null ? `/user/${user.userId}` : "/sign-in"}`}
                   className='body-1-normal text-gray-300 hover:text-gray-100'
                 >
                   마이페이지

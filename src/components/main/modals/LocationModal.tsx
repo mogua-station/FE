@@ -9,7 +9,7 @@ export default function LocationModal({
 }) {
   const cities = [
     { key: "ALL", label: "전체" },
-    { key: "Capital", label: "수도권" },
+    { key: "CAPITAL", label: "수도권" },
     { key: "DAEJEON", label: "대전" },
     { key: "JEONJU", label: "전주" },
     { key: "GWANGJU", label: "광주" },
