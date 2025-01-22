@@ -276,7 +276,7 @@ export default function MeetButtonArea({
   return (
     <div className='flex flex-1 flex-col'>
       <ShareMeetUpButton />
-      <div className='meet-info-box-small fixed bottom-0 left-0 z-50 mt-8 flex w-full gap-2 bg-gray-950 p-5 desktop:static desktop:bg-[unset] desktop:p-0'>
+      <div className='meet-info-box-small fixed bottom-0 left-0 z-30 mt-8 flex w-full gap-2 bg-gray-950 p-5 desktop:static desktop:bg-[unset] desktop:p-0'>
         <IconButton
           mode='special'
           className='w-[72px]'
