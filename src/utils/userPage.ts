@@ -1,6 +1,7 @@
 import { PAGE_SIZE } from "@/constants/pagination";
 import useCookie from "@/hooks/auths/useTokenState";
-import { fetcher } from "@/lib/user/clientFetch";
+import { fetcher } from "@/lib/user/fetcher";
+
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
 import {

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetcher } from "@/lib/user/clientFetch";
+import { fetcher } from "@/lib/user/fetcher";
 
 interface UserProfile {
   email: string;
