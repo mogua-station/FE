@@ -1,13 +1,13 @@
 import { useRouter } from "next/navigation";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useModal from "@/hooks/useModal";
 
 export function SuccessModal({
   data,
+  close,
 }: {
   data: { data: { meetupId: number } };
+  close: () => void;
 }) {
-  const { closeModal } = useModal();
   const router = useRouter();
 
   return (
@@ -21,7 +21,7 @@ export function SuccessModal({
       <div className='flex w-full gap-[.4375rem]'>
         <SolidButton
           onClick={() => {
-            closeModal();
+            close();
             router.push("/");
           }}
         >
@@ -29,7 +29,7 @@ export function SuccessModal({
         </SolidButton>
         <SolidButton
           onClick={() => {
-            closeModal();
+            close();
             router.push(`/study/${data.data.meetupId}`);
           }}
           state='activated'
@@ -41,8 +41,7 @@ export function SuccessModal({
   );
 }
 
-export function FailModal() {
-  const { closeModal } = useModal();
+export function FailModal({ close }: { close: () => void }) {
   return (
     <div className='flex w-[17.6875rem] flex-col items-center p-6'>
       <p className='pb-3 text-heading-2 font-medium text-gray-100'>
@@ -52,7 +51,7 @@ export function FailModal() {
         모임 개설 중 오류가 발생했어요.
       </p>
       <div className='flex w-full gap-[.4375rem]'>
-        <SolidButton onClick={() => closeModal()}>닫기</SolidButton>
+        <SolidButton onClick={close}>닫기</SolidButton>
       </div>
     </div>
   );

@@ -20,9 +20,9 @@ import FilterModal from "@/components/main/modals/FilterModal";
 import { cardList } from "@/data/mockList";
 import { useSelectedDateRange } from "@/hooks/calendar/useSelectedDateRange";
 import { usePostImage } from "@/hooks/inputs/images/usePostImage";
-import useModal from "@/hooks/useModal";
 import { type LocationType, type StateType } from "@/types/meetup.type";
 import { type ReviewInfo } from "@/types/review";
+import modal from "@/utils/modalController";
 
 export default function Home() {
   const { postImage } = usePostImage(); // uploadError, isUploading 상태는 각자 시안에 맞게 사용하시면 됩니다.
@@ -70,32 +70,28 @@ export default function Home() {
   const { selectedDates, setSelectedDates } = useSelectedDateRange();
   const [state, setState] = useState<StateType>("ALL");
   const [city, setCity] = useState<LocationType>("ALL");
-  const { openModal } = useModal();
 
   const handleOpenModal = () => {
-    openModal({
-      title: CALENDAR_MODAL_TITLE,
-      children: (
+    modal.open(
+      () => (
         <CalendarModal
           selectedDates={selectedDates}
           onDateChange={(date) => setSelectedDates(date)}
         />
       ),
-      isDark: false,
-    });
+      { title: CALENDAR_MODAL_TITLE, isDark: false },
+    );
   };
 
   const handleOpenFilterModal = () => {
-    openModal({
-      children: (
-        <FilterModal
-          selectedFilter={{ location: city, state: state, date: selectedDates }}
-          onDateChange={(date) => setSelectedDates(date)}
-          onStateChange={(state) => setState(state)}
-          onLocationChange={(city) => setCity(city)}
-        />
-      ),
-    });
+    modal.open(() => (
+      <FilterModal
+        selectedFilter={{ location: city, state: state, date: selectedDates }}
+        onDateChange={(date) => setSelectedDates(date)}
+        onStateChange={(state) => setState(state)}
+        onLocationChange={(city) => setCity(city)}
+      />
+    ));
   };
 
   return (

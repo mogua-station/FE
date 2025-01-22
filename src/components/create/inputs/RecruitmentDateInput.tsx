@@ -3,8 +3,8 @@
 import { useState } from "react";
 import RecruitmentDateModals from "../modals/RecruitmentDateModals";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
-import useModal from "@/hooks/useModal";
 import type { DateType } from "@/types/meetup.type";
+import modal from "@/utils/modalController";
 
 export default function RecruitmentDateInput({
   initDate,
@@ -17,12 +17,10 @@ export default function RecruitmentDateInput({
     startDate: initDate.startDate ?? new Date(),
     endDate: initDate.endDate ?? null,
   });
-  const { openModal } = useModal();
 
   const handleClick = () => {
-    openModal({
-      title: "날짜 선택",
-      children: (
+    modal.open(
+      ({ close }) => (
         <RecruitmentDateModals
           initDate={initDate}
           onDateChange={(date: DateType) => {
@@ -32,9 +30,11 @@ export default function RecruitmentDateInput({
             });
             if (date.endDate) onChange(date);
           }}
+          close={close}
         />
       ),
-    });
+      { title: "모집 기간" },
+    );
   };
 
   return (

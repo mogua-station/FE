@@ -5,23 +5,22 @@ import IconButton from "../../common/buttons/IconButton";
 import SolidButton from "../../common/buttons/SolidButton";
 import { CalendarModal } from "../../common/modals/CalendarModal";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
-import useModal from "@/hooks/useModal";
 import type { DateType } from "@/types/meetup.type";
 
 export default function RecruitmentDateModals({
   initDate,
   onDateChange,
+  close,
 }: {
   initDate: DateType;
   onDateChange: (dates: DateType) => void;
+  close: () => void;
 }) {
   const today = initDate.startDate ?? new Date();
   const [selectedDate, setSelectedDate] = useState<DateType>({
     startDate: today,
     endDate: initDate.endDate ?? null,
   });
-
-  const { closeModal } = useModal();
 
   const handleReset = () => {
     setSelectedDate({ startDate: today, endDate: null });
@@ -30,7 +29,7 @@ export default function RecruitmentDateModals({
 
   const handleComplete = () => {
     if (selectedDate.endDate) onDateChange(selectedDate);
-    closeModal();
+    close();
   };
 
   useEffect(() => {
