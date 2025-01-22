@@ -85,6 +85,7 @@ export interface EmptyStateProps {
 export interface PageResponse<T> {
   items: T[];
   hasNextPage: boolean;
+  nextPage: number;
 }
 
 export interface FetchConfig {
@@ -127,7 +128,7 @@ export interface CreatedMeetup extends BaseMeetup {
 }
 
 export interface EligibleReview extends BaseMeetup {
-  status: MeetingStatus;
+  status: MeetingStatus; // 항상 status 사용
   maxParticipants: number;
   minParticipants: number;
   participantsCount: number;
@@ -145,5 +146,6 @@ export interface WrittenReview {
   content: string;
   meetingEndDate: string;
   thumbnail?: string;
+  reviewThumbnail?: string; // 수강평 API 응답용
   reviewDate: string;
 }

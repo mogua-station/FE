@@ -23,3 +23,13 @@ export interface ContentProps {
 export interface RatingStyle {
   [key: number]: string;
 }
+
+export interface MeetupReviewProps {
+  pageParams: number;
+  meetupId: number;
+}
+
+export interface ReviewQueryProps {
+  data: any[];
+  page: number;
+}

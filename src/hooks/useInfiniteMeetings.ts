@@ -47,6 +47,7 @@ export const useInfiniteMeetings = ({
     queryKey: ["meetings", tab, studyType, reviewTab, userId],
     queryFn: async ({ pageParam = 1 }) => {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
+      const page = pageParam - 1;
 
       try {
         switch (tab) {
@@ -55,7 +56,7 @@ export const useInfiniteMeetings = ({
               userId,
               type,
               token,
-              pageParam - 1,
+              page,
             );
             const result =
               (await response.json()) as ApiResponse<ParticipatingMeetup>;
@@ -67,7 +68,7 @@ export const useInfiniteMeetings = ({
               userId,
               type,
               token,
-              pageParam - 1,
+              page,
             );
             const result =
               (await response.json()) as ApiResponse<CreatedMeetup>;
@@ -83,7 +84,7 @@ export const useInfiniteMeetings = ({
               type,
               status,
               token,
-              pageParam - 1,
+              page,
             );
 
             if (status === "eligible") {
@@ -106,7 +107,7 @@ export const useInfiniteMeetings = ({
             const response = await userContentApi.getReceived(
               userId,
               token,
-              pageParam - 1,
+              page,
             );
             const result =
               (await response.json()) as ApiResponse<WrittenReview>;
@@ -126,9 +127,12 @@ export const useInfiniteMeetings = ({
         throw error;
       }
     },
-    getNextPageParam: (lastPage: PageResponse<CardProps | ReviewInfo>) => {
+    getNextPageParam: (
+      lastPage: PageResponse<CardProps | ReviewInfo>,
+      pages,
+    ) => {
       if (!lastPage.hasNextPage) return undefined;
-      return lastPage.items.length > 0 ? lastPage.items.length + 1 : undefined;
+      return pages.length + 1;
     },
     initialPageParam: 1,
     refetchOnMount: false,
