@@ -7,22 +7,11 @@ import { useInfiniteMeetings } from "@/hooks/useInfiniteMeetings";
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
 import {
-  type UserPageSection,
-  type MyReviewTab,
-  type StudyType,
   type EmptyStateVariant,
   isMeetingCard,
   isReviewInfo,
+  type MeetingListProps,
 } from "@/types/user-page";
-
-interface MeetingListProps {
-  userId: string;
-  tab: UserPageSection;
-  studyType: StudyType;
-  reviewTab?: MyReviewTab;
-  isMe: boolean;
-  token: string;
-}
 
 export const MeetingList = ({
   userId,

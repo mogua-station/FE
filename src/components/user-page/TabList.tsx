@@ -1,12 +1,6 @@
 "use client";
 
-import { type UserPageSection } from "@/types/user-page";
-
-interface TabListProps {
-  currentTab: UserPageSection;
-  onChange: (tab: UserPageSection) => void;
-  isInstructor?: boolean;
-}
+import { type TabListProps, type UserPageSection } from "@/types/user-page";
 
 const TABS: { id: UserPageSection; label: string }[] = [
   { id: "myMeeting", label: "내 모임" },
