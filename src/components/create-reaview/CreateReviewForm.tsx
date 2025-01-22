@@ -55,7 +55,7 @@ export default function CreateReviewForm() {
         <div className='flex flex-col gap-12'>
           <RatingInput value={rating} onChange={handleRatingChange} />
           <CommonTextArea
-            className='h-40 max-h-40 resize-none'
+            formClassName='h-40'
             required={true}
             name='content'
             label='구체적인 경험을 알려주세요'
