@@ -70,8 +70,15 @@ export type EmptyStateConfig = {
 };
 
 export type EmptyStateVariant =
-  | Exclude<UserPageSection, "myReview">
-  | { type: "myReview"; tab: MyReviewTab };
+  | "myMeeting"
+  | "createdMeeting"
+  | "classReview"
+  | { type: "myReview"; tab: "toWrite" | "written" };
+
+export interface EmptyStateProps {
+  variant?: EmptyStateVariant;
+  isMe?: boolean;
+}
 
 // ===== API 응답 타입 =====
 export interface ApiResponse<T> {
