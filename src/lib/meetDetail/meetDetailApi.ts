@@ -3,7 +3,7 @@ import { type ReviewInfo, type MeetupReviewProps } from "@/types/review";
 export const fetchHostData = async (hostId: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/profile/${hostId}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${hostId}`,
       {
         headers: {
           Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
@@ -37,7 +37,7 @@ export const fetchHostData = async (hostId: number) => {
 export const fetchJoinMeet = async (id: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}/join`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}/join`,
       {
         method: "POST",
         headers: {
@@ -72,7 +72,7 @@ export const fetchJoinMeet = async (id: number) => {
 export const fetchLeaveMeet = async (id: number) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/meetups/${id}/leave`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}/leave`,
       {
         method: "DELETE",
         headers: {
