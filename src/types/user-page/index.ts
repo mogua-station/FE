@@ -159,5 +159,5 @@ export function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
 }
 
 export function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {
-  return "userId" in item && "review" in item;
+  return "userid" in item && "review" in item;
 }
