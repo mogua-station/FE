@@ -2,12 +2,7 @@
 
 import ArrowDownIcon from "@/assets/images/icons/arrow_left.svg";
 import Dropdown from "@/components/common/Dropdown";
-import { type StudyType } from "@/types/user-page";
-
-interface StudyTypeFilterProps {
-  value: StudyType;
-  onChange: (value: StudyType) => void;
-}
+import { type StudyTypeFilterProps, type StudyType } from "@/types/user-page";
 
 const STUDY_TYPE_OPTIONS = [
   { label: "스터디", value: "study" },

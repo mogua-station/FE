@@ -3,8 +3,8 @@
 import { useState } from "react";
 import MeetingDateModal from "../modals/MeetingDateModal";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
-import useModal from "@/hooks/useModal";
 import { type DateType } from "@/types/meetup.type";
+import modal from "@/utils/modalController";
 
 export default function MeetingDateInput({
   initDate,
@@ -20,21 +20,20 @@ export default function MeetingDateInput({
     },
   );
 
-  const { openModal } = useModal();
-
   const handleClick = () => {
-    openModal({
-      title: "날짜 선택",
-      children: (
+    modal.open(
+      ({ close }) => (
         <MeetingDateModal
           onDateChange={(date) => {
             setSelectedDate(date);
             onChange(date);
           }}
           selectedDates={selectedDate}
+          close={close}
         />
       ),
-    });
+      { title: "날짜 선택" },
+    );
   };
 
   const StartDateButton = () => {

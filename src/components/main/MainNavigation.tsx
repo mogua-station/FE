@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import FilterControls from "./FilterControls";
 import MeetupSelectionDropdown from "./MeetupSelectionDropdown";
 import FilterModal from "./modals/FilterModal";
-import useModal from "@/hooks/useModal";
 import {
   type LocationType,
   type StateType,
@@ -13,11 +12,11 @@ import {
   type MeetupType,
   type OrderType,
 } from "@/types/meetup.type";
+import modal from "@/utils/modalController";
 
 export default function MainNavigation() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { openModal } = useModal();
 
   const [selectedMeetup, setSelectedMeetup] = useState<MeetupType>("STUDY");
   const [selectedOrder, setSelectedOrder] = useState<OrderType>("latest");
@@ -87,8 +86,8 @@ export default function MainNavigation() {
   };
 
   const handleOpenFilterModal = () => {
-    openModal({
-      children: (
+    modal.open(
+      ({ close }) => (
         <FilterModal
           selectedFilter={selectedFilter}
           onLocationChange={(location) =>
@@ -96,10 +95,11 @@ export default function MainNavigation() {
           }
           onStateChange={(state) => handleFilterChange("state", state)}
           onDateChange={(dates) => handleFilterChange("date", dates)}
+          closeModal={close}
         />
       ),
-      isDark: true,
-    });
+      { isDark: true },
+    );
   };
 
   return (
