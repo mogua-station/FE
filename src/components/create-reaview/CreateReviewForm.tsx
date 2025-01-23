@@ -1,6 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import SolidButton from "@/components/common/buttons/SolidButton";
@@ -25,6 +26,7 @@ export default function CreateReviewForm() {
   const token = useCookie("accessToken");
   const { user } = useUserStore();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   if (!meetUpId) {
     router.replace("/");
@@ -70,6 +72,12 @@ export default function CreateReviewForm() {
       return res.json();
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["meetings", "myReview", "study"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["meetings", "myReview", "tutoring"],
+      });
       router.replace(`/user/${user?.userId}`);
     },
   });
