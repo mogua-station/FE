@@ -53,7 +53,7 @@ const CommonImageInput = ({ label, onImageChange }: ImageuploadProps) => {
           </div>
         ) : (
           <div>
-            <UploadIcon />
+            <UploadIcon className='size-10 text-gray-600' />
           </div>
         )}
       </button>

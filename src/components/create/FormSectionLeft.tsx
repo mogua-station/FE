@@ -6,8 +6,9 @@ import {
 } from "react-hook-form";
 import CommonImageInput from "../common/inputs/ImageUpload";
 import CommonSelectBox from "../common/inputs/SelectBox";
-import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
+import { FormatTypeSelection } from "./inputs/FormatTypeSelection";
+import MeetingTypeSelection from "./inputs/MeetingTypeSelection";
 import LocationIcon from "@/assets/images/icons/location.svg";
 import { type MeetupFormType } from "@/types/meetup.type";
 
@@ -16,11 +17,13 @@ export default function FormSectionLeft({
   control,
   watch,
   setValue,
+  isTutor = false,
 }: {
   setImage: (image: File | null) => void;
   control: Control<MeetupFormType>;
   watch: UseFormWatch<MeetupFormType>;
   setValue: UseFormSetValue<MeetupFormType>;
+  isTutor?: boolean;
 }) {
   const isOnline = watch("isOnline");
 
@@ -32,6 +35,12 @@ export default function FormSectionLeft({
 
   return (
     <section className='flex flex-1 flex-col gap-10'>
+      <MeetingTypeSelection
+        watch={watch}
+        setValue={setValue}
+        isTutor={isTutor}
+      />
+
       <CommonTextInput
         required={true}
         name='title'
@@ -41,8 +50,11 @@ export default function FormSectionLeft({
           required: "제목을 입력해주세요.",
         }}
       />
+
+      <FormatTypeSelection watch={watch} setValue={setValue} />
+
       <div
-        className={`relative h-fit w-full overflow-hidden transition-[max-height] duration-500 ease-in-out ${isOnline ? "max-h-0" : "max-h-screen"}`}
+        className={`relative h-fit w-full overflow-hidden duration-500 ease-in-out ${isOnline ? "max-h-0" : "max-h-screen"}`}
       >
         <CommonSelectBox
           required={!isOnline}
@@ -71,17 +83,6 @@ export default function FormSectionLeft({
       <CommonImageInput
         label='이미지'
         onImageChange={(image: File | null) => setImage(image)}
-      />
-
-      <CommonTextArea
-        required={true}
-        name='content'
-        label='본문'
-        control={control}
-        rules={{
-          required: "내용을 입력해주세요.",
-        }}
-        className='h-40 max-h-40 resize-none bg-gray-950'
       />
     </section>
   );

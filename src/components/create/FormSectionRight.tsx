@@ -6,8 +6,8 @@ import type {
   UseFormWatch,
 } from "react-hook-form";
 import SolidButton from "../common/buttons/SolidButton";
+import CommonTextArea from "../common/inputs/TextArea";
 import { DateInputSection } from "./inputs/DateInputSection";
-import { MeetingTypeSection } from "./inputs/MeetingTypeSection";
 import { ParticipantsInput } from "./inputs/ParticipantsInput";
 import { type MeetupFormType } from "@/types/meetup.type";
 interface FormSectionRightProps {
@@ -44,10 +44,15 @@ export default function FormSectionRight({
 
   return (
     <section className='flex flex-1 flex-col gap-10'>
-      <MeetingTypeSection
-        watch={watch}
-        setValue={setValue}
-        isOnline={watch("isOnline")}
+      <CommonTextArea
+        required={true}
+        name='content'
+        label='본문'
+        control={control}
+        rules={{
+          required: "내용을 입력해주세요.",
+        }}
+        className='h-40 max-h-40 resize-none bg-gray-950'
       />
 
       <DateInputSection
@@ -90,11 +95,35 @@ export default function FormSectionRight({
         hasError={Boolean(methods.formState.errors.minParticipants)}
         onDecrease={() => {
           if (watch("minParticipants") === 2) return;
-          setValue("minParticipants", watch("minParticipants") - 1);
+          if (watch("minParticipants") < 2) {
+            setValue("minParticipants", 2, { shouldValidate: true });
+            return;
+          }
+          if (watch("minParticipants") > watch("maxParticipants")) {
+            setValue("minParticipants", watch("maxParticipants"), {
+              shouldValidate: true,
+            });
+            return;
+          }
+          setValue("minParticipants", watch("minParticipants") - 1, {
+            shouldValidate: true,
+          });
         }}
         onIncrease={() => {
           if (watch("minParticipants") === watch("maxParticipants")) return;
-          setValue("minParticipants", watch("minParticipants") + 1);
+          if (watch("minParticipants") > watch("maxParticipants")) {
+            setValue("minParticipants", watch("maxParticipants"), {
+              shouldValidate: true,
+            });
+            return;
+          }
+          if (typeof watch("minParticipants") !== "number") {
+            setValue("minParticipants", 2, { shouldValidate: true });
+            return;
+          }
+          setValue("minParticipants", watch("minParticipants") + 1, {
+            shouldValidate: true,
+          });
         }}
       />
 
@@ -107,11 +136,37 @@ export default function FormSectionRight({
         hasError={Boolean(methods.formState.errors.maxParticipants)}
         onDecrease={() => {
           if (watch("maxParticipants") === watch("minParticipants")) return;
-          setValue("maxParticipants", watch("maxParticipants") - 1);
+          if (watch("maxParticipants") < watch("minParticipants")) {
+            setValue("maxParticipants", watch("minParticipants"), {
+              shouldValidate: true,
+            });
+            return;
+          }
+          if (watch("maxParticipants") > 10) {
+            setValue("maxParticipants", 10, {
+              shouldValidate: true,
+            });
+            return;
+          }
+          setValue("maxParticipants", watch("maxParticipants") - 1, {
+            shouldValidate: true,
+          });
         }}
         onIncrease={() => {
           if (watch("maxParticipants") === 10) return;
-          setValue("maxParticipants", watch("maxParticipants") + 1);
+          if (typeof watch("maxParticipants") !== "number") {
+            setValue("maxParticipants", 10, { shouldValidate: true });
+            return;
+          }
+          if (watch("maxParticipants") < watch("minParticipants")) {
+            setValue("maxParticipants", watch("minParticipants"), {
+              shouldValidate: true,
+            });
+            return;
+          }
+          setValue("maxParticipants", watch("maxParticipants") + 1, {
+            shouldValidate: true,
+          });
         }}
       />
 

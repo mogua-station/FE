@@ -1,12 +1,16 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
+import { useShallow } from "zustand/shallow";
 import FormSectionLeft from "./FormSectionLeft";
 import FormSectionRight from "./FormSectionRight";
 import { FailModal, SuccessModal } from "./modals/ResultInfoModal";
+import useCookie from "@/hooks/auths/useTokenState";
 import { createMeetup } from "@/lib/main/meetup.api";
+import { getUserProfile } from "@/lib/user/getUserProfile";
+import useUserStore from "@/store/auth/useUserStore";
 import type { MeetupFormType } from "@/types/meetup.type";
 import modal from "@/utils/modalController";
 
@@ -30,6 +34,13 @@ export default function CreateForm() {
   const { control, handleSubmit, watch, setValue } = methods;
   const [image, setImage] = useState<File | null>(null);
   const queryClient = useQueryClient();
+  const userId = useUserStore(useShallow((state) => state.user?.userId));
+  const accessToken = useCookie("accessToken");
+  const useInfo = useQuery({
+    queryKey: ["userInfo"],
+    queryFn: () => getUserProfile(userId!.toString(), accessToken!),
+    retry: 1,
+  });
 
   const createMeetupMutation = useMutation({
     mutationFn: createMeetup,
@@ -87,6 +98,7 @@ export default function CreateForm() {
           control={control}
           watch={watch}
           setValue={setValue}
+          isTutor={useInfo.data?.qualificationStatus === "QUALIFIED"}
         />
         <FormSectionRight
           watch={watch}
