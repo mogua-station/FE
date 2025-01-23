@@ -1,16 +1,7 @@
-// 유저 프로필 타입
-export type UserProfile = {
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImg: string;
-  qualificationStatus: "QUALIFIED" | "UNQUALIFIED";
-  bio: string;
-  userTagList: Array<{ id: number; tag: string }>;
-  ownId: boolean;
-};
+import { type CardProps } from "@/types/card";
+import { type ReviewInfo } from "@/types/review";
 
-// 공통 상수 타입
+// ===== 공통 상수 타입 =====
 export type MeetingType = "STUDY" | "TUTORING";
 export type MeetingStatus =
   | "RECRUITING"
@@ -26,7 +17,7 @@ export type Location =
   | "DAEGU"
   | "GANGNEUNG";
 
-// 기본 모임 정보
+// ===== 기본 모임 정보 =====
 interface BaseMeetup {
   meetupId: number;
   title: string;
@@ -39,7 +30,19 @@ interface BaseMeetup {
   online: boolean;
 }
 
-// 탭 목록 관련 타입
+// ===== 유저 프로필 타입 =====
+export type UserProfile = {
+  userId: number;
+  email: string;
+  nickname: string;
+  profileImg: string;
+  qualificationStatus: "QUALIFIED" | "UNQUALIFIED";
+  bio: string;
+  userTagList: Array<{ id: number; tag: string }>;
+  ownId: boolean;
+};
+
+// ===== 탭 관련 타입 =====
 export type UserPageSection =
   | "myMeeting"
   | "myReview"
@@ -48,13 +51,7 @@ export type UserPageSection =
 export type MyReviewTab = "toWrite" | "written";
 export type StudyType = "study" | "tutoring";
 
-export interface UserTabsProps {
-  userId: string;
-  isInstructor?: boolean;
-  token: string;
-}
-
-// EmptyState 공통 타입
+// ===== EmptyState 관련 타입 =====
 type BaseEmptyState = {
   marginTop: string;
   content: React.ReactNode;
@@ -73,31 +70,17 @@ export type EmptyStateConfig = {
 };
 
 export type EmptyStateVariant =
-  | Exclude<UserPageSection, "myReview">
-  | { type: "myReview"; tab: MyReviewTab };
+  | "myMeeting"
+  | "createdMeeting"
+  | "classReview"
+  | { type: "myReview"; tab: "toWrite" | "written" };
 
 export interface EmptyStateProps {
   variant?: EmptyStateVariant;
   isMe?: boolean;
 }
 
-//API 관련 타입
-export interface PageResponse<T> {
-  items: T[];
-  hasNextPage: boolean;
-  nextPage: number;
-}
-
-export interface FetchConfig {
-  tab: UserPageSection;
-  studyType: StudyType;
-  reviewTab?: MyReviewTab;
-  page: number;
-  userId: string;
-  currentUserId: string;
-}
-
-// API 응답 타입
+// ===== API 응답 타입 =====
 export interface ApiResponse<T> {
   status: string;
   data: T[];
@@ -106,6 +89,12 @@ export interface ApiResponse<T> {
     isLast: boolean;
     nextPage: number;
   };
+}
+
+export interface PageResponse<T> {
+  items: T[];
+  hasNextPage: boolean;
+  nextPage: number;
 }
 
 export interface ParticipatingMeetup extends BaseMeetup {
@@ -128,7 +117,7 @@ export interface CreatedMeetup extends BaseMeetup {
 }
 
 export interface EligibleReview extends BaseMeetup {
-  status: MeetingStatus; // 항상 status 사용
+  status: MeetingStatus;
   maxParticipants: number;
   minParticipants: number;
   participantsCount: number;
@@ -146,6 +135,61 @@ export interface WrittenReview {
   content: string;
   meetingEndDate: string;
   thumbnail?: string;
-  reviewThumbnail?: string; // 수강평 API 응답용
+  reviewThumbnail?: string;
   reviewDate: string;
+}
+
+// ===== API 요청 설정 타입 =====
+export interface FetchConfig {
+  tab: UserPageSection;
+  studyType: StudyType;
+  reviewTab?: MyReviewTab;
+  page: number;
+  userId: string;
+  currentUserId: string;
+}
+
+// ===== 타입가드 함수 =====
+export function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
+  return "meetupId" in item && "meetupStatus" in item;
+}
+
+export function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {
+  return "userid" in item && "review" in item;
+}
+
+// ===== 컴포넌트 Props 타입 =====
+export interface UserProfileProps {
+  userInfo: UserProfile;
+}
+
+export interface UserTabsProps {
+  userId: string;
+  isInstructor?: boolean;
+  token: string;
+}
+
+export interface TabListProps {
+  currentTab: UserPageSection;
+  onChange: (tab: UserPageSection) => void;
+  isInstructor?: boolean;
+}
+
+export interface StudyTypeFilterProps {
+  value: StudyType;
+  onChange: (value: StudyType) => void;
+}
+
+export interface ReviewTabsProps {
+  value: MyReviewTab;
+  onChange: (value: MyReviewTab) => void;
+}
+
+export interface MeetingListProps {
+  userId: string;
+  tab: UserPageSection;
+  studyType: StudyType;
+  reviewTab?: MyReviewTab;
+  isMe: boolean;
+  token: string;
 }
