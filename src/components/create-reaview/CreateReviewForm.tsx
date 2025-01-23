@@ -8,7 +8,8 @@ import CommonTextArea from "@/components/common/inputs/TextArea";
 import RatingInput from "@/components/create-reaview/RatingInput";
 import ReviewImageInput from "@/components/create-reaview/ReviewImageInput";
 import useCookie from "@/hooks/auths/useTokenState";
-import { fetcher } from "@/lib/user/clientFetch";
+
+import { fetcher } from "@/lib/user/fetcher";
 import useUserStore from "@/store/auth/useUserStore";
 
 interface ReviewFormData {
@@ -70,10 +71,6 @@ export default function CreateReviewForm() {
     },
     onSuccess: () => {
       router.replace(`/user/${user?.userId}`);
-    },
-    onError: (error) => {
-      // TODO: 에러 처리 (예: 토스트 메시지 등)
-      console.error("리뷰 작성 중 오류 발생:", error);
     },
   });
 
