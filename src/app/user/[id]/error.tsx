@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
 export default function Error({
@@ -10,10 +9,6 @@ export default function Error({
   error: Error & { digest?: string };
 }) {
   const router = useRouter();
-
-  useEffect(() => {
-    console.error("사용자 페이지 오류:", error);
-  }, [error]);
 
   return (
     <div className='flex h-full flex-1 flex-col items-center justify-center gap-4'>
