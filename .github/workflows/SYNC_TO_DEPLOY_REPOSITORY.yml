@@ -2,12 +2,13 @@ name: Synchronize to forked repo
 on:
   workflow_run:
     workflows: 
-      - Push Validation
+      - "CI_DEVELOP_PUSH.yml"
     types:
       - completed
 
 jobs:
   sync:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Sync forked repo
     runs-on: ubuntu-latest
 
