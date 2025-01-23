@@ -1,8 +1,10 @@
 name: Synchronize to forked repo
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: 
+      - Push Validation
+    types:
+      - completed
 
 jobs:
   sync:
@@ -15,7 +17,7 @@ jobs:
         with: 
           token: ${{ secrets.GITHUBACTIONKEY }}
           fetch-depth: 0
-          ref: main
+          ref: Develop
           
       - name: Add remote-url
         run: |
