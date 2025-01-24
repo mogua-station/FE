@@ -108,6 +108,10 @@ export default function CreateReviewForm() {
       formData.append("image", data.image);
     }
 
+    if (data.image === null) {
+      formData.append("image", new Blob(), "");
+    }
+
     await createReviewMutation.mutateAsync(formData);
   });
 
