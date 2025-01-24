@@ -21,3 +21,31 @@ jobs:
 
       - name: Build project
         run: npm run build
+  sync:
+    needs: validate-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Deploy
+        uses: actions/checkout@v4
+        with: 
+          token: ${{ secrets.GITHUBACTIONKEY }}
+          fetch-depth: 0
+          ref: Develop
+          
+      - name: Add remote-url
+        run: |
+          git remote add forked-repo https://joshuayeyo:${{ secrets.GITHUBACTIONKEY }}@github.com/joshuayeyo/mogua_FE
+          git config user.name joshuayeyo
+          git config user.email chiikawayeyo@gmail.com
+
+      - name: Checkout Deploy
+        run: |
+          git checkout -b Deploy
+      
+      - name: Push changes to forked-repo 
+        run: |
+          git push -f forked-repo Deploy:Deploy
+      
+      - name: Clean up
+        run: |
+          git remote remove forked-repo
