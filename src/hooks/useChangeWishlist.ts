@@ -111,8 +111,10 @@ export default function useChangeWishlist() {
 
       //찜하기를 클릭했을 때 이미 찜하기에 등록 된 데이터
       if (isIncludeArr) {
+        if (deleteMutation.isPending) return;
         deleteMutation.mutate({ meetupId: meetupId });
       } else {
+        if (addMutation.isPending) return;
         addMutation.mutate({ meetupId: meetupId });
       }
     } else {
