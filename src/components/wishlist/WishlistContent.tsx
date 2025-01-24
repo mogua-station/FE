@@ -1,36 +1,43 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Card from "@/components/common/card/Card";
 import CardSkeleton from "@/components/common/card/CardSkeleton";
 import useIntersectionObserver from "@/hooks/useInterSectionObserve";
-import { fetchWishlist } from "@/lib/wishlist/wishlistApi";
-import useUserStore from "@/store/auth/useUserStore";
+import {
+  fetchUserWishlist,
+  fetchLocalWishlist,
+} from "@/lib/wishlist/wishlistApi";
 import { type CardProps } from "@/types/card";
 
 export default function WishlistNotLogged() {
-  const [list, setList] = useState<CardProps[] | null>(null);
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, { threshold: 0.5 });
   const isPageEnd = !!pageRef?.isIntersecting;
-
-  const { user } = useUserStore();
+  const user =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user") || "null")
+      : null;
 
   const {
-    data: meetupList,
+    data: wishlist,
     isFetchingNextPage,
     hasNextPage,
     isLoading,
     fetchNextPage,
-    refetch,
   } = useInfiniteQuery({
     queryKey: ["wishlist"],
-    queryFn: ({ pageParam }) =>
-      fetchWishlist({
-        pageParms: pageParam,
-        userId: user != null ? user.userId : null,
-      }),
+    queryFn: ({ pageParam }) => {
+      if (user != null) {
+        return fetchUserWishlist({
+          pageParms: pageParam,
+          userId: user.userId,
+        });
+      } else {
+        return fetchLocalWishlist({ pageParms: pageParam });
+      }
+    },
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       if (lastPage instanceof Error || !lastPage.data) {
@@ -39,12 +46,9 @@ export default function WishlistNotLogged() {
 
       return lastPage.data.length > 0 ? lastPage.page + 1 : undefined;
     },
-    retry: false,
+    select: (data) => data.pages.flatMap((ele) => ele.data || []), // useCallback 제거
+    retry: 1,
   });
-
-  useEffect(() => {
-    setList(meetupList?.pages.flatMap((ele) => ele.data) || []);
-  }, [meetupList]);
 
   //페이지의 끝에 도달하면 fetchNextPage를 호출
   useEffect(() => {
@@ -68,7 +72,7 @@ export default function WishlistNotLogged() {
   return (
     <div className='w-full'>
       <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
-        {list?.map((meet: CardProps, index: number) => {
+        {wishlist?.map((meet: CardProps, index: number) => {
           return (
             <Card
               key={index}
@@ -85,14 +89,7 @@ export default function WishlistNotLogged() {
                 meetingEndDate: meet.meetingEndDate,
                 thumbnail: meet.thumbnail,
                 online: meet.online,
-                participants: [
-                  {
-                    userId: 1,
-                    profileImageUrl: "기로록",
-                  },
-                ],
-                callback: refetch,
-                ...(user ? { isWishlist: true } : {}),
+                participants: meet.participants,
               }}
             />
           );

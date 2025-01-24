@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import ShareMeetUpButton from "./ShareMeetUpButton";
@@ -8,16 +8,12 @@ import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useToggleWishlist from "@/hooks/useToggleWishlist";
+import useChangeWishlist from "@/hooks/useChangeWishlist";
 import {
   fetchHostData,
   fetchJoinMeet,
   fetchLeaveMeet,
 } from "@/lib/meetDetail/meetDetailApi";
-import {
-  deleteUserWishList,
-  addUserWishlist,
-} from "@/lib/wishlist/wishlistApi";
 import useUserStore from "@/store/auth/useUserStore";
 import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type ClientInfo } from "@/types/meetDetail";
@@ -34,14 +30,12 @@ export default function MeetButtonArea({
 }) {
   //임시 유저 데이터 확인
   const { user } = useUserStore();
-  const { userWishlist, setUserWishlist } = useUserWishlist();
+  const { userAllWishlist } = useUserWishlist();
 
   const router = useRouter();
-  const toggleWishlist = useToggleWishlist();
-  const queryClient = useQueryClient();
+  const { loggedInWishlist, nonLoggedInWishlist } = useChangeWishlist();
 
-  //지금 페이지가 북마크가 되어있느지 확인
-  const [isBookmark, setIsBookmark] = useState<boolean | null>(null);
+  const [wishlist, setWishlist] = useState<number[]>([]);
   const [joinButton, setJoinButton] = useState<JSX.Element | null>(() => {
     if (clientInfo.meetupStatus === "COMPLETED") {
       return (
@@ -110,57 +104,17 @@ export default function MeetButtonArea({
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: (meetupId: number) => deleteUserWishList(meetupId),
-    onSuccess: (variables) => {
-      alert("찜하기가 취소되었습니다.");
-      const updatedArray = userWishlist.filter(
-        (item: number) => item !== variables,
-      );
-      setUserWishlist(updatedArray);
-      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
-      router.refresh();
-    },
-  });
-
-  const addMutation = useMutation({
-    mutationFn: (meetupId: number) => addUserWishlist(meetupId),
-    onSuccess: (variables) => {
-      alert("찜하기가 완료되었습니다.");
-      const updatedArray = [...userWishlist, variables];
-      setUserWishlist(updatedArray);
-      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
-      router.refresh();
-    },
-  });
-
   const handleClickToggleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (user != null) {
-      const isIncludeArr = userWishlist.includes(clientInfo.meetupId);
-
-      //찜하기를 클릭했을 때 이미 찜하기에 등록 된 데이터
-      if (isIncludeArr) {
-        deleteMutation.mutate(clientInfo.meetupId);
-        setIsBookmark(false);
-      } else {
-        addMutation.mutate(clientInfo.meetupId);
-        setIsBookmark(true);
-      }
+      loggedInWishlist(clientInfo.meetupId, clientInfo.meetupStatus);
     } else {
-      if (clientInfo.meetupStatus === "RECRUITING") {
-        const isBookmarked = toggleWishlist(clientInfo.meetupId);
-        if (isBookmarked) {
-          setIsBookmark(true);
-        } else {
-          setIsBookmark(false);
-        }
-
-        router.refresh();
-      } else {
-        alert("모집중인 모임만 가능합니다");
-      }
+      nonLoggedInWishlist(
+        clientInfo.meetupId,
+        clientInfo.meetupStatus,
+        setWishlist,
+      );
     }
   };
 
@@ -255,19 +209,16 @@ export default function MeetButtonArea({
     }
   }, [clientInfo.participants, user]);
 
-  //븍마크 확인
   useEffect(() => {
-    if (!user) {
-      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      if (wishlist.includes(clientInfo.meetupId)) {
-        setIsBookmark(true);
-      }
+    if (user === null) {
+      // user가 null일 경우, localStorage에서 wishlist를 가져와서 상태를 설정
+      const myWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      setWishlist(myWishlist);
     } else {
-      if (userWishlist.includes(clientInfo.meetupId)) {
-        setIsBookmark(true);
-      }
+      // user가 있을 경우, 전역 상태관리에 저장된 userWishlist 상태를 그대로 사용
+      setWishlist(userAllWishlist);
     }
-  }, [user, setIsBookmark]);
+  }, [user, userAllWishlist]);
 
   if (isLoading) {
     <div>로딩중..</div>;
@@ -282,8 +233,18 @@ export default function MeetButtonArea({
           className='w-[72px]'
           onClick={handleClickToggleWishlist}
         >
-          {isBookmark ? (
-            <BookmarkActive className='size-6 text-orange-200' />
+          {clientInfo.meetupStatus === "RECRUITING" ? (
+            user != null ? (
+              userAllWishlist.includes(clientInfo.meetupId) ? (
+                <BookmarkActive className='size-6 text-orange-200' />
+              ) : (
+                <Bookmark className='size-6' />
+              )
+            ) : wishlist.includes(clientInfo.meetupId) ? (
+              <BookmarkActive className='size-6 text-orange-200' />
+            ) : (
+              <Bookmark className='size-6' />
+            )
           ) : (
             <Bookmark className='size-6' />
           )}

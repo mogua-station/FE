@@ -26,7 +26,7 @@ export default function StatusBadge({ badge }: BadgeInfo) {
             </span>
             <span className='flex items-center justify-between rounded-[6px] bg-gray-800 px-2 py-1'>
               <span className='text-caption-normal font-medium text-primary'>
-                {deadline(badge.recruitmentEndDate) == 1
+                {deadline(badge.recruitmentEndDate) == 0
                   ? "오늘 마감"
                   : `마감 D-${deadline(badge.recruitmentEndDate)}`}
               </span>

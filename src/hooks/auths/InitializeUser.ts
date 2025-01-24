@@ -1,21 +1,23 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { fetchUserWishlist } from "@/lib/wishlist/wishlistApi";
+import { useEffect } from "react";
+import { fetchUserAllWishlist } from "@/lib/wishlist/wishlistApi";
 import useUserStore from "@/store/auth/useUserStore";
 import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type CardProps } from "@/types/card";
 
 export default function InitializeUser() {
-  const [userId, setUserId] = useState<number | null>(null);
-  const { setUserWishlist } = useUserWishlist();
+  const { setUserAllWishlist } = useUserWishlist();
+  const userInfo =
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user") || "null")
+      : null;
 
   const { data } = useQuery({
-    queryKey: ["userWishlist"],
-    queryFn: async () => fetchUserWishlist(userId as number),
-    enabled: userId != null,
-    retry: false,
+    queryKey: ["userAllWishlist"],
+    queryFn: async () => fetchUserAllWishlist(userInfo?.userId as number),
+    enabled: !!userInfo && !!userInfo.userId,
   });
 
   useEffect(() => {
@@ -29,8 +31,7 @@ export default function InitializeUser() {
         if (user) {
           useUserStore.getState().setUser(JSON.parse(user));
 
-          setUserId(JSON.parse(user).userId);
-          console.log(123);
+          //로그인했으니 로컬스토리지 초기화
           localStorage.setItem("wishlist", JSON.stringify([]));
         }
       }
@@ -38,9 +39,9 @@ export default function InitializeUser() {
   }, []);
 
   useEffect(() => {
-    if (data != null) {
-      const ids = data.data.map((item: CardProps) => item.meetupId);
-      setUserWishlist(ids);
+    if (data != null && data.data != null) {
+      const ids = data.data.map((item: CardProps) => item.meetupId) || [];
+      setUserAllWishlist(ids);
       localStorage.setItem("wishlist", JSON.stringify([]));
     }
   }, [data]);
