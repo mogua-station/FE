@@ -16,6 +16,7 @@ interface FormSectionRightProps {
   control: Control<MeetupFormType>;
   methods: UseFormReturn<MeetupFormType>;
   isSubmitDisabled: boolean;
+  isEdit?: boolean;
 }
 
 export default function FormSectionRight({
@@ -24,19 +25,21 @@ export default function FormSectionRight({
   control,
   methods,
   isSubmitDisabled,
+  isEdit,
 }: FormSectionRightProps) {
   const [dateError, setDateError] = useState<string | undefined>(undefined);
 
   const validateDates = (
     recruitmentEndDate: Date | null,
     meetingStartDate: Date | null,
+    message: string,
   ) => {
     if (
       recruitmentEndDate &&
       meetingStartDate &&
       meetingStartDate < recruitmentEndDate
     ) {
-      setDateError("진행 기간은 모집 기간보다 과거일 수 없습니다.");
+      setDateError(message);
     } else {
       setDateError(undefined);
     }
@@ -63,11 +66,16 @@ export default function FormSectionRight({
         }}
         onChange={(date) => {
           setValue("recruitmentEndDate", date.endDate);
-          validateDates(date.endDate, watch("meetingStartDate"));
+          validateDates(
+            date.endDate,
+            watch("meetingStartDate"),
+            "모집 기간은 진행 기간보다 미래일 수 없습니다.",
+          );
         }}
         errorMessage={dateError}
         watch={watch}
         setValue={setValue}
+        isDisabled={isEdit}
       />
 
       <DateInputSection
@@ -79,11 +87,16 @@ export default function FormSectionRight({
         onChange={(date) => {
           setValue("meetingStartDate", date.startDate);
           setValue("meetingEndDate", date.endDate);
-          validateDates(watch("recruitmentEndDate"), date.startDate);
+          validateDates(
+            watch("recruitmentEndDate"),
+            date.startDate,
+            "진행 기간은 모집 기간보다 과거일 수 없습니다.",
+          );
         }}
         errorMessage={dateError}
         watch={watch}
         setValue={setValue}
+        isDisabled={isEdit}
       />
 
       <ParticipantsInput
@@ -93,6 +106,7 @@ export default function FormSectionRight({
         name='minParticipants'
         label='최소 인원'
         hasError={Boolean(methods.formState.errors.minParticipants)}
+        isDisabled={isEdit}
         onDecrease={() => {
           if (watch("minParticipants") === 2) return;
           if (watch("minParticipants") < 2) {
@@ -134,6 +148,7 @@ export default function FormSectionRight({
         name='maxParticipants'
         label='모집 인원'
         hasError={Boolean(methods.formState.errors.maxParticipants)}
+        isDisabled={isEdit}
         onDecrease={() => {
           if (watch("maxParticipants") === watch("minParticipants")) return;
           if (watch("maxParticipants") < watch("minParticipants")) {

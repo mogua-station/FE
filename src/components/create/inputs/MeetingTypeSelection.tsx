@@ -2,12 +2,14 @@ import { type BaseFormProps } from "@/types/meetup.type";
 
 interface MeetingTypeProps extends Pick<BaseFormProps, "watch" | "setValue"> {
   isTutor: boolean;
+  isDisabled: boolean;
 }
 
 export default function MeetingTypeSelection({
   watch,
   setValue,
   isTutor,
+  isDisabled: isLocked,
 }: MeetingTypeProps) {
   return (
     <div className='flex flex-col gap-3'>
@@ -17,8 +19,9 @@ export default function MeetingTypeSelection({
       <div className='flex gap-[.6875rem]'>
         <button
           type='button'
+          disabled={isLocked}
           onClick={() => {
-            if (watch("meetingType") === "STUDY") return;
+            if (isLocked || watch("meetingType") === "STUDY") return;
             setValue("meetingType", "STUDY");
           }}
           className={`${watch("meetingType") === "STUDY" ? "bg-orange-300 text-gray-100" : "bg-gray-800 text-gray-300"} h-[3.375rem] flex-1 rounded-2xl text-body-2-normal font-semibold transition-colors duration-300`}
@@ -28,8 +31,9 @@ export default function MeetingTypeSelection({
         {isTutor ? (
           <button
             type='button'
+            disabled={isLocked}
             onClick={() => {
-              if (watch("meetingType") === "TUTORING") return;
+              if (isLocked || watch("meetingType") === "TUTORING") return;
               setValue("meetingType", "TUTORING");
             }}
             className={`${watch("meetingType") === "TUTORING" ? "bg-orange-300 text-gray-100" : "bg-gray-800 text-gray-300"} h-[3.375rem] flex-1 rounded-2xl text-body-2-normal font-semibold transition-colors duration-300`}

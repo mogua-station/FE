@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   type UseFormWatch,
   type Control,
@@ -13,19 +14,24 @@ import LocationIcon from "@/assets/images/icons/location.svg";
 import { type MeetupFormType } from "@/types/meetup.type";
 
 export default function FormSectionLeft({
-  setImage,
+  initImage,
   control,
   watch,
   setValue,
   isTutor = false,
+  isEdit = false,
+  setRemovedInitImage,
 }: {
-  setImage: (image: File | null) => void;
+  initImage?: string;
   control: Control<MeetupFormType>;
   watch: UseFormWatch<MeetupFormType>;
   setValue: UseFormSetValue<MeetupFormType>;
   isTutor?: boolean;
+  isEdit?: boolean;
+  setRemovedInitImage?: (value: boolean) => void;
 }) {
   const isOnline = watch("isOnline");
+  const [hasInitImage, setHasInitImage] = useState(!!initImage);
 
   useEffect(() => {
     if (isOnline) {
@@ -39,6 +45,7 @@ export default function FormSectionLeft({
         watch={watch}
         setValue={setValue}
         isTutor={isTutor}
+        isDisabled={isEdit}
       />
 
       <CommonTextInput
@@ -51,7 +58,11 @@ export default function FormSectionLeft({
         }}
       />
 
-      <FormatTypeSelection watch={watch} setValue={setValue} />
+      <FormatTypeSelection
+        watch={watch}
+        setValue={setValue}
+        isDisabled={isEdit}
+      />
 
       <div
         className={`relative h-fit w-full overflow-hidden duration-500 ease-in-out ${isOnline ? "max-h-0" : "max-h-screen"}`}
@@ -75,15 +86,43 @@ export default function FormSectionLeft({
           rules={{
             required: !isOnline ? "장소를 선택해주세요." : undefined,
           }}
+          disabled={isEdit}
         />
 
         <LocationIcon className='absolute right-4 top-[calc(50%+18px)] size-6 -translate-y-1/2 transform fill-gray-300' />
       </div>
 
-      <CommonImageInput
-        label='이미지'
-        onImageChange={(image: File | null) => setImage(image)}
-      />
+      {hasInitImage ? (
+        <div className='flex flex-col gap-[12px]'>
+          <p className='pl-[8px] text-body-2-normal font-medium text-gray-300'>
+            이미지
+          </p>
+          <div className='group relative flex h-[120px] w-[120px] cursor-pointer items-center justify-center rounded-[12px] border border-gray-800 bg-gray-900'>
+            <Image
+              src={initImage!}
+              alt='Image Preview'
+              width={120}
+              height={120}
+              sizes='(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 120px'
+              className='h-[120px] w-[120px] rounded-[12px] object-cover group-hover:brightness-50'
+            />
+
+            <div
+              className='absolute inset-0 flex size-full items-center justify-center'
+              onClick={() => {
+                setRemovedInitImage?.(true);
+                setHasInitImage(false);
+              }}
+            >
+              <div className='left-12 top-12 z-10 hidden h-[24px] w-[24px] items-center justify-center rounded-[7px] bg-[#28292E] p-1 text-center text-label-normal font-semibold text-[#C4C4C4] group-hover:block'>
+                X
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <CommonImageInput label='이미지' />
+      )}
     </section>
   );
 }

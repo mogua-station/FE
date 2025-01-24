@@ -41,7 +41,7 @@ export const useIndexedDB = () => {
     }
   };
 
-  const loadImage = async () => {
+  const loadImage = async (): Promise<File | null> => {
     try {
       const db = await initDB();
       const tx = db.transaction(STORE_NAME, "readonly");

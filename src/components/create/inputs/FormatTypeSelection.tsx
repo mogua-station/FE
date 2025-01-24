@@ -1,9 +1,15 @@
 import { type BaseFormProps } from "@/types/meetup.type";
 
+interface FormatTypeSelectionProps
+  extends Pick<BaseFormProps, "watch" | "setValue"> {
+  isDisabled?: boolean;
+}
+
 export function FormatTypeSelection({
   watch,
   setValue,
-}: Pick<BaseFormProps, "watch" | "setValue">) {
+  isDisabled = false,
+}: FormatTypeSelectionProps) {
   return (
     <div className='flex flex-col gap-3'>
       <label className='flex h-5 px-2 text-body-2-normal font-medium text-gray-300 after:ml-0.5 after:mt-0.5 after:text-danger after:content-["*"]'>
@@ -12,6 +18,7 @@ export function FormatTypeSelection({
       <div className='flex gap-[.6875rem]'>
         <button
           type='button'
+          disabled={isDisabled}
           onClick={() => {
             if (watch("isOnline") === true) return;
             setValue("isOnline", true);
@@ -22,6 +29,7 @@ export function FormatTypeSelection({
         </button>
         <button
           type='button'
+          disabled={isDisabled}
           onClick={() => {
             if (watch("isOnline") === false) return;
             setValue("isOnline", false);
