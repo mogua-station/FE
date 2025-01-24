@@ -7,7 +7,6 @@ import ResetIcon from "@/assets/images/icons/reset_thin.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { CalendarModal } from "@/components/common/modals/CalendarModal";
-import useModal from "@/hooks/useModal";
 import {
   type DateType,
   type LocationType,
@@ -22,17 +21,18 @@ export default function FilterModal({
   onDateChange,
   onStateChange,
   onLocationChange,
+  closeModal,
 }: {
   selectedFilter: FilterType;
   onDateChange: (dates: DateType) => void;
   onStateChange: (state: StateType) => void;
   onLocationChange: (location: LocationType) => void;
+  closeModal: () => void;
 }) {
   const [tab, setTab] = useState<TAB_STATE>("지역");
   const [tempFilter, setTempFilter] = useState<FilterType>({
     ...selectedFilter,
   });
-  const { closeModal } = useModal();
 
   const handleReset = () => {
     const resetValues: Partial<FilterType> = {

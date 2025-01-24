@@ -1,4 +1,4 @@
-import { fetcher } from "./clientFetch";
+import { fetcher } from "./fetcher";
 import { PAGE_SIZE } from "@/constants/pagination";
 
 export const userContentApi = {

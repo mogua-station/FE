@@ -6,9 +6,9 @@ import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import FormSectionLeft from "./FormSectionLeft";
 import FormSectionRight from "./FormSectionRight";
 import { FailModal, SuccessModal } from "./modals/ResultInfoModal";
-import useModal from "@/hooks/useModal";
 import { createMeetup } from "@/lib/main/meetup.api";
 import type { MeetupFormType } from "@/types/meetup.type";
+import modal from "@/utils/modalController";
 
 export default function CreateForm() {
   const methods = useForm<MeetupFormType>({
@@ -29,7 +29,6 @@ export default function CreateForm() {
   });
   const { control, handleSubmit, watch, setValue } = methods;
   const [image, setImage] = useState<File | null>(null);
-  const { openModal } = useModal();
   const queryClient = useQueryClient();
 
   const createMeetupMutation = useMutation({
@@ -37,15 +36,16 @@ export default function CreateForm() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onSuccess: (data: any) => {
       queryClient.invalidateQueries({ queryKey: ["meetup"] });
-      openModal({
+      modal.open(({ close }) => <SuccessModal data={data} close={close} />, {
         hasCloseBtn: false,
-        children: <SuccessModal data={data} />,
+        isBottom: false,
+        disableOverlayClick: true,
       });
     },
     onError: () => {
-      openModal({
+      modal.open(({ close }) => <FailModal close={close} />, {
         hasCloseBtn: false,
-        children: <FailModal />,
+        isBottom: false,
       });
     },
   });
@@ -53,8 +53,14 @@ export default function CreateForm() {
   const onSubmit: SubmitHandler<MeetupFormType> = async (data) => {
     try {
       const formData = new FormData();
-      formData.append("request", JSON.stringify(data));
-      formData.append("image", image || "");
+      const jsonBlob = new Blob([JSON.stringify(data)], {
+        type: "application/json",
+      });
+      formData.append("request", jsonBlob);
+
+      if (image) {
+        formData.append("image", image);
+      }
 
       await createMeetupMutation.mutateAsync(formData);
     } catch (error) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
@@ -35,8 +36,14 @@ const SignUPSuccessContent = () => {
       />
 
       <div className='flex h-full flex-col items-center justify-center'>
-        {/* 컨텐츠 영역 */}
-        <div className='z-10 mx-auto flex flex-col items-center justify-center gap-8 p-4 tablet:h-[70%] tablet:w-[90%] tablet:rounded-[2.5rem] tablet:bg-gray-950/[0.48] tablet:px-6 desktop:w-[60%]'>
+        <motion.div
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 50 }}
+          transition={{ duration: 0.8 }}
+          className='z-10 mx-auto flex flex-col items-center justify-center gap-8 p-4 tablet:h-[70%] tablet:w-[90%] tablet:rounded-[2.5rem] tablet:bg-gray-950/[0.48] tablet:px-6 desktop:w-[60%]'
+        >
+          {/* 컨텐츠 영역 */}
           {/* 이미지 및 텍스트 */}
           <div className='flex flex-col items-center justify-center gap-4'>
             <div>
@@ -61,7 +68,7 @@ const SignUPSuccessContent = () => {
               확인
             </SolidButton>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

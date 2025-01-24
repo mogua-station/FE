@@ -1,9 +1,4 @@
-import { type MyReviewTab } from "@/types/user-page";
-
-interface ReviewTabsProps {
-  value: MyReviewTab;
-  onChange: (value: MyReviewTab) => void;
-}
+import { type ReviewTabsProps, type MyReviewTab } from "@/types/user-page";
 
 const REVIEW_TABS = [
   { value: "toWrite", label: "작성 가능한 리뷰" },
