@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
@@ -20,15 +20,13 @@ interface ReviewFormData {
   meetupId: number;
 }
 
-export default function CreateReviewForm() {
-  const searchParams = useSearchParams();
-  const meetUpId = searchParams.get("meetupId");
+export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
   const token = useCookie("accessToken");
   const { user } = useUserStore();
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  if (!meetUpId) {
+  if (!meetupId) {
     router.replace("/");
     return null;
   }
@@ -38,7 +36,7 @@ export default function CreateReviewForm() {
       rating: -1,
       content: "",
       image: null,
-      meetupId: Number(meetUpId),
+      meetupId: Number(meetupId),
     },
     mode: "onChange",
   });

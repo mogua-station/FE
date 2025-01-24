@@ -2,7 +2,11 @@ import BackButton from "@/components/create-reaview/BackButton";
 import CreateReviewForm from "@/components/create-reaview/CreateReviewForm";
 import ReviewGreeting from "@/components/create-reaview/ReviewGreeting";
 
-export default function CreateReview() {
+export default function CreateReview({
+  searchParams,
+}: {
+  searchParams: { meetupId: string };
+}) {
   return (
     // TODO: NavBar 없는 레이아웃 적용 필요
     <div className='relative z-10 flex justify-center'>
@@ -12,7 +16,7 @@ export default function CreateReview() {
           <BackButton />
         </div>
         <ReviewGreeting />
-        <CreateReviewForm />
+        <CreateReviewForm meetupId={searchParams.meetupId} />
       </div>
     </div>
   );
