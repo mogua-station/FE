@@ -96,6 +96,7 @@ export const useInfiniteMeetings = ({
             } else {
               const result =
                 (await response.json()) as ApiResponse<WrittenReview>;
+              console.log(result);
               return transformPageResponse(result, (item) => ({
                 ...mapWrittenReviewToReviewInfo(item),
                 eventType: type.toLowerCase(),
