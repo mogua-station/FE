@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import DotLoader from "react-spinners/Dotloader";
+
 import {
   CommonEmailInput,
   CommonPasswordInput,
@@ -14,6 +17,7 @@ import { type FormData } from "@/types";
 
 const SignUpPage = () => {
   const { signUp } = useSignUp();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -36,7 +40,9 @@ const SignUpPage = () => {
   const confirmPassword = watch("confirmPassword");
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setIsLoading(true);
     await signUp(data, setError);
+    setIsLoading(false);
   };
 
   return (
@@ -83,13 +89,17 @@ const SignUpPage = () => {
                 </Link>
               </div>
             </div>
-            <div className='mt-[30px]'>
-              <SolidButton
-                type='submit'
-                state={isValid ? "activated" : "default"}
-              >
-                가입완료
-              </SolidButton>
+            <div className='mt-[30px] flex flex-col items-center'>
+              {/* 로딩중일 때는 버튼 비활성화 */}
+              {!isLoading && (
+                <SolidButton
+                  type='submit'
+                  state={isValid ? "activated" : "default"}
+                >
+                  가입완료
+                </SolidButton>
+              )}
+              <DotLoader size={24} color={"#FF9A42"} loading={isLoading} />
             </div>
           </form>
         </div>
