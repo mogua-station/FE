@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import DotLoader from "react-spinners/Dotloader";
+import DotLoader from "react-spinners/DotLoader";
 import {
   CommonEmailInput,
   CommonPasswordInput,
