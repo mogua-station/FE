@@ -1,4 +1,5 @@
 import { type CardProps } from "@/types/card";
+import { type FilterProps } from "@/types/meetup.type";
 import { getAccessToken } from "@/utils/cookie";
 
 export const fetchUserAllWishlist = async (userId: number) => {
@@ -24,14 +25,20 @@ export const fetchUserAllWishlist = async (userId: number) => {
 export const fetchUserWishlist = async ({
   pageParms = 0,
   userId,
+  filter,
 }: {
   pageParms: number;
   userId: number;
+  filter: string;
 }) => {
   //유저 정보가 있을 때
   try {
+    console.log(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}${filter ? `&${filter}` : ""}`,
+    );
+
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&limit=8`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}${filter ? `&${filter}` : ""}`,
       {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
@@ -58,8 +65,10 @@ export const fetchUserWishlist = async ({
 
 export const fetchLocalWishlist = async ({
   pageParms = 0,
+  filter,
 }: {
   pageParms: number;
+  filter: FilterProps;
 }) => {
   try {
     const response = await fetch(
@@ -80,14 +89,59 @@ export const fetchLocalWishlist = async ({
     const wishlist = localStorage.getItem("wishlist");
     const arr = wishlist ? JSON.parse(wishlist as string) : [];
 
+    let filteredList: CardProps[] = [];
+
     //전체 리스트에서 로컬스토리지에 들어가있는 id만 필터링
-    const filteredList = meetupList.filter(
+    filteredList = meetupList.filter(
       (item: CardProps) =>
         arr.includes(item.meetupId) && item.meetupStatus === "RECRUITING",
     );
 
-    const startIndex = pageParms * 8;
-    const endIndex = startIndex + 8;
+    if (filter.meetupType != null) {
+      filteredList = filteredList.filter(
+        (item: CardProps) => item.meetingType === filter.meetupType,
+      );
+    }
+
+    if (filter.location != null) {
+      if (filter.location !== "ALL") {
+        filteredList = filteredList.filter(
+          (item: CardProps) => item.location === filter.location,
+        );
+      }
+    }
+
+    if (filter.orderBy != null) {
+      if (filter.orderBy === "latest") {
+        filteredList = filteredList.sort((a, b) => {
+          const aTime = new Date(a.recruitmentStartDate).getTime();
+          const bTime = new Date(b.recruitmentStartDate).getTime();
+
+          return bTime - aTime;
+        });
+      }
+
+      if (filter.orderBy === "deadline") {
+        filteredList = filteredList.sort((a, b) => {
+          const aTime = new Date(a.recruitmentEndDate).getTime();
+          const bTime = new Date(b.recruitmentEndDate).getTime();
+
+          return aTime - bTime;
+        });
+      }
+
+      if (filter.orderBy === "participant") {
+        filteredList = filteredList.sort((a, b) => {
+          const aLenght = a.participants.length;
+          const bLenght = b.participants.length;
+
+          return bLenght - aLenght;
+        });
+      }
+    }
+
+    const startIndex = pageParms * filter.limit;
+    const endIndex = startIndex + filter.limit;
 
     return {
       data: filteredList.slice(startIndex, endIndex),
