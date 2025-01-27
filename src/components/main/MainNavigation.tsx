@@ -1,91 +1,45 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { Suspense, useCallback } from "react";
 import FilterControls from "./FilterControls";
 import MeetupSelectionDropdown from "./MeetupSelectionDropdown";
 import FilterModal from "./modals/FilterModal";
-import {
-  type LocationType,
-  type StateType,
-  type FilterType,
-  type MeetupType,
-  type OrderType,
+import { useMeetupQueryParams } from "@/hooks/meetup/useMeetupQueryParams";
+import { useMeetupUpdateQuery } from "@/hooks/meetup/useMeetupUpdateQuery";
+import type {
+  FilterType,
+  MeetupQueryType,
+  MeetupType,
 } from "@/types/meetup.type";
 import modal from "@/utils/modalController";
 
-export default function MainNavigation() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+function RenderNavigation({
+  initialParams,
+}: {
+  initialParams?: MeetupQueryType;
+}) {
+  const {
+    selectedMeetup,
+    setSelectedMeetup,
+    selectedOrder,
+    setSelectedOrder,
+    selectedFilter,
+    setSelectedFilter,
+  } = useMeetupQueryParams(initialParams);
 
-  const [selectedMeetup, setSelectedMeetup] = useState<MeetupType>("STUDY");
-  const [selectedOrder, setSelectedOrder] = useState<OrderType>("latest");
-  const [selectedFilter, setSelectedFilter] = useState<FilterType>({
-    location: "ALL",
-    state: "ALL",
-    date: { startDate: null, endDate: null },
-  });
+  useMeetupUpdateQuery(selectedMeetup, selectedFilter, selectedOrder);
 
-  useEffect(() => {
-    const type = searchParams.get("type") as MeetupType;
-    const location = searchParams.get("location") as LocationType;
-    const state = searchParams.get("state") as StateType;
-    const startDate = searchParams.get("startDate")
-      ? new Date(searchParams.get("startDate")!)
-      : null;
-    const endDate = searchParams.get("endDate")
-      ? new Date(searchParams.get("endDate")!)
-      : null;
-    const orderBy = searchParams.get("orderBy") as OrderType;
+  const handleFilterChange = useCallback(
+    (
+      key: keyof FilterType,
+      value: string | { startDate: Date | null; endDate: Date | null },
+    ) => {
+      setSelectedFilter((prev) => ({ ...prev, [key]: value }));
+    },
+    [setSelectedFilter],
+  );
 
-    if (type) setSelectedMeetup(type);
-    setSelectedFilter((prev) => ({
-      ...prev,
-      location: location || prev.location,
-      state: state || prev.state,
-      date: { startDate: startDate || null, endDate: endDate || null },
-    }));
-    if (orderBy) setSelectedOrder(orderBy);
-  }, [searchParams]);
-
-  useEffect(() => {
-    const type = selectedMeetup;
-    const { location, state, date } = selectedFilter;
-    const { startDate, endDate } = date;
-
-    const queryObject: Record<string, string> = {};
-
-    if (type !== "STUDY") queryObject.type = type;
-    if (location !== "ALL") queryObject.location = location;
-    if (state !== "ALL") queryObject.state = state;
-    if (selectedOrder !== "latest") queryObject.orderBy = selectedOrder;
-    if (startDate) {
-      const startYear = startDate.getFullYear();
-      const startMonth = String(startDate.getMonth() + 1).padStart(2, "0");
-      const startDay = String(startDate.getDate()).padStart(2, "0");
-      queryObject.startDate = `${startYear}-${startMonth}-${startDay}`;
-    }
-
-    if (endDate) {
-      const endYear = endDate.getFullYear();
-      const endMonth = String(endDate.getMonth() + 1).padStart(2, "0");
-      const endDay = String(endDate.getDate()).padStart(2, "0");
-      queryObject.endDate = `${endYear}-${endMonth}-${endDay}`;
-    }
-
-    const query = new URLSearchParams(queryObject).toString();
-
-    router.replace(`?${query}`);
-  }, [selectedMeetup, selectedFilter, selectedOrder]);
-
-  const handleFilterChange = (
-    key: keyof FilterType,
-    value: string | { startDate: Date | null; endDate: Date | null },
-  ) => {
-    setSelectedFilter((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleOpenFilterModal = () => {
+  const handleOpenFilterModal = useCallback(() => {
     modal.open(
       ({ close }) => (
         <FilterModal
@@ -100,22 +54,27 @@ export default function MainNavigation() {
       ),
       { isDark: true },
     );
-  };
+  }, [handleFilterChange, selectedFilter]);
+
+  const handleSelectMeetup = useCallback(
+    (meetup: MeetupType) => {
+      setSelectedMeetup(meetup);
+      setSelectedFilter((prev) => ({
+        ...prev,
+        location: "ALL",
+        state: "ALL",
+        date: { startDate: null, endDate: null },
+      }));
+      setSelectedOrder("latest");
+    },
+    [setSelectedFilter, setSelectedMeetup, setSelectedOrder],
+  );
 
   return (
     <nav className='flex w-full items-center justify-between'>
       <MeetupSelectionDropdown
         selectedMeetup={selectedMeetup}
-        onSelectMeetup={(meetup) => {
-          setSelectedMeetup(meetup);
-          setSelectedFilter((prev) => ({
-            ...prev,
-            location: "ALL",
-            state: "ALL",
-            date: { startDate: null, endDate: null },
-          }));
-          setSelectedOrder("latest");
-        }}
+        onSelectMeetup={handleSelectMeetup}
       />
       <FilterControls
         selectedOrder={selectedOrder}
@@ -123,5 +82,27 @@ export default function MainNavigation() {
         onOpenFilterModal={handleOpenFilterModal}
       />
     </nav>
+  );
+}
+
+export default function MainNavigation({
+  initialParams,
+}: {
+  initialParams?: MeetupQueryType;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className='flex h-11 w-full grow items-center justify-between px-5'>
+          <div className='h-full w-[6.1875rem] animate-pulse bg-gray-800' />
+          <div>
+            <div className='h-full w-[3.25rem] animate-pulse rounded-2xl bg-gray-800' />
+            <div className='h-full w-[3.25rem] animate-pulse rounded-2xl bg-gray-800' />
+          </div>
+        </div>
+      }
+    >
+      <RenderNavigation initialParams={initialParams} />
+    </Suspense>
   );
 }
