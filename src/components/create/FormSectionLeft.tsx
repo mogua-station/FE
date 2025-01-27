@@ -36,6 +36,8 @@ export default function FormSectionLeft({
   useEffect(() => {
     if (isOnline) {
       setValue("location", null);
+    } else {
+      if (watch("location") === null) setValue("location", "");
     }
   }, [isOnline, setValue]);
 
@@ -65,7 +67,7 @@ export default function FormSectionLeft({
       />
 
       <div
-        className={`relative h-fit w-full overflow-hidden duration-500 ease-in-out ${isOnline ? "max-h-0" : "max-h-screen"}`}
+        className={`relative h-fit w-full overflow-hidden transition-all duration-500 ${isOnline ? "max-h-0" : "max-h-screen"}`}
       >
         <CommonSelectBox
           required={!isOnline}

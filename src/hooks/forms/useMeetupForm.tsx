@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useShallow } from "zustand/shallow";
 import { useIndexedDB } from "../inputs/images/useIndexedDB";
@@ -33,6 +34,29 @@ export const useMeetupForm = (id?: number) => {
   const { createMeetupMutation, editMeetupMutation } = useMeetupMutations(id);
   const accessToken = useCookie("accessToken");
   const userInfo = useGetProfile(userId!, accessToken!);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (meetupData?.hostId !== userId) {
+      modal.open(
+        ({ close }) => (
+          <FailModal
+            close={() => {
+              close();
+              router.replace("/");
+            }}
+            title='모임 수정 실패'
+            message='본인이 개설한 모임만 수정할 수 있습니다.'
+          />
+        ),
+        {
+          hasCloseBtn: false,
+          isBottom: false,
+          disableOverlayClick: true,
+        },
+      );
+    }
+  }, [meetupData, userId, router]);
 
   const methods = useForm<MeetupFormType>({
     defaultValues: getDefaultValues(meetupData),
@@ -119,7 +143,11 @@ export const useMeetupForm = (id?: number) => {
     methods.watch("recruitmentEndDate") === null ||
     methods.watch("meetingStartDate") === null ||
     methods.watch("meetingEndDate") === null ||
-    (methods.watch("isOnline") === false && methods.watch("location") === null);
+    (methods.watch("isOnline") === false &&
+      methods.watch("location") === null) ||
+    createMeetupMutation.isPending ||
+    editMeetupMutation.isPending ||
+    (isEdit === true && meetupData?.hostId !== userId);
 
   return {
     methods,
