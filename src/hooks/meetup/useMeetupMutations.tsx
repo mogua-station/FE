@@ -11,11 +11,13 @@ const useMeetupMutations = (id?: number) => {
   const queryClient = useQueryClient();
   const { deleteImage } = useIndexedDB();
 
-  const commonOnSuccess = async (meetupId: number) => {
+  const commonOnSuccess = async (meetupId: number, isEdit = false) => {
     await deleteImage();
     queryClient.invalidateQueries({ queryKey: ["meetup"] });
     modal.open(
-      ({ close }) => <SuccessModal meetupId={meetupId} close={close} />,
+      ({ close }) => (
+        <SuccessModal meetupId={meetupId} close={close} isEdit={isEdit} />
+      ),
       {
         hasCloseBtn: false,
         isBottom: false,
@@ -49,7 +51,7 @@ const useMeetupMutations = (id?: number) => {
   const editMeetupMutation = useMutation({
     mutationFn: (formData: FormData) => editMeetup({ id: id!, formData }),
     onSuccess: async () => {
-      await commonOnSuccess(id!);
+      await commonOnSuccess(id!, true);
     },
     onError: () => {
       commonOnError("모임 수정 실패", "모임 수정 중 오류가 발생했어요");
