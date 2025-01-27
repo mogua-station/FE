@@ -13,7 +13,7 @@ import MeetingTypeSelection from "./inputs/MeetingTypeSelection";
 import LocationIcon from "@/assets/images/icons/location.svg";
 import { type MeetupFormType } from "@/types/meetup.type";
 
-export default function FormSectionLeft({
+export default function MeetupFormLeft({
   initImage,
   control,
   watch,

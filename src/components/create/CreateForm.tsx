@@ -1,8 +1,8 @@
 "use client";
 
 import { FormProvider } from "react-hook-form";
-import FormSectionLeft from "./FormSectionLeft";
-import FormSectionRight from "./FormSectionRight";
+import MeetupFormLeft from "./MeetupFormLeft";
+import MeetupFormRight from "./MeetupFormRight";
 import { useMeetupForm } from "@/hooks/forms/useMeetupForm";
 
 export default function CreateForm({ id }: { id?: number }) {
@@ -25,7 +25,7 @@ export default function CreateForm({ id }: { id?: number }) {
         onSubmit={methods.handleSubmit(onSubmit)}
         className='z-10 mx-4 my-6 flex flex-col gap-10 desktop:my-8 desktop:flex-row desktop:gap-9'
       >
-        <FormSectionLeft
+        <MeetupFormLeft
           initImage={meetupData?.thumbnail}
           control={control}
           watch={watch}
@@ -34,7 +34,7 @@ export default function CreateForm({ id }: { id?: number }) {
           isEdit={isEdit}
           setRemovedInitImage={setRemovedInitImage}
         />
-        <FormSectionRight
+        <MeetupFormRight
           watch={watch}
           setValue={setValue}
           control={control}

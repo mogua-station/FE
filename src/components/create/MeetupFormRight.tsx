@@ -11,7 +11,7 @@ import { DateInputSection } from "./inputs/DateInputSection";
 import { ParticipantsInput } from "./inputs/ParticipantsInput";
 import { type MeetupFormType } from "@/types/meetup.type";
 
-interface FormSectionRightProps {
+interface MeetupFormRightProps {
   watch: UseFormWatch<MeetupFormType>;
   setValue: UseFormSetValue<MeetupFormType>;
   control: Control<MeetupFormType>;
@@ -20,14 +20,14 @@ interface FormSectionRightProps {
   isEdit?: boolean;
 }
 
-export default function FormSectionRight({
+export default function MeetupFormRight({
   watch,
   setValue,
   control,
   methods,
   isSubmitDisabled,
   isEdit,
-}: FormSectionRightProps) {
+}: MeetupFormRightProps) {
   const [dateError, setDateError] = useState<string | undefined>(undefined);
 
   const validateDates = useCallback(
