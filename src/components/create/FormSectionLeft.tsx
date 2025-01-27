@@ -34,11 +34,10 @@ export default function FormSectionLeft({
   const [hasInitImage, setHasInitImage] = useState(!!initImage);
 
   useEffect(() => {
-    if (isOnline) {
-      setValue("location", null);
-    } else {
-      if (watch("location") === null) setValue("location", "");
-    }
+    setValue(
+      "location",
+      isOnline ? null : watch("location") === null ? "" : watch("location"),
+    );
   }, [isOnline, setValue]);
 
   return (

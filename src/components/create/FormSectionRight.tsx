@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type {
   Control,
   UseFormReturn,
@@ -10,6 +10,7 @@ import CommonTextArea from "../common/inputs/TextArea";
 import { DateInputSection } from "./inputs/DateInputSection";
 import { ParticipantsInput } from "./inputs/ParticipantsInput";
 import { type MeetupFormType } from "@/types/meetup.type";
+
 interface FormSectionRightProps {
   watch: UseFormWatch<MeetupFormType>;
   setValue: UseFormSetValue<MeetupFormType>;
@@ -29,21 +30,48 @@ export default function FormSectionRight({
 }: FormSectionRightProps) {
   const [dateError, setDateError] = useState<string | undefined>(undefined);
 
-  const validateDates = (
-    recruitmentEndDate: Date | null,
-    meetingStartDate: Date | null,
-    message: string,
-  ) => {
-    if (
-      recruitmentEndDate &&
-      meetingStartDate &&
-      meetingStartDate < recruitmentEndDate
-    ) {
-      setDateError(message);
-    } else {
-      setDateError(undefined);
-    }
-  };
+  const validateDates = useCallback(
+    (
+      recruitmentEndDate: Date | null,
+      meetingStartDate: Date | null,
+      message: string,
+    ) => {
+      if (
+        recruitmentEndDate &&
+        meetingStartDate &&
+        meetingStartDate < recruitmentEndDate
+      ) {
+        setDateError(message);
+      } else {
+        setDateError(undefined);
+      }
+    },
+    [],
+  );
+
+  const handleParticipantsChange = useCallback(
+    (name: "minParticipants" | "maxParticipants", delta: number) => {
+      const currentValue = watch(name);
+      const otherValue = watch(
+        name === "minParticipants" ? "maxParticipants" : "minParticipants",
+      );
+
+      if (typeof currentValue !== "number") return;
+
+      let newValue = currentValue + delta;
+
+      if (name === "minParticipants") {
+        newValue = Math.max(2, Math.min(newValue, otherValue));
+      } else {
+        newValue = Math.max(otherValue, Math.min(newValue, 10));
+      }
+
+      if (newValue !== currentValue) {
+        setValue(name, newValue, { shouldValidate: true });
+      }
+    },
+    [watch, setValue],
+  );
 
   return (
     <section className='flex flex-1 flex-col gap-10'>
@@ -107,38 +135,8 @@ export default function FormSectionRight({
         label='최소 인원'
         hasError={Boolean(methods.formState.errors.minParticipants)}
         isDisabled={isEdit}
-        onDecrease={() => {
-          if (watch("minParticipants") === 2) return;
-          if (watch("minParticipants") < 2) {
-            setValue("minParticipants", 2, { shouldValidate: true });
-            return;
-          }
-          if (watch("minParticipants") > watch("maxParticipants")) {
-            setValue("minParticipants", watch("maxParticipants"), {
-              shouldValidate: true,
-            });
-            return;
-          }
-          setValue("minParticipants", watch("minParticipants") - 1, {
-            shouldValidate: true,
-          });
-        }}
-        onIncrease={() => {
-          if (watch("minParticipants") === watch("maxParticipants")) return;
-          if (watch("minParticipants") > watch("maxParticipants")) {
-            setValue("minParticipants", watch("maxParticipants"), {
-              shouldValidate: true,
-            });
-            return;
-          }
-          if (typeof watch("minParticipants") !== "number") {
-            setValue("minParticipants", 2, { shouldValidate: true });
-            return;
-          }
-          setValue("minParticipants", watch("minParticipants") + 1, {
-            shouldValidate: true,
-          });
-        }}
+        onDecrease={() => handleParticipantsChange("minParticipants", -1)}
+        onIncrease={() => handleParticipantsChange("minParticipants", 1)}
       />
 
       <ParticipantsInput
@@ -149,40 +147,8 @@ export default function FormSectionRight({
         label='모집 인원'
         hasError={Boolean(methods.formState.errors.maxParticipants)}
         isDisabled={isEdit}
-        onDecrease={() => {
-          if (watch("maxParticipants") === watch("minParticipants")) return;
-          if (watch("maxParticipants") < watch("minParticipants")) {
-            setValue("maxParticipants", watch("minParticipants"), {
-              shouldValidate: true,
-            });
-            return;
-          }
-          if (watch("maxParticipants") > 10) {
-            setValue("maxParticipants", 10, {
-              shouldValidate: true,
-            });
-            return;
-          }
-          setValue("maxParticipants", watch("maxParticipants") - 1, {
-            shouldValidate: true,
-          });
-        }}
-        onIncrease={() => {
-          if (watch("maxParticipants") === 10) return;
-          if (typeof watch("maxParticipants") !== "number") {
-            setValue("maxParticipants", 10, { shouldValidate: true });
-            return;
-          }
-          if (watch("maxParticipants") < watch("minParticipants")) {
-            setValue("maxParticipants", watch("minParticipants"), {
-              shouldValidate: true,
-            });
-            return;
-          }
-          setValue("maxParticipants", watch("maxParticipants") + 1, {
-            shouldValidate: true,
-          });
-        }}
+        onDecrease={() => handleParticipantsChange("maxParticipants", -1)}
+        onIncrease={() => handleParticipantsChange("maxParticipants", 1)}
       />
 
       <SolidButton
