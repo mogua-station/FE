@@ -143,7 +143,7 @@ export default function WishlistContent() {
         </section>
       )}
       {wishlist?.length == 0 && (
-        <div className='flex flex-col items-center pt-20'>
+        <div className='flex flex-col items-center gap-4 pt-20'>
           <Image
             src='/icons/empty.svg'
             alt='리스트 없음 이미지'
@@ -151,7 +151,9 @@ export default function WishlistContent() {
             height='180'
           />
           <p className='body-1-reading text-center font-regular text-gray-500'>
-            찜한 모임이 없어요
+            {searchParams.size > 0
+              ? "조건에 맞는 모임이 없어요"
+              : "찜한 모임이 없어요"}
           </p>
         </div>
       )}

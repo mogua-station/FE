@@ -33,10 +33,6 @@ export const fetchUserWishlist = async ({
 }) => {
   //유저 정보가 있을 때
   try {
-    console.log(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}${filter ? `&${filter}` : ""}`,
-    );
-
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}${filter ? `&${filter}` : ""}`,
       {
