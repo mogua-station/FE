@@ -10,15 +10,13 @@ import {
 } from "@/components/auth/AuthInputs";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import useSignIn from "@/hooks/auths/useSignIn";
-import { fetchUserWishlist } from "@/lib/wishlist/wishlistApi";
-import useUserWishlist from "@/store/wishlist/useUserWishlist";
+import useLoginSetWishlist from "@/hooks/useLoginSetWishlist";
 import { type FormData } from "@/types";
-import { type CardProps } from "@/types/card";
 
 const SignInBasicPage = () => {
   const { signIn } = useSignIn();
-  const { setUserWishlist } = useUserWishlist();
   const [isLoading, setIsLoading] = useState(false);
+  const setLoginWishlist = useLoginSetWishlist();
 
   const {
     control,
@@ -52,15 +50,7 @@ const SignInBasicPage = () => {
 
     //로그인이 성공했을 때 찜하기를 가져와서 젼역 상태관리에 추가
     if (result.success) {
-      const userInfo = localStorage.getItem("user");
-      const userParse = userInfo ? JSON.parse(userInfo) : null;
-
-      const wishlistResponse = await fetchUserWishlist(userParse.userId);
-
-      const arr = wishlistResponse.data.map((item: CardProps) => item.meetupId);
-
-      setUserWishlist(arr);
-      setIsLoading(false);
+      setLoginWishlist();
     }
   };
 

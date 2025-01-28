@@ -42,6 +42,18 @@ export const getMeetupList = async ({
 
   const data: MeetupPromiseType = await res.json();
 
+  if (!res.ok) {
+    throw new Error("Failed to fetch meetup list");
+  }
+
+  if (data.data.length === 0) {
+    return {
+      data: [],
+      nextPage: null,
+      isLast: true,
+    };
+  }
+
   return {
     data: data.data,
     nextPage: data.additionalData.nextPage,
@@ -62,13 +74,38 @@ export const createMeetup = async (formData: FormData) => {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-    next: {
-      revalidate: 1600,
-    },
   });
 
   if (!res.ok) {
     throw new Error("Failed to create meetup");
+  }
+
+  return await res.json();
+};
+
+export const editMeetup = async ({
+  id,
+  formData,
+}: {
+  id: number;
+  formData: FormData;
+}) => {
+  const accessToken = getAccessToken();
+
+  if (!accessToken) {
+    throw new Error("Access token is not found");
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`, {
+    method: "PATCH",
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to edit meetup");
   }
 
   return await res.json();

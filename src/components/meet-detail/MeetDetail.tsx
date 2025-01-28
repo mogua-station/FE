@@ -1,26 +1,53 @@
-import ArrowRight from "@/assets/images/icons/arrow_right.svg";
+import ShareMeetUpButton from "./ShareMeetUpButton";
+import StatusBadge from "@/components/common/card/StatusBadge";
 import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
 import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
-import { type MeetInfo } from "@/types/meetDetail";
+import { reviews } from "@/data/mockList";
+import { type MeetInfo, type ClientInfo } from "@/types/meetDetail";
 
 export default function MeetDetail({ meetInfo }: MeetInfo) {
-  const participationSlice = meetInfo.users.slice(0, 4);
+  const participationSlice = meetInfo.participants.slice(0, 4);
+  const Location = () => {
+    switch (meetInfo.location) {
+      case "CAPITAL":
+        return "수도권";
+
+      case "DAEJEON":
+        return "대전광역시";
+
+      case "JEONJU":
+        return "전주시";
+
+      case "GWANGJU":
+        return "광주광역시";
+
+      case "BUSAN":
+        return "부신광역시";
+
+      case "DAEGU":
+        return "대구광역시";
+
+      case "GANGNEUNG":
+        return "강릉시";
+
+      default:
+        return "";
+    }
+  };
+
+  const clientInfo: ClientInfo = {
+    meetupId: meetInfo.meetupId,
+    hostId: meetInfo.hostId,
+    hostNickname: meetInfo.hostNickname,
+    participants: meetInfo.participants,
+    minParticipants: meetInfo.minParticipants,
+    meetupStatus: meetInfo.meetupStatus,
+  };
 
   return (
     <div className='relative mx-auto w-full max-w-[1200px] bg-gray-950 py-[60px] desktop:bg-[unset] desktop:py-[74px]'>
       <div className='fixed left-1/2 z-10 -mt-[38px] block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:hidden'>
-        <button className='relative mx-auto flex w-full gap-[15px] rounded-[16px] bg-gray-800 p-3'>
-          <div className='overflow-hidden rounded-[50%] bg-gray-600'>
-            <img src='/images/share_character.png' alt='캐릭터 이미지' />
-          </div>
-          <div className='flex flex-col justify-between'>
-            <p className='text-body text-gray-300'>친구와 함께 참여해보세요</p>
-            <p className='text-left text-body-2-normal font-bold text-gray-100'>
-              모임 공유하기
-            </p>
-          </div>
-          <ArrowRight className='absolute right-10 top-1/2 size-6 -translate-y-1/2 text-gray-400' />
-        </button>
+        <ShareMeetUpButton />
       </div>
       <div className='h-[346px] w-full overflow-hidden desktop:rounded-[24px]'>
         <img
@@ -35,7 +62,17 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
             {/* 스터디디 제목 정보 */}
             <div className='meet-info-box flex flex-col gap-8'>
               <div>
-                <div className='flex'></div>
+                <div className='flex gap-1.5'>
+                  <StatusBadge
+                    badge={{
+                      meetupStatus: meetInfo.meetupStatus,
+                      recruitmentEndDate: meetInfo.recruitmentEndDate,
+                      confirm:
+                        meetInfo.minParticipants <=
+                        meetInfo.participants.length,
+                    }}
+                  />
+                </div>
 
                 <div className='mt-3'>
                   <div></div>
@@ -44,7 +81,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                   </p>
 
                   <span className='mt-3 inline-block text-body-2-normal text-gray-300'>
-                    {meetInfo.location}
+                    {meetInfo.online ? "온라인" : Location()}
                   </span>
                 </div>
               </div>
@@ -53,11 +90,11 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                 <div className='flex justify-between py-4'>
                   <span className='text-caption'>모집</span>
                   <span className='text-caption'>
-                    {meetInfo.recruitmentDate.startDate.toLocaleDateString(
+                    {new Date(meetInfo.recruitmentStartDate).toLocaleDateString(
                       "ko-KR",
                     )}
                     {" - "}
-                    {meetInfo.recruitmentDate.endDate.toLocaleDateString(
+                    {new Date(meetInfo.recruitmentEndDate).toLocaleDateString(
                       "ko-KR",
                     )}
                   </span>
@@ -65,9 +102,13 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                 <div className='flex justify-between py-4'>
                   <span className='text-caption'>참여</span>
                   <span className='text-caption'>
-                    {meetInfo.meetingDate.startDate.toLocaleDateString("ko-KR")}
+                    {new Date(meetInfo.meetingStartDate).toLocaleDateString(
+                      "ko-KR",
+                    )}
                     {" - "}
-                    {meetInfo.meetingDate.endDate.toLocaleDateString("ko-KR")}
+                    {new Date(meetInfo.meetingEndDate).toLocaleDateString(
+                      "ko-KR",
+                    )}
                   </span>
                 </div>
               </div>
@@ -86,7 +127,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                       <div
                         className='join-flag absolute left-0 top-0 h-full rounded-[100px] bg-orange-300'
                         style={{
-                          width: `${(meetInfo.users.length / meetInfo.maxParticipants) * 100}%`,
+                          width: `${(meetInfo.participants.length / meetInfo.maxParticipants) * 100}%`,
                         }}
                       />
                     </div>
@@ -109,20 +150,21 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                             </span>
                           </div>
                         ))}
-                        {meetInfo.users.length > 4 && (
+                        {meetInfo.participants.length > 4 && (
                           <div className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'>
                             <span className='flex items-center justify-center text-label-reading text-gray-200'>
-                              {`+${meetInfo.users.length - 4}`}
+                              {`+${meetInfo.participants.length - 4}`}
                             </span>
                           </div>
                         )}
                       </div>
                       <div className='flex flex-1 justify-between desktop:justify-start'>
                         <span className='ml-3 text-label-reading text-gray-200'>
-                          {meetInfo.users.length}/{meetInfo.maxParticipants}
+                          {meetInfo.participants.length}/
+                          {meetInfo.maxParticipants}
                         </span>
                         <span className='ml-8 text-label-reading text-orange-300'>
-                          {`${meetInfo.maxParticipants - meetInfo.users.length}명 더 참여 할 수 있어요`}
+                          {`${meetInfo.maxParticipants - meetInfo.participants.length}명 더 참여 할 수 있어요`}
                         </span>
                       </div>
                     </div>
@@ -140,11 +182,11 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
             </div>
           </div>
           {/* 주최자 프로필, 시작 */}
-          <MeetButtonArea meetId={meetInfo.id} host={meetInfo.host} />
+          <MeetButtonArea clientInfo={clientInfo} />
         </div>
         {/* 리뷰 */}
         <div className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
-          <MeetDetailReview reviews={meetInfo.reviews} />
+          <MeetDetailReview meetupId={meetInfo.meetupId} reviews={reviews} />
         </div>
       </div>
     </div>

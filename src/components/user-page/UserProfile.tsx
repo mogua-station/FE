@@ -1,8 +1,4 @@
-import { type UserProfile as UserProfileType } from "@/types/user-page";
-
-interface UserProfileProps {
-  userInfo: UserProfileType;
-}
+import { type UserProfileProps } from "@/types/user-page";
 
 export default function UserProfile({ userInfo }: UserProfileProps) {
   const { nickname, profileImg, bio, userTagList, qualificationStatus } =

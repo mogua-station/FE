@@ -5,18 +5,18 @@ import IconButton from "../../common/buttons/IconButton";
 import SolidButton from "../../common/buttons/SolidButton";
 import { CalendarModal } from "../../common/modals/CalendarModal";
 import ResetIcon from "@/assets/images/icons/reset_thin.svg";
-import useModal from "@/hooks/useModal";
 import { type DateType } from "@/types/meetup.type";
 
 export default function MeetingDateModal({
   selectedDates,
   onDateChange,
+  close,
 }: {
   selectedDates: DateType;
   onDateChange: (dates: DateType) => void;
+  close: () => void;
 }) {
   const [currentDate, setCurrentDate] = useState<DateType>(selectedDates);
-  const { closeModal } = useModal();
 
   const handleReset = () => {
     setCurrentDate({ startDate: null, endDate: null });
@@ -25,7 +25,7 @@ export default function MeetingDateModal({
 
   const handleComplete = () => {
     onDateChange(currentDate);
-    closeModal();
+    close();
   };
 
   return (

@@ -1,25 +1,17 @@
 import { useInView } from "react-intersection-observer";
 import Card from "../common/card/Card";
 import Review from "../common/review/Review";
+import SkeletonList from "../common/skeleton/SkeletonList";
 import EmptyState from "./EmptyState";
 import { useInfiniteMeetings } from "@/hooks/useInfiniteMeetings";
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
 import {
-  type UserPageSection,
-  type MyReviewTab,
-  type StudyType,
   type EmptyStateVariant,
+  isMeetingCard,
+  isReviewInfo,
+  type MeetingListProps,
 } from "@/types/user-page";
-
-interface MeetingListProps {
-  userId: string;
-  tab: UserPageSection;
-  studyType: StudyType;
-  reviewTab?: MyReviewTab;
-  isMe: boolean;
-  token: string;
-}
 
 export const MeetingList = ({
   userId,
@@ -65,8 +57,9 @@ export const MeetingList = ({
       : tab
   ) as EmptyStateVariant; // 그 외에는 탭 정보만 전달
 
-  if (isLoading)
-    return <div className='flex justify-center py-4 text-white'>로딩중...</div>;
+  if (isLoading) {
+    return <SkeletonList base={3} tablet={3} desktop={8} />;
+  }
 
   // 첫 페지이 데이터가 없으면 EmptyState 표시
   if (!data?.pages[0]?.items.length) {
@@ -108,25 +101,13 @@ export const MeetingList = ({
     <section aria-label={`${tab} 목록`}>
       <ul className='grid flex-col gap-y-6 desktop:grid-cols-2 desktop:gap-x-5'>
         {data.pages.map((page, pageIndex) =>
-          page.items.map((item, itemIndex) =>
-            renderItem(item, pageIndex * 10 + itemIndex),
-          ),
+          page.items.map((item, itemIndex) => {
+            const globalIndex = pageIndex * page.items.length + itemIndex;
+            return renderItem(item, globalIndex);
+          }),
         )}
-        {isFetchingNextPage && (
-          <li className='col-span-full flex justify-center py-4 text-white'>
-            로딩중...
-          </li>
-        )}
+        {isFetchingNextPage && <SkeletonList base={3} tablet={3} desktop={4} />}
       </ul>
     </section>
   );
 };
-
-// 타입 가드 함수
-function isMeetingCard(item: CardProps | ReviewInfo): item is CardProps {
-  return "meetupId" in item && "status" in item;
-}
-
-function isReviewInfo(item: CardProps | ReviewInfo): item is ReviewInfo {
-  return "userid" in item && "review" in item;
-}

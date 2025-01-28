@@ -1,5 +1,7 @@
+import { PAGE_SIZE } from "@/constants/pagination";
 import useCookie from "@/hooks/auths/useTokenState";
-import { fetcher } from "@/lib/user/clientFetch";
+import { fetcher } from "@/lib/user/fetcher";
+
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
 import {
@@ -13,8 +15,6 @@ import {
   type EligibleReview,
   type WrittenReview,
 } from "@/types/user-page";
-
-const PAGE_SIZE = 10;
 
 // API 응답을 CardProps로 변환하는 함수
 const mapParticipatingMeetupToCard = (
@@ -140,6 +140,7 @@ export const fetchItems = async ({
       return {
         items: result.data.map(mapParticipatingMeetupToCard),
         hasNextPage: !result.additionalData.isLast,
+        nextPage: result.additionalData.nextPage,
       };
     } catch (error) {
       console.error("Error fetching participating meetups:", error);
@@ -168,6 +169,7 @@ export const fetchItems = async ({
           mapCreatedMeetupToCard(meetup, type),
         ),
         hasNextPage: !result.additionalData.isLast,
+        nextPage: result.additionalData.nextPage,
       };
     } catch (error) {
       console.error("Error fetching created meetups:", error);
@@ -204,6 +206,7 @@ export const fetchItems = async ({
               },
         ),
         hasNextPage: !result.additionalData.isLast,
+        nextPage: result.additionalData.nextPage,
       };
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -214,37 +217,25 @@ export const fetchItems = async ({
   // 수강평 탭일 경우 실제 API 호출
   if (tab === "classReview") {
     try {
-      const url = `/user/${userId}/reviews/received?page=${page - 1}&limit=${PAGE_SIZE}`;
-      console.log("[수강평 API 요청]", {
-        url,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const response = await fetcher(url, token, { auth: true });
-
-      console.log("[수강평 API 응답 상태]", {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries()),
-      });
+      const response = await fetcher(
+        `/user/${userId}/reviews/received?page=${page - 1}&limit=${PAGE_SIZE}`,
+        token,
+        { auth: true },
+      );
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("[수강평 API 에러]", errorText);
         throw new Error("Failed to fetch class reviews");
       }
 
       const result: ApiResponse<WrittenReview> = await response.json();
-      console.log("[수강평 API 응답 데이터]", result);
 
       return {
         items: result.data.map((item) => ({
-          ...mapWrittenReviewToReviewInfo(item as WrittenReview),
+          ...mapWrittenReviewToReviewInfo(item),
           eventType: "tutoring",
         })),
         hasNextPage: !result.additionalData.isLast,
+        nextPage: result.additionalData.nextPage,
       };
     } catch (error) {
       console.error("Error fetching class reviews:", error);

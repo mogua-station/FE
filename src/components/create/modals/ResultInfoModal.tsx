@@ -1,36 +1,41 @@
 import { useRouter } from "next/navigation";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useModal from "@/hooks/useModal";
 
 export function SuccessModal({
-  data,
+  meetupId,
+  close,
+  isEdit = false,
 }: {
-  data: { data: { meetupId: number } };
+  meetupId: number;
+  close: () => void;
+  isEdit?: boolean;
 }) {
-  const { closeModal } = useModal();
   const router = useRouter();
+
+  const type = isEdit ? "수정" : "개설";
 
   return (
     <div className='flex w-[17.6875rem] flex-col items-center p-6'>
       <p className='pb-3 text-heading-2 font-medium text-gray-100'>
-        모임 개설 완료
+        모임 {type} 완료
       </p>
       <p className='pb-6 text-body-2-normal font-medium text-gray-400'>
-        모임 개설이 완료되었어요
+        모임 {type}이 완료되었어요
       </p>
       <div className='flex w-full gap-[.4375rem]'>
         <SolidButton
           onClick={() => {
-            closeModal();
+            close();
             router.push("/");
           }}
+          mode='special'
         >
           목록으로
         </SolidButton>
         <SolidButton
           onClick={() => {
-            closeModal();
-            router.push(`/study/${data.data.meetupId}`);
+            close();
+            router.push(`/study/${meetupId}`);
           }}
           state='activated'
         >
@@ -41,18 +46,25 @@ export function SuccessModal({
   );
 }
 
-export function FailModal() {
-  const { closeModal } = useModal();
+export function FailModal({
+  title,
+  message,
+  close,
+}: {
+  title: string;
+  message: string;
+  close: () => void;
+}) {
   return (
     <div className='flex w-[17.6875rem] flex-col items-center p-6'>
-      <p className='pb-3 text-heading-2 font-medium text-gray-100'>
-        모임 개설 실패
-      </p>
+      <p className='pb-3 text-heading-2 font-medium text-gray-100'>{title}</p>
       <p className='pb-6 text-body-2-normal font-medium text-gray-400'>
-        모임 개설 중 오류가 발생했어요.
+        {message}
       </p>
       <div className='flex w-full gap-[.4375rem]'>
-        <SolidButton onClick={() => closeModal()}>닫기</SolidButton>
+        <SolidButton mode='special' onClick={close}>
+          닫기
+        </SolidButton>
       </div>
     </div>
   );

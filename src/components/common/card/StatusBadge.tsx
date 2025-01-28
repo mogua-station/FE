@@ -6,9 +6,10 @@ import { type BadgeInfo } from "@/types/card";
 //recruitmentDate = new Date() 모집중이 아닐때 오류를 피하기 위한 설정?
 export default function StatusBadge({ badge }: BadgeInfo) {
   const deadline = (date: Date) => {
-    if (!badge.recruitmentEndDate) return;
+    if (date == null) return;
 
     const diffTime = +new Date(date) - +new Date();
+
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
@@ -25,7 +26,7 @@ export default function StatusBadge({ badge }: BadgeInfo) {
             </span>
             <span className='flex items-center justify-between rounded-[6px] bg-gray-800 px-2 py-1'>
               <span className='text-caption-normal font-medium text-primary'>
-                {deadline(badge.recruitmentEndDate) == 1
+                {deadline(badge.recruitmentEndDate) == 0
                   ? "오늘 마감"
                   : `마감 D-${deadline(badge.recruitmentEndDate)}`}
               </span>
