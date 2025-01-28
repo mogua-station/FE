@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import DotLoader from "react-spinners/DotLoader";
 import {
   CommonEmailInput,
   CommonPasswordInput,
@@ -13,6 +15,7 @@ import { type FormData } from "@/types";
 
 const SignInBasicPage = () => {
   const { signIn } = useSignIn();
+  const [isLoading, setIsLoading] = useState(false);
   const setLoginWishlist = useLoginSetWishlist();
 
   const {
@@ -32,6 +35,7 @@ const SignInBasicPage = () => {
   const email = watch("email");
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setIsLoading(true);
     const result = await signIn(data);
 
     if (result?.error) {
@@ -41,6 +45,7 @@ const SignInBasicPage = () => {
       } else if (result.error.type === "password") {
         setError("password", { message: result.error.message });
       }
+      setIsLoading(false);
     }
 
     //로그인이 성공했을 때 찜하기를 가져와서 젼역 상태관리에 추가
@@ -92,13 +97,21 @@ const SignInBasicPage = () => {
                       비밀번호 찾기
                     </Link>
                   </div>
-                  <div>
-                    <SolidButton
-                      type='submit'
-                      state={isValid ? "activated" : "default"}
-                    >
-                      로그인
-                    </SolidButton>
+                  <div className='flex flex-col items-center gap-[12px]'>
+                    {/* 로딩중일 때는 버튼 비활성화 */}
+                    {!isLoading && (
+                      <SolidButton
+                        type='submit'
+                        state={isValid ? "activated" : "default"}
+                      >
+                        로그인
+                      </SolidButton>
+                    )}
+                    <DotLoader
+                      size={24}
+                      color={"#FF9A42"}
+                      loading={isLoading}
+                    />
                   </div>
                 </div>
               </div>
