@@ -1,57 +1,68 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import EmptyImage from "@/assets/images/icons/empty.svg";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Review from "@/components/common/review/Review";
 import { fetchMeetupReview } from "@/lib/meetDetail/meetDetailApi";
-import { type ReviewInfo } from "@/types/review";
+
+// interface RviewQuery {}
 
 export default function MeetDetailReview({
   meetupId,
-  reviews,
+  meetupStatus,
 }: {
   meetupId: number;
-  reviews: ReviewInfo[];
+  meetupStatus: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
 }) {
-  const [comment, setComment] = useState<ReviewInfo[]>([]);
-
-  const { data, isFetching, hasNextPage, fetchNextPage } = useInfiniteQuery({
+  const {
+    data: reviewData,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: ["review", meetupId],
     queryFn: ({ pageParam }) =>
       fetchMeetupReview({ pageParams: pageParam, meetupId: meetupId }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage, allPage) => {
+    getNextPageParam: (lastPage) => {
       const totalFetched = lastPage.page * 3;
-      console.log(allPage);
-      return totalFetched < reviews.length ? lastPage.page + 1 : undefined;
+      return totalFetched < lastPage.page * 3 ? lastPage.page + 1 : undefined;
     },
+    select: (data) => data.pages.flatMap((ele) => ele.data),
+    enabled: meetupStatus === "COMPLETED",
   });
 
   const handleClickNextComment = () => {
     fetchNextPage();
   };
 
-  useEffect(() => {
-    if (data?.pages.flatMap((ele) => ele.data) == null) return;
-
-    setComment(data?.pages.flatMap((ele) => ele.data));
-  }, [data]);
-
   return (
     <div className='flex flex-col gap-2'>
-      <div className='flex flex-col gap-4'>
-        <span className='text-title'>
+      <div className='flex flex-col'>
+        <span className='text-title mb-4'>
           리뷰{" "}
-          <span className='text-title text-blue-300'>{reviews.length}</span>
+          <span className='text-title text-blue-300'>
+            {reviewData != null ? reviewData.length : 0}
+          </span>
         </span>
         <div className='flex flex-col gap-6'>
-          {comment.map((review, index) => {
-            return <Review key={index} reviewInfo={review} />;
-          })}
+          {!isFetching &&
+            (reviewData && reviewData.length > 0 ? (
+              reviewData.map((review, index) => (
+                <Review key={index} reviewInfo={review} />
+              ))
+            ) : (
+              <div className='mt-[60px] flex flex-col items-center gap-4'>
+                <EmptyImage />
+                <p className='text-body-1-reading font-regular text-gray-500'>
+                  아직 작성된 리뷰가 없어요
+                </p>
+              </div>
+            ))}
         </div>
       </div>
-      {isFetching && <div>로딩중...</div>}
+      {isFetching && <p className='text-center text-white'>로딩중...</p>}
       {hasNextPage && (
         <SolidButton mode='special' onClick={handleClickNextComment}>
           더보기

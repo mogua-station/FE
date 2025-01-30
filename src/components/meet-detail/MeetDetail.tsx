@@ -3,7 +3,6 @@ import ShareMeetUpButton from "./ShareMeetUpButton";
 import StatusBadge from "@/components/common/card/StatusBadge";
 import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
 import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
-import { reviews } from "@/data/mockList";
 import { type MeetInfo, type ClientInfo } from "@/types/meetDetail";
 
 export default function MeetDetail({ meetInfo }: MeetInfo) {
@@ -187,7 +186,10 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
         </div>
         {/* 리뷰 */}
         <div className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
-          <MeetDetailReview meetupId={meetInfo.meetupId} reviews={reviews} />
+          <MeetDetailReview
+            meetupId={meetInfo.meetupId}
+            meetupStatus={meetInfo.meetupStatus}
+          />
         </div>
       </div>
       <ToastContainer
