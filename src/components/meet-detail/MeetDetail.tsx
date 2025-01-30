@@ -192,8 +192,9 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
       </div>
       <ToastContainer
         containerId={"joinArea"}
-        className='fixed bottom-[100px] left-1/2 right-[unset] top-[unset] w-full -translate-x-1/2 px-5 tablet:px-20 desktop:max-w-[585px] desktop:px-0'
         autoClose={2000}
+        className='fixed bottom-[100px] left-1/2 right-[unset] top-[unset] w-full -translate-x-1/2 px-5 tablet:px-20 desktop:max-w-[585px] desktop:px-0'
+        position='bottom-center'
       />
     </div>
   );

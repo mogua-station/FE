@@ -39,7 +39,6 @@ export default function MeetButtonArea({
 
   const JoinToastOption = {
     containerId: "joinArea",
-    autoClose: 2000,
     closeButton: false,
     className: "join-toast",
     hideProgressBar: true,

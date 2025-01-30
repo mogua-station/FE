@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ToastContentProps } from "react-toastify";
+import { useEffect } from "react";
+import { toast, type ToastContentProps } from "react-toastify";
 import JoinCheck from "@/assets/images/icons/join-check.svg";
 import useUserStore from "@/store/auth/useUserStore";
 
@@ -17,6 +18,16 @@ export default function JoinToast({ closeToast, type }: JoinToastProps) {
     closeToast();
     router.push(`/user/${user?.userId}`);
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      toast.dismiss();
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []);
 
   return (
     <div className='border-1 flex h-[66px] w-full items-center justify-between rounded-[20px] border-solid border-gray-700 bg-gray-800-80 px-5 py-3.5 desktop:max-w-[584px]'>
