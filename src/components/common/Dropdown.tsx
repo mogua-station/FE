@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Popover from "./Popover";
 import { type DropdownProps, type Position } from "@/types/dropdown.type";
 
@@ -15,6 +15,10 @@ export default function Dropdown({
   const [selected, setSelected] = useState<string | null>(
     defaultSelected || null,
   );
+
+  useEffect(() => {
+    setSelected(defaultSelected || null);
+  }, [defaultSelected]);
 
   const handleSelect = (
     label: string,
