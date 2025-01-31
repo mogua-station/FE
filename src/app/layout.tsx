@@ -4,6 +4,7 @@ import Providers from "./providers/Providers";
 import Header from "@/components/common/Header";
 import NavBar from "@/components/common/nav-bar/NavBar";
 import InitializeUser from "@/hooks/auths/InitializeUser";
+import ClearImageOnPageLeave from "@/hooks/inputs/images/useLeavePage";
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
@@ -31,6 +32,7 @@ export default function RootLayout({
         />
         <Providers>
           <InitializeUser />
+          <ClearImageOnPageLeave />
           <Header />
           <main className='relative flex flex-1 flex-col pb-[62px] pt-[56px] desktop:pb-0'>
             {children}
