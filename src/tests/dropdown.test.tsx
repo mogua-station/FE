@@ -21,7 +21,7 @@ describe("Dropdown Component", () => {
   it("기본 children(드롭다운 트리거)이 렌더링되는지 확인", () => {
     render(
       <Dropdown content={mockContent}>
-        <button>Open Dropdown</button>
+        <span>Open Dropdown</span>
       </Dropdown>,
     );
 
@@ -31,7 +31,7 @@ describe("Dropdown Component", () => {
   it("defaultSelected가 주어졌을 경우 해당 값이 초기 선택값으로 설정되는지 확인", () => {
     render(
       <Dropdown content={mockContent} defaultSelected='Option 1'>
-        <button>Open Dropdown</button>
+        <span>Open Dropdown</span>
       </Dropdown>,
     );
 
@@ -44,7 +44,7 @@ describe("Dropdown Component", () => {
   it("드롭다운을 클릭하면 Popover가 열리고, 옵션 리스트가 표시되는지 확인", async () => {
     render(
       <Dropdown content={mockContent}>
-        <button>Open Dropdown</button>
+        <span>Open Dropdown</span>
       </Dropdown>,
     );
 
@@ -62,7 +62,7 @@ describe("Dropdown Component", () => {
   it("옵션 클릭 시 onClick 콜백 함수가 호출되고, Dropdown이 닫히는지 확인", async () => {
     render(
       <Dropdown content={mockContent}>
-        <button>Open Dropdown</button>
+        <span>Open Dropdown</span>
       </Dropdown>,
     );
 
@@ -83,7 +83,7 @@ describe("Dropdown Component", () => {
   it("선택된 옵션이 변경되는지 확인", async () => {
     render(
       <Dropdown content={mockContent} defaultSelected='Option 1'>
-        <button>Open Dropdown</button>
+        <span>Open Dropdown</span>
       </Dropdown>,
     );
 
