@@ -82,3 +82,31 @@ export const createMeetup = async (formData: FormData) => {
 
   return await res.json();
 };
+
+export const editMeetup = async ({
+  id,
+  formData,
+}: {
+  id: number;
+  formData: FormData;
+}) => {
+  const accessToken = getAccessToken();
+
+  if (!accessToken) {
+    throw new Error("Access token is not found");
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`, {
+    method: "PATCH",
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to edit meetup");
+  }
+
+  return await res.json();
+};

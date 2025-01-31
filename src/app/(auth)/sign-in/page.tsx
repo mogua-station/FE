@@ -28,7 +28,7 @@ const SignInPage = () => {
         playsInline
       />
       <div className='flex h-screen flex-col items-center justify-center'>
-        <div className='relative z-10 flex h-full w-full flex-col items-center justify-end justify-center gap-[24px] p-4 tablet:justify-end tablet:p-20 desktop:w-[40%]'>
+        <div className='relative z-10 flex h-full w-full flex-col items-center justify-center gap-[24px] p-4 tablet:justify-end tablet:p-20 desktop:w-[40%]'>
           <div className='flex w-full flex-col gap-[16px] p-6'>
             <div className='flex w-full flex-col gap-[10px]'>
               <IconButton className='mt-2 w-full gap-[12px]'>

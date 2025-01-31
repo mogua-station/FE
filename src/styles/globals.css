@@ -109,34 +109,4 @@
     -moz-appearance: none;
     appearance: none;
   }
-
-  @keyframes slide-in {
-    from {
-      max-height: 0;
-      opacity: 0;
-    }
-    to {
-      max-height: 500px; /* Adjust based on content */
-      opacity: 1;
-    }
-  }
-
-  @keyframes slide-out {
-    from {
-      max-height: 500px; /* Adjust based on content */
-      opacity: 1;
-    }
-    to {
-      max-height: 0;
-      opacity: 0;
-    }
-  }
-
-  .animate-slide-in {
-    animation: slide-in 0.5s forwards;
-  }
-
-  .animate-slide-out {
-    animation: slide-out 0.5s forwards;
-  }
 }

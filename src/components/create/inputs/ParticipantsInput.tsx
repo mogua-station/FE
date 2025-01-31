@@ -8,6 +8,7 @@ interface ParticipantsInputProps extends BaseFormProps {
   name: "minParticipants" | "maxParticipants";
   label: string;
   hasError: boolean;
+  isDisabled?: boolean;
   onDecrease: () => void;
   onIncrease: () => void;
 }
@@ -17,6 +18,7 @@ export function ParticipantsInput({
   name,
   label,
   hasError,
+  isDisabled,
   onDecrease,
   onIncrease,
   watch,
@@ -36,6 +38,7 @@ export function ParticipantsInput({
           name={name}
           label={label}
           control={control}
+          disabled={isDisabled}
           rules={{
             required: `${label}을 입력해주세요.`,
             max: {
@@ -54,10 +57,10 @@ export function ParticipantsInput({
         />
       </div>
       <div className='flex w-[9.375rem] items-center gap-1.5'>
-        <SolidButton type='button' onClick={onDecrease}>
+        <SolidButton type='button' disabled={isDisabled} onClick={onDecrease}>
           <MinusIcon className='size-6 fill-gray-300' />
         </SolidButton>
-        <SolidButton type='button' onClick={onIncrease}>
+        <SolidButton type='button' disabled={isDisabled} onClick={onIncrease}>
           <PlusIcon className='size-6 fill-gray-300' />
         </SolidButton>
       </div>
