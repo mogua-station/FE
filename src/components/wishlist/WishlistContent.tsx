@@ -11,6 +11,7 @@ import {
   fetchUserWishlist,
   fetchLocalWishlist,
 } from "@/lib/wishlist/wishlistApi";
+import useUserStore from "@/store/auth/useUserStore";
 import { type CardProps } from "@/types/card";
 import {
   type LocationType,
@@ -24,13 +25,9 @@ export default function WishlistContent() {
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, { threshold: 0.5 });
   const isPageEnd = !!pageRef?.isIntersecting;
-  const user =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("user") || "null")
-      : null;
+  const { user } = useUserStore();
 
   //여러개의 값을 한번에 가져오고 싶다면
-
   const [filter, setFilter] = useState<FilterProps>({
     limit: 8,
     meetupType: "STUDY",
@@ -101,6 +98,10 @@ export default function WishlistContent() {
 
     refetch();
   }, [searchParams]);
+
+  useEffect(() => {
+    console.log(wishlist);
+  }, [wishlist]);
 
   if (isLoading) {
     return (

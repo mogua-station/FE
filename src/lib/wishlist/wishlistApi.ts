@@ -25,7 +25,7 @@ export const fetchUserAllWishlist = async (userId: number) => {
 export const fetchUserWishlist = async ({
   pageParms = 0,
   userId,
-  filter,
+  filter = "",
 }: {
   pageParms: number;
   userId: number;
@@ -34,7 +34,7 @@ export const fetchUserWishlist = async ({
   //유저 정보가 있을 때
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}${filter ? `&${filter}` : ""}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&${filter}`,
       {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
@@ -81,6 +81,8 @@ export const fetchLocalWishlist = async ({
     const responseData = await response.json();
 
     const meetupList = responseData.data;
+
+    console.log(meetupList);
 
     const wishlist = localStorage.getItem("wishlist");
     const arr = wishlist ? JSON.parse(wishlist as string) : [];
