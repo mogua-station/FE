@@ -143,7 +143,7 @@ export default function WishlistContent() {
         </section>
       )}
       {wishlist?.length == 0 && (
-        <div className='flex flex-col items-center gap-4 pt-20'>
+        <div className='flex flex-col items-center gap-4 pt-[72px]'>
           <Image
             src='/icons/empty.svg'
             alt='리스트 없음 이미지'

@@ -61,8 +61,8 @@ export default function useChangeWishlist() {
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
-      queryClient.refetchQueries({ queryKey: ["userAllWishlist"] });
-      queryClient.refetchQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["userAllWishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
     },
   });
 
@@ -96,8 +96,8 @@ export default function useChangeWishlist() {
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
-      queryClient.refetchQueries({ queryKey: ["userAllWishlist"] });
-      queryClient.refetchQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["userAllWishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
     },
   });
 
@@ -152,7 +152,7 @@ export default function useChangeWishlist() {
       if (myWishlist != storage) stateSetter(storage);
 
       //쿼리 다시 실행
-      queryClient.refetchQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
       router.refresh();
     } else {
       alert("모집중인 모임만 가능합니다");
