@@ -6,8 +6,6 @@ import SolidButton from "@/components/common/buttons/SolidButton";
 import Review from "@/components/common/review/Review";
 import { fetchMeetupReview } from "@/lib/meetDetail/meetDetailApi";
 
-// interface RviewQuery {}
-
 export default function MeetDetailReview({
   meetupId,
   meetupStatus,
