@@ -29,7 +29,7 @@ export const useSignUp = () => {
       const responseData = await response.json();
 
       if (!response.ok) {
-        if (responseData.message?.includes("Duplicate entry")) {
+        if (responseData.message?.includes("사용 중")) {
           setError("email", {
             message: "이미 등록된 이메일입니다. 다른 이메일을 사용해주세요.",
           });

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { type CardContentProps } from "@/types/card";
 
 export default function Content({ content }: CardContentProps) {
@@ -71,10 +72,13 @@ export default function Content({ content }: CardContentProps) {
         </div>
       </div>
       <div className='flex flex-col justify-end'>
-        <img
-          className='h-20 w-20 rounded-[8px] object-cover'
+        <Image
+          className='size-20 rounded-[8px] object-cover'
           src={content.thumbnail ? content.thumbnail : ""}
+          width={80}
+          height={80}
           alt='모임 이미지'
+          loading='lazy'
         />
       </div>
     </div>

@@ -1,52 +1,66 @@
 import { type CardProps } from "@/types/card";
+import { getAccessToken } from "@/utils/cookie";
 
-export const fetchUserWishlist = async (userId: number) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+export const fetchUserAllWishlist = async (userId: number) => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+        cache: "no-store",
       },
-      cache: "no-store",
-    },
-  );
+    );
 
-  return response.json();
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    throw new Error("데이터 요청 에러");
+  }
 };
 
 //사용자의 찜 목록을 가져오는 함수
-export const fetchWishlist = async ({
+export const fetchUserWishlist = async ({
   pageParms = 0,
   userId,
 }: {
   pageParms: number;
-  userId: number | null;
+  userId: number;
 }) => {
   //유저 정보가 있을 때
-  if (userId != null) {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&limit=8`,
-        {
-          headers: {
-            Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
-          },
-          cache: "no-store",
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&limit=8`,
+      {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
         },
-      );
+        cache: "no-store",
+      },
+    );
 
-      const responseData = await response.json();
-
-      return {
-        data: responseData.data,
-        page: pageParms,
-      };
-    } catch (error) {
-      console.error(error);
-      throw new Error("데이터 요청 에러");
+    if (!response.ok) {
+      throw new Error(response.statusText);
     }
-  }
 
+    const responseData = await response.json();
+
+    return {
+      data: responseData.data,
+      page: pageParms,
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const fetchLocalWishlist = async ({
+  pageParms = 0,
+}: {
+  pageParms: number;
+}) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/list`,
@@ -54,6 +68,10 @@ export const fetchWishlist = async ({
         cache: "no-store",
       },
     );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
 
     const responseData = await response.json();
 
@@ -77,7 +95,7 @@ export const fetchWishlist = async ({
     };
   } catch (error) {
     console.error(error);
-    throw new Error("데이터 요청 에러");
+    throw error;
   }
 };
 
@@ -89,7 +107,7 @@ export const deleteUserWishList = async (meetupId: number) => {
       {
         method: "Delete",
         headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       },
     );
@@ -113,7 +131,7 @@ export const addUserWishlist = async (meetupId: number) => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       },
     );
