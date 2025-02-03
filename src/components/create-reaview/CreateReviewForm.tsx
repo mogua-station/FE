@@ -1,13 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
 import RatingInput from "@/components/create-reaview/RatingInput";
 import ReviewImageInput from "@/components/create-reaview/ReviewImageInput";
 import useCookie from "@/hooks/auths/useTokenState";
-import { useReviewMutation } from "@/hooks/review/useReviewMutation";
+import useReviewMutations from "@/hooks/review/useReviewMutation";
 
 interface ReviewFormData {
   rating: number;
@@ -18,18 +17,7 @@ interface ReviewFormData {
 
 export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
   const token = useCookie("accessToken");
-  const router = useRouter();
-
-  if (!token) {
-    router.replace("/");
-    return null;
-  }
-
-  if (!meetupId) {
-    router.replace("/");
-    return null;
-  }
-
+  const { createReviewMutation } = useReviewMutations();
   const methods = useForm<ReviewFormData>({
     defaultValues: {
       rating: -1,
@@ -46,8 +34,6 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
   const content = watch("content");
   const isFormValid = rating !== -1 && content.trim() !== "";
 
-  const createReviewMutation = useReviewMutation();
-
   const handleRatingChange = (value: number) => {
     setValue("rating", value);
   };
@@ -57,6 +43,8 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
   };
 
   const onSubmit = handleSubmit(async (data) => {
+    if (!token) return;
+
     const formData = new FormData();
 
     const requestData = {
@@ -103,7 +91,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
           type='submit'
           className='mt-10'
           state={
-            createReviewMutation.isPending || !isFormValid
+            createReviewMutation.isPending || !isFormValid || !token
               ? "inactive"
               : "activated"
           }

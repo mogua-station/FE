@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import BackButton from "@/components/create-reaview/BackButton";
 import CreateReviewForm from "@/components/create-reaview/CreateReviewForm";
 import ReviewGreeting from "@/components/create-reaview/ReviewGreeting";
@@ -7,6 +9,17 @@ export default function CreateReview({
 }: {
   searchParams: { meetupId: string };
 }) {
+  const cookieStore = cookies();
+  const token = cookieStore.get("accessToken");
+
+  if (!token) {
+    redirect("/");
+  }
+
+  if (!searchParams.meetupId) {
+    redirect("/");
+  }
+
   return (
     // TODO: NavBar 없는 레이아웃 적용 필요
     <div className='relative z-10 flex justify-center'>
