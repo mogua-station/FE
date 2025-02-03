@@ -60,7 +60,7 @@ export default function Card({ card }: CardInfo) {
   const handleClickReview = (e: React.MouseEvent, meetUpId: number) => {
     e.stopPropagation();
 
-    alert(`${meetUpId} 리뷰 작성`);
+    router.push(`/user/create_review?meetupId=${meetUpId}`);
   };
 
   useEffect(() => {
