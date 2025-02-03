@@ -41,12 +41,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
     mode: "onChange",
   });
 
-  const {
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { isSubmitting },
-  } = methods;
+  const { handleSubmit, setValue, watch } = methods;
 
   const rating = watch("rating");
   const content = watch("content");
@@ -134,9 +129,13 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
         <SolidButton
           type='submit'
           className='mt-10'
-          state={isSubmitting || !isFormValid ? "inactive" : "activated"}
+          state={
+            createReviewMutation.isPending || !isFormValid
+              ? "inactive"
+              : "activated"
+          }
         >
-          {isSubmitting ? "작성 중..." : "작성 완료"}
+          {createReviewMutation.isPending ? "작성 중..." : "작성 완료"}
         </SolidButton>
       </form>
     </FormProvider>
