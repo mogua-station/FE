@@ -26,7 +26,7 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
             {reviewContent.title}
           </span>
           <span className='inline-block pl-2 text-label-reading font-regular text-gray-400'>
-            {reviewContent.meetingEndDate.toLocaleDateString("ko-KR")}
+            {reviewContent.meetingEndDate?.toLocaleDateString("ko-KR") ?? "-"}
           </span>
         </div>
       )}
