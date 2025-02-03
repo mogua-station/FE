@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RecruitmentDateModals from "../modals/RecruitmentDateModals";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
 import type { DateType } from "@/types/meetup.type";
@@ -19,6 +19,12 @@ export default function RecruitmentDateInput({
     startDate: initDate.startDate ?? new Date(),
     endDate: initDate.endDate ?? null,
   });
+
+  useEffect(() => {
+    if (initDate.endDate) {
+      setSelectedDate(initDate);
+    }
+  }, [initDate]);
 
   const handleClick = () => {
     modal.open(

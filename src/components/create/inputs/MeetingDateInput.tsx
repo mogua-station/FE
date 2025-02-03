@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MeetingDateModal from "../modals/MeetingDateModal";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
 import { type DateType } from "@/types/meetup.type";
@@ -21,6 +21,12 @@ export default function MeetingDateInput({
       endDate: null,
     },
   );
+
+  useEffect(() => {
+    if (initDate) {
+      setSelectedDate(initDate);
+    }
+  }, [initDate]);
 
   const handleClick = () => {
     modal.open(
