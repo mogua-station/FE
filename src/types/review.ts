@@ -6,7 +6,7 @@ export interface ReviewInfo {
   username: string;
   userprofile?: string;
   date: Date;
-  meetingEndDate: Date;
+  meetingEndDate?: Date;
   isMyReview?: boolean;
   eventId?: number;
   eventType?: string;
