@@ -7,6 +7,7 @@ export interface ReviewInfo {
   userprofile?: string;
   date: Date;
   isMyReview?: boolean;
+  isMyWritten?: boolean;
   eventId?: number;
   eventType?: string;
 }
