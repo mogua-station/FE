@@ -50,10 +50,12 @@ export function FailModal({
   title,
   message,
   close,
+  btnText = "닫기",
 }: {
   title: string;
   message: string;
   close: () => void;
+  btnText?: string;
 }) {
   return (
     <div className='flex w-[17.6875rem] flex-col items-center p-6'>
@@ -63,7 +65,7 @@ export function FailModal({
       </p>
       <div className='flex w-full gap-[.4375rem]'>
         <SolidButton mode='special' onClick={close}>
-          닫기
+          {btnText}
         </SolidButton>
       </div>
     </div>
