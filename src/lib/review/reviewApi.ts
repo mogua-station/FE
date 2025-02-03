@@ -1,8 +1,6 @@
 import { fetcher } from "@/lib/user/fetcher";
 
 export const createReview = async (formData: FormData, token: string) => {
-  if (!token) throw new Error("로그인이 필요합니다.");
-
   const res = await fetcher("/reviews", token, {
     method: "POST",
     body: formData,

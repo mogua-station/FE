@@ -20,6 +20,11 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
   const token = useCookie("accessToken");
   const router = useRouter();
 
+  if (!token) {
+    router.replace("/");
+    return null;
+  }
+
   if (!meetupId) {
     router.replace("/");
     return null;
@@ -52,8 +57,6 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    if (!token) return;
-
     const formData = new FormData();
 
     const requestData = {
