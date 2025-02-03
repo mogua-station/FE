@@ -9,6 +9,7 @@ interface DateInputSectionProps
   initDate: DateRange;
   onChange: (date: DateRange) => void;
   errorMessage?: string;
+  isDisabled?: boolean;
 }
 
 export function DateInputSection({
@@ -16,6 +17,7 @@ export function DateInputSection({
   initDate,
   onChange,
   errorMessage,
+  isDisabled,
 }: DateInputSectionProps) {
   return (
     <div className='flex flex-col'>
@@ -23,9 +25,17 @@ export function DateInputSection({
         {label}
       </label>
       {label === "모집 기간" ? (
-        <RecruitmentDateInput initDate={initDate} onChange={onChange} />
+        <RecruitmentDateInput
+          initDate={initDate}
+          onChange={onChange}
+          isDisabled={isDisabled}
+        />
       ) : (
-        <MeetingDateInput initDate={initDate} onChange={onChange} />
+        <MeetingDateInput
+          initDate={initDate}
+          onChange={onChange}
+          isDisabled={isDisabled}
+        />
       )}
       <span
         className={`px-2 pt-2 text-label-normal font-medium ${errorMessage ? "text-danger" : "text-gray-500"}`}

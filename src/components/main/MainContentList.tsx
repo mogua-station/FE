@@ -1,89 +1,29 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import SolidButton from "../common/buttons/SolidButton";
 import CardSkeleton from "../common/skeleton/CardSkeleton";
 import EmptyImage from "@/assets/images/icons/empty.svg";
 import Card from "@/components/common/card/Card";
-import { getMeetupList } from "@/lib/main/meetup.api";
-import type {
-  OrderType,
-  LocationType,
-  MeetupType,
-  StateType,
-} from "@/types/meetup.type";
-import { generateQueryKey } from "@/utils/meetup.queryKey";
+import { useMeetupList } from "@/hooks/meetup/useMeetupList";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 export default function MainContentList() {
-  const loadMoreRef = useRef<HTMLDivElement>(null); // 무한 스크롤 관찰자
-  const searchParams = useSearchParams();
+  const { data, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMeetupList();
+  const loadMoreRef = useInfiniteScroll(
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  );
 
-  const typeQuery = (searchParams.get("type") as MeetupType) ?? undefined;
-  const stateQuery = (searchParams.get("state") as StateType) ?? undefined;
-  const locationQuery =
-    (searchParams.get("location") as LocationType) ?? undefined;
-  const startQuery = searchParams.get("startDate") ?? undefined;
-  const endQuery = searchParams.get("endDate") ?? undefined;
-  const orderByQuery = (searchParams.get("orderBy") as OrderType) ?? undefined;
-
-  const queryKey = generateQueryKey({
-    type: typeQuery,
-    state: stateQuery,
-    location: locationQuery,
-    startDate: startQuery,
-    endDate: endQuery,
-    orderBy: orderByQuery,
-  });
-
-  // 무한 스크롤을 통한 데이터 불러오기
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey,
-      queryFn: ({ pageParam = 0 }) =>
-        getMeetupList({
-          page: pageParam,
-          limit: 10,
-          orderBy: orderByQuery,
-          type: typeQuery,
-          state: stateQuery,
-          location: locationQuery,
-          startDate: startQuery,
-          endDate: endQuery,
-        }),
-      getNextPageParam: (lastPage) =>
-        !lastPage.isLast ? lastPage.nextPage : undefined,
-      initialPageParam: 0,
-      retry: 1,
-    });
-
-  // 무한 스크롤 관찰자 설정
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.5 },
+  if (!data || data.pages[0].data.length === 0 || isError) {
+    return (
+      <MainContentEmpty
+        isSearching={!!new URLSearchParams(window.location.search)}
+      />
     );
-
-    const currentRef = loadMoreRef.current;
-
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  if (!data || data.pages[0].data.length === 0)
-    return <MainContentEmpty isSearching={queryKey.length > 1} />;
+  }
 
   return (
     <>
