@@ -47,8 +47,8 @@ export const useUploadImage = () => {
   };
 
   // 이미지 삭제 처리
-  const handleImageDelete = async (event: React.MouseEvent) => {
-    event.stopPropagation(); // 부모 클릭 방지 (input 파일 선택)
+  const handleImageDelete = async (event?: React.MouseEvent) => {
+    if (event) event.stopPropagation(); // 부모 클릭 방지 (input 파일 선택)
     try {
       await deleteImage();
       setImage(null);

@@ -5,7 +5,6 @@ import { type ReviewQueryProps } from "@/types/review";
 
 export default function usePrefetchMeetingReview(meetupId: number) {
   const queryClient = new QueryClient();
-  console.log(123);
 
   queryClient.prefetchInfiniteQuery({
     queryKey: ["review", meetupId],
