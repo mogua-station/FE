@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import SolidButton from "../common/buttons/SolidButton";
 import CardSkeleton from "../common/skeleton/CardSkeleton";
 import EmptyImage from "@/assets/images/icons/empty.svg";
@@ -24,6 +25,10 @@ export default function MainContentList() {
       />
     );
   }
+
+  useEffect(() => {
+    console.log(Card);
+  });
 
   return (
     <>

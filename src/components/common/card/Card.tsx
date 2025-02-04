@@ -12,7 +12,7 @@ import useUserStore from "@/store/auth/useUserStore";
 import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type CardInfo } from "@/types/card";
 
-export default function Card({ card }: CardInfo) {
+const Card = ({ card }: CardInfo) => {
   const { user } = useUserStore();
   const router = useRouter();
   const { userAllWishlist } = useUserWishlist();
@@ -92,7 +92,18 @@ export default function Card({ card }: CardInfo) {
         </div>
 
         {!card.isMypage && (
-          <button onClick={(e) => handleClickWishlist(e)}>
+          <button
+            onClick={(e) => handleClickWishlist(e)}
+            aria-label={
+              user !== null
+                ? userAllWishlist.includes(card.meetupId)
+                  ? "active"
+                  : "default"
+                : wishlist.includes(card.meetupId)
+                  ? "active"
+                  : "default"
+            }
+          >
             {card.meetupStatus === "RECRUITING" ? (
               user != null ? (
                 userAllWishlist.includes(card.meetupId) ? (
@@ -125,4 +136,6 @@ export default function Card({ card }: CardInfo) {
       )}
     </div>
   );
-}
+};
+
+export default Card;
