@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import CameraIcon from "@/assets/images/icons/camera.svg";
 import DeleteIcon from "@/assets/images/icons/delete.svg";
@@ -45,10 +46,15 @@ export default function ProfileImageInput({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <img
-          className='size-20 rounded-full border-4 border-gray-600 object-cover'
+        <Image
           src={previewUrl || profileImg}
           alt='프로필 이미지'
+          className='size-20 rounded-full border-4 border-gray-600 object-cover'
+          width={80}
+          height={80}
+          priority
+          quality={75}
+          sizes='80px'
         />
         {previewUrl && isHovered && (
           <div className='absolute inset-0 flex items-center justify-center rounded-full bg-black/50'>
