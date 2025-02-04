@@ -11,10 +11,6 @@ export default async function UserPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
   const token = cookieStore.get("accessToken")?.value || "";
 
-  if (!token) {
-    throw new Error("인증이 필요한 페이지입니다.");
-  }
-
   const userInfo = await getUserProfile(userId, token, {
     cache: "no-store",
   });
