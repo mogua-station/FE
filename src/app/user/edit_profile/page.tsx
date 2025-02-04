@@ -1,8 +1,9 @@
+import { type Metadata } from "next";
 import AccountActionButtons from "@/components/edit-profile/AccountActionButtons";
 import ContactBanner from "@/components/edit-profile/ContactBanner";
 import EditProfileForm from "@/components/edit-profile/EditProfileForm";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "프로필 수정 | mogua",
   description: "계정 정보를 업데이트하고 프로필을 관리하세요.",
   robots: {
