@@ -15,14 +15,14 @@ export function useEditProfile() {
     data: userInfo,
     error,
     refetch,
-  } = useGetProfile(user ? user.userId : 0, token || "");
+  } = useGetProfile(user ? user.userId : 0);
 
   // user 정보가 업데이트되면 프로필 정보 다시 가져오기
   useEffect(() => {
-    if (user && token) {
+    if (user) {
       refetch();
     }
-  }, [user, token, refetch]);
+  }, [user, refetch]);
 
   const updateProfileMutation = useUpdateProfile();
 
