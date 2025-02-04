@@ -11,7 +11,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
   const cookieStore = cookies();
   const token = cookieStore.get("accessToken")?.value || "";
 
-  const userInfo = await getUserProfile(userId, token, {
+  const userInfo = await getUserProfile(userId, {
     cache: "no-store",
   });
 

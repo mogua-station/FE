@@ -1,13 +1,8 @@
 import { fetcher } from "./fetcher";
 import { type UserProfile } from "@/types/user-page";
 
-export async function getUserProfile(
-  userId: string,
-  token: string,
-  options?: RequestInit,
-) {
-  const res = await fetcher(`/user/profile/${userId}`, token, {
-    auth: true,
+export async function getUserProfile(userId: string, options?: RequestInit) {
+  const res = await fetcher(`/user/profile/${userId}`, {
     ...options,
   });
 
