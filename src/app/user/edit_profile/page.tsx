@@ -1,5 +1,3 @@
-"use client";
-
 import AccountActionButtons from "@/components/edit-profile/AccountActionButtons";
 import ContactBanner from "@/components/edit-profile/ContactBanner";
 import EditProfileForm from "@/components/edit-profile/EditProfileForm";
