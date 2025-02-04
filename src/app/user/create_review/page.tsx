@@ -1,7 +1,17 @@
+import { type Metadata } from "next";
 import { redirect } from "next/navigation";
 import BackButton from "@/components/create-reaview/BackButton";
 import CreateReviewForm from "@/components/create-reaview/CreateReviewForm";
 import ReviewGreeting from "@/components/create-reaview/ReviewGreeting";
+
+export const metadata: Metadata = {
+  title: "리뷰 작성 | mogua",
+  description: "참여한 모임에 대해 리뷰를 작성해보세요.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function CreateReview({
   searchParams,
