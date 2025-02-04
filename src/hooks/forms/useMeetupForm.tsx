@@ -7,7 +7,6 @@ import { useIndexedDB } from "../inputs/images/useIndexedDB";
 import useMeetupMutations from "../meetup/useMeetupMutations";
 import { useGetProfile } from "../user/useProfile";
 import { FailModal } from "@/components/create/modals/ResultInfoModal";
-import useCookie from "@/hooks/auths/useTokenState";
 import { fetchMeetupData } from "@/lib/meetDetail/meetDetailApi";
 import useUserStore from "@/store/auth/useUserStore";
 import { type MeetProps } from "@/types/meetDetail";
@@ -32,8 +31,7 @@ export const useMeetupForm = (id?: number) => {
   const { loadImage } = useIndexedDB();
   const [removedInitImage, setRemovedInitImage] = useState(false);
   const { createMeetupMutation, editMeetupMutation } = useMeetupMutations(id);
-  const accessToken = useCookie("accessToken");
-  const userInfo = useGetProfile(userId!, accessToken!);
+  const userInfo = useGetProfile(userId!);
   const router = useRouter();
 
   useEffect(() => {
