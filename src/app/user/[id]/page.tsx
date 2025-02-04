@@ -19,6 +19,10 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: `${userInfo?.nickname}님의 프로필 | mogua`,
     description: `${userInfo?.nickname}님의 활동 내역을 확인해보세요.`,
+    robots: {
+      index: false,
+      follow: false,
+    },
   };
 }
 
