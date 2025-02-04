@@ -15,7 +15,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
     throw new Error("인증이 필요한 페이지입니다.");
   }
 
-  const userInfo = await getUserProfile(userId, token, {
+  const userInfo = await getUserProfile(userId, {
     cache: "no-store",
   });
 
