@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import CameraIcon from "@/assets/images/icons/camera.svg";
 import DeleteIcon from "@/assets/images/icons/delete.svg";
-import { useSimpleImageUpload } from "@/hooks/useSimpleImageUpload";
+import { useUploadImage } from "@/hooks/inputs/images/useUploadImage";
 
 export default function ProfileImageInput({
   profileImg,
@@ -15,7 +15,7 @@ export default function ProfileImageInput({
   const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { image, previewUrl, handleImageUpload, handleImageDelete } =
-    useSimpleImageUpload();
+    useUploadImage();
 
   const handleCameraclick = (e: React.MouseEvent) => {
     e.stopPropagation();
