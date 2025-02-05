@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { type UserProfileProps } from "@/types/user-page";
 
 export default function UserProfile({ userInfo }: UserProfileProps) {
@@ -31,10 +32,15 @@ export default function UserProfile({ userInfo }: UserProfileProps) {
           ))}
         </ul>
       </div>
-      <img
-        src={`${profileImg != null ? profileImg : "/images/default_user_profile.png"}`}
+      <Image
+        src={profileImg}
         alt={`${nickname}님의 프로필 이미지`}
         className='size-16 rounded-full object-cover'
+        width={64}
+        height={64}
+        priority
+        quality={75}
+        sizes='64px'
       />
     </div>
   );

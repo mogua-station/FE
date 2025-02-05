@@ -1,10 +1,13 @@
+import { useRouter } from "next/navigation";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
 export default function CardReview({ meetupId }: { meetupId: number }) {
+  const router = useRouter();
+
   const handleClickReview = (e: React.MouseEvent, meetUpId: number) => {
     e.stopPropagation();
 
-    alert(`${meetUpId} 리뷰 작성`);
+    router.push(`/user/create_review?meetupId=${meetUpId}`);
   };
 
   return (

@@ -6,16 +6,33 @@ import UserProfile from "@/components/user-page/UserProfile";
 import UserTabs from "@/components/user-page/UserTabs";
 import { getUserProfile } from "@/lib/user/getUserProfile";
 
-export default async function UserPage({ params }: { params: { id: string } }) {
+type Props = {
+  params: { id: string };
+};
+
+export async function generateMetadata({ params }: Props) {
+  // Next.js는 서버 컴포넌트 내에서 동일한 요청에 대해 자동으로 중복 요청을 방지함
+  const userInfo = await getUserProfile(params.id, {
+    cache: "no-store",
+  });
+
+  return {
+    title: `${userInfo?.nickname}님의 프로필 | mogua`,
+    description: `${userInfo?.nickname}님의 활동 내역을 확인해보세요.`,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
+
+export default async function UserPage({ params }: Props) {
   const userId = params.id;
   const cookieStore = cookies();
   const token = cookieStore.get("accessToken")?.value || "";
 
-  if (!token) {
-    throw new Error("인증이 필요한 페이지입니다.");
-  }
-
-  const userInfo = await getUserProfile(userId, token, {
+  // 위의 generateMetadata와 동일한 요청이기 때문에 자동으로 재사용 됨
+  const userInfo = await getUserProfile(userId, {
     cache: "no-store",
   });
 
