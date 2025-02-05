@@ -96,6 +96,7 @@ export const mapWrittenReviewToReviewInfo = (
     title: review.title,
     review: review.content,
     date: new Date(review.reviewDate),
+    meetingEndDate: new Date(review.meetingEndDate),
     isMyReview: true,
     eventId: review.meetupId,
   };

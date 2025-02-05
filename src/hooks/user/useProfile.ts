@@ -2,11 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetcher } from "@/lib/user/fetcher";
 import { getUserProfile } from "@/lib/user/getUserProfile";
 
-export const useGetProfile = (userId: number, token: string) => {
+export const useGetProfile = (userId: number) => {
   return useQuery({
     queryKey: ["userProfile", userId],
-    queryFn: async () => getUserProfile(userId.toString(), token),
-    enabled: userId > 0 && !!token,
+    queryFn: async () => getUserProfile(userId.toString()),
+    enabled: userId > 0,
     staleTime: Infinity,
   });
 };
