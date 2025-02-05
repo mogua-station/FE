@@ -74,4 +74,23 @@ describe("getUserProfile", () => {
       "해당 유저는 존재하지 않습니다.",
     );
   });
+
+  it("API 응답에 에러 메세지가 없으면 기본 에러 메세지를 던진다", async () => {
+    const defaultErrorMessage = "유저 프로필을 불러오는데 실패했습니다.";
+
+    const errorResponse = {
+      status: "error",
+      data: null,
+      message: "",
+      additionalData: null,
+    };
+
+    (fetcher as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: () => Promise.resolve(errorResponse),
+    });
+
+    await expect(getUserProfile("999")).rejects.toThrow(defaultErrorMessage);
+  });
 });

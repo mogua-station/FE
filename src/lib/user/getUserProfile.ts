@@ -16,7 +16,7 @@ export async function getUserProfile(userId: string, options?: RequestInit) {
       errorMessage: message,
     });
 
-    throw new Error(message);
+    throw new Error(message || "유저 프로필을 불러오는데 실패했습니다.");
   }
 
   return data as UserProfile;
