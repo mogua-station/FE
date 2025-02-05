@@ -13,26 +13,6 @@ import {
 } from "@/types/card";
 import "@testing-library/jest-dom";
 
-//mocking이 필요한 기준
-
-/*
-- 테스트 환경에서 실제 동작이 불가능한 경우 
-  useRouter처럼 브라우저 환경에서 동작하는 함수들은 jest 환경에서 동작이 불가하므로 mocking해야한다
-
-
-- 외부 상태나 API 호출이 포함된 경우
-  상태관리 또는 API 요청 같은 동작들을 mocking이 필요하다
-
-
-- 의존성이 강한 외부 라이브러릴나 시스템 리소스를 사용하는 경우
-  로컬스토리지 같은 외부 의존성이 강한 기능을 테스트할려면 mocking이 필요하다
-
-
-- 테스트할 필요가 없는 내부 구현을 단순화하려는 경우
-  테스트에서는 기능 결과만 필요할 때 mocking한다(예를들어 useRouter.push는 nextjs에서 보장이 되므로 테스트할 필요가 없다)
-
-*/
-
 //useRouter mocking
 jest.mock("next/navigation", () => ({
   __esModule: true,
