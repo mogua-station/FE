@@ -6,17 +6,18 @@ export async function getUserProfile(userId: string, options?: RequestInit) {
     ...options,
   });
 
+  const { data, message } = await res.json();
+
   if (!res.ok) {
-    const errorData = await res.text();
-    console.error("Profile API Error:", {
+    console.error("사용자 프로필 조회 실패:", {
+      url: `/user/profile/${userId}`,
       status: res.status,
       statusText: res.statusText,
-      errorMessage: errorData,
+      errorMessage: message,
     });
 
-    throw new Error("사용자 프로필을 가져오지 못했습니다.");
+    throw new Error(message);
   }
 
-  const { data } = await res.json();
   return data as UserProfile;
 }
