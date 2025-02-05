@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import ETCButton from "@/components/common/buttons/ETCButton";
 import "@testing-library/jest-dom";
 
@@ -18,6 +18,8 @@ describe("ETCButton", () => {
   });
 
   describe("스타일 변경", () => {
+    beforeEach(cleanup);
+
     it("state가 activated일 때 버튼 스타일이 변경된다", () => {
       render(<ETCButton state='activated'>버튼</ETCButton>);
       const button = screen.getByRole("button");
@@ -32,6 +34,8 @@ describe("ETCButton", () => {
   });
 
   describe("이벤트 핸들링", () => {
+    beforeEach(cleanup);
+
     it("클릭 이벤트가 정상적으로 동작한다", () => {
       const handleClick = jest.fn();
       render(<ETCButton onClick={handleClick}>버튼</ETCButton>);
