@@ -6,6 +6,7 @@ describe("ETCButton", () => {
   describe("기본 렌더링", () => {
     render(<ETCButton>버튼</ETCButton>);
     const button = screen.getByRole("button");
+
     it("버튼이 정상적으로 렌더링된다", () => {
       expect(button).toBeInTheDocument();
       expect(button).toHaveTextContent("버튼");
