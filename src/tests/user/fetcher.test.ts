@@ -12,7 +12,7 @@ describe("fetcher", () => {
     global.fetch = jest.fn(() => Promise.resolve(mockResponse));
   });
 
-  describe("기본 요청", () => {
+  describe("기본 동작", () => {
     it("기본 GET 요청을 성공적으로 처리한다", async () => {
       const res = await fetcher("/test", "");
       const data = await res.json();
@@ -113,6 +113,26 @@ describe("fetcher", () => {
 
       const fetchCall = (global.fetch as jest.Mock).mock.calls[0][1];
       expect(fetchCall.body).toBeInstanceOf(FormData);
+    });
+  });
+
+  describe("Next.js 옵션 처리", () => {
+    it("Next.js fetch 옵션을 처리할 수 있다", async () => {
+      const nextOptions = {
+        cache: "no-store" as const,
+        next: { revalidate: 60 },
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Language": "ko-KR",
+        },
+      };
+
+      await fetcher("/test", "", nextOptions);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining(nextOptions),
+      );
     });
   });
 });
