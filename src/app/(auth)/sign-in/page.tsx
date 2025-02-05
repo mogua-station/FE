@@ -34,7 +34,7 @@ const SignInPage = () => {
               <IconButton className='mt-2 w-full gap-[12px]'>
                 <KakaoIcon className='mr-[12px] size-6 text-yellow-400' />
                 <Link
-                  href='#'
+                  href={process.env.NEXT_PUBLIC_KAKAO_AUTH_URL || "#"}
                   className='text-body-2-normal font-medium text-gray-200'
                 >
                   <p>카카오로 시작하기</p>
