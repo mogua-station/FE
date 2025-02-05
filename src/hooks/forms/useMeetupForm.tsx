@@ -4,7 +4,6 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useLocalStorageForm } from "./useLocalStorageForm";
 import { useMeetupPermissions } from "./useMeetupPermissions";
 import { FailModal } from "@/components/create/modals/ResultInfoModal";
-import useCookie from "@/hooks/auths/useTokenState";
 import { useIndexedDB } from "@/hooks/inputs/images/useIndexedDB";
 import useMeetupMutations from "@/hooks/meetup/useMeetupMutations";
 import { useGetProfile } from "@/hooks/user/useProfile";
@@ -31,8 +30,7 @@ export const useMeetupForm = (id?: number) => {
   const { loadImage } = useIndexedDB();
   const [removedInitImage, setRemovedInitImage] = useState(false);
   const { createMeetupMutation, editMeetupMutation } = useMeetupMutations(id);
-  const accessToken = useCookie("accessToken");
-  const userInfo = useGetProfile(userId!, accessToken!);
+  const userInfo = useGetProfile(userId!);
   const tempKey = isEdit ? `meetup-edit-${id}` : "meetup-create";
 
   const methods = useForm<MeetupFormType>({
