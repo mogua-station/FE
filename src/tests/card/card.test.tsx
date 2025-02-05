@@ -39,57 +39,6 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn().mockReturnValue({ push: jest.fn() }),
 }));
 
-// //아래 4개의 컴포넌트는 렌더링이 되는지만 확인하기 위해 mocking
-// jest.mock("../components/common/card/StatusBadge", () => ({
-//   __esModule: true,
-//   default: () => <span>Mocked StatusBadge</span>,
-// }));
-
-// jest.mock("../components/common/card/CardWishlist", () => ({
-//   __esModule: true,
-//   default: () => <button>Mocked CardWishlist</button>,
-// }));
-
-// jest.mock("../components/common/card/Content", () => ({
-//   __esModule: true, // default export가 필요하므로 추가
-//   default: (props: CardContentProps) => {
-//     return <div>{props.content.title}</div>;
-//   },
-// }));
-
-// jest.mock("../components/common/card/CardReview", () => ({
-//   __esModule: true,
-//   default: () => <SolidButton>Mocked CardWishlist</SolidButton>,
-// }));
-
-//zustand 유저 store mocking
-// jest.mock("../store/auth/useUserStore", () => ({
-//   __esModule: true,
-//   default: jest.fn(() => ({
-//     user: null,
-//     setUser: jest.fn(),
-//     clearUser: jest.fn(),
-//   })),
-// }));
-
-// //zustand 유저 찜한모임 mocking
-// jest.mock("../store/wishlist/useUserWishlist", () => ({
-//   __esModule: true,
-//   default: jest.fn(() => ({
-//     userAllwishlist: [],
-//     setUserAllWishlist: jest.fn(),
-//   })),
-// }));
-
-//찜하기 기능 hook mocking
-// jest.mock("../hooks/useChangeWishlist", () => ({
-//   __esModule: true,
-//   default: () => ({
-//     loggedInWishlist: jest.fn(),
-//     nonLoggedInWishlist: jest.fn(),
-//   }),
-// }));
-
 const queryClient = new QueryClient();
 
 describe("Card 컴포넌트 테스트", () => {
