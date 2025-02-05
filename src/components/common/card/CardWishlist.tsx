@@ -56,32 +56,14 @@ export default function CardWishlist({
   return (
     <Fragment>
       {!wishlistInfo.isMypage && (
-        <button
-          onClick={(e) => handleClickWishlist(e)}
-          aria-label={
-            user !== null
-              ? userAllWishlist.includes(wishlistInfo.meetupId)
-                ? "active"
-                : "default"
-              : wishlist.includes(wishlistInfo.meetupId)
-                ? "active"
-                : "default"
-          }
-        >
-          {wishlistInfo.meetupStatus === "RECRUITING" ? (
-            user != null ? (
-              userAllWishlist.includes(wishlistInfo.meetupId) ? (
-                <BookmarkActive className='size-6 text-orange-200' />
-              ) : (
-                <Bookmark className='size-6' />
-              )
-            ) : wishlist.includes(wishlistInfo.meetupId) ? (
-              <BookmarkActive className='size-6 text-orange-200' />
-            ) : (
-              <Bookmark className='size-6' />
-            )
+        <button onClick={(e) => handleClickWishlist(e)}>
+          {wishlist.includes(wishlistInfo.meetupId) ? (
+            <BookmarkActive
+              className='size-6 text-orange-200'
+              aria-label='active'
+            />
           ) : (
-            <Bookmark className='size-6' />
+            <Bookmark className='size-6' aria-label='default' />
           )}
         </button>
       )}
