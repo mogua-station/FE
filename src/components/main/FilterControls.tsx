@@ -1,9 +1,10 @@
+import { memo } from "react";
 import Dropdown from "../common/Dropdown";
 import FilterIcon from "@/assets/images/icons/filter.svg";
 import OrderIcon from "@/assets/images/icons/sort.svg";
 import { type OrderType } from "@/types/meetup.type";
 
-export default function FilterControls({
+function FilterControls({
   selectedOrder,
   onOrderChange,
   onOpenFilterModal,
@@ -48,3 +49,5 @@ export default function FilterControls({
     </div>
   );
 }
+
+export default memo(FilterControls);
