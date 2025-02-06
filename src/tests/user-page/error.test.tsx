@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Error, { type ErrorProps } from "@/app/user/[id]/error";
+import Error, { type ErrorProps } from "@/app/error";
 import "@testing-library/jest-dom";
 
 const mockReplace = jest.fn();
