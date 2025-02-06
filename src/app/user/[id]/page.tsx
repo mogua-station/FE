@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
 import UserProfile from "@/components/user-page/UserProfile";
 import UserTabs from "@/components/user-page/UserTabs";
 import { getUserProfile } from "@/lib/user/getUserProfile";
@@ -35,10 +34,6 @@ export default async function UserPage({ params }: Props) {
   const userInfo = await getUserProfile(userId, {
     cache: "no-store",
   });
-
-  if (!userInfo) {
-    notFound();
-  }
 
   return (
     <div className='flex h-full flex-1 flex-col p-4 tablet:px-20 tablet:py-[52px] desktop:py-[56px]'>
