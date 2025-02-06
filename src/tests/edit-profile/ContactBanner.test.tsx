@@ -19,6 +19,5 @@ describe("ContactBanner", () => {
     const alertMock = jest.spyOn(window, "alert").mockImplementation(() => {});
     banner.click();
     expect(alertMock).toHaveBeenCalledWith(SYSTEM_ALERTS.IN_PROGRESS);
-    alertMock.mockRestore();
   });
 });
