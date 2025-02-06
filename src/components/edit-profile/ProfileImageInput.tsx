@@ -19,6 +19,7 @@ export default function ProfileImageInput({
     useUploadImage();
 
   const handleCameraclick = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     inputRef.current?.click();
   };
@@ -57,9 +58,12 @@ export default function ProfileImageInput({
           sizes='80px'
         />
         {previewUrl && isHovered && (
-          <div className='absolute inset-0 flex items-center justify-center rounded-full bg-black/50'>
+          <button
+            className='absolute inset-0 flex items-center justify-center rounded-full bg-black/50'
+            type='button'
+          >
             <DeleteIcon className='size-6 text-white' />
-          </div>
+          </button>
         )}
       </div>
       <input
@@ -71,6 +75,7 @@ export default function ProfileImageInput({
         accept='image/*'
         onChange={handleImageUpload}
       />
+
       <label
         className='absolute bottom-0 right-0 flex size-8 cursor-pointer items-center justify-center rounded-full bg-gray-600'
         htmlFor='profile-image'
