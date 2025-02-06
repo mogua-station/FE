@@ -59,7 +59,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
       <div className='px-5 tablet:px-20 desktop:px-0'>
         <div className='mt-10 flex flex-col gap-6 desktop:flex-row'>
           <div className='flex flex-col desktop:w-[775px]'>
-            {/* 스터디디 제목 정보 */}
+            {/* 스터디 제목 정보 */}
             <div className='meet-info-box flex flex-col gap-8'>
               <div>
                 <div className='flex gap-1.5'>
@@ -175,7 +175,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                 <span className='text-title'>모집 내용</span>
                 <textarea
                   readOnly
-                  className='h-[160px] w-full resize-none rounded-[12px] bg-gray-900 px-4 py-[18px] text-body-2-reading text-gray-200'
+                  className='h-[160px] w-full resize-none rounded-[12px] bg-gray-900 px-4 py-[18px] text-body-2-reading text-gray-200 outline-none'
                   value={meetInfo.content}
                 />
               </div>

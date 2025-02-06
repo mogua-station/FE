@@ -150,6 +150,8 @@ export const fetchMeetupReview = async ({
     return {
       data: data,
       page: pageParams,
+      nextPage: (pageParams + 1) * pageSize < reviewArr.length,
+      allDataLenght: reviewArr.length,
     };
   } catch (error) {
     console.error(error);
