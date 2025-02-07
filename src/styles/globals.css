@@ -93,6 +93,13 @@
   }
 }
 
+/* 토스트 */
+@layer components {
+  .join-toast {
+    @apply bg-[unset] p-0;
+  }
+}
+
 @layer utilities {
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -109,4 +116,13 @@
     -moz-appearance: none;
     appearance: none;
   }
+}
+
+#joinArea .Toastify__toast {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+#joinArea .Toastify__progress-bar--wrp {
+  display: none;
 }
