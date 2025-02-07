@@ -129,7 +129,7 @@ export const fetchMeetupReview = async ({
 }: MeetupReviewProps) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${meetupId}/reviews`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${meetupId}/reviews?page=${pageParams}&limit=3`,
       {
         cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
       },
@@ -150,6 +150,8 @@ export const fetchMeetupReview = async ({
     return {
       data: data,
       page: pageParams,
+      nextPage: (pageParams + 1) * pageSize < reviewArr.length,
+      allDataLenght: reviewArr.length,
     };
   } catch (error) {
     console.error(error);
