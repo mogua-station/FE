@@ -21,7 +21,12 @@ export default function ProfileImageInput({
   const handleCameraclick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    inputRef.current?.click();
+    if (previewUrl) {
+      handleImageDelete();
+      onImageSelect(null);
+    } else {
+      inputRef.current?.click();
+    }
   };
 
   const handleImageClick = () => {
@@ -40,13 +45,12 @@ export default function ProfileImageInput({
   }, [image, onImageSelect]);
 
   return (
-    <div className='relative mb-6 mt-8'>
-      <div
-        className='relative cursor-pointer'
-        onClick={handleImageClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+    <div
+      className='relative mb-6 mt-8'
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className='relative cursor-pointer' onClick={handleImageClick}>
         <Image
           src={previewUrl || profileImg}
           alt='프로필 이미지'
