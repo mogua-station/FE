@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { CommonNicknameInput } from "../auth/AuthInputs";
 import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
-import TagInput from "./TagInput";
+import TagInputField from "./TagInputField";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import { SYSTEM_ALERTS } from "@/constants/alerts";
 import { useEditProfile } from "@/hooks/user/useEditProfile";
@@ -22,49 +22,36 @@ export default function EditProfileForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const { userInfo, error, handleProfileUpdate, isUpdating } = useEditProfile();
 
+  if (!userInfo || !error) {
+    throw new Error("프로필을 불러오는데 실패했습니다.");
+  }
+
   const methods = useForm<FormValues>({
-    values: userInfo
-      ? {
-          nickname: userInfo.nickname,
-          bio: userInfo.bio,
-          userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
-        }
-      : {
-          nickname: "",
-          bio: "",
-          userTagList: [],
-        },
+    values: {
+      nickname: userInfo.nickname || "",
+      bio: userInfo.bio || "",
+      userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
+    },
     mode: "onChange",
   });
 
-  // userInfo가 없을 때는 빈 화면 표시
-  if (!userInfo) {
-    return <div className='min-h-[calc(100vh-64px)]' />;
-  }
-
-  // 에러 처리
-  if (error) {
-    return (
-      <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
-        프로필을 불러오는데 실패했습니다. 다시 시도해주세요.
-      </div>
-    );
-  }
-
-  // form 관련 로직
   const {
     control,
     formState: { errors },
     watch,
+    setValue,
   } = methods;
 
   const watchedNickname = watch("nickname");
   const watchedBio = watch("bio");
   const watchedTags = watch("userTagList");
 
-  const handleTagsChange = (tags: string[]) => {
-    methods.setValue("userTagList", tags);
-  };
+  const handleTagsChange = useCallback(
+    (tags: string[]) => {
+      setValue("userTagList", tags);
+    },
+    [setValue],
+  );
 
   const getChangedFields = () => {
     const changes: {
@@ -177,7 +164,7 @@ export default function EditProfileForm() {
             maxLength={20}
             hint='최대 20자까지 입력 가능해요'
           />
-          <TagInput
+          <TagInputField
             defaultTags={userInfo.userTagList}
             onTagsChange={handleTagsChange}
             name='userTag'
