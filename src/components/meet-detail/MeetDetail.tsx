@@ -3,10 +3,20 @@ import ShareMeetUpButton from "./ShareMeetUpButton";
 import StatusBadge from "@/components/common/card/StatusBadge";
 import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
 import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
-import { type MeetInfo, type ClientInfo } from "@/types/meetDetail";
+import {
+  type MeetInfo,
+  type ClientInfo,
+  type ParticipantInfo,
+} from "@/types/meetDetail";
 
 export default function MeetDetail({ meetInfo }: MeetInfo) {
-  const participationSlice = meetInfo.participants.slice(0, 4);
+  const participationSlice: ParticipantInfo[] = meetInfo.participants.slice(
+    0,
+    4,
+  );
+
+  console.log(participationSlice);
+
   const Location = () => {
     switch (meetInfo.location) {
       case "CAPITAL":
@@ -136,20 +146,23 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                     </span>
                     <div className='flex items-center'>
                       <div className='flex'>
-                        {participationSlice.map((item, index) => (
-                          <div
-                            key={index}
-                            className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
-                          >
-                            <span className='inline-block h-full w-full overflow-hidden rounded-[50%]'>
-                              <img
-                                src={item.userProfile}
-                                alt='유저 프로필 이미지'
-                                className='h-full w-full object-cover'
-                              />
-                            </span>
-                          </div>
-                        ))}
+                        {participationSlice.length != 0 &&
+                          participationSlice.map(
+                            (item: ParticipantInfo, index) => (
+                              <div
+                                key={index}
+                                className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
+                              >
+                                <span className='inline-block h-full w-full overflow-hidden rounded-[50%]'>
+                                  <img
+                                    src={item.profileImageUrl}
+                                    alt='유저 프로필 이미지'
+                                    className='h-full w-full object-cover'
+                                  />
+                                </span>
+                              </div>
+                            ),
+                          )}
                         {meetInfo.participants.length > 4 && (
                           <div className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'>
                             <span className='flex items-center justify-center text-label-reading text-gray-200'>
