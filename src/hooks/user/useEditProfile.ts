@@ -15,6 +15,7 @@ export function useEditProfile() {
     data: userInfo,
     error,
     refetch,
+    isLoading,
   } = useGetProfile(user ? user.userId : 0);
 
   // user 정보가 업데이트되면 프로필 정보 다시 가져오기
@@ -68,9 +69,9 @@ export function useEditProfile() {
 
   return {
     userInfo,
-    isLoading: !userInfo,
     error,
     handleProfileUpdate,
     isUpdating: updateProfileMutation.isPending,
+    isLoading,
   };
 }

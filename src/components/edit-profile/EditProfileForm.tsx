@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { DotLoader } from "react-spinners";
 import { twMerge } from "tailwind-merge";
 import { CommonNicknameInput } from "../auth/AuthInputs";
 import CommonTextArea from "../common/inputs/TextArea";
@@ -20,19 +21,18 @@ type FormValues = {
 
 export default function EditProfileForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const { userInfo, error, handleProfileUpdate, isUpdating } = useEditProfile();
-
-  if (!userInfo || !error) {
-    throw new Error("프로필을 불러오는데 실패했습니다.");
-  }
+  const { userInfo, error, handleProfileUpdate, isUpdating, isLoading } =
+    useEditProfile();
 
   const methods = useForm<FormValues>({
-    values: {
-      nickname: userInfo.nickname || "",
-      bio: userInfo.bio || "",
-      userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
-    },
     mode: "onChange",
+    values: userInfo
+      ? {
+          nickname: userInfo.nickname || "",
+          bio: userInfo.bio || "",
+          userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
+        }
+      : undefined,
   });
 
   const {
@@ -53,6 +53,36 @@ export default function EditProfileForm() {
     [setValue],
   );
 
+  useEffect(() => {
+    if (userInfo) {
+      setValue("nickname", userInfo.nickname);
+      setValue("bio", userInfo.bio);
+      setValue(
+        "userTagList",
+        userInfo.userTagList.map((tag) => tag.tag),
+      );
+    }
+  }, [userInfo, setValue]);
+
+  if (isLoading) {
+    return (
+      <div className='flex min-h-[calc(100vh-212px)] w-full items-center justify-center'>
+        <DotLoader
+          size={24}
+          color={"#FF9A42"}
+          cssOverride={{ position: "absolute" }}
+          loading={isLoading}
+        />
+      </div>
+    );
+  }
+
+  if (!userInfo || error) {
+    throw new Error("프로필을 불러오는데 실패했습니다.");
+  }
+
+  const profile = userInfo;
+
   const getChangedFields = () => {
     const changes: {
       image?: File;
@@ -61,19 +91,18 @@ export default function EditProfileForm() {
 
     const requestData: any = {};
 
-    if (watchedNickname !== userInfo.nickname) {
+    if (watchedNickname !== profile.nickname) {
       requestData.nickname = watchedNickname;
     }
 
-    if (watchedBio !== userInfo.bio) {
+    if (watchedBio !== profile.bio) {
       requestData.bio = watchedBio;
     }
 
     if (
       watchedTags &&
-      userInfo.userTagList &&
       JSON.stringify([...watchedTags].sort()) !==
-        JSON.stringify(userInfo.userTagList.map((tag) => tag.tag).sort())
+        JSON.stringify(profile.userTagList.map((tag) => tag.tag).sort())
     ) {
       requestData.userTagList = watchedTags;
     }
@@ -113,7 +142,6 @@ export default function EditProfileForm() {
     handleProfileUpdate(submitFormData);
   });
 
-  // 버튼 상태 관리
   const getButtonState = () => {
     if (Object.keys(errors).length > 0) return "inactive";
     if (isUpdating) return "inactive";
@@ -128,7 +156,7 @@ export default function EditProfileForm() {
     <FormProvider {...methods}>
       <form className='contents' onSubmit={onSubmit}>
         <ProfileImageInput
-          profileImg={userInfo.profileImg}
+          profileImg={profile.profileImg}
           onImageSelect={setSelectedImage}
         />
         <p
@@ -142,7 +170,7 @@ export default function EditProfileForm() {
             className='cursor-not-allowed bg-gray-800 text-gray-500'
             name='email'
             label='이메일 주소'
-            value={userInfo.email}
+            value={profile.email}
             control={control}
             disabled
           />
@@ -165,7 +193,7 @@ export default function EditProfileForm() {
             hint='최대 20자까지 입력 가능해요'
           />
           <TagInputField
-            defaultTags={userInfo.userTagList}
+            defaultTags={profile.userTagList}
             onTagsChange={handleTagsChange}
             name='userTag'
           />
