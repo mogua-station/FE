@@ -148,27 +148,27 @@ export const meetDetailMock: MeetProps[] = [
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
@@ -194,27 +194,27 @@ export const meetDetailMock: MeetProps[] = [
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
@@ -240,32 +240,32 @@ export const meetDetailMock: MeetProps[] = [
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
       {
         userId: 6,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
@@ -291,32 +291,32 @@ export const meetDetailMock: MeetProps[] = [
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
       {
         userId: 6,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
