@@ -44,6 +44,16 @@ describe("ProfileImageInput", () => {
     });
   });
 
+  describe("이미지 업로드", () => {
+    it("카메라 아이콘 클릭 시 파일 선택이 트리거된다", () => {});
+
+    it("이미지 영역 클릭 시 파일 선택이 트리거된다", () => {});
+
+    it("이미지 선택 시 미리보기가 표시된다", () => {});
+
+    it("이미지 선택 시 onImageSelect가 호출된다", () => {});
+  });
+
   describe("호버 상태", () => {
     beforeEach(() => {
       mockUseUploadImage.previewUrl = "https://test.com/preview.jpg";
@@ -52,8 +62,8 @@ describe("ProfileImageInput", () => {
     it("미리보기 상태에서 호버 시 삭제 아이콘이 표시된다", () => {
       renderProfileImageInput();
 
-      const imageContainer = screen.getByAltText("프로필 이미지").parentElement;
-      fireEvent.mouseEnter(imageContainer!);
+      const container = screen.getByAltText("프로필 이미지").parentElement;
+      fireEvent.mouseEnter(container!);
 
       const deleteButton = screen.getByRole("button");
       expect(deleteButton).toBeInTheDocument();
@@ -62,23 +72,13 @@ describe("ProfileImageInput", () => {
     it("호버 해제 시 삭제 아이콘이 숨겨진다", () => {
       renderProfileImageInput();
 
-      const imageContainer = screen.getByAltText("프로필 이미지").parentElement;
-      fireEvent.mouseLeave(imageContainer!);
+      const container = screen.getByAltText("프로필 이미지").parentElement;
+      fireEvent.mouseLeave(container!);
 
       const deleteButton = screen.queryByRole("button");
       expect(deleteButton).not.toBeInTheDocument();
     });
   });
-
-  /*   describe("이미지 업로드", () => {
-    it("카메라 아이콘 클릭 시 파일 선택이 트리거된다", () => {});
-
-    it("이미지 영역 클릭 시 파일 선택이 트리거된다", () => {});
-
-    it("이미지 선택 시 미리보기가 표시된다", () => {});
-
-    it("이미지 선택 시 onImageSelect가 호출된다", () => {});
-  }); */
 
   /*   describe("이미지 삭제", () => {
     it("미리보기 상태에서 이미지 영역 클릭 시 이미지가 삭제된다", () => {});
