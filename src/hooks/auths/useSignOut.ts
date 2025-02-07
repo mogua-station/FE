@@ -1,13 +1,10 @@
-import useUserStore from "../../store/auth/useUserStore";
-import { deleteCookie } from "./useTokenState";
+import useUserStore from "@/store/auth/useUserStore";
 
 const useSignOut = () => {
   const clearUser = useUserStore((state) => state.clearUser);
 
   const handleSignOut = async () => {
     clearUser();
-    deleteCookie("accessToken");
-    // deleteCookie("refreshToken");
   };
 
   return { handleSignOut };
