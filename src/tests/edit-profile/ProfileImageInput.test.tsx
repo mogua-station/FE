@@ -31,58 +31,59 @@ describe("ProfileImageInput", () => {
     mockOnImageSelect.mockClear();
   });
 
-  describe("렌더링", () => {
-    it("유저 프로필 이미지가 올바르게 렌더링된다", () => {
+  describe("새 프로필 이미지를 선택하지 않은 상태", () => {
+    it("기존의 프로필 이미지가 표시된다", () => {
       renderProfileImageInput();
-
       const image = screen.getByAltText("프로필 이미지");
-      expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute(
         "src",
         expect.stringContaining(encodeURIComponent(mockProfileImg)),
       );
     });
-  });
 
-  describe("이미지 업로드", () => {
-    it("카메라 아이콘 클릭 시 파일 선택이 트리거된다", () => {});
-
-    it("이미지 영역 클릭 시 파일 선택이 트리거된다", () => {});
-
-    it("이미지 선택 시 미리보기가 표시된다", () => {});
-
-    it("이미지 선택 시 onImageSelect가 호출된다", () => {});
-  });
-
-  describe("호버 상태", () => {
-    beforeEach(() => {
-      mockUseUploadImage.previewUrl = "https://test.com/preview.jpg";
+    it("hover해도 삭제버튼이 표시되지 않는다", () => {
+      renderProfileImageInput();
+      const container = screen.getByAltText("프로필 이미지")
+        .parentElement as HTMLElement;
+      fireEvent.mouseEnter(container);
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
     });
 
-    it("미리보기 상태에서 호버 시 삭제 아이콘이 표시된다", () => {
+    it("카메라 아이콘 클릭 시 input의 click 이벤트가 트리거된다", () => {
       renderProfileImageInput();
 
-      const container = screen.getByAltText("프로필 이미지").parentElement;
-      fireEvent.mouseEnter(container!);
+      const input = screen.getByTestId("profile-image-input");
+      const label = screen.getByTestId("camera-label");
 
-      const deleteButton = screen.getByRole("button");
-      expect(deleteButton).toBeInTheDocument();
+      const mockInputClick = jest.fn();
+      input.click = mockInputClick;
+
+      fireEvent.click(label);
+      expect(mockInputClick).toHaveBeenCalled();
     });
 
-    it("호버 해제 시 삭제 아이콘이 숨겨진다", () => {
+    it("이미지 영역 클릭 시 input의 click 이벤트가 트리거된다", () => {
       renderProfileImageInput();
 
-      const container = screen.getByAltText("프로필 이미지").parentElement;
-      fireEvent.mouseLeave(container!);
+      const input = screen.getByTestId("profile-image-input");
+      const imageContainer = screen.getByAltText("프로필 이미지")
+        .parentElement as HTMLElement;
 
-      const deleteButton = screen.queryByRole("button");
-      expect(deleteButton).not.toBeInTheDocument();
+      const mockInputClick = jest.fn();
+      input.click = mockInputClick;
+
+      fireEvent.click(imageContainer);
+      expect(mockInputClick).toHaveBeenCalled();
     });
   });
 
-  /*   describe("이미지 삭제", () => {
-    it("미리보기 상태에서 이미지 영역 클릭 시 이미지가 삭제된다", () => {});
+  describe("새 프로필 이미지를 선택한 상태", () => {
+    it("선택한 새 이미지가 프리뷰로 표시된다", () => {});
 
-    it("이미지 삭제 시 onImageSelect(null)이 호출된다", () => {});
-  }); */
+    it("hover시 삭제 버튼이 표시된다", () => {});
+
+    it("이미지 영역이나 카메라 아이콘 클릭 시 선택한 이미지가 해제된다", () => {});
+
+    it("새 이미지 선택이 차단된다", () => {});
+  });
 });

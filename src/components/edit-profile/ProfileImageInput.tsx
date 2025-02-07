@@ -21,6 +21,7 @@ export default function ProfileImageInput({
   const handleCameraclick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
     if (previewUrl) {
       handleImageDelete();
       onImageSelect(null);
@@ -78,11 +79,13 @@ export default function ProfileImageInput({
         name='profileImg'
         accept='image/*'
         onChange={handleImageUpload}
+        data-testid='profile-image-input'
       />
 
       <label
         className='absolute bottom-0 right-0 flex size-8 cursor-pointer items-center justify-center rounded-full bg-gray-600'
         htmlFor='profile-image'
+        data-testid='camera-label'
         onClick={handleCameraclick}
       >
         <CameraIcon className='size-4 text-gray-100' />
