@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Error, { type ErrorProps } from "@/app/user/[id]/error";
+import Error, { type ErrorProps } from "@/app/error";
 import "@testing-library/jest-dom";
 
 const mockReplace = jest.fn();
@@ -11,13 +11,12 @@ jest.mock("next/navigation", () => ({
   }),
 }));
 
-describe("유저페이지 Error 컴포넌트", () => {
-  const errorMessage = "해당 유저는 존재하지 않습니다.";
+describe("error 컴포넌트", () => {
+  const errorMessage = "요청하신 정보를 찾을 수 없습니다.";
   const mockError: ErrorProps["error"] = {
     name: "Error",
-    message: "해당 유저는 존재하지 않습니다.",
-    digest: "test-digest",
-  } as const;
+    message: "요청하신 정보를 찾을 수 없습니다.",
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();

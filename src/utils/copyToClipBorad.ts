@@ -5,6 +5,4 @@ export const copyToClipBoard = (url: string) => {
   textarea.select();
   document.execCommand("copy");
   document.body.removeChild(textarea);
-
-  alert("클립보드에 복사되었습니다.");
 };
