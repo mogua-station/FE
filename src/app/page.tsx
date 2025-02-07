@@ -3,6 +3,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import BackgroundAlien from "@/components/main/BackgroundAlien";
 import MainContentList from "@/components/main/MainContentList";
 import MainNavigation from "@/components/main/MainNavigation";
 import { getMeetupList } from "@/lib/main/meetup.api";
@@ -53,6 +54,8 @@ export default async function Home({
           <MainContentList />
         </HydrationBoundary>
       </div>
+
+      <BackgroundAlien />
     </div>
   );
 }
