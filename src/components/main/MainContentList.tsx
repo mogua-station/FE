@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { memo } from "react";
 import SolidButton from "../common/buttons/SolidButton";
 import CardSkeleton from "../common/skeleton/CardSkeleton";
@@ -19,16 +19,12 @@ export default function MainContentList() {
   );
 
   if (!data || data.pages[0].data.length === 0 || isError) {
-    return (
-      <MainContentEmpty
-        isSearching={!!new URLSearchParams(window.location.search)}
-      />
-    );
+    return <MainContentEmpty />;
   }
 
   return (
-    <>
-      <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
+    <div className='flex size-full grow flex-col justify-between gap-8'>
+      <section className='relative grid w-full grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
         {data?.pages.map((page) =>
           page.data.map((item) => (
             <Card
@@ -67,23 +63,21 @@ export default function MainContentList() {
 
       <div
         ref={loadMoreRef}
-        className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
+        className='relative grid w-full grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
       >
         {isFetchingNextPage &&
           Array.from({ length: 10 }).map((_, index) => (
             <CardSkeleton key={index} />
           ))}
       </div>
-    </>
+    </div>
   );
 }
 
-const MainContentEmpty = memo(function MainContentEmpty({
-  isSearching = false,
-}: {
-  isSearching?: boolean;
-}) {
+const MainContentEmpty = memo(function MainContentEmpty() {
   const router = useRouter();
+  const search = useSearchParams();
+  const isSearching = search.toString().length > 0 && !search.get("orderBy");
 
   return (
     <section className='relative size-full grow'>
@@ -101,6 +95,7 @@ const MainContentEmpty = memo(function MainContentEmpty({
               onClick={() => {
                 router.push("/create");
               }}
+              aria-label='create meetup'
             >
               모임 개설하기
             </SolidButton>

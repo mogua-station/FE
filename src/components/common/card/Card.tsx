@@ -92,7 +92,7 @@ export default function Card({ card }: CardInfo) {
         </div>
 
         {!card.isMypage && (
-          <button onClick={(e) => handleClickWishlist(e)}>
+          <button onClick={(e) => handleClickWishlist(e)} aria-label='bookmark'>
             {card.meetupStatus === "RECRUITING" ? (
               user != null ? (
                 userAllWishlist.includes(card.meetupId) ? (

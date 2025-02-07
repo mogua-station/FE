@@ -1,10 +1,17 @@
 import "@/styles/globals.css";
+import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import Providers from "./providers/Providers";
 import Header from "@/components/common/Header";
 import NavBar from "@/components/common/nav-bar/NavBar";
 import InitializeUser from "@/hooks/auths/InitializeUser";
-import ClearImageOnPageLeave from "@/hooks/inputs/images/useLeavePage";
+
+const ClearImageOnPageLeave = dynamic(
+  () => import("@/hooks/inputs/images/useLeavePage"),
+  {
+    ssr: false,
+  },
+);
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
@@ -20,6 +27,16 @@ export default function RootLayout({
   return (
     <html lang='ko-KR' className={pretendard.className}>
       <body className='flex min-h-[100dvh] flex-col bg-gray-950 scrollbar:w-1 scrollbar:bg-transparent scrollbar-thumb:rounded-full scrollbar-thumb:bg-orange-300'>
+        <Providers>
+          <InitializeUser />
+          <ClearImageOnPageLeave />
+          <Header />
+          <main className='relative flex flex-1 flex-col pb-[62px] pt-[56px] desktop:pb-0'>
+            {children}
+          </main>
+          <NavBar />
+        </Providers>
+
         {/* 배경 비디오 임시설정 */}
         <video
           className='fixed inset-0 -z-10 size-full object-cover'
@@ -30,15 +47,6 @@ export default function RootLayout({
           preload='auto'
           playsInline
         />
-        <Providers>
-          <InitializeUser />
-          <ClearImageOnPageLeave />
-          <Header />
-          <main className='relative flex flex-1 flex-col pb-[62px] pt-[56px] desktop:pb-0'>
-            {children}
-          </main>
-          <NavBar />
-        </Providers>
       </body>
     </html>
   );

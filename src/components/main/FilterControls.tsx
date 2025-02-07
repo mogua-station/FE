@@ -18,6 +18,7 @@ function FilterControls({
       <button
         onClick={onOpenFilterModal}
         className='filter-sm filter-default z-10 w-[3.25rem] cursor-pointer'
+        aria-label='Filter'
       >
         <FilterIcon className='size-6 fill-gray-300' />
       </button>
