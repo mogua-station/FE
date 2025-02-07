@@ -3,16 +3,18 @@
 import { useRouter } from "next/navigation";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
-export default function Error({
-  error,
-}: {
+export type ErrorProps = {
   error: Error & { digest?: string };
-}) {
+};
+
+export default function Error({ error }: ErrorProps) {
   const router = useRouter();
 
   return (
     <div className='flex h-full flex-1 flex-col items-center justify-center gap-4'>
-      <p className='text-gray-100'>{error?.message}</p>
+      <p className='text-gray-100'>
+        {error?.message || "오류가 발생했습니다."}
+      </p>
 
       <SolidButton
         className='w-fit'

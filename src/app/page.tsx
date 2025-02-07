@@ -4,6 +4,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import dynamicImport from "next/dynamic";
+import BackgroundAlien from "@/components/main/BackgroundAlien";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import { type MeetupQueryType } from "@/types/meetup.type";
 import { generateQueryKey } from "@/utils/meetup.queryKey";
@@ -58,6 +59,8 @@ export default async function Home({
           <MainContentList />
         </HydrationBoundary>
       </div>
+
+      <BackgroundAlien />
     </div>
   );
 }
