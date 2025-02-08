@@ -170,6 +170,7 @@ export default function EditProfileForm() {
             className='cursor-not-allowed bg-gray-800 text-gray-500'
             name='email'
             label='이메일 주소'
+            aria-label='이메일 주소'
             value={profile.email}
             control={control}
             disabled
