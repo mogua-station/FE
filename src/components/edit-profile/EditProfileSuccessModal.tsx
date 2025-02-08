@@ -12,9 +12,10 @@ export default function EditProfileSuccessModal({
 }) {
   const router = useRouter();
 
-  const handleCloseModal = () => {
+  const handleCloseModal = async () => {
     close();
-    router.replace(`/user/${userId}`);
+    await router.replace(`/user/${userId}`, {});
+    router.refresh();
   };
 
   return (
