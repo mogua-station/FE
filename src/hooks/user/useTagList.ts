@@ -33,7 +33,7 @@ export function useTagList({ defaultTags = [], onTagsChange }: TagListProps) {
   }, []);
 
   const deleteLastTag = useCallback(() => {
-    setTagList((prev) => prev.slice(0, -2));
+    setTagList((prev) => prev.slice(0, -1));
   }, []);
 
   const handleTagsChange = useCallback(
