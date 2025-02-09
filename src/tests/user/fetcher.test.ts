@@ -14,11 +14,17 @@ describe("fetcher", () => {
 
   describe("기본 동작", () => {
     it("기본 GET 요청을 성공적으로 처리한다", async () => {
-      const res = await fetcher("/test", "");
+      const res = await fetcher("/test");
       const data = await res.json();
 
       expect(res.ok).toBe(true);
       expect(data).toEqual(mockData);
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          credentials: "include",
+        }),
+      );
     });
 
     it("HTTP 메서드를 설정할 수 있다", async () => {
@@ -32,7 +38,7 @@ describe("fetcher", () => {
         }),
       );
 
-      const res = await fetcher("/update", "", {
+      const res = await fetcher("/update", {
         method: "PATCH",
         body: JSON.stringify(updateData),
       });
@@ -42,6 +48,7 @@ describe("fetcher", () => {
         expect.objectContaining({
           method: "PATCH",
           body: JSON.stringify(updateData),
+          credentials: "include",
         }),
       );
 
@@ -52,31 +59,12 @@ describe("fetcher", () => {
   });
 
   describe("헤더 처리", () => {
-    it("인증 토큰이 필요한 요청을 성공적으로 처리한다", async () => {
-      const token = "test-token";
-      const res = await fetcher("/auth-test", token, { auth: true });
-
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          headers: expect.objectContaining({
-            Authorization: `Bearer ${token}`,
-          }),
-        }),
-      );
-
-      const data = await res.json();
-      expect(data).toEqual(mockData);
-    });
-
     it("커스텀 헤더를 설정할 수 있다", async () => {
       const customHeaders = {
         "Accept-Language": "ko-KR",
       };
-      const token = "test-token";
 
-      await fetcher("/test", token, {
-        auth: true,
+      await fetcher("/test", {
         headers: customHeaders,
       });
 
@@ -84,10 +72,10 @@ describe("fetcher", () => {
         expect.any(String),
         expect.objectContaining({
           headers: expect.objectContaining({
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
             ...customHeaders,
           }),
+          credentials: "include",
         }),
       );
     });
@@ -96,7 +84,7 @@ describe("fetcher", () => {
       const formData = new FormData();
       formData.append("key", "value");
 
-      await fetcher("/upload", "", {
+      await fetcher("/upload", {
         method: "POST",
         body: formData,
       });
@@ -105,6 +93,7 @@ describe("fetcher", () => {
         expect.any(String),
         expect.objectContaining({
           body: formData,
+          credentials: "include",
           headers: expect.not.objectContaining({
             "Content-Type": "application/json",
           }),
@@ -127,11 +116,14 @@ describe("fetcher", () => {
         },
       };
 
-      await fetcher("/test", "", nextOptions);
+      await fetcher("/test", nextOptions);
 
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
-        expect.objectContaining(nextOptions),
+        expect.objectContaining({
+          ...nextOptions,
+          credentials: "include",
+        }),
       );
     });
   });
