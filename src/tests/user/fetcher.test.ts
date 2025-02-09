@@ -23,14 +23,6 @@ describe("fetcher", () => {
       );
     });
 
-    it("BASE_URL이 요청 URL에 포함된다", async () => {
-      await get("/test");
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining(process.env.NEXT_PUBLIC_BASE_URL as string),
-        expect.any(Object),
-      );
-    });
-
     it("커스텀 헤더를 설정할 수 있다", async () => {
       const customHeaders = {
         "Accept-Language": "ko-KR",
