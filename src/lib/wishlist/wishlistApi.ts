@@ -6,12 +6,18 @@ export const fetchUserAllWishlist = async (userId: number) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}`,
       {
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
         cache: "no-store",
+        credentials: "include",
       },
     );
+
+    if (!response.ok) {
+      if (response.status === 403) {
+        throw new Error(response.statusText || "인증 오류가  발생하였습니다");
+      } else {
+        throw new Error(response.statusText || "오류가 발생하였습니다.");
+      }
+    }
 
     return response.json();
   } catch (error) {

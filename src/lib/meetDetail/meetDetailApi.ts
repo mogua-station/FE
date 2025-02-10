@@ -4,11 +4,6 @@ export const fetchHostData = async (hostId: number) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${hostId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
-        },
-      },
     );
 
     if (!response.ok) {
@@ -108,7 +103,7 @@ export const fetchMeetupData = async (id: number) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`,
       {
-        cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
+        next: { revalidate: 60 }, //캐싱 1분
       },
     );
 
@@ -131,7 +126,7 @@ export const fetchMeetupReview = async ({
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${meetupId}/reviews?page=${pageParams}&limit=3`,
       {
-        cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
+        next: { revalidate: 60 }, //캐싱 1분
       },
     );
 

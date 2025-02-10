@@ -32,7 +32,7 @@ export interface MeetProps {
   recruitmentEndDate: Date;
   meetingStartDate: Date;
   meetingEndDate: Date;
-  thumbnail?: string;
+  thumbnail: string;
   hostId: number;
   hostNickname: string;
   online: boolean;

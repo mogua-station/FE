@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ToastContainer } from "react-toastify";
 import ShareMeetUpButton from "./ShareMeetUpButton";
 import StatusBadge from "@/components/common/card/StatusBadge";
@@ -14,8 +15,6 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
     0,
     4,
   );
-
-  console.log(participationSlice);
 
   const Location = () => {
     switch (meetInfo.location) {
@@ -59,11 +58,12 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
       <div className='fixed left-1/2 z-10 -mt-[38px] block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:hidden'>
         <ShareMeetUpButton />
       </div>
-      <div className='h-[346px] w-full overflow-hidden desktop:rounded-[24px]'>
-        <img
+      <div className='relative h-[346px] w-full overflow-hidden desktop:rounded-[24px]'>
+        <Image
           src={meetInfo.thumbnail}
+          fill
           alt='모임 이미지'
-          className='h-full w-full object-cover'
+          className='object-cover object-top'
         />
       </div>
       <div className='px-5 tablet:px-20 desktop:px-0'>
@@ -85,7 +85,6 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                 </div>
 
                 <div className='mt-3'>
-                  <div></div>
                   <p className='text-heading-2 font-medium text-gray-50'>
                     {meetInfo.title}
                   </p>
@@ -153,11 +152,12 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                                 key={index}
                                 className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
                               >
-                                <span className='inline-block h-full w-full overflow-hidden rounded-[50%]'>
-                                  <img
+                                <span className='relative inline-block h-full w-full overflow-hidden rounded-[50%]'>
+                                  <Image
                                     src={item.profileImageUrl}
+                                    fill
                                     alt='유저 프로필 이미지'
-                                    className='h-full w-full object-cover'
+                                    className='object-cover'
                                   />
                                 </span>
                               </div>
@@ -190,6 +190,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                   readOnly
                   className='h-[160px] w-full resize-none rounded-[12px] bg-gray-900 px-4 py-[18px] text-body-2-reading text-gray-200 outline-none'
                   value={meetInfo.content}
+                  aria-label='모임 설명란'
                 />
               </div>
             </div>

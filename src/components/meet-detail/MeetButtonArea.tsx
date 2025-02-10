@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -160,14 +161,18 @@ export default function MeetButtonArea({
   useEffect(() => {
     if (clientInfo.meetupStatus === "COMPLETED") {
       setJoinButton(
-        <SolidButton mode='special' disabled>
+        <SolidButton mode='special' disabled aria-label='모임 신청하기'>
           종료된 모임이에요
         </SolidButton>,
       );
     } else if (clientInfo.meetupStatus === "RECRUITING") {
       if (user === null) {
         setJoinButton(
-          <SolidButton mode='special' onClick={() => handleClickJoin()}>
+          <SolidButton
+            mode='special'
+            onClick={() => handleClickJoin()}
+            aria-label='모임 신청하기'
+          >
             모임 신청하기
           </SolidButton>,
         );
@@ -177,7 +182,7 @@ export default function MeetButtonArea({
           //모집 중일 때
           if (clientInfo.participants.length >= clientInfo.minParticipants) {
             setJoinButton(
-              <SolidButton mode='special' disabled>
+              <SolidButton mode='special' disabled aria-label='모임 신청하기'>
                 개설확정된 모임이에요
               </SolidButton>,
             );
@@ -197,13 +202,18 @@ export default function MeetButtonArea({
               <SolidButton
                 mode='special'
                 onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
+                aria-label='모임 신청하기'
               >
                 신청 취소하기
               </SolidButton>,
             );
           } else {
             setJoinButton(
-              <SolidButton mode='special' onClick={() => handleClickJoin()}>
+              <SolidButton
+                mode='special'
+                onClick={() => handleClickJoin()}
+                aria-label='모임 신청하기'
+              >
                 모임 신청하기
               </SolidButton>,
             );
@@ -212,13 +222,13 @@ export default function MeetButtonArea({
       }
     } else if (clientInfo.meetupStatus === "IN_PROGRESS") {
       setJoinButton(
-        <SolidButton mode='special' disabled>
+        <SolidButton mode='special' disabled aria-label='모임 신청하기'>
           진행중인 모임이에요
         </SolidButton>,
       );
     } else if (clientInfo.meetupStatus === "BEFORE_START") {
       setJoinButton(
-        <SolidButton mode='special' disabled>
+        <SolidButton mode='special' disabled aria-label='모임 신청하기'>
           시작전인 모임이에요
         </SolidButton>,
       );
@@ -248,21 +258,15 @@ export default function MeetButtonArea({
           mode='special'
           className='w-[72px]'
           onClick={handleClickToggleWishlist}
+          aria-label='모임 찜하기'
         >
-          {clientInfo.meetupStatus === "RECRUITING" ? (
-            user != null ? (
-              userAllWishlist.includes(clientInfo.meetupId) ? (
-                <BookmarkActive className='size-6 text-orange-200' />
-              ) : (
-                <Bookmark className='size-6' />
-              )
-            ) : wishlist.includes(clientInfo.meetupId) ? (
-              <BookmarkActive className='size-6 text-orange-200' />
-            ) : (
-              <Bookmark className='size-6' />
-            )
+          {wishlist.includes(clientInfo.meetupId) ? (
+            <BookmarkActive
+              className='size-6 text-orange-200'
+              aria-label='active'
+            />
           ) : (
-            <Bookmark className='size-6' />
+            <Bookmark className='size-6' aria-label='default' />
           )}
         </IconButton>
         {joinButton}
@@ -270,12 +274,13 @@ export default function MeetButtonArea({
       <button
         className='meet-info-box-small mt-6 flex flex-col gap-4'
         onClick={(e) => handleClickNavigateUser(e, clientInfo.hostId)}
+        aria-label='유저 프로필 버튼'
       >
         <span className='text-title block'>주최자 프로필</span>
         <div className='meet-info-box-inner-2 flex w-full flex-col gap-5'>
           <div className='flex gap-[14px]'>
-            <div className='h-[46px] w-[46px] overflow-hidden rounded-[50%] bg-gray-700'>
-              <img src={hostData?.profileImg} alt='유저 프로필' />
+            <div className='relative h-[46px] w-[46px] overflow-hidden rounded-[50%] bg-gray-700'>
+              <Image src={hostData?.profileImg} alt='유저 프로필' fill />
             </div>
             <div>
               <span className='flex items-center gap-[6px] text-body-2-normal font-medium text-gray-300'>
