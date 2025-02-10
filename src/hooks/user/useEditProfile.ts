@@ -1,11 +1,9 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import useCookie from "../auths/useTokenState";
 import { useGetProfile, useUpdateProfile } from "./useProfile";
 import useUserStore from "@/store/auth/useUserStore";
 
 export function useEditProfile() {
-  const token = useCookie("accessToken");
   const router = useRouter();
 
   const user = useUserStore((state) => state.user);
@@ -27,7 +25,7 @@ export function useEditProfile() {
   const updateProfileMutation = useUpdateProfile();
 
   const handleProfileUpdate = async (formData: FormData) => {
-    if (!token || !user) return;
+    if (!user) return;
 
     const request = formData.get("request");
     if (!(request instanceof Blob)) return;
@@ -35,7 +33,7 @@ export function useEditProfile() {
     const requestData = JSON.parse(await request.text());
 
     updateProfileMutation.mutate(
-      { formData, token },
+      { formData },
       {
         onSuccess: () => {
           if (requestData) {
