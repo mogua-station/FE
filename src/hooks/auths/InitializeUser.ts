@@ -18,6 +18,7 @@ export default function InitializeUser() {
     queryKey: ["userAllWishlist"],
     queryFn: async () => fetchUserAllWishlist(userInfo?.userId as number),
     enabled: !!userInfo && !!userInfo.userId,
+    retry: 1,
   });
 
   useEffect(() => {

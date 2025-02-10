@@ -6,17 +6,22 @@ export const fetchUserAllWishlist = async (userId: number) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}`,
       {
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
         cache: "no-store",
+        credentials: "include",
       },
     );
 
+    if (!response.ok) {
+      if (response.status === 403) {
+        throw new Error(response.statusText || "인증 오류가 발생하였습니다");
+      } else {
+        throw new Error(response.statusText || "오류가 발생하였습니다.");
+      }
+    }
+
     return response.json();
   } catch (error) {
-    console.error(error);
-    throw new Error("데이터 요청 에러");
+    throw error;
   }
 };
 
@@ -31,11 +36,12 @@ export const fetchUserWishlist = async ({
   //유저 정보가 있을 때
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&limit=8`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&limit=8&orderBy=latest&type=STUDY&state=RECRUITING&location=ALL`,
       {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
         },
+        // credentials: "include",
         cache: "no-store",
       },
     );
@@ -51,7 +57,6 @@ export const fetchUserWishlist = async ({
       page: pageParms,
     };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -94,7 +99,6 @@ export const fetchLocalWishlist = async ({
       page: pageParms,
     };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -118,8 +122,7 @@ export const deleteUserWishList = async (meetupId: number) => {
 
     return response.json();
   } catch (error) {
-    console.error(error);
-    throw new Error("데이터 요청 에러");
+    throw error;
   }
 };
 
@@ -142,7 +145,6 @@ export const addUserWishlist = async (meetupId: number) => {
 
     return response.json();
   } catch (error) {
-    console.error(error);
-    throw new Error("데이터 요청 에러");
+    throw error;
   }
 };
