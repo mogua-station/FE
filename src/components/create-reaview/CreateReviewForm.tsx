@@ -5,7 +5,6 @@ import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
 import RatingInput from "@/components/create-reaview/RatingInput";
 import ReviewImageInput from "@/components/create-reaview/ReviewImageInput";
-import useCookie from "@/hooks/auths/useTokenState";
 import useReviewMutations from "@/hooks/review/useReviewMutation";
 
 interface ReviewFormData {
@@ -16,7 +15,6 @@ interface ReviewFormData {
 }
 
 export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
-  const token = useCookie("accessToken");
   const { createReviewMutation } = useReviewMutations();
   const methods = useForm<ReviewFormData>({
     defaultValues: {
@@ -43,8 +41,6 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    if (!token) return;
-
     const formData = new FormData();
 
     const requestData = {
@@ -66,7 +62,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
       formData.append("image", new Blob(), "");
     }
 
-    await createReviewMutation.mutateAsync({ formData, token });
+    await createReviewMutation.mutateAsync(formData);
   });
 
   return (
@@ -91,7 +87,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
           type='submit'
           className='mt-10'
           state={
-            createReviewMutation.isPending || !isFormValid || !token
+            createReviewMutation.isPending || !isFormValid
               ? "inactive"
               : "activated"
           }

@@ -19,13 +19,10 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/user/verify`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${request.nextUrl.origin}/api/auth/verify`, {
+      method: "GET",
+      credentials: "include", // 쿠키가 자동으로 포함되므로 이 설정만 필요
+    });
 
     // 인증이 필요한 페이지에 토큰 없이 접근 시도할 경우
     if (!response.ok && isProtectedPage) {
