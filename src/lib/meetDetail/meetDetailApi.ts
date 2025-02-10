@@ -113,7 +113,6 @@ export const fetchMeetupData = async (id: number) => {
 
     return response.json();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -124,7 +123,7 @@ export const fetchMeetupReview = async ({
 }: MeetupReviewProps) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${meetupId}/reviews?page=${pageParams}&limit=3`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/reviews/list/${meetupId}?page=${pageParams}&limit=3`,
       {
         next: { revalidate: 60 }, //캐싱 1분
       },
@@ -149,7 +148,6 @@ export const fetchMeetupReview = async ({
       allDataLenght: reviewArr.length,
     };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
