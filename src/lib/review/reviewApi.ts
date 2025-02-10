@@ -1,11 +1,7 @@
-import { fetcher } from "@/lib/user/fetcher";
+import { post } from "@/lib/user/fetcher";
 
-export const createReview = async (formData: FormData, token: string) => {
-  const res = await fetcher("/reviews", token, {
-    method: "POST",
-    body: formData,
-    auth: true,
-  });
+export const createReview = async (formData: FormData) => {
+  const res = await post("/reviews", formData);
 
   if (!res.ok) {
     const errorData = await res.json().catch(() => null);

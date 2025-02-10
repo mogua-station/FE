@@ -29,8 +29,7 @@ export default function useReviewMutations() {
   };
 
   const createReviewMutation = useMutation({
-    mutationFn: ({ formData, token }: { formData: FormData; token: string }) =>
-      createReview(formData, token),
+    mutationFn: (formData: FormData) => createReview(formData),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["meetings", "myReview", "study"],

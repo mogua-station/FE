@@ -1,43 +1,22 @@
-import { fetcher } from "./fetcher";
+import { get } from "./fetcher";
 import { PAGE_SIZE } from "@/constants/pagination";
 
 export const userContentApi = {
-  getReceived: (userId: string, token: string, page: number) =>
-    fetcher(
-      `/user/${userId}/reviews/received?page=${page}&limit=${PAGE_SIZE}`,
-      token,
-      { auth: true },
-    ),
+  getReceived: (userId: string, page: number) =>
+    get(`/user/${userId}/reviews/received?page=${page}&limit=${PAGE_SIZE}`),
 
-  getWritten: (
-    userId: string,
-    type: string,
-    status: string,
-    token: string,
-    page: number,
-  ) =>
-    fetcher(
+  getWritten: (userId: string, type: string, status: string, page: number) =>
+    get(
       `/user/${userId}/reviews/${type}/${status}?page=${page}&limit=${PAGE_SIZE}`,
-      token,
-      { auth: true },
     ),
 
-  getParticipating: (
-    userId: string,
-    type: string,
-    token: string,
-    page: number,
-  ) =>
-    fetcher(
+  getParticipating: (userId: string, type: string, page: number) =>
+    get(
       `/user/${userId}/meetups/participating/${type}?page=${page}&limit=${PAGE_SIZE}`,
-      token,
-      { auth: true },
     ),
 
-  getCreated: (userId: string, type: string, token: string, page: number) =>
-    fetcher(
+  getCreated: (userId: string, type: string, page: number) =>
+    get(
       `/user/${userId}/meetups/created/${type}?page=${page}&limit=${PAGE_SIZE}`,
-      token,
-      { auth: true },
     ),
 };
