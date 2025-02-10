@@ -52,25 +52,27 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
             {ratingArr[reviewInfo.rating]}
           </span>
           {reviewInfo.isMyWritten ? (
-            <Dropdown
-              content={[
-                {
-                  label: "수정하기",
-                  value: "modify",
-                  onClick: () => handleClickModify(),
-                },
-                {
-                  label: "삭제하기",
-                  value: "delete",
-                  onClick: () => handleClickDelete(),
-                },
-              ]}
-              isReview={true}
-            >
-              <div className='z-10 cursor-pointer'>
-                <MenuCircle />
-              </div>
-            </Dropdown>
+            <div className='relative' onClick={(e) => e.stopPropagation()}>
+              <Dropdown
+                content={[
+                  {
+                    label: "수정하기",
+                    value: "modify",
+                    onClick: () => handleClickModify(),
+                  },
+                  {
+                    label: "삭제하기",
+                    value: "delete",
+                    onClick: () => handleClickDelete(),
+                  },
+                ]}
+                isReview={true}
+              >
+                <div className='z-10 cursor-pointer'>
+                  <MenuCircle />
+                </div>
+              </Dropdown>
+            </div>
           ) : (
             <button
               onClick={handleClickDetail}
