@@ -1,9 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import SolidButton from "../common/buttons/SolidButton";
 import CardSkeleton from "../common/skeleton/CardSkeleton";
-import EmptyImage from "@/assets/images/icons/empty.svg";
+import MainContentEmpty from "./MainContentEmpty";
 import Card from "@/components/common/card/Card";
 import { useMeetupList } from "@/hooks/meetup/useMeetupList";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -18,16 +16,12 @@ export default function MainContentList() {
   );
 
   if (!data || data.pages[0].data.length === 0 || isError) {
-    return (
-      <MainContentEmpty
-        isSearching={!!new URLSearchParams(window.location.search)}
-      />
-    );
+    return <MainContentEmpty />;
   }
 
   return (
-    <>
-      <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
+    <div className='flex size-full grow flex-col justify-between gap-8'>
+      <section className='relative grid w-full grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
         {data?.pages.map((page) =>
           page.data.map((item) => (
             <Card
@@ -66,40 +60,13 @@ export default function MainContentList() {
 
       <div
         ref={loadMoreRef}
-        className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
+        className='relative grid w-full grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
       >
         {isFetchingNextPage &&
           Array.from({ length: 10 }).map((_, index) => (
             <CardSkeleton key={index} />
           ))}
       </div>
-    </>
-  );
-}
-
-function MainContentEmpty({ isSearching = false }: { isSearching?: boolean }) {
-  const router = useRouter();
-
-  return (
-    <div className='flex h-[50vh] flex-col items-center justify-center gap-4'>
-      <EmptyImage />
-      <p className='text-center text-body-1-reading text-gray-500'>
-        {isSearching
-          ? "조건에 맞는 모임이 없어요"
-          : "아직 개설된 모임이 없어요"}
-      </p>
-      {!isSearching && (
-        <div className='flex flex-col items-center gap-8'>
-          <SolidButton
-            size='small'
-            onClick={() => {
-              router.push("/create");
-            }}
-          >
-            모임 개설하기
-          </SolidButton>
-        </div>
-      )}
     </div>
   );
 }

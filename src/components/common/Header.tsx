@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Edit from "@/assets/images/icons/edit.svg";
+import LogoIcon from "@/assets/images/icons/mogua.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
 import SearchIcon from "@/assets/images/icons/search-thin.svg";
 import useUserStore from "@/store/auth/useUserStore";
@@ -13,12 +14,12 @@ export default function Header() {
   const { user } = useUserStore();
 
   return (
-    <header className='fixed left-0 top-0 z-[49] flex w-full items-center justify-center bg-[#0E0E10]'>
-      <div className='flex h-[56px] w-full max-w-[1240px] items-center justify-between px-5 py-2.5'>
+    <header className='fixed left-0 top-0 z-50 flex w-full items-center justify-center bg-[#0E0E10]'>
+      <div className='flex h-14 w-full max-w-[1240px] items-center justify-between px-5 py-2.5'>
         <div className='flex items-center gap-12'>
           <h1>
             <Link href='/'>
-              <img src='/icons/mogua.svg' alt='모과 로고' />
+              <LogoIcon aria-label='mogua' />
             </Link>
           </h1>
           <nav className='hidden desktop:block'>
@@ -53,15 +54,21 @@ export default function Header() {
 
         <div>
           {pathname.includes("user") ? (
-            <button onClick={() => router.push("/user/edit_profile")}>
+            <button
+              onClick={() => router.push("/user/edit_profile")}
+              aria-label='Edit Profile'
+            >
               <Edit className='text-gray-200' />
             </button>
           ) : (
             <div className='flex gap-6'>
               <button>
-                <SearchIcon className='text-gray-200' />
+                <SearchIcon className='text-gray-200' aria-label='Search' />
               </button>
-              <button onClick={() => router.push("/create")}>
+              <button
+                onClick={() => router.push("/create")}
+                aria-label='Create Meetup'
+              >
                 <PlusIcon className='text-gray-200' />
               </button>
             </div>
