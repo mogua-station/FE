@@ -6,25 +6,38 @@ const isProtectedPath = (path: string) => {
   return protectedPaths.some((pattern) => new RegExp(pattern).test(path));
 };
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get("accessToken");
+export async function middleware(request: NextRequest) {
   const isAuthPage = ["/sign-in", "/sign-in/basic", "/sign-up"].includes(
     request.nextUrl.pathname,
   );
   // 인증 필요한 페이지 env로 관리
   const isProtectedPage = isProtectedPath(request.nextUrl.pathname);
 
-  // 인증이 필요한 페이지에 토큰 없이 접근 시도할 경우
-  if (isProtectedPage && !token) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+  // 인증이 필요 없는 페이지는 API 호출 없이 바로 렌더링
+  if (!isProtectedPage && !isAuthPage) {
+    return NextResponse.next();
   }
 
-  // 로그인된 상태로 인증 페이지 접근 시
-  if (token && isAuthPage) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  try {
+    const response = await fetch(`${request.nextUrl.origin}/api/auth/verify`, {
+      method: "GET",
+      credentials: "include", // 쿠키가 자동으로 포함되므로 이 설정만 필요
+    });
 
-  return NextResponse.next();
+    // 인증이 필요한 페이지에 토큰 없이 접근 시도할 경우
+    if (!response.ok && isProtectedPage) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
+
+    // 로그인된 상태로 인증 페이지 접근 시
+    if (response.ok && isAuthPage) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
 export const config = {
