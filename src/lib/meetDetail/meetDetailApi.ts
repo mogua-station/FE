@@ -1,9 +1,13 @@
 import { type ReviewInfo, type MeetupReviewProps } from "@/types/review";
+// import { getAccessToken } from "@/utils/cookie";
 
 export const fetchHostData = async (hostId: number) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${hostId}`,
+      {
+        next: { revalidate: 60 * 60 }, //캐싱 한시간
+      },
     );
 
     if (!response.ok) {
@@ -125,6 +129,10 @@ export const fetchMeetupReview = async ({
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/reviews/list/${meetupId}?page=${pageParams}&limit=3`,
       {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjY4LCJpYXQiOjE3MzkxOTEwNTYsImV4cCI6MTczOTE5NDY1NiwianRpIjoiNzkyNzIwMGEtZDRiMy00YjIxLTlmMWMtOGI1MTI3ODUxNzZmIn0.CogkSQ70UdwR2oHkxE--nRivbjIt3QlcATFoq_Lowc2MueMpWrkxD6BiGmR3NjyEr1FO5jMpwzfpx77Msao92Q`,
+        },
+        // credentials: "include",
         next: { revalidate: 60 }, //캐싱 1분
       },
     );

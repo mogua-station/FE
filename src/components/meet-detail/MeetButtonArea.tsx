@@ -1,9 +1,10 @@
 "use client";
 
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "react-toastify";
 import ShareMeetUpButton from "./ShareMeetUpButton";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
@@ -12,25 +13,26 @@ import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import JoinToast from "@/components/toast/JoinToast";
 import useChangeWishlist from "@/hooks/useChangeWishlist";
-import {
-  fetchHostData,
-  fetchJoinMeet,
-  fetchLeaveMeet,
-} from "@/lib/meetDetail/meetDetailApi";
+import { fetchJoinMeet, fetchLeaveMeet } from "@/lib/meetDetail/meetDetailApi";
 import useUserStore from "@/store/auth/useUserStore";
 import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type ClientInfo } from "@/types/meetDetail";
+import { type UserProfile } from "@/types/user-page";
 
 interface UserTag {
   id: number;
   tag: string;
 }
 
+interface MeetButtonAreaProps {
+  clientInfo: ClientInfo;
+  hostInfo: UserProfile;
+}
+
 export default function MeetButtonArea({
   clientInfo,
-}: {
-  clientInfo: ClientInfo;
-}) {
+  hostInfo,
+}: MeetButtonAreaProps) {
   //임시 유저 데이터 확인
   const { user } = useUserStore();
   const { userAllWishlist } = useUserWishlist();
@@ -46,7 +48,7 @@ export default function MeetButtonArea({
   };
 
   const [wishlist, setWishlist] = useState<number[]>([]);
-  const [joinButton, setJoinButton] = useState<JSX.Element | null>(() => {
+  const joinButton = useMemo(() => {
     if (clientInfo.meetupStatus === "COMPLETED") {
       return (
         <SolidButton mode='special' disabled>
@@ -54,92 +56,89 @@ export default function MeetButtonArea({
         </SolidButton>
       );
     }
-    if (user === null) {
+    if (clientInfo.meetupStatus === "IN_PROGRESS") {
       return (
-        <SolidButton mode='special' onClick={() => handleClickJoin()}>
+        <SolidButton mode='special' disabled>
+          진행중인 모임이에요
+        </SolidButton>
+      );
+    }
+    if (clientInfo.meetupStatus === "BEFORE_START") {
+      return (
+        <SolidButton mode='special' disabled>
+          시작전인 모임이에요
+        </SolidButton>
+      );
+    }
+
+    if (!user) {
+      return (
+        <SolidButton mode='special' onClick={handleClickJoin}>
           모임 신청하기
         </SolidButton>
       );
-    } else {
-      //내가 주최자 일 때
-      if (clientInfo.hostId === user.userId) {
-        //모집 중일 때때
-        if (clientInfo.meetupStatus === "RECRUITING") {
-          if (clientInfo.participants.length >= clientInfo.minParticipants) {
-            return (
-              <SolidButton mode='special' disabled>
-                개설확정된 모임이에요
-              </SolidButton>
-            );
-          } else {
-            return (
-              <SolidButton mode='special' onClick={() => {}}>
-                모임 취소하기
-              </SolidButton>
-            );
-          }
-        }
-      } else {
-        //주최자가 아니면서 참여 여부에 따른 버튼 렌더링
-        if (
-          clientInfo.participants.some((item) => item.userId === user.userId) &&
-          clientInfo.meetupStatus === "RECRUITING"
-        ) {
-          return (
-            <SolidButton
-              mode='special'
-              onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-            >
-              신청 취소하기
-            </SolidButton>
-          );
-        } else {
-          return (
-            <SolidButton mode='special' onClick={() => handleClickJoin()}>
-              모임 신청하기
-            </SolidButton>
-          );
-        }
-      }
     }
 
-    return null;
-  });
-
-  const { data: hostData, isLoading } = useQuery({
-    queryKey: ["host", clientInfo.hostId],
-    queryFn: async () => {
-      const host = await fetchHostData(clientInfo.hostId);
-      return host.data;
-    },
-  });
-
-  const handleClickToggleWishlist = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (user != null) {
-      loggedInWishlist(clientInfo.meetupId, clientInfo.meetupStatus);
-    } else {
-      nonLoggedInWishlist(
-        clientInfo.meetupId,
-        clientInfo.meetupStatus,
-        setWishlist,
+    if (clientInfo.hostId === user.userId) {
+      if (clientInfo.participants.length >= clientInfo.minParticipants) {
+        return (
+          <SolidButton mode='special' disabled>
+            개설확정된 모임이에요
+          </SolidButton>
+        );
+      }
+      return (
+        <SolidButton mode='special' onClick={() => {}}>
+          모임 취소하기
+        </SolidButton>
       );
     }
-  };
 
-  const handleClickNavigateUser = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
-    router.push(`/user/${id}`);
-  };
+    const isJoined = clientInfo.participants.some(
+      (item) => item.userId === user.userId,
+    );
+    return isJoined ? (
+      <SolidButton
+        mode='special'
+        onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
+      >
+        신청 취소하기
+      </SolidButton>
+    ) : (
+      <SolidButton mode='special' onClick={handleClickJoin}>
+        모임 신청하기
+      </SolidButton>
+    );
+  }, [clientInfo, user]);
 
-  const handleClickJoin = () => {
+  const handleClickToggleWishlist = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (user != null) {
+        loggedInWishlist(clientInfo.meetupId, clientInfo.meetupStatus);
+      } else {
+        nonLoggedInWishlist(
+          clientInfo.meetupId,
+          clientInfo.meetupStatus,
+          setWishlist,
+        );
+      }
+    },
+    [clientInfo.meetupId, clientInfo.meetupStatus, user],
+  );
+
+  // const handleClickNavigateUser = (e: React.MouseEvent, id: number) => {
+  //   e.stopPropagation();
+  //   router.push(`/user/${id}`);
+  // };
+
+  const handleClickJoin = useCallback(() => {
     if (user === null) {
       alert("로그인 해주세요");
     } else {
       joinMutate.mutate(clientInfo.meetupId);
     }
-  };
+  }, [user, clientInfo.meetupId]);
 
   const joinMutate = useMutation({
     mutationFn: (id: number) => fetchJoinMeet(id),
@@ -157,98 +156,18 @@ export default function MeetButtonArea({
     },
   });
 
-  //참여자가 변경될 때 마다
-  useEffect(() => {
-    if (clientInfo.meetupStatus === "COMPLETED") {
-      setJoinButton(
-        <SolidButton mode='special' disabled aria-label='모임 신청하기'>
-          종료된 모임이에요
-        </SolidButton>,
-      );
-    } else if (clientInfo.meetupStatus === "RECRUITING") {
-      if (user === null) {
-        setJoinButton(
-          <SolidButton
-            mode='special'
-            onClick={() => handleClickJoin()}
-            aria-label='모임 신청하기'
-          >
-            모임 신청하기
-          </SolidButton>,
-        );
-      } else {
-        //내가 주최자 일 때
-        if (clientInfo.hostId === user.userId) {
-          //모집 중일 때
-          if (clientInfo.participants.length >= clientInfo.minParticipants) {
-            setJoinButton(
-              <SolidButton mode='special' disabled aria-label='모임 신청하기'>
-                개설확정된 모임이에요
-              </SolidButton>,
-            );
-          } else {
-            setJoinButton(
-              <SolidButton mode='special' onClick={() => {}}>
-                모임 취소하기
-              </SolidButton>,
-            );
-          }
-        } else {
-          //주최자가 아니면서 참여 여부에 따른 버튼 렌더링
-          if (
-            clientInfo.participants.some((item) => item.userId === user.userId)
-          ) {
-            setJoinButton(
-              <SolidButton
-                mode='special'
-                onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-                aria-label='모임 신청하기'
-              >
-                신청 취소하기
-              </SolidButton>,
-            );
-          } else {
-            setJoinButton(
-              <SolidButton
-                mode='special'
-                onClick={() => handleClickJoin()}
-                aria-label='모임 신청하기'
-              >
-                모임 신청하기
-              </SolidButton>,
-            );
-          }
-        }
-      }
-    } else if (clientInfo.meetupStatus === "IN_PROGRESS") {
-      setJoinButton(
-        <SolidButton mode='special' disabled aria-label='모임 신청하기'>
-          진행중인 모임이에요
-        </SolidButton>,
-      );
-    } else if (clientInfo.meetupStatus === "BEFORE_START") {
-      setJoinButton(
-        <SolidButton mode='special' disabled aria-label='모임 신청하기'>
-          시작전인 모임이에요
-        </SolidButton>,
-      );
-    }
-  }, [clientInfo.participants, user]);
-
-  useEffect(() => {
+  const updateWishlist = useCallback(() => {
     if (user === null) {
-      // user가 null일 경우, localStorage에서 wishlist를 가져와서 상태를 설정
       const myWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
       setWishlist(myWishlist);
     } else {
-      // user가 있을 경우, 전역 상태관리에 저장된 userWishlist 상태를 그대로 사용
       setWishlist(userAllWishlist);
     }
   }, [user, userAllWishlist]);
 
-  if (isLoading) {
-    <div>로딩중..</div>;
-  }
+  useEffect(() => {
+    updateWishlist();
+  }, [updateWishlist]);
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -271,35 +190,44 @@ export default function MeetButtonArea({
         </IconButton>
         {joinButton}
       </div>
-      <button
+      <div
         className='meet-info-box-small mt-6 flex flex-col gap-4'
-        onClick={(e) => handleClickNavigateUser(e, clientInfo.hostId)}
-        aria-label='유저 프로필 버튼'
+        // onClick={(e) => handleClickNavigateUser(e, hostInfo.userId)}
       >
-        <span className='text-title block'>주최자 프로필</span>
-        <div className='meet-info-box-inner-2 flex w-full flex-col gap-5'>
+        <span className='text-title block text-left'>주최자 프로필</span>
+        <Link
+          href={`/user/${clientInfo.hostId}`}
+          className='meet-info-box-inner-2 flex w-full flex-col gap-5'
+          aria-label={`유저 ${clientInfo.hostId} 프로필 이동`}
+        >
           <div className='flex gap-[14px]'>
             <div className='relative h-[46px] w-[46px] overflow-hidden rounded-[50%] bg-gray-700'>
-              <Image src={hostData?.profileImg} alt='유저 프로필' fill />
+              <Image
+                src={hostInfo.profileImg}
+                alt='유저 프로필'
+                fill
+                className='object-cover'
+                sizes='60px'
+              />
             </div>
             <div>
               <span className='flex items-center gap-[6px] text-body-2-normal font-medium text-gray-300'>
-                {clientInfo.hostNickname}
-                {hostData?.qualificationStatus == "QUALIFIED" && (
+                {hostInfo.nickname}
+                {hostInfo.qualificationStatus == "QUALIFIED" && (
                   <span className='rounded-5 text-gary-300 inline-block rounded-[20px] bg-gray-700 px-2 py-1 text-caption-normal font-medium'>
                     과외선생님
                   </span>
                 )}
               </span>
-              {hostData?.bio.length === 0 && (
-                <p className='text-body mt-[6px] text-gray-400'>
-                  안녕하세요! 기획하는 모과입니다.
-                </p>
-              )}
+              <p className='text-body mt-[6px] text-gray-400'>
+                {hostInfo.bio.length === 0
+                  ? "소개글이 없습니다."
+                  : hostInfo.bio}
+              </p>
             </div>
           </div>
           <ul className='flex gap-1'>
-            {hostData?.userTagList.map((item: UserTag, index: number) => (
+            {hostInfo.userTagList.map((item: UserTag, index: number) => (
               <li
                 className='rounded-[6px] bg-gray-600 px-2 py-[3px] text-caption-normal font-medium text-gray-300'
                 key={index}
@@ -307,12 +235,9 @@ export default function MeetButtonArea({
                 {item.tag}
               </li>
             ))}
-            <li className='rounded-[6px] bg-gray-600 px-2 py-[3px] text-caption-normal font-medium text-gray-300'>
-              태그
-            </li>
           </ul>
-        </div>
-      </button>
+        </Link>
+      </div>
     </div>
   );
 }

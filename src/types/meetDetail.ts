@@ -6,7 +6,6 @@ export interface ParticipantInfo {
 export interface ClientInfo {
   meetupId: number;
   hostId: number;
-  hostNickname: string;
   participants: ParticipantInfo[];
   minParticipants: number;
   meetupStatus: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";

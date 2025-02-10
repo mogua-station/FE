@@ -28,7 +28,12 @@ export default function ShareMeetUpButton() {
       aria-label='모임 공유하기'
     >
       <div className='relative h-[40px] w-[40px] overflow-hidden rounded-[50%] bg-gray-600'>
-        <Image fill src='/images/share_character.png' alt='캐릭터 이미지' />
+        <Image
+          fill
+          src='/images/share_character.png'
+          alt='캐릭터 이미지'
+          sizes='40px'
+        />
       </div>
       <div className='flex flex-col justify-between'>
         <p className='text-body text-gray-300'>친구와 함께 참여해보세요</p>
