@@ -1,4 +1,4 @@
-import { fetcher } from "@/lib/user/fetcher";
+import { get, post, patch, del } from "@/lib/user/fetcher";
 
 describe("fetcher", () => {
   const mockData = { data: "test" };
@@ -12,71 +12,23 @@ describe("fetcher", () => {
     global.fetch = jest.fn(() => Promise.resolve(mockResponse));
   });
 
-  describe("기본 동작", () => {
-    it("기본 GET 요청을 성공적으로 처리한다", async () => {
-      const res = await fetcher("/test", "");
-      const data = await res.json();
-
-      expect(res.ok).toBe(true);
-      expect(data).toEqual(mockData);
-    });
-
-    it("HTTP 메서드를 설정할 수 있다", async () => {
-      const originalData = { title: "수정 전" };
-      const updateData = { title: "수정 후" };
-
-      (global.fetch as jest.Mock).mockImplementationOnce(() =>
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve(updateData),
-        }),
-      );
-
-      const res = await fetcher("/update", "", {
-        method: "PATCH",
-        body: JSON.stringify(updateData),
-      });
-
+  describe("공통 기능", () => {
+    it("credentials가 include로 설정된다", async () => {
+      await get("/test");
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
-          method: "PATCH",
-          body: JSON.stringify(updateData),
+          credentials: "include",
         }),
       );
-
-      const data = await res.json();
-      expect(data).toEqual(updateData);
-      expect(data).not.toEqual(originalData);
-    });
-  });
-
-  describe("헤더 처리", () => {
-    it("인증 토큰이 필요한 요청을 성공적으로 처리한다", async () => {
-      const token = "test-token";
-      const res = await fetcher("/auth-test", token, { auth: true });
-
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          headers: expect.objectContaining({
-            Authorization: `Bearer ${token}`,
-          }),
-        }),
-      );
-
-      const data = await res.json();
-      expect(data).toEqual(mockData);
     });
 
     it("커스텀 헤더를 설정할 수 있다", async () => {
       const customHeaders = {
         "Accept-Language": "ko-KR",
       };
-      const token = "test-token";
 
-      await fetcher("/test", token, {
-        auth: true,
+      await get("/test", {
         headers: customHeaders,
       });
 
@@ -84,22 +36,29 @@ describe("fetcher", () => {
         expect.any(String),
         expect.objectContaining({
           headers: expect.objectContaining({
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
             ...customHeaders,
           }),
         }),
       );
     });
 
-    it("FormData 요청시 Content-Type: application/json이 설정되지 않는다", async () => {
+    it("JSON 데이터는 자동으로 직렬화된다", async () => {
+      const data = { name: "test" };
+      await post("/test", data);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          body: JSON.stringify(data),
+        }),
+      );
+    });
+
+    it("FormData는 직렬화되지 않고 Content-Type이 설정되지 않는다", async () => {
       const formData = new FormData();
       formData.append("key", "value");
 
-      await fetcher("/upload", "", {
-        method: "POST",
-        body: formData,
-      });
+      await post("/test", formData);
 
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
@@ -110,29 +69,83 @@ describe("fetcher", () => {
           }),
         }),
       );
-
-      const fetchCall = (global.fetch as jest.Mock).mock.calls[0][1];
-      expect(fetchCall.body).toBeInstanceOf(FormData);
     });
-  });
 
-  describe("Next.js 옵션 처리", () => {
-    it("Next.js fetch 옵션을 처리할 수 있다", async () => {
+    it("Next.js 옵션을 처리할 수 있다", async () => {
       const nextOptions = {
         cache: "no-store" as const,
         next: { revalidate: 60 },
-        headers: {
-          "Content-Type": "application/json",
-          "Accept-Language": "ko-KR",
-        },
       };
 
-      await fetcher("/test", "", nextOptions);
+      await get("/test", nextOptions);
 
       expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining(nextOptions),
       );
+    });
+  });
+
+  describe("HTTP Methods", () => {
+    describe("GET", () => {
+      it("GET 요청을 처리한다", async () => {
+        const res = await get("/test");
+        const data = await res.json();
+
+        expect(res.ok).toBe(true);
+        expect(data).toEqual(mockData);
+        expect(global.fetch).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            method: "GET",
+          }),
+        );
+      });
+    });
+
+    describe("POST", () => {
+      it("POST 요청을 처리한다", async () => {
+        const postData = { name: "test" };
+        await post("/test", postData);
+
+        expect(global.fetch).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            method: "POST",
+            body: JSON.stringify(postData),
+          }),
+        );
+      });
+    });
+
+    describe("PATCH", () => {
+      it("PATCH 요청을 처리한다", async () => {
+        const updateData = { name: "updated" };
+        const res = await patch("/test", updateData);
+        const data = await res.json();
+
+        expect(global.fetch).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            method: "PATCH",
+            body: JSON.stringify(updateData),
+          }),
+        );
+        expect(data).toEqual(mockData);
+      });
+    });
+
+    describe("DELETE", () => {
+      it("DELETE 요청을 처리한다", async () => {
+        await del("/test");
+
+        expect(global.fetch).toHaveBeenCalledWith(
+          expect.any(String),
+          expect.objectContaining({
+            method: "DELETE",
+          }),
+        );
+      });
     });
   });
 });
