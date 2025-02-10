@@ -1,7 +1,5 @@
 export const dynamic = "force-dynamic";
 
-import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
 import UserProfile from "@/components/user-page/UserProfile";
 import UserTabs from "@/components/user-page/UserTabs";
 import { getUserProfile } from "@/lib/user/getUserProfile";
@@ -28,17 +26,11 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function UserPage({ params }: Props) {
   const userId = params.id;
-  const cookieStore = cookies();
-  const token = cookieStore.get("accessToken")?.value || "";
 
   // 위의 generateMetadata와 동일한 요청이기 때문에 자동으로 재사용 됨
   const userInfo = await getUserProfile(userId, {
     cache: "no-store",
   });
-
-  if (!userInfo) {
-    notFound();
-  }
 
   return (
     <div className='flex h-full flex-1 flex-col p-4 tablet:px-20 tablet:py-[52px] desktop:py-[56px]'>
@@ -52,7 +44,6 @@ export default async function UserPage({ params }: Props) {
           <UserTabs
             userId={userId}
             isInstructor={userInfo.qualificationStatus === "QUALIFIED"}
-            token={token}
           />
         </section>
       </div>

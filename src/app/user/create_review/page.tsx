@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import BackButton from "@/components/create-reaview/BackButton";
 import CreateReviewForm from "@/components/create-reaview/CreateReviewForm";
@@ -9,13 +8,6 @@ export default function CreateReview({
 }: {
   searchParams: { meetupId: string };
 }) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("accessToken");
-
-  if (!token) {
-    redirect("/");
-  }
-
   if (!searchParams.meetupId) {
     redirect("/");
   }
