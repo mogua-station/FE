@@ -13,6 +13,10 @@ export default function Header() {
   const router = useRouter();
   const { user } = useUserStore();
 
+  if (pathname.startsWith("/user/")) {
+    return null;
+  }
+
   return (
     <header className='fixed left-0 top-0 z-50 flex w-full items-center justify-center bg-[#0E0E10]'>
       <div className='flex h-14 w-full max-w-[1240px] items-center justify-between px-5 py-2.5'>

@@ -3,8 +3,8 @@ import { type Metadata } from "next";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import Providers from "./providers/Providers";
-import Header from "@/components/common/Header";
-import NavBar from "@/components/common/nav-bar/NavBar";
+import HeaderWrapper from "@/components/common/layout/HeaderWrapper";
+import NavBarWrapper from "@/components/common/layout/NavBarWrapper";
 import InitializeUser from "@/hooks/auths/InitializeUser";
 
 const ClearImageOnPageLeave = dynamic(
@@ -58,11 +58,9 @@ export default function RootLayout({
         <Providers>
           <InitializeUser />
           <ClearImageOnPageLeave />
-          <Header />
-          <main className='relative flex flex-1 flex-col pb-[62px] pt-[56px] desktop:pb-0'>
-            {children}
-          </main>
-          <NavBar />
+          <HeaderWrapper />
+          <main className='relative flex flex-1 flex-col'>{children}</main>
+          <NavBarWrapper />
         </Providers>
 
         {/* 배경 비디오 임시설정 */}
