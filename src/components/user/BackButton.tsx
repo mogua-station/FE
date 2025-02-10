@@ -1,6 +1,6 @@
 "use client";
 
-import CreateReviewCancelModal from "./CreateReviewCancelModal";
+import CancelModal from "./CancelModal";
 import DeleteIcon from "@/assets/images/icons/delete.svg";
 import useUserStore from "@/store/auth/useUserStore";
 import modal from "@/utils/modalController";
@@ -10,9 +10,7 @@ export default function BackButton() {
 
   const handleOpenModal = () => {
     modal.open(
-      ({ close }) => (
-        <CreateReviewCancelModal userId={user!.userId} close={close} />
-      ),
+      ({ close }) => <CancelModal userId={user!.userId} close={close} />,
       {
         hasCloseBtn: false,
         isBottom: false,

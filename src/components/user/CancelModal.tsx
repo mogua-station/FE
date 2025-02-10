@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import SolidButton from "../common/buttons/SolidButton";
 
-export default function CreateReviewCancelModal({
+export default function CancelModal({
   userId,
   close,
 }: {
