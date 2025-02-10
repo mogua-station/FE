@@ -3,7 +3,6 @@ import type {
   MeetupQueryType,
   MeetupListResponseType,
 } from "@/types/meetup.type";
-import { getAccessToken } from "@/utils/cookie";
 
 export const getMeetupList = async ({
   page = 0,
@@ -62,18 +61,10 @@ export const getMeetupList = async ({
 };
 
 export const createMeetup = async (formData: FormData) => {
-  const accessToken = getAccessToken();
-
-  if (!accessToken) {
-    throw new Error("Access token is not found");
-  }
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups`, {
     method: "POST",
     body: formData,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -90,18 +81,10 @@ export const editMeetup = async ({
   id: number;
   formData: FormData;
 }) => {
-  const accessToken = getAccessToken();
-
-  if (!accessToken) {
-    throw new Error("Access token is not found");
-  }
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`, {
     method: "PATCH",
     body: formData,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    credentials: "include",
   });
 
   if (!res.ok) {
