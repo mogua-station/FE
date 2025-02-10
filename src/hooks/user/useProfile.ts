@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetcher } from "@/lib/user/fetcher";
+import { patch } from "@/lib/user/fetcher";
 import { getUserProfile } from "@/lib/user/getUserProfile";
 
 export const useGetProfile = (userId: number) => {
@@ -15,18 +15,8 @@ export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      formData,
-      token,
-    }: {
-      formData: FormData;
-      token: string;
-    }) => {
-      const res = await fetcher(`/user/profile/me`, token, {
-        method: "PATCH",
-        body: formData,
-        auth: true,
-      });
+    mutationFn: async ({ formData }: { formData: FormData }) => {
+      const res = await patch(`/user/profile/me`, formData);
       if (!res.ok) {
         const errorData = await res.text();
         throw new Error(`Failed to update profile: ${errorData}`);

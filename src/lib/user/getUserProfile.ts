@@ -1,8 +1,8 @@
-import { fetcher } from "./fetcher";
+import { get } from "./fetcher";
 import { type UserProfile } from "@/types/user-page";
 
 export async function getUserProfile(userId: string, options?: RequestInit) {
-  const res = await fetcher(`/user/profile/${userId}`, "", {
+  const res = await get(`/user/profile/${userId}`, {
     ...options,
   });
 

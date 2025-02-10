@@ -1,4 +1,4 @@
-import { fetcher } from "@/lib/user/fetcher";
+import { get } from "@/lib/user/fetcher";
 import { getUserProfile } from "@/lib/user/getUserProfile";
 
 jest.mock("@/lib/user/fetcher");
@@ -24,7 +24,7 @@ describe("getUserProfile", () => {
   });
 
   it("Next.js fetch 옵션을 전달할 수 있다", async () => {
-    (fetcher as jest.Mock).mockResolvedValue({
+    (get as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ data: mockUserProfile }),
     });
@@ -36,15 +36,14 @@ describe("getUserProfile", () => {
 
     await getUserProfile("1", options);
 
-    expect(fetcher).toHaveBeenCalledWith(
+    expect(get).toHaveBeenCalledWith(
       `/user/profile/1`,
-      "",
       expect.objectContaining(options),
     );
   });
 
   it("유저 프로필을 성공적으로 가져온다", async () => {
-    (fetcher as jest.Mock).mockResolvedValue({
+    (get as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ data: mockUserProfile }),
     });
@@ -52,7 +51,7 @@ describe("getUserProfile", () => {
     const userId = "1";
     const data = await getUserProfile(userId);
 
-    expect(fetcher).toHaveBeenCalledWith(`/user/profile/${userId}`, "", {});
+    expect(get).toHaveBeenCalledWith(`/user/profile/${userId}`, {});
     expect(data).toEqual(mockUserProfile);
   });
 
@@ -64,7 +63,7 @@ describe("getUserProfile", () => {
       additionalData: null,
     };
 
-    (fetcher as jest.Mock).mockResolvedValue({
+    (get as jest.Mock).mockResolvedValue({
       ok: false,
       status: 400,
       json: () => Promise.resolve(errorResponse),
@@ -85,7 +84,7 @@ describe("getUserProfile", () => {
       additionalData: null,
     };
 
-    (fetcher as jest.Mock).mockResolvedValue({
+    (get as jest.Mock).mockResolvedValue({
       ok: false,
       status: 400,
       json: () => Promise.resolve(errorResponse),
