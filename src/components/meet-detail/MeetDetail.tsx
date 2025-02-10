@@ -73,9 +73,7 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
           sizes='(max-width: 1200px) 100vw, 1200px'
           alt={`모임 제목: ${meetInfo.title} 이미지`}
           fill
-          // width={0}
-          // height={0}
-          // style={{ width: "auto", height: "100%" }}
+          priority
           className='object-cover'
         />
       </div>
@@ -83,7 +81,7 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
         <div className='mt-10 flex flex-col gap-6 desktop:flex-row'>
           <div className='flex flex-col desktop:w-[775px]'>
             {/* 스터디 제목 정보 */}
-            <div className='meet-info-box flex flex-col gap-8'>
+            <section className='meet-info-box flex flex-col gap-8'>
               <div>
                 <div className='flex gap-1.5'>
                   <StatusBadge
@@ -134,10 +132,10 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
                   </span>
                 </div>
               </div>
-            </div>
+            </section>
 
             {/* 스터디 참여인원, 본문 */}
-            <div className='meet-info-box mt-10 flex flex-col gap-8'>
+            <section className='meet-info-box mt-10 flex flex-col gap-8'>
               <div className='flex flex-col gap-4'>
                 <span className='text-title'>참여 인원</span>
                 <div className='meet-info-box-inner-1'>
@@ -217,18 +215,18 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
                   {meetInfo.content}
                 </p>
               </div>
-            </div>
+            </section>
           </div>
           {/* 주최자 프로필, 시작 */}
           <MeetButtonArea clientInfo={clientInfo} hostInfo={hostInfo.data} />
         </div>
         {/* 리뷰 */}
-        <div className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
+        <section className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
           <MeetDetailReview
             meetupId={meetInfo.meetupId}
             meetupStatus={meetInfo.meetupStatus}
           />
-        </div>
+        </section>
       </div>
       <ToastContainer
         containerId={"joinArea"}

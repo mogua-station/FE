@@ -130,7 +130,7 @@ export const fetchMeetupReview = async ({
       `${process.env.NEXT_PUBLIC_BASE_URL}/reviews/list/${meetupId}?page=${pageParams}&limit=3`,
       {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjY4LCJpYXQiOjE3MzkxOTEwNTYsImV4cCI6MTczOTE5NDY1NiwianRpIjoiNzkyNzIwMGEtZDRiMy00YjIxLTlmMWMtOGI1MTI3ODUxNzZmIn0.CogkSQ70UdwR2oHkxE--nRivbjIt3QlcATFoq_Lowc2MueMpWrkxD6BiGmR3NjyEr1FO5jMpwzfpx77Msao92Q`,
+          Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjY4LCJpYXQiOjE3MzkxOTQyNzQsImV4cCI6MTczOTE5Nzg3NCwianRpIjoiMzlmZGY2ZWMtY2FjZS00N2E1LWIwYzItNDUzYWU3OGRmYWZkIn0.Ys6IR0m79oujX_E2bvWclUsisEnUAEWgbxgHkfTFYIjtusB6KqSQZYKyv8wCfdQsBbRz73rjpK69zzs4UP7j3A`,
         },
         // credentials: "include",
         next: { revalidate: 60 }, //캐싱 1분
