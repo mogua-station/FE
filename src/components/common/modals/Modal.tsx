@@ -59,7 +59,7 @@ export default function ModalBase({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[999] flex items-center justify-center transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       } bg-gray-950-48`}
       onPointerUp={handleOverlayClick}

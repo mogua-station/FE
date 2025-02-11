@@ -8,6 +8,7 @@ export interface ReviewInfo {
   date: Date;
   meetingEndDate?: Date;
   isMyReview?: boolean;
+  isMyWritten?: boolean;
   eventId?: number;
   eventType?: string;
 }

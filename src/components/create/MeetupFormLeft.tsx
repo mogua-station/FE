@@ -36,7 +36,11 @@ export default function MeetupFormLeft({
   useEffect(() => {
     setValue(
       "location",
-      isOnline ? null : watch("location") === null ? "" : watch("location"),
+      isOnline
+        ? "UNDEFINED"
+        : watch("location") === "UNDEFINED"
+          ? ""
+          : watch("location"),
     );
   }, [isOnline, setValue]);
 
