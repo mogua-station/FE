@@ -1,21 +1,9 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect } from "react";
 import KakaoIcon from "@/assets/images/icons/kakao.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useCookie from "@/hooks/auths/useTokenState";
 
 const SignInPage = () => {
-  const token = useCookie("accessToken");
-
-  useEffect(() => {
-    if (token !== null) {
-      console.log("Token:", token);
-    }
-  }, [token]);
-
   return (
     <div className='relative z-10 mx-auto flex h-full w-full flex-grow flex-col items-center justify-end gap-[24px] px-4 pb-12 tablet:p-20'>
       <div className='flex w-full flex-col gap-[16px] desktop:w-[584px]'>
