@@ -5,8 +5,6 @@ import SolidButton from "@/components/common/buttons/SolidButton";
 const WelcomePage = () => {
   return (
     <div className='relative flex h-full grow flex-col items-center justify-center'>
-      {/* <div className='flex w-full justify-center tablet:w-[90%] tablet:rounded-[40px] tablet:px-[40px] tablet:py-[56px]'>
-        <div className='flex flex-col gap-6 px-4'> */}
       <div className='flex w-full flex-col gap-[24px] px-4 pb-[56px] tablet:m-20 tablet:w-[90%] tablet:rounded-[40px] tablet:px-[40px] tablet:py-[56px] desktop:w-[40%]'>
         <div className='flex flex-col text-title-1 font-semibold text-gray-100'>
           <p>모과와 함께</p>
