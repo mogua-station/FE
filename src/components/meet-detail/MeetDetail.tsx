@@ -1,12 +1,22 @@
+import { ToastContainer } from "react-toastify";
 import ShareMeetUpButton from "./ShareMeetUpButton";
 import StatusBadge from "@/components/common/card/StatusBadge";
 import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
 import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
-import { reviews } from "@/data/mockList";
-import { type MeetInfo, type ClientInfo } from "@/types/meetDetail";
+import {
+  type MeetInfo,
+  type ClientInfo,
+  type ParticipantInfo,
+} from "@/types/meetDetail";
 
 export default function MeetDetail({ meetInfo }: MeetInfo) {
-  const participationSlice = meetInfo.participants.slice(0, 4);
+  const participationSlice: ParticipantInfo[] = meetInfo.participants.slice(
+    0,
+    4,
+  );
+
+  console.log(participationSlice);
+
   const Location = () => {
     switch (meetInfo.location) {
       case "CAPITAL":
@@ -59,7 +69,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
       <div className='px-5 tablet:px-20 desktop:px-0'>
         <div className='mt-10 flex flex-col gap-6 desktop:flex-row'>
           <div className='flex flex-col desktop:w-[775px]'>
-            {/* 스터디디 제목 정보 */}
+            {/* 스터디 제목 정보 */}
             <div className='meet-info-box flex flex-col gap-8'>
               <div>
                 <div className='flex gap-1.5'>
@@ -136,20 +146,23 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                     </span>
                     <div className='flex items-center'>
                       <div className='flex'>
-                        {participationSlice.map((item, index) => (
-                          <div
-                            key={index}
-                            className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
-                          >
-                            <span className='inline-block h-full w-full overflow-hidden rounded-[50%]'>
-                              <img
-                                src={item.userProfile}
-                                alt='유저 프로필 이미지'
-                                className='h-full w-full object-cover'
-                              />
-                            </span>
-                          </div>
-                        ))}
+                        {participationSlice.length != 0 &&
+                          participationSlice.map(
+                            (item: ParticipantInfo, index) => (
+                              <div
+                                key={index}
+                                className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
+                              >
+                                <span className='inline-block h-full w-full overflow-hidden rounded-[50%]'>
+                                  <img
+                                    src={item.profileImageUrl}
+                                    alt='유저 프로필 이미지'
+                                    className='h-full w-full object-cover'
+                                  />
+                                </span>
+                              </div>
+                            ),
+                          )}
                         {meetInfo.participants.length > 4 && (
                           <div className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'>
                             <span className='flex items-center justify-center text-label-reading text-gray-200'>
@@ -175,7 +188,7 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                 <span className='text-title'>모집 내용</span>
                 <textarea
                   readOnly
-                  className='h-[160px] w-full resize-none rounded-[12px] bg-gray-900 px-4 py-[18px] text-body-2-reading text-gray-200'
+                  className='h-[160px] w-full resize-none rounded-[12px] bg-gray-900 px-4 py-[18px] text-body-2-reading text-gray-200 outline-none'
                   value={meetInfo.content}
                 />
               </div>
@@ -186,9 +199,18 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
         </div>
         {/* 리뷰 */}
         <div className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
-          <MeetDetailReview meetupId={meetInfo.meetupId} reviews={reviews} />
+          <MeetDetailReview
+            meetupId={meetInfo.meetupId}
+            meetupStatus={meetInfo.meetupStatus}
+          />
         </div>
       </div>
+      <ToastContainer
+        containerId={"joinArea"}
+        autoClose={2000}
+        className='fixed bottom-[100px] left-1/2 right-[unset] top-[unset] w-full -translate-x-1/2 px-5 tablet:px-20 desktop:max-w-[585px] desktop:px-0'
+        position='bottom-center'
+      />
     </div>
   );
 }

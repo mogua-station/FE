@@ -11,6 +11,7 @@ export default function Dropdown({
   gapY = 8,
   defaultSelected,
   children,
+  isReview,
 }: DropdownProps) {
   const [selected, setSelected] = useState<string | null>(
     defaultSelected || null,
@@ -68,14 +69,18 @@ export default function Dropdown({
       gapY={gapY}
       position={getPosition()}
       content={(closePopover) => (
-        <ul className='min-w-[7.25rem] cursor-pointer rounded-xl border border-gray-800 bg-gray-900'>
+        <ul
+          className={`min-w-[7.25rem] cursor-pointer rounded-xl ${!isReview ? "border border-gray-800 bg-gray-900" : "bg-gray-700"} `}
+        >
           {content.map((item, index) => (
             <li
               key={index}
               className={`text-body-2-normal ${
-                selected === item.label || selected === item.value
-                  ? "text-gray-200"
-                  : "text-gray-500"
+                !isReview
+                  ? selected === item.label || selected === item.value
+                    ? "text-gray-200"
+                    : "text-gray-500"
+                  : "text-gray-100"
               } mx-auto w-max px-[0.875rem] py-3 text-center font-semibold`}
               onClick={() =>
                 handleSelect(item.label, item.value, item.onClick, closePopover)

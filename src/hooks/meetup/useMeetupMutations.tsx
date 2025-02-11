@@ -1,19 +1,23 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useIndexedDB } from "../inputs/images/useIndexedDB";
 import {
   FailModal,
   SuccessModal,
 } from "@/components/create/modals/ResultInfoModal";
+import { revalidateMeetupTag } from "@/lib/actions/meetupRevalidate";
 import { createMeetup, editMeetup } from "@/lib/main/meetup.api";
 import modal from "@/utils/modalController";
 
 const useMeetupMutations = (id?: number) => {
-  const queryClient = useQueryClient();
   const { deleteImage } = useIndexedDB();
 
   const commonOnSuccess = async (meetupId: number, isEdit = false) => {
-    await deleteImage();
-    queryClient.invalidateQueries({ queryKey: ["meetup"] });
+    if (isEdit) {
+      localStorage.removeItem(`meetup-edit-${meetupId}`);
+    } else {
+      localStorage.removeItem("meetup-create");
+    }
+
     modal.open(
       ({ close }) => (
         <SuccessModal meetupId={meetupId} close={close} isEdit={isEdit} />
@@ -24,6 +28,9 @@ const useMeetupMutations = (id?: number) => {
         disableOverlayClick: true,
       },
     );
+
+    await deleteImage();
+    await revalidateMeetupTag();
   };
 
   const commonOnError = (title: string, message: string) => {
