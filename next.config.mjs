@@ -15,12 +15,12 @@ const nextConfig = {
         pathname: "/**",
       },
       {
-        protocol: "https",
+        protocol: "*",
         hostname: "k.kakaocdn.net",
         pathname: "/**",
       },
       {
-        protocol: "https",
+        protocol: "*",
         hostname: "img1.kakaocdn.net",
         pathname: "/**",
       },
