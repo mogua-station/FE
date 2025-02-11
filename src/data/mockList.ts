@@ -18,6 +18,7 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     online: false,
+    reviewId: 1,
   },
   {
     meetupId: 2,
@@ -34,6 +35,7 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
     online: true,
+    reviewId: 2,
   },
   {
     meetupId: 3,
@@ -50,6 +52,7 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
     online: true,
+    reviewId: 3,
   },
   {
     meetupId: 4,
@@ -66,6 +69,7 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
     online: false,
+    reviewId: 4,
   },
 ];
 
@@ -77,6 +81,7 @@ export const comments: ReviewInfo[] = [
     userid: 1,
     username: "A",
     date: new Date(),
+    reviewId: 1,
   },
   {
     rating: 1,
@@ -87,6 +92,7 @@ export const comments: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 2,
   },
   {
     rating: 0,
@@ -95,6 +101,7 @@ export const comments: ReviewInfo[] = [
     userid: 1,
     username: "C",
     date: new Date(),
+    reviewId: 3,
   },
   {
     rating: 1,
@@ -105,6 +112,7 @@ export const comments: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 4,
   },
   {
     rating: 0,
@@ -113,6 +121,7 @@ export const comments: ReviewInfo[] = [
     userid: 1,
     username: "E",
     date: new Date(),
+    reviewId: 5,
   },
   {
     rating: 1,
@@ -123,6 +132,7 @@ export const comments: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 6,
   },
 ];
 
@@ -331,6 +341,7 @@ export const reviews: ReviewInfo[] = [
     userid: 1,
     username: "A",
     date: new Date(),
+    reviewId: 1,
   },
   {
     rating: 1,
@@ -341,6 +352,7 @@ export const reviews: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 2,
   },
   {
     rating: 0,
@@ -349,6 +361,7 @@ export const reviews: ReviewInfo[] = [
     userid: 1,
     username: "C",
     date: new Date(),
+    reviewId: 3,
   },
   {
     rating: 1,
@@ -359,6 +372,7 @@ export const reviews: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 4,
   },
   {
     rating: 0,
@@ -367,6 +381,7 @@ export const reviews: ReviewInfo[] = [
     userid: 1,
     username: "E",
     date: new Date(),
+    reviewId: 5,
   },
   {
     rating: 1,
@@ -377,6 +392,7 @@ export const reviews: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 6,
   },
 ];
 
