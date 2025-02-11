@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, Suspense } from "react";
 import { useKakaoLogin } from "@/lib/auth/useKakaoLogin";
 
-const KakaoCallbackPage = () => {
+const KakaoCallbackContent = () => {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
   const { handleKakaoLogin, loading, error } = useKakaoLogin();
@@ -36,6 +36,20 @@ const KakaoCallbackPage = () => {
   }
 
   return null;
+};
+
+const KakaoCallbackPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className='flex h-screen items-center justify-center'>
+          로딩중...
+        </div>
+      }
+    >
+      <KakaoCallbackContent />
+    </Suspense>
+  );
 };
 
 export default KakaoCallbackPage;
