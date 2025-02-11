@@ -23,11 +23,14 @@ export default function Header() {
   const { user } = useUserStore();
   const [isClient, setIsClient] = useState(false);
   const isAuthPageHeader = AUTH_PAGE_PATHS.some((path) => pathname === path);
-  const isCreateMeetup = CREATE_PAGE_PATHS.some((path) =>
+  const isCreatePageHeader = CREATE_PAGE_PATHS.some((path) =>
     typeof path === "string" ? pathname === path : path.test(pathname),
   );
 
-  const isHeaderColorChange = isAuthPageHeader || isCreateMeetup;
+  const authBgColor = isAuthPageHeader
+    ? "bg-gray-950 tablet:bg-[#0E0E10]"
+    : "bg-[#0E0E10]";
+  const createBgColor = isCreatePageHeader ? "bg-gray-950" : "bg-[#0E0E10]";
 
   useEffect(() => setIsClient(true), []);
 
@@ -37,10 +40,12 @@ export default function Header() {
 
   return (
     <>
-      <div className={`h-14 ${isCreateMeetup ? "hidden tablet:block" : ""}`} />
+      <div
+        className={`h-14 ${isCreatePageHeader ? "hidden tablet:block" : ""}`}
+      />
 
       <header
-        className={`${isHeaderColorChange ? "bg-gray-950" : "bg-[#0E0E10]"} ${isCreateMeetup ? "hidden tablet:flex" : "flex"} fixed left-0 top-0 z-50 w-full items-center justify-center`}
+        className={`${authBgColor} ${createBgColor} ${isCreatePageHeader ? "hidden tablet:flex" : "flex"} fixed left-0 top-0 z-50 w-full items-center justify-center`}
       >
         <div className='flex h-14 w-full max-w-[1240px] items-center justify-between px-5 py-2.5'>
           <div className='flex items-center gap-12'>
