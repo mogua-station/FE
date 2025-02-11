@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FailModal } from "@/components/create/modals/ResultInfoModal";
-import { createReview } from "@/lib/review/reviewApi";
+import { createReview, deleteReview } from "@/lib/review/reviewApi";
 import useUserStore from "@/store/auth/useUserStore";
 import modal from "@/utils/modalController";
 
@@ -11,14 +11,15 @@ export default function useReviewMutations() {
   const router = useRouter();
   const { user } = useUserStore();
 
-  const handleError = (error: unknown, title: string) => {
-    const errorMessage =
-      error instanceof Error ? error.message : "리뷰 작성에 실패했습니다.";
+  const handleError = (error: unknown, message: string) => {
+    // 디버깅을 위한 상세 에러 로깅
+    console.error("Error details:", error);
+
     modal.open(
       ({ close }) =>
         React.createElement(FailModal, {
-          title,
-          message: errorMessage,
+          title: "실패",
+          message,
           close: close,
         }),
       {
@@ -39,10 +40,25 @@ export default function useReviewMutations() {
       });
       router.replace(`/user/${user?.userId}`);
     },
-    onError: (error) => handleError(error, "리뷰 작성 실패"),
+    onError: (error) => handleError(error, "리뷰 작성에 실패했습니다."),
+  });
+
+  const deleteReviewMutation = useMutation({
+    mutationFn: (reviewId: number) => deleteReview(reviewId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["meetings", "myReview", "study"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["meetings", "myReview", "tutoring"],
+      });
+      router.replace(`/user/${user?.userId}`);
+    },
+    onError: (error) => handleError(error, "리뷰 삭제에 실패했습니다."),
   });
 
   return {
     createReviewMutation,
+    deleteReviewMutation,
   };
 }
