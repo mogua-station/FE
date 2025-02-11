@@ -7,6 +7,16 @@ const nextConfig = {
     });
     return config;
   },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "fesi6.s3.dualstack.ap-southeast-2.amazonaws.com",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

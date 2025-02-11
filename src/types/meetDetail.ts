@@ -1,6 +1,6 @@
 export interface ParticipantInfo {
   userId: number;
-  userProfile: string;
+  profileImageUrl: string;
 }
 
 export interface ClientInfo {

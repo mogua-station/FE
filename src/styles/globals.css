@@ -3,6 +3,16 @@
 @tailwind utilities;
 
 @layer components {
+  .nav-mb {
+    @apply mb-[62px] desktop:mb-0;
+  }
+
+  .header-mt {
+    @apply mt-[56px];
+  }
+}
+
+@layer components {
   .filter-sm {
     @apply flex h-11 w-max items-center justify-center rounded-xl px-3.5 py-3 text-body-2-normal font-semibold;
   }
@@ -93,6 +103,13 @@
   }
 }
 
+/* 토스트 */
+@layer components {
+  .join-toast {
+    @apply bg-[unset] p-0;
+  }
+}
+
 @layer utilities {
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -109,34 +126,13 @@
     -moz-appearance: none;
     appearance: none;
   }
+}
 
-  @keyframes slide-in {
-    from {
-      max-height: 0;
-      opacity: 0;
-    }
-    to {
-      max-height: 500px; /* Adjust based on content */
-      opacity: 1;
-    }
-  }
+#joinArea .Toastify__toast {
+  width: 100%;
+  margin-bottom: 0;
+}
 
-  @keyframes slide-out {
-    from {
-      max-height: 500px; /* Adjust based on content */
-      opacity: 1;
-    }
-    to {
-      max-height: 0;
-      opacity: 0;
-    }
-  }
-
-  .animate-slide-in {
-    animation: slide-in 0.5s forwards;
-  }
-
-  .animate-slide-out {
-    animation: slide-out 0.5s forwards;
-  }
+#joinArea .Toastify__progress-bar--wrp {
+  display: none;
 }

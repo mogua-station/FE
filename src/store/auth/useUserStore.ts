@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface User {
+export interface User {
   userId: number;
   email: string;
   name: string;
@@ -14,7 +14,10 @@ interface UserState {
 }
 
 const useUserStore = create<UserState>((set) => ({
-  user: null,
+  user:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("user") || "null")
+      : null,
   setUser: (user) => {
     set({ user });
     localStorage.setItem("user", JSON.stringify(user));

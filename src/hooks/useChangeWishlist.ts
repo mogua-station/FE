@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   deleteUserWishList,
   addUserWishlist,
@@ -17,10 +18,14 @@ export default function useChangeWishlist() {
   // const { deleteMutation, addMutation } = useSetWishlist();
   const { userAllWishlist, setUserAllWishlist } = useUserWishlist();
   const router = useRouter();
-  const myWishlist =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("wishlist") || "[]")
-      : [];
+
+  const [myWishlist, setMyWishlist] = useState<number[]>([]);
+
+  useEffect(() => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+
+    if (wishlist.length > 0) setMyWishlist(wishlist);
+  }, []);
 
   const deleteMutation = useMutation({
     mutationFn: ({ meetupId }: WishlistProps) => deleteUserWishList(meetupId),

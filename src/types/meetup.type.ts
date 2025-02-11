@@ -17,7 +17,7 @@ export type StateType =
 
 export type LocationType =
   | "ALL"
-  | "Capital"
+  | "CAPITAL"
   | "DAEJEON"
   | "JEONJU"
   | "GWANGJU"

@@ -3,11 +3,13 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import ShareMeetUpButton from "./ShareMeetUpButton";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import JoinToast from "@/components/toast/JoinToast";
 import useChangeWishlist from "@/hooks/useChangeWishlist";
 import {
   fetchHostData,
@@ -34,6 +36,13 @@ export default function MeetButtonArea({
 
   const router = useRouter();
   const { loggedInWishlist, nonLoggedInWishlist } = useChangeWishlist();
+
+  const JoinToastOption = {
+    containerId: "joinArea",
+    closeButton: false,
+    className: "join-toast",
+    hideProgressBar: true,
+  };
 
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [joinButton, setJoinButton] = useState<JSX.Element | null>(() => {
@@ -134,7 +143,7 @@ export default function MeetButtonArea({
   const joinMutate = useMutation({
     mutationFn: (id: number) => fetchJoinMeet(id),
     onSuccess: () => {
-      alert("모임 신청이 완료되었습니다.");
+      toast((props) => <JoinToast {...props} type='join' />, JoinToastOption);
       router.refresh();
     },
   });
@@ -142,7 +151,7 @@ export default function MeetButtonArea({
   const leaveMutate = useMutation({
     mutationFn: (id: number) => fetchLeaveMeet(id),
     onSuccess: () => {
-      alert("신청 취소가 완료되었습니다.");
+      toast((props) => <JoinToast {...props} type='leave' />, JoinToastOption);
       router.refresh();
     },
   });
@@ -155,7 +164,7 @@ export default function MeetButtonArea({
           종료된 모임이에요
         </SolidButton>,
       );
-    } else {
+    } else if (clientInfo.meetupStatus === "RECRUITING") {
       if (user === null) {
         setJoinButton(
           <SolidButton mode='special' onClick={() => handleClickJoin()}>
@@ -166,28 +175,23 @@ export default function MeetButtonArea({
         //내가 주최자 일 때
         if (clientInfo.hostId === user.userId) {
           //모집 중일 때
-          if (clientInfo.meetupStatus === "RECRUITING") {
-            if (clientInfo.participants.length >= clientInfo.minParticipants) {
-              setJoinButton(
-                <SolidButton mode='special' disabled>
-                  개설확정된 모임이에요
-                </SolidButton>,
-              );
-            } else {
-              setJoinButton(
-                <SolidButton mode='special' onClick={() => {}}>
-                  모임 취소하기
-                </SolidButton>,
-              );
-            }
+          if (clientInfo.participants.length >= clientInfo.minParticipants) {
+            setJoinButton(
+              <SolidButton mode='special' disabled>
+                개설확정된 모임이에요
+              </SolidButton>,
+            );
+          } else {
+            setJoinButton(
+              <SolidButton mode='special' onClick={() => {}}>
+                모임 취소하기
+              </SolidButton>,
+            );
           }
         } else {
           //주최자가 아니면서 참여 여부에 따른 버튼 렌더링
           if (
-            clientInfo.participants.some(
-              (item) => item.userId === user.userId,
-            ) &&
-            clientInfo.meetupStatus === "RECRUITING"
+            clientInfo.participants.some((item) => item.userId === user.userId)
           ) {
             setJoinButton(
               <SolidButton
@@ -206,6 +210,18 @@ export default function MeetButtonArea({
           }
         }
       }
+    } else if (clientInfo.meetupStatus === "IN_PROGRESS") {
+      setJoinButton(
+        <SolidButton mode='special' disabled>
+          진행중인 모임이에요
+        </SolidButton>,
+      );
+    } else if (clientInfo.meetupStatus === "BEFORE_START") {
+      setJoinButton(
+        <SolidButton mode='special' disabled>
+          시작전인 모임이에요
+        </SolidButton>,
+      );
     }
   }, [clientInfo.participants, user]);
 

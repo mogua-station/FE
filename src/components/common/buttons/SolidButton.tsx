@@ -1,3 +1,4 @@
+import { twMerge } from "tailwind-merge";
 import { type SolidButtonProps } from "@/types/button";
 
 export default function SolidButton({
@@ -32,12 +33,12 @@ export default function SolidButton({
     inactive: "bg-gray-800 border-gray-800 text-gray-500 cursor-not-allowed",
   }[state];
 
+  const finalStyle = twMerge(
+    `btn-base ${variantStyles} ${stateStyles} ${className}`,
+  );
+
   return (
-    <button
-      className={`btn-base ${variantStyles} ${stateStyles} ${className}`}
-      disabled={state === "inactive"}
-      {...props}
-    >
+    <button className={finalStyle} disabled={state === "inactive"} {...props}>
       {children}
     </button>
   );
