@@ -10,7 +10,7 @@ const USER_PAGE_HEADER_PATHS = [
   { pattern: /^\/user\/\d+$/, description: "user detail page" },
 ];
 
-const HIDE_HEADER_PATHS = [""];
+const HIDE_HEADER_PATHS = ["/sign-in"];
 
 export default function HeaderWrapper() {
   const pathname = usePathname();
@@ -23,9 +23,9 @@ export default function HeaderWrapper() {
   });
   const isHideHeader = HIDE_HEADER_PATHS.some((path) => pathname === path);
 
-  if (userPageHeader) return <UserHeader />;
-
   if (isHideHeader) return null;
+
+  if (userPageHeader) return <UserHeader />;
 
   return <Header />;
 }
