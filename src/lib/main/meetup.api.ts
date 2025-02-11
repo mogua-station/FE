@@ -3,6 +3,7 @@ import type {
   MeetupQueryType,
   MeetupListResponseType,
 } from "@/types/meetup.type";
+import { generateQueryKey } from "@/utils/meetup.queryKey";
 
 export const getMeetupList = async ({
   page = 0,
@@ -34,7 +35,17 @@ export const getMeetupList = async ({
         "Content-Type": "application/json",
       },
       next: {
-        revalidate: 1600,
+        revalidate: 40,
+        tags: generateQueryKey({
+          page,
+          limit,
+          type,
+          orderBy,
+          state,
+          location,
+          startDate,
+          endDate,
+        }),
       },
     },
   );
