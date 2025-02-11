@@ -9,16 +9,14 @@ import {
   fetchUserWishlist,
   fetchLocalWishlist,
 } from "@/lib/wishlist/wishlistApi";
+import useUserStore from "@/store/auth/useUserStore";
 import { type CardProps } from "@/types/card";
 
 export default function WishlistNotLogged() {
   const ref = useRef<HTMLDivElement | null>(null);
   const pageRef = useIntersectionObserver(ref, { threshold: 0.5 });
   const isPageEnd = !!pageRef?.isIntersecting;
-  const user =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("user") || "null")
-      : null;
+  const { user } = useUserStore();
 
   const {
     data: wishlist,

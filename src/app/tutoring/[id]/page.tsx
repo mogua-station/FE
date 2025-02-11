@@ -13,7 +13,9 @@ export default async function Meet({ params }: { params: { id: number } }) {
 
   const meetData = await fetchMeetupData(id);
 
-  await usePrefetchMeetingReview(id);
+  if (meetData.data.meetupStatus === "COMPLETED") {
+    await usePrefetchMeetingReview(id);
+  }
 
   const dehydratedState = dehydrate(queryClient);
 

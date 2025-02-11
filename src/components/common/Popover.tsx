@@ -105,6 +105,7 @@ export default function Popover({
         ref={triggerRef}
         onClick={togglePopover}
         className='focus:outline-none'
+        aria-label='popover-trigger'
       >
         {children}
       </button>

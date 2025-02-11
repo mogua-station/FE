@@ -25,7 +25,9 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
   const handleClickReview = () => {
     if (reviewInfo.isMyReview) {
       //과외와 스터디가 다른 라우터를 사용하기 때문에 eventType으로 분기처리
-      router.push(`/${reviewInfo.eventType}/${reviewInfo.eventId}`);
+      router.push(
+        `/${reviewInfo.eventType?.toLowerCase()}/${reviewInfo.eventId}`,
+      );
     }
     return;
   };
@@ -42,8 +44,13 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
   };
+
   return (
-    <div className='rounded-[12px] bg-gray-900 p-4' onClick={handleClickReview}>
+    <div
+      className='rounded-[12px] bg-gray-900 p-4'
+      onClick={handleClickReview}
+      aria-label={"routeMeet"}
+    >
       <div className='relative'>
         <div className='flex justify-between'>
           <span

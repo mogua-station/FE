@@ -166,7 +166,6 @@ export interface UserProfileProps {
 export interface UserTabsProps {
   userId: string;
   isInstructor?: boolean;
-  token: string;
 }
 
 export interface TabListProps {
@@ -191,5 +190,4 @@ export interface MeetingListProps {
   studyType: StudyType;
   reviewTab?: MyReviewTab;
   isMe: boolean;
-  token: string;
 }

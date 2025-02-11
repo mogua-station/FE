@@ -14,7 +14,7 @@ export default function NavBar() {
     { href: "/", icon: <PlanetIcon />, label: "모임 찾기" },
     { href: "/wishlist", icon: <BookmarkFillIcon />, label: "북마크" },
     {
-      href: user ? `/user/${user.userId}` : "/user",
+      href: user ? `/user/${user.userId}` : "/sign-in",
       icon: <UserIcon />,
       label: "마이 페이지",
     },
