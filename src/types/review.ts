@@ -11,6 +11,8 @@ export interface ReviewInfo {
   isMyWritten?: boolean;
   eventId?: number;
   eventType?: string;
+  reviewId: number;
+  editable?: boolean;
 }
 
 export interface ReviewInfoProps {
