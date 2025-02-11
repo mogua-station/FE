@@ -15,8 +15,6 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
     4,
   );
 
-  console.log(participationSlice);
-
   const Location = () => {
     switch (meetInfo.location) {
       case "CAPITAL":

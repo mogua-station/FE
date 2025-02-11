@@ -43,7 +43,7 @@ export default function WishlistContent() {
     fetchNextPage,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["wishlist"],
+    queryKey: ["wishlist", filter.meetupType, filter.location, filter.orderBy],
     queryFn: ({ pageParam }) => {
       if (user != null) {
         const filterString = Object.entries(filter).reduce<
@@ -98,10 +98,6 @@ export default function WishlistContent() {
 
     refetch();
   }, [searchParams]);
-
-  useEffect(() => {
-    console.log(wishlist);
-  }, [wishlist]);
 
   if (isLoading) {
     return (

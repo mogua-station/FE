@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import {
   deleteUserWishList,
   addUserWishlist,
@@ -15,17 +14,8 @@ interface WishlistProps {
 
 export default function useChangeWishlist() {
   const queryClient = useQueryClient();
-  // const { deleteMutation, addMutation } = useSetWishlist();
   const { userAllWishlist, setUserAllWishlist } = useUserWishlist();
   const router = useRouter();
-
-  const [myWishlist, setMyWishlist] = useState<number[]>([]);
-
-  useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-
-    if (wishlist.length > 0) setMyWishlist(wishlist);
-  }, []);
 
   const deleteMutation = useMutation({
     mutationFn: ({ meetupId }: WishlistProps) => deleteUserWishList(meetupId),
@@ -136,11 +126,12 @@ export default function useChangeWishlist() {
     ) => void,
   ) => {
     if (meetupStatus === "RECRUITING") {
+      const myWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+
       //이미 추가되었는지 확인
       if (!myWishlist.includes(meetupId)) {
         //새로운 모임을 로컬 스토리지에 추가
         const newWishlist = [...myWishlist, meetupId];
-
         localStorage.setItem("wishlist", JSON.stringify(newWishlist));
       } else {
         const idx = myWishlist.indexOf(meetupId);
