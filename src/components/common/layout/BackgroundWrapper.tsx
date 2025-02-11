@@ -1,7 +1,11 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import BackgroundAlien from "@/components/main/BackgroundAlien";
+
+const BackgroundAlien = dynamic(
+  () => import("@/components/main/BackgroundAlien"),
+);
 
 const HIDE_BACKGROUND_PATHS = ["/create", "/user/edit_profile"];
 const SHOW_ALIEN_PATHS = ["/", "/wishlist"];

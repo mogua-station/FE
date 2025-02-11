@@ -3,7 +3,6 @@ import { type Metadata } from "next";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import Providers from "./providers/Providers";
-import BackgroundWrapper from "@/components/common/layout/BackgroundWrapper";
 import HeaderWrapper from "@/components/common/layout/HeaderWrapper";
 import NavBarWrapper from "@/components/common/layout/NavBarWrapper";
 import InitializeUser from "@/hooks/auths/InitializeUser";
@@ -13,6 +12,10 @@ const ClearImageOnPageLeave = dynamic(
   {
     ssr: false,
   },
+);
+
+const BackgroundWrapper = dynamic(
+  () => import("@/components/common/layout/BackgroundWrapper"),
 );
 
 const pretendard = localFont({
