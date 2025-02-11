@@ -171,8 +171,10 @@ export default function MeetButtonArea({
 
   return (
     <section className='flex flex-1 flex-col'>
-      <ShareMeetUpButton />
-      <div className='meet-info-box-small fixed bottom-0 left-0 z-30 mt-8 flex w-full gap-2 bg-gray-950 p-5 desktop:static desktop:bg-[unset] desktop:p-0'>
+      <div className='hidden desktop:block'>
+        <ShareMeetUpButton />
+      </div>
+      <div className='meet-info-box fixed bottom-0 left-0 z-30 flex w-full gap-2 rounded-none bg-gray-950 p-4 desktop:static desktop:mt-8 desktop:rounded-[24px] desktop:px-8 desktop:py-7'>
         <IconButton
           mode='special'
           className='w-[72px]'

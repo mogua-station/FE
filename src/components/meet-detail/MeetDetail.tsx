@@ -1,10 +1,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { ToastContainer } from "react-toastify";
-// import ShareMeetUpButton from "./ShareMeetUpButton";
 import StatusBadge from "@/components/common/card/StatusBadge";
-// import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
-// import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
 import { fetchHostData } from "@/lib/meetDetail/meetDetailApi";
 import {
   type MeetInfo,
@@ -63,8 +60,8 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
   const hostInfo = await fetchHostData(meetInfo.hostId);
 
   return (
-    <div className='relative mx-auto w-full max-w-[1200px] bg-gray-950 py-[60px] pt-0 desktop:bg-[unset] desktop:py-[74px]'>
-      <div className='fixed left-1/2 z-10 -mt-[38px] block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:hidden'>
+    <div className='mx-auto w-full max-w-[1200px] bg-gray-950 pb-[108px] pt-[176px] desktop:bg-[unset] desktop:pb-[88px] desktop:pt-[130px]'>
+      <div className='absolute left-1/2 top-[76px] z-10 block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:static desktop:hidden'>
         <ShareMeetUpButton />
       </div>
       <div className='relative h-[346px] w-full overflow-hidden desktop:rounded-[24px]'>
