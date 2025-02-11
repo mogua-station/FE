@@ -1,6 +1,6 @@
 import { type ButtonHTMLAttributes } from "react";
 
-type ButtonVariant = "primary" | "secondary";
+export type ButtonVariant = "primary" | "secondary";
 type ButtonSize = "large" | "small";
 type ButtonState = "default" | "activated" | "inactive";
 type ButtonMode = "default" | "special";
