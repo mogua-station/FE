@@ -21,14 +21,18 @@ export default function NavBar() {
   ];
 
   return (
-    <nav className='fixed bottom-0 left-0 right-0 z-10 bg-normal px-6 py-[9px] tablet:px-20 desktop:hidden'>
-      <ul className='flex w-full justify-between'>
-        {NAV_ITEMS.map((item) => (
-          <li key={item.label}>
-            <NavMenuItem {...item} />
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <>
+      <nav className='fixed bottom-0 left-0 right-0 z-10 h-[62px] bg-normal px-6 py-[9px] tablet:px-20 desktop:hidden'>
+        <ul className='flex w-full justify-between'>
+          {NAV_ITEMS.map((item) => (
+            <li key={item.label}>
+              <NavMenuItem {...item} />
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className='h-[62px] desktop:hidden' />
+    </>
   );
 }
