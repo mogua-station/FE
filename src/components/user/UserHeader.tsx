@@ -58,6 +58,9 @@ export default function UserHeader() {
   const isEditProfile = pathname === "/user/edit_profile";
   const isCreateReview = pathname === "/user/create_review";
 
+  const currentUserId = isUserPage ? Number(pathname.split("/")[2]) : null;
+  const isMyPage = currentUserId === user?.userId;
+
   const headerBgColor = isEditProfile
     ? "bg-gray-900 desktop:bg-gray-950"
     : "bg-[#0E0E10]";
@@ -88,18 +91,12 @@ export default function UserHeader() {
 
         <div>
           <div className='flex gap-6'>
-            {!isCreateReview && (
+            {!isCreateReview && !isEditProfile && isUserPage && isMyPage && (
               <button
                 onClick={() => router.push("/user/edit_profile")}
                 aria-label='Edit Profile'
               >
-                {isEditProfile ? (
-                  <span className='mobile:block text-gray-200 tablet:block desktop:hidden'>
-                    <BackButton />
-                  </span>
-                ) : (
-                  <Edit className='text-gray-200' />
-                )}
+                <Edit className='text-gray-200' />
               </button>
             )}
 
@@ -109,20 +106,27 @@ export default function UserHeader() {
               </span>
             )}
 
-            {!isUserPage && !isEditProfile && !isCreateReview && (
-              <button>
-                <SearchIcon className='text-gray-200' aria-label='Search' />
-              </button>
+            {isEditProfile && (
+              <span className='text-gray-200 desktop:hidden'>
+                <BackButton />
+              </span>
             )}
 
-            {!isUserPage && !isEditProfile && !isCreateReview && (
-              <button onClick={() => router.push("/create")}>
-                <PlusIcon
-                  className='text-gray-200'
-                  aria-label='Create Meetup'
-                />
-              </button>
-            )}
+            {(!isUserPage || (isUserPage && !isMyPage)) &&
+              !isEditProfile &&
+              !isCreateReview && (
+                <>
+                  <button>
+                    <SearchIcon className='text-gray-200' aria-label='Search' />
+                  </button>
+                  <button onClick={() => router.push("/create")}>
+                    <PlusIcon
+                      className='text-gray-200'
+                      aria-label='Create Meetup'
+                    />
+                  </button>
+                </>
+              )}
 
             {(isEditProfile || isCreateReview) && (
               <div className='hidden gap-6 desktop:flex'>
