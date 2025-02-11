@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import CameraIcon from "@/assets/images/icons/camera.svg";
 import FilledDeleteIcon from "@/assets/images/icons/filled_delete.svg";
-import { useSimpleImageUpload } from "@/hooks/useSimpleImageUpload";
+import { useUploadImage } from "@/hooks/inputs/images/useUploadImage";
 
 export default function ReviewImageInput({
   onImageSelect,
@@ -16,7 +16,7 @@ export default function ReviewImageInput({
     previewUrl,
     handleImageUpload: handleImagePreview,
     handleImageDelete,
-  } = useSimpleImageUpload();
+  } = useUploadImage();
 
   const handleCameraclick = (e: React.MouseEvent) => {
     e.stopPropagation();
