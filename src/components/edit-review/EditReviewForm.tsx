@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { DotLoader } from "react-spinners";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
+import { FailModal } from "@/components/create/modals/ResultInfoModal";
 import RatingInput from "@/components/create-reaview/RatingInput";
 import ReviewImageInput from "@/components/create-reaview/ReviewImageInput";
 import useReviewModals from "@/hooks/review/useReviewModals";
 import { getReview } from "@/lib/review/reviewApi";
+import modal from "@/utils/modalController";
 
 interface ReviewFormData {
   rating: number;
@@ -116,7 +118,19 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
 
     // 변경사항이 없을 때 알림
     if (!changes.image && !changes.requestData) {
-      alert("변경된 내용이 없습니다.");
+      modal.open(
+        ({ close }) => (
+          <FailModal
+            title='변경된 내용이 없습니다.'
+            message='수정할 내용을 입력해주세요.'
+            close={close}
+          />
+        ),
+        {
+          hasCloseBtn: false,
+          isBottom: false,
+        },
+      );
       return;
     }
 
