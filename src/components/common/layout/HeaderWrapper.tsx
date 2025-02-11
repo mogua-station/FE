@@ -7,6 +7,7 @@ import UserHeader from "@/components/user/UserHeader";
 const USER_PAGE_HEADER_PATHS = [
   "/user/edit_profile",
   "/user/create_review",
+  "/user/edit_review",
   { pattern: /^\/user\/\d+$/, description: "user detail page" },
 ];
 

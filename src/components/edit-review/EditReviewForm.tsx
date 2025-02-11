@@ -11,17 +11,15 @@ interface ReviewFormData {
   rating: number;
   content: string;
   image: File | null;
-  meetupId: number;
 }
 
-export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
-  const { handleCreateReview } = useReviewModals();
+export default function EditReviewForm({ reviewId }: { reviewId: string }) {
+  const { handleUpdateReview } = useReviewModals();
   const methods = useForm<ReviewFormData>({
     defaultValues: {
       rating: -1,
       content: "",
       image: null,
-      meetupId: Number(meetupId),
     },
     mode: "onChange",
   });
@@ -44,7 +42,6 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
     const formData = new FormData();
 
     const requestData = {
-      meetupId: Number(data.meetupId),
       rating: data.rating,
       content: data.content,
     };
@@ -61,7 +58,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
       formData.append("image", emptyBlob, "empty.txt");
     }
 
-    await handleCreateReview(formData);
+    await handleUpdateReview(reviewId, formData);
   });
 
   return (
@@ -87,7 +84,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
           className='mt-10'
           state={!isFormValid ? "inactive" : "activated"}
         >
-          작성 완료
+          수정 완료
         </SolidButton>
       </form>
     </FormProvider>
