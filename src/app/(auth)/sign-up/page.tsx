@@ -46,18 +46,9 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className='relative flex grow flex-col bg-gray-950'>
-      <video
-        className='absolute inset-0 hidden h-full w-full object-cover tablet:block'
-        src='/videos/background.mp4'
-        loop
-        autoPlay
-        muted
-        preload='auto'
-        playsInline
-      />
-      <div className='flex h-screen flex-col items-center tablet:justify-center'>
-        <div className='z-10 flex h-auto w-[100%] flex-col gap-[24px] bg-gray-950 p-4 tablet:m-20 tablet:w-[90%] tablet:rounded-[40px] tablet:px-[40px] tablet:py-[56px] desktop:w-[40%]'>
+    <div className='relative flex grow flex-col bg-gray-950 tablet:bg-transparent tablet:px-10 tablet:pb-4 tablet:pt-[calc(20dvh-56px)] desktop:mx-auto desktop:w-full desktop:max-w-[668px] desktop:justify-center desktop:p-4'>
+      <div className='z-10 flex w-full flex-grow flex-col items-center px-4 pb-4 pt-2 tablet:flex-grow-0 tablet:rounded-[40px] tablet:bg-gray-950-48 tablet:px-[40px] tablet:py-[56px]'>
+        <div className='flex w-full flex-grow flex-col gap-6'>
           <div>
             <p className='text-title-1 font-medium text-gray-100'>반가워요!</p>
             <p className='text-body-2-normal font-medium text-gray-400'>

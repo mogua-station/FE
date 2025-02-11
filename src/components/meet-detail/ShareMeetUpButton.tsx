@@ -1,13 +1,29 @@
 "use client";
 
+import { toast } from "react-toastify";
 import ArrowRight from "@/assets/images/icons/arrow_right.svg";
+import JoinToast from "@/components/toast/JoinToast";
 import { copyToClipBoard } from "@/utils/copyToClipBorad";
 
 export default function ShareMeetUpButton() {
+  const JoinToastOption = {
+    containerId: "joinArea",
+    autoClose: 2000,
+    closeButton: false,
+    className: "join-toast",
+    hideProgressBar: true,
+  };
+
+  const handleClickShare = () => {
+    copyToClipBoard(window.location.href);
+
+    toast((props) => <JoinToast {...props} type='copy' />, JoinToastOption);
+  };
+
   return (
     <button
       className='relative mx-auto flex w-full gap-[15px] rounded-[16px] bg-gray-800 p-3'
-      onClick={() => copyToClipBoard(window.location.href)}
+      onClick={() => handleClickShare()}
     >
       <div className='overflow-hidden rounded-[50%] bg-gray-600'>
         <img src='/images/share_character.png' alt='캐릭터 이미지' />

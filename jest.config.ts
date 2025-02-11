@@ -1,16 +1,23 @@
-import type { Config } from "@jest/types";
 import nextJest from "next/jest";
 
 const createJestConfig = nextJest({
   dir: "./",
 });
-
-const config: Config.InitialOptions = {
-  testEnvironment: "jest-environment-jsdom",
-  //   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-  moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
-  },
+const config = async () => {
+  const nextConfig = await createJestConfig({})();
+  return {
+    ...nextConfig,
+    testEnvironment: "jsdom",
+    //   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+    rootDir: "./",
+    moduleNameMapper: {
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^.+\\.svg$": "<rootDir>/src/utils/__svgTransformer__.ts",
+    },
+    // transform: {
+    //   "^.+\\.svg$": "jest-transformer-svg",
+    // },
+  };
 };
 
-export default createJestConfig(config);
+export default config;

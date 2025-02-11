@@ -27,7 +27,6 @@ interface UseInfiniteMeetingsProps {
   reviewTab?: MyReviewTab;
   userId: string;
   currentUserId: string;
-  token: string;
 }
 
 export const useInfiniteMeetings = ({
@@ -35,7 +34,6 @@ export const useInfiniteMeetings = ({
   studyType,
   reviewTab,
   userId,
-  token,
 }: UseInfiniteMeetingsProps) => {
   return useInfiniteQuery<
     PageResponse<CardProps | ReviewInfo>,
@@ -55,7 +53,6 @@ export const useInfiniteMeetings = ({
             const response = await userContentApi.getParticipating(
               userId,
               type,
-              token,
               page,
             );
             const result =
@@ -67,7 +64,6 @@ export const useInfiniteMeetings = ({
             const response = await userContentApi.getCreated(
               userId,
               type,
-              token,
               page,
             );
             const result =
@@ -83,7 +79,6 @@ export const useInfiniteMeetings = ({
               userId,
               type,
               status,
-              token,
               page,
             );
 
@@ -104,11 +99,7 @@ export const useInfiniteMeetings = ({
           }
 
           case "classReview": {
-            const response = await userContentApi.getReceived(
-              userId,
-              token,
-              page,
-            );
+            const response = await userContentApi.getReceived(userId, page);
             const result =
               (await response.json()) as ApiResponse<WrittenReview>;
             return transformPageResponse(result, (item) => ({

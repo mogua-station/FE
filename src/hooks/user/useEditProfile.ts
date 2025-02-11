@@ -1,13 +1,10 @@
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import useCookie from "../auths/useTokenState";
+import { createElement, useEffect } from "react";
 import { useGetProfile, useUpdateProfile } from "./useProfile";
+import EditProfileSuccessModal from "@/components/edit-profile/EditProfileSuccessModal";
 import useUserStore from "@/store/auth/useUserStore";
+import modal from "@/utils/modalController";
 
 export function useEditProfile() {
-  const token = useCookie("accessToken");
-  const router = useRouter();
-
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
 
@@ -15,6 +12,7 @@ export function useEditProfile() {
     data: userInfo,
     error,
     refetch,
+    isLoading,
   } = useGetProfile(user ? user.userId : 0);
 
   // user 정보가 업데이트되면 프로필 정보 다시 가져오기
@@ -27,7 +25,7 @@ export function useEditProfile() {
   const updateProfileMutation = useUpdateProfile();
 
   const handleProfileUpdate = async (formData: FormData) => {
-    if (!token || !user) return;
+    if (!user) return;
 
     const request = formData.get("request");
     if (!(request instanceof Blob)) return;
@@ -35,7 +33,7 @@ export function useEditProfile() {
     const requestData = JSON.parse(await request.text());
 
     updateProfileMutation.mutate(
-      { formData, token },
+      { formData },
       {
         onSuccess: () => {
           if (requestData) {
@@ -45,7 +43,19 @@ export function useEditProfile() {
               profileImg: requestData.profileImg || user.profileImg,
             });
           }
-          router.replace(`/user/${user.userId}`);
+          modal.open(
+            ({ close }) =>
+              createElement(EditProfileSuccessModal, {
+                userId: user.userId,
+                close,
+              }),
+            {
+              hasCloseBtn: false,
+              disableOverlayClick: true,
+              isBottom: false,
+              isDark: false,
+            },
+          );
         },
         onError: (error) => {
           console.error("[프로필 수정 실패] 에러:", error);
@@ -56,9 +66,9 @@ export function useEditProfile() {
 
   return {
     userInfo,
-    isLoading: !userInfo,
     error,
     handleProfileUpdate,
     isUpdating: updateProfileMutation.isPending,
+    isLoading,
   };
 }

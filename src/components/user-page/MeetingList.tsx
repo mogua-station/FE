@@ -19,7 +19,6 @@ export const MeetingList = ({
   studyType,
   reviewTab,
   isMe,
-  token,
 }: MeetingListProps) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteMeetings({
@@ -28,7 +27,6 @@ export const MeetingList = ({
       reviewTab,
       userId,
       currentUserId: userId,
-      token,
     });
 
   const { ref } = useInView({

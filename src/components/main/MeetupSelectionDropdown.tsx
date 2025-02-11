@@ -1,8 +1,9 @@
+import { memo } from "react";
 import Dropdown from "../common/Dropdown";
 import ArrowDownIcon from "@/assets/images/icons/arrow_down_fill.svg";
 import { type MeetupType } from "@/types/meetup.type";
 
-export default function MeetupSelectionDropdown({
+function MeetupSelectionDropdown({
   selectedMeetup,
   onSelectMeetup,
 }: {
@@ -35,3 +36,5 @@ export default function MeetupSelectionDropdown({
     </Dropdown>
   );
 }
+
+export default memo(MeetupSelectionDropdown);
