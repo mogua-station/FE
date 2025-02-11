@@ -2,6 +2,7 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { addUserWishlist } from "@/lib/wishlist/wishlistApi";
 import { fetchUserAllWishlist } from "@/lib/wishlist/wishlistApi";
 import useUserStore from "@/store/auth/useUserStore";
 import useUserWishlist from "@/store/wishlist/useUserWishlist";
@@ -15,7 +16,7 @@ export default function InitializeUser() {
       : null;
   const userId = userInfo?.userId;
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
       queryKey: ["userAllWishlist", userId],
       queryFn: ({ pageParam }) =>
@@ -41,9 +42,6 @@ export default function InitializeUser() {
         const user = localStorage.getItem("user");
         if (user) {
           useUserStore.getState().setUser(JSON.parse(user));
-
-          //로그인했으니 로컬스토리지 초기화
-          localStorage.setItem("wishlist", JSON.stringify([]));
         }
       }
     }
@@ -61,6 +59,28 @@ export default function InitializeUser() {
       setUserAllWishlist(arr);
     }
   }, [data, setUserAllWishlist]);
+
+  //로그인했을 때 비회원 찜했 던 모임 추가
+  useEffect(() => {
+    const localWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+
+    //로컬스토리지에 있던 비회원 찜하기들을 다시 동기화
+    Promise.all(
+      localWishlist.map((item: number) => {
+        addUserWishlist(item);
+      }),
+    )
+      .then(() => {
+        //모두 추가하고나서는 다시 refetch
+        refetch();
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    //왼료되었으면 로컬스토리지 초기화
+    localStorage.setItem("wishlist", JSON.stringify([]));
+  }, [userInfo]);
 
   return null;
 }
