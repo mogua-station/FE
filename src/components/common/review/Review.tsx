@@ -86,6 +86,7 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
               className='absolute right-0 top-0'
             >
               <ArrowDown
+                aria-label={"icon"}
                 className={`size-6 text-gray-200 ${isOpen ? "rotate-180" : ""}`}
               />
             </button>
