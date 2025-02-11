@@ -56,8 +56,12 @@ export default function useChangeWishlist() {
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
-      queryClient.invalidateQueries({ queryKey: ["userAllWishlist"] });
-      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("userAllWishlist"),
+      });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("wishlist"),
+      });
     },
   });
 
@@ -91,8 +95,12 @@ export default function useChangeWishlist() {
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
-      queryClient.invalidateQueries({ queryKey: ["userAllWishlist"] });
-      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("userAllWishlist"),
+      });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("wishlist"),
+      });
     },
   });
 

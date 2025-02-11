@@ -17,7 +17,7 @@ export default function InitializeUser() {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["items", userId],
+      queryKey: ["userAllWishlist", userId],
       queryFn: ({ pageParam }) =>
         fetchUserAllWishlist({
           userId,
