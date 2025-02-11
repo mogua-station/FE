@@ -4,6 +4,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import dynamicImport from "next/dynamic";
+import MainContentList from "@/components/main/MainContentList";
 import { getMeetupList } from "@/lib/main/meetup.api";
 import { type MeetupQueryType } from "@/types/meetup.type";
 import { generateQueryKey } from "@/utils/meetup.queryKey";
