@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import AuthWrapper from "@/components/auth/AuthWrapper";
 import UserProfile from "@/components/user-page/UserProfile";
 import UserTabs from "@/components/user-page/UserTabs";
 import { getUserProfile } from "@/lib/user/getUserProfile";
@@ -33,20 +34,22 @@ export default async function UserPage({ params }: Props) {
   });
 
   return (
-    <div className='flex h-full flex-1 flex-col p-4 tablet:px-20 tablet:py-[52px] desktop:py-[56px]'>
-      <div className='relative z-10 mx-auto flex w-full flex-col desktop:max-w-[960px]'>
-        {/* 유저 프로필 섹션 */}
-        <section aria-label='프로필 정보'>
-          <UserProfile userInfo={userInfo} />
-        </section>
-        {/* 유저 컨텐츠 섹션 */}
-        <section aria-label='활동 내역'>
-          <UserTabs
-            userId={userId}
-            isInstructor={userInfo.qualificationStatus === "QUALIFIED"}
-          />
-        </section>
+    <AuthWrapper>
+      <div className='flex h-full flex-1 flex-col p-4 tablet:px-20 tablet:py-[52px] desktop:py-[56px]'>
+        <div className='relative z-10 mx-auto flex w-full flex-col desktop:max-w-[960px]'>
+          {/* 유저 프로필 섹션 */}
+          <section aria-label='프로필 정보'>
+            <UserProfile userInfo={userInfo} />
+          </section>
+          {/* 유저 컨텐츠 섹션 */}
+          <section aria-label='활동 내역'>
+            <UserTabs
+              userId={userId}
+              isInstructor={userInfo.qualificationStatus === "QUALIFIED"}
+            />
+          </section>
+        </div>
       </div>
-    </div>
+    </AuthWrapper>
   );
 }
