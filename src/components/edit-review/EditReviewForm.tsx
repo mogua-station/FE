@@ -1,11 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { DotLoader } from "react-spinners";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
 import RatingInput from "@/components/create-reaview/RatingInput";
 import ReviewImageInput from "@/components/create-reaview/ReviewImageInput";
 import useReviewModals from "@/hooks/review/useReviewModals";
+import { getReview } from "@/lib/review/reviewApi";
 
 interface ReviewFormData {
   rating: number;
@@ -15,6 +18,24 @@ interface ReviewFormData {
 
 export default function EditReviewForm({ reviewId }: { reviewId: string }) {
   const { handleUpdateReview } = useReviewModals();
+  const [isLoading, setIsLoading] = useState(true);
+  const [review, setReview] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchReview = async () => {
+      try {
+        const data = await getReview(reviewId);
+        setReview(data);
+      } catch (error) {
+        console.error("리뷰 조회 실패:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchReview();
+  }, [reviewId]);
+
   const methods = useForm<ReviewFormData>({
     defaultValues: {
       rating: -1,
@@ -26,9 +47,60 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
 
   const { handleSubmit, setValue, watch } = methods;
 
+  useEffect(() => {
+    if (review) {
+      setValue("rating", review.rating);
+      setValue("content", review.content);
+    }
+  }, [review, setValue]);
+
   const rating = watch("rating");
   const content = watch("content");
+  const image = watch("image");
   const isFormValid = rating !== -1 && content.trim() !== "";
+
+  const getChangedFields = () => {
+    if (!review) return null;
+
+    const changes: {
+      image?: File;
+      requestData?: any;
+    } = {};
+
+    const requestData: any = {};
+    let hasChanges = false;
+
+    // content 변경 여부 확인
+    if (content !== review.content) {
+      hasChanges = true;
+    }
+    // content는 서버에서 null을 허용하지 않으므로 항상 포함
+    // 변경사항이 없더라도 현재 값을 전송
+    requestData.content = content;
+
+    // rating 변경 여부 확인
+    if (rating !== review.rating) {
+      requestData.rating = rating;
+      hasChanges = true;
+    }
+
+    // TODO: 백엔드 응답에 이미지 URL 추가 후
+    // 1. 기존 이미지 렌더링 확인 필요 (이미지 없는 경우도 처리)
+    // 2. 이미지 수정/삭제/추가 기능 테스트 필요
+    // 3. 이미지 삭제 시 서버에 어떻게 알릴지 백엔드와 협의 필요
+    // 이미지 변경 여부 확인
+    if (image) {
+      changes.image = image;
+      hasChanges = true;
+    }
+
+    // 실제 변경사항이 있을 때만 requestData 포함
+    if (hasChanges) {
+      changes.requestData = requestData;
+    }
+
+    return changes;
+  };
 
   const handleRatingChange = (value: number) => {
     setValue("rating", value);
@@ -38,28 +110,44 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
     setValue("image", image);
   };
 
-  const onSubmit = handleSubmit(async (data) => {
-    const formData = new FormData();
+  const onSubmit = handleSubmit(async () => {
+    const changes = getChangedFields();
+    if (!changes) return;
 
-    const requestData = {
-      rating: data.rating,
-      content: data.content,
-    };
+    // 변경사항이 없을 때 알림
+    if (!changes.image && !changes.requestData) {
+      alert("변경된 내용이 없습니다.");
+      return;
+    }
+
+    const formData = new FormData();
 
     formData.append(
       "request",
-      new Blob([JSON.stringify(requestData)], { type: "application/json" }),
+      new Blob([JSON.stringify(changes.requestData || {})], {
+        type: "application/json",
+      }),
     );
 
-    if (data.image) {
-      formData.append("image", data.image);
-    } else {
-      const emptyBlob = new Blob([], { type: "application/octet-stream" });
-      formData.append("image", emptyBlob, "empty.txt");
+    if (changes.image) {
+      formData.append("image", changes.image);
     }
 
     await handleUpdateReview(reviewId, formData);
   });
+
+  if (isLoading) {
+    return (
+      <div className='flex min-h-[calc(100vh-212px)] w-full items-center justify-center'>
+        <DotLoader
+          size={24}
+          color={"#FF9A42"}
+          cssOverride={{ position: "absolute" }}
+          loading={isLoading}
+        />
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...methods}>
@@ -77,12 +165,21 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
             placeholder='모임의 장소, 환경, 진행, 구성 등 만족스러웠나요?'
             maxLength={150}
           />
-          <ReviewImageInput onImageSelect={handleImageSelect} />
+          <ReviewImageInput
+            onImageSelect={handleImageSelect}
+            imageUrl={review?.imageUrl}
+          />
         </div>
         <SolidButton
           type='submit'
           className='mt-10'
-          state={!isFormValid ? "inactive" : "activated"}
+          state={
+            !isFormValid
+              ? "inactive"
+              : getChangedFields()?.requestData || getChangedFields()?.image
+                ? "activated"
+                : "default"
+          }
         >
           수정 완료
         </SolidButton>
