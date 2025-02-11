@@ -16,7 +16,7 @@ const MainNavigation = dynamicImport(
   () => import("@/components/main/MainNavigation"),
 );
 
-export const dynamic = "force-dynamic"; // 동적 렌더링 강제
+export const dynamic = "force-dynamic";
 
 export default async function Home({
   searchParams,
@@ -25,41 +25,35 @@ export default async function Home({
 }) {
   const queryClient = new QueryClient();
 
-  try {
-    const queryKey = generateQueryKey(searchParams);
+  const result = await getMeetupList({
+    page: 0,
+    limit: 10,
+    orderBy: searchParams.orderBy,
+    type: searchParams.type,
+    state: searchParams.state,
+    location: searchParams.location,
+    startDate: searchParams.startDate,
+    endDate: searchParams.endDate,
+  });
 
-    await queryClient.prefetchInfiniteQuery({
-      queryKey,
-      queryFn: ({ pageParam = 0 }) =>
-        getMeetupList({
-          page: pageParam,
-          limit: 10,
-          orderBy: searchParams.orderBy,
-          type: searchParams.type,
-          state: searchParams.state,
-          location: searchParams.location,
-          startDate: searchParams.startDate,
-          endDate: searchParams.endDate,
-        }),
-      getNextPageParam: (lastPage: {
-        isLast: boolean;
-        nextPage: number | null;
-      }) => (!lastPage.isLast ? lastPage.nextPage : undefined),
-      initialPageParam: 0,
-    });
-  } catch (error) {
-    console.error("Error prefetching data:", error);
-  }
+  const queryKey = generateQueryKey(searchParams);
+  queryClient.setQueryData(queryKey, {
+    pages: [result],
+    pageParams: [0],
+  });
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <div className='flex grow flex-col px-4 tablet:px-8 desktop:px-0'>
       <div className='z-10 mx-auto flex size-full max-w-[1200px] grow flex-col gap-8 rounded-[2.5rem] pt-2 tablet:pt-[3.25rem] desktop:pb-2.5 desktop:pt-[4.5rem]'>
+        {/* 내비게이션 */}
         <MainNavigation initialParams={searchParams} />
-        <HydrationBoundary state={dehydrate(queryClient)}>
+
+        <HydrationBoundary state={dehydratedState}>
           <MainContentList />
         </HydrationBoundary>
       </div>
-
       <BackgroundAlien />
     </div>
   );
