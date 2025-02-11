@@ -18,7 +18,6 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     online: false,
-    reviewId: 1,
   },
   {
     meetupId: 2,
@@ -35,7 +34,6 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
     online: true,
-    reviewId: 2,
   },
   {
     meetupId: 3,
@@ -52,7 +50,6 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
     online: true,
-    reviewId: 3,
   },
   {
     meetupId: 4,
@@ -69,7 +66,6 @@ export const cardList: CardProps[] = [
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
     online: false,
-    reviewId: 4,
   },
 ];
 
