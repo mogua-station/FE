@@ -1,49 +1,54 @@
 import { type CardProps } from "@/types/card";
 import { type FilterProps } from "@/types/meetup.type";
-import { getAccessToken } from "@/utils/cookie";
 
-export const fetchUserAllWishlist = async (userId: number) => {
+export const fetchUserAllWishlist = async ({
+  userId,
+  pageParams = 0,
+}: {
+  userId: number;
+  pageParams: number;
+}) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParams}&limit=50`,
       {
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-        cache: "no-store",
+        credentials: "include",
       },
     );
 
-    return response.json();
+    const resData = await response.json();
+
+    return {
+      data: resData,
+      page: pageParams,
+      isNext: resData.additionalData.nextPage,
+    };
   } catch (error) {
-    console.error(error);
-    throw new Error("데이터 요청 에러");
+    throw error;
   }
 };
 
 //사용자의 찜 목록을 가져오는 함수
 export const fetchUserWishlist = async ({
-  pageParms = 0,
+  pageParams = 0,
   userId,
   filter = "",
 }: {
-  pageParms: number;
+  pageParams: number;
   userId: number;
   filter: string;
 }) => {
   //유저 정보가 있을 때
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParms}&${filter}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParams}&${filter}`,
       {
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-        cache: "no-store",
+        credentials: "include",
       },
     );
 
     if (!response.ok) {
+      console.log(response);
       throw new Error(response.statusText);
     }
 
@@ -51,10 +56,10 @@ export const fetchUserWishlist = async ({
 
     return {
       data: responseData.data,
-      page: pageParms,
+      page: pageParams,
+      isNext: responseData.additionalData.nextPage,
     };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -68,10 +73,7 @@ export const fetchLocalWishlist = async ({
 }) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/list`,
-      {
-        cache: "no-store",
-      },
+      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/all`,
     );
 
     if (!response.ok) {
@@ -81,8 +83,6 @@ export const fetchLocalWishlist = async ({
     const responseData = await response.json();
 
     const meetupList = responseData.data;
-
-    console.log(meetupList);
 
     const wishlist = localStorage.getItem("wishlist");
     const arr = wishlist ? JSON.parse(wishlist as string) : [];
@@ -144,9 +144,12 @@ export const fetchLocalWishlist = async ({
     return {
       data: filteredList.slice(startIndex, endIndex),
       page: pageParms,
+      isNext:
+        filteredList.length - (startIndex + 1) * filter.limit > 0
+          ? true
+          : false,
     };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -157,21 +160,19 @@ export const deleteUserWishList = async (meetupId: number) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${meetupId}`,
       {
-        method: "Delete",
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
+        method: "DELETE",
+        credentials: "include",
       },
     );
 
     if (!response.ok) {
+      console.log(response);
       throw new Error(response.statusText);
     }
 
     return response.json();
   } catch (error) {
-    console.error(error);
-    throw new Error("데이터 요청 에러");
+    throw error;
   }
 };
 
@@ -182,19 +183,17 @@ export const addUserWishlist = async (meetupId: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${meetupId}`,
       {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
+        credentials: "include",
       },
     );
 
     if (!response.ok) {
+      console.log(response);
       throw new Error(response.statusText);
     }
 
     return response.json();
   } catch (error) {
-    console.error(error);
-    throw new Error("데이터 요청 에러");
+    throw error;
   }
 };

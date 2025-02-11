@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { fetchUserAllWishlist } from "@/lib/wishlist/wishlistApi";
 import useUserStore from "@/store/auth/useUserStore";
@@ -14,11 +14,23 @@ export default function InitializeUser() {
       ? JSON.parse(localStorage.getItem("user") || "null")
       : null;
 
-  const { data } = useQuery({
-    queryKey: ["userAllWishlist"],
-    queryFn: async () => fetchUserAllWishlist(userInfo?.userId as number),
-    enabled: !!userInfo && !!userInfo.userId,
-  });
+  const userId = userInfo?.userId;
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["items", userId],
+      queryFn: ({ pageParam }) =>
+        fetchUserAllWishlist({
+          userId,
+          pageParams: pageParam,
+        }),
+      getNextPageParam: (lastPage) => {
+        return lastPage.isNext !== -1 ? lastPage.page + 1 : undefined;
+      },
+      initialPageParam: 0,
+      enabled: !!userId,
+      select: (data) => data.pages.flatMap((ele) => ele.data.data || []),
+    });
 
   useEffect(() => {
     const performanceEntries =
@@ -39,12 +51,17 @@ export default function InitializeUser() {
   }, []);
 
   useEffect(() => {
-    if (data != null && data.data != null) {
-      const ids = data.data.map((item: CardProps) => item.meetupId) || [];
-      setUserAllWishlist(ids);
-      localStorage.setItem("wishlist", JSON.stringify([]));
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
-  }, [data]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  useEffect(() => {
+    if (data) {
+      const arr = data.map((item: CardProps) => item.meetupId);
+      setUserAllWishlist(arr);
+    }
+  }, [data, setUserAllWishlist]);
 
   return null;
 }

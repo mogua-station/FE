@@ -10,13 +10,12 @@ import {
 } from "@/components/auth/AuthInputs";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import useSignIn from "@/hooks/auths/useSignIn";
-import useLoginSetWishlist from "@/hooks/useLoginSetWishlist";
+
 import { type FormData } from "@/types";
 
 const SignInBasicPage = () => {
   const { signIn } = useSignIn();
   const [isLoading, setIsLoading] = useState(false);
-  const setLoginWishlist = useLoginSetWishlist();
 
   const {
     control,
@@ -48,9 +47,7 @@ const SignInBasicPage = () => {
       setIsLoading(false);
     }
 
-    //로그인이 성공했을 때 찜하기를 가져와서 젼역 상태관리에 추가
     if (result.success) {
-      setLoginWishlist();
     }
   };
 

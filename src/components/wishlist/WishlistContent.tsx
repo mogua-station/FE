@@ -29,7 +29,7 @@ export default function WishlistContent() {
 
   //여러개의 값을 한번에 가져오고 싶다면
   const [filter, setFilter] = useState<FilterProps>({
-    limit: 8,
+    limit: 10,
     meetupType: "STUDY",
     location: "ALL",
     orderBy: "latest",
@@ -43,7 +43,13 @@ export default function WishlistContent() {
     fetchNextPage,
     refetch,
   } = useInfiniteQuery({
-    queryKey: ["wishlist", filter.meetupType, filter.location, filter.orderBy],
+    queryKey: [
+      "wishlist",
+      filter.meetupType,
+      filter.location,
+      filter.orderBy,
+      user?.userId ?? "guest",
+    ],
     queryFn: ({ pageParam }) => {
       if (user != null) {
         const filterString = Object.entries(filter).reduce<
@@ -54,7 +60,7 @@ export default function WishlistContent() {
         }, {});
 
         return fetchUserWishlist({
-          pageParms: pageParam,
+          pageParams: pageParam,
           userId: user.userId,
           filter: new URLSearchParams(filterString).toString(),
         });
@@ -64,11 +70,7 @@ export default function WishlistContent() {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      if (lastPage instanceof Error || !lastPage.data) {
-        return undefined; // 오류가 있을 경우 다음 페이지를 요청하지 않음
-      }
-
-      return lastPage.data.length > 0 ? lastPage.page + 1 : undefined;
+      return lastPage.isNext !== -1 ? lastPage.page + 1 : undefined;
     },
     select: (data) => data.pages.flatMap((ele) => ele.data || []),
     retry: 1,
@@ -139,21 +141,22 @@ export default function WishlistContent() {
           })}
         </section>
       )}
-      {wishlist?.length == 0 && (
-        <div className='flex flex-col items-center gap-4 pt-[72px]'>
-          <Image
-            src='/icons/empty.svg'
-            alt='리스트 없음 이미지'
-            width='180'
-            height='180'
-          />
-          <p className='body-1-reading text-center font-regular text-gray-500'>
-            {searchParams.size > 0
-              ? "조건에 맞는 모임이 없어요"
-              : "찜한 모임이 없어요"}
-          </p>
-        </div>
-      )}
+      {wishlist == undefined ||
+        (wishlist?.length == 0 && (
+          <div className='flex flex-col items-center gap-4 pt-[72px]'>
+            <Image
+              src='/icons/empty.svg'
+              alt='리스트 없음 이미지'
+              width='180'
+              height='180'
+            />
+            <p className='body-1-reading text-center font-regular text-gray-500'>
+              {searchParams.size > 0
+                ? "조건에 맞는 모임이 없어요"
+                : "찜한 모임이 없어요"}
+            </p>
+          </div>
+        ))}
       {isFetchingNextPage && hasNextPage && (
         <p className='text-center text-white'>로딩중...</p>
       )}
