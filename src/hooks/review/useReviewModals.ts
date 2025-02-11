@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { FailModal } from "@/components/create/modals/ResultInfoModal";
 import ConfirmModal from "@/components/user/ConfirmModal";
-import UserSuccessModal from "@/components/user/ReviewSuccessModal";
+import ReviewSuccessModal from "@/components/user/ReviewSuccessModal";
 import useReviewMutations from "@/hooks/review/useReviewMutation";
 import useUserStore from "@/store/auth/useUserStore";
 import modal from "@/utils/modalController";
@@ -21,7 +21,7 @@ export default function useReviewModals() {
   ) => {
     modal.open(
       ({ close }) =>
-        React.createElement(UserSuccessModal, {
+        React.createElement(ReviewSuccessModal, {
           title,
           message,
           close: () => {
