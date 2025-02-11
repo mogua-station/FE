@@ -15,8 +15,6 @@ export const createReview = async (formData: FormData) => {
 export const deleteReview = async (reviewId: number) => {
   const res = await del(`/reviews/${reviewId}`);
 
-  throw new Error("테스트 에러");
-
   if (!res.ok) {
     const errorData = await res.json().catch(() => null);
     console.error("서버 응답 에러:", errorData);
