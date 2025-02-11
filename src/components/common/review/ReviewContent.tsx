@@ -22,7 +22,7 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
       )}
 
       <p
-        className={`body-2-reading mt-4 break-keep text-gray-200 ${contentStyle}`}
+        className={`body-2-reading mt-4 whitespace-pre-line break-keep text-gray-200 ${contentStyle}`}
       >
         {reviewContent.review}
       </p>
