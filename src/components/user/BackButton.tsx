@@ -20,7 +20,12 @@ export default function BackButton() {
   };
 
   return (
-    <button type='button' onClick={handleOpenModal}>
+    <button
+      className='p-1'
+      type='button'
+      aria-label='뒤로가기'
+      onClick={handleOpenModal}
+    >
       <DeleteIcon className='size-6' />
     </button>
   );

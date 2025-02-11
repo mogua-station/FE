@@ -14,6 +14,10 @@ const ClearImageOnPageLeave = dynamic(
   },
 );
 
+const BackgroundWrapper = dynamic(
+  () => import("@/components/common/layout/BackgroundWrapper"),
+);
+
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
   display: "swap",
@@ -59,19 +63,10 @@ export default function RootLayout({
           <InitializeUser />
           <ClearImageOnPageLeave />
           <HeaderWrapper />
-          <main className='relative flex flex-1 flex-col'>{children}</main>
+          <main className='relative flex flex-grow flex-col'>{children}</main>
           <NavBarWrapper />
+          <BackgroundWrapper />
         </Providers>
-        {/* 배경 비디오 임시설정 */}
-        <video
-          className='fixed inset-0 -z-10 size-full object-cover'
-          src='/videos/background.mp4'
-          loop
-          autoPlay
-          muted
-          preload='auto'
-          playsInline
-        />
       </body>
     </html>
   );

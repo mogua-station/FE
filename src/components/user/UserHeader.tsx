@@ -58,12 +58,81 @@ export default function UserHeader() {
   const isEditProfile = pathname === "/user/edit_profile";
   const isCreateReview = pathname === "/user/create_review";
 
+  const currentUserId = isUserPage ? Number(pathname.split("/")[2]) : null;
+  const isMyPage = currentUserId === user?.userId;
+
   const headerBgColor = isEditProfile
     ? "bg-gray-900 desktop:bg-gray-950"
     : "bg-[#0E0E10]";
   const headerBorderColor = isCreateReview
     ? "border-b border-gray-900 tablet:border-none"
     : "";
+
+  // 버튼 렌더링 로직
+  const renderRightButtons = () => {
+    // 리뷰 작성 페이지
+    if (isCreateReview) {
+      return (
+        <>
+          <span className='mobile:block text-gray-200 tablet:hidden'>
+            <BackButton />
+          </span>
+          <div className='hidden gap-6 desktop:flex'>
+            <button>
+              <SearchIcon className='text-gray-200' aria-label='Search' />
+            </button>
+            <button onClick={() => router.push("/create")}>
+              <PlusIcon className='text-gray-200' aria-label='Create Meetup' />
+            </button>
+          </div>
+        </>
+      );
+    }
+
+    // 프로필 수정 페이지
+    if (isEditProfile) {
+      return (
+        <>
+          <span className='text-gray-200 desktop:hidden'>
+            <BackButton />
+          </span>
+          <div className='hidden gap-6 desktop:flex'>
+            <button>
+              <SearchIcon className='text-gray-200' aria-label='Search' />
+            </button>
+            <button onClick={() => router.push("/create")}>
+              <PlusIcon className='text-gray-200' aria-label='Create Meetup' />
+            </button>
+          </div>
+        </>
+      );
+    }
+
+    // 유저 프로필 페이지
+    if (isUserPage) {
+      if (isMyPage) {
+        return (
+          <button
+            onClick={() => router.push("/user/edit_profile")}
+            aria-label='Edit Profile'
+          >
+            <Edit className='text-gray-200' />
+          </button>
+        );
+      }
+      // 다른 유저의 프로필 페이지
+      return (
+        <div className='flex gap-6'>
+          <button>
+            <SearchIcon className='text-gray-200' aria-label='Search' />
+          </button>
+          <button onClick={() => router.push("/create")}>
+            <PlusIcon className='text-gray-200' aria-label='Create Meetup' />
+          </button>
+        </div>
+      );
+    }
+  };
 
   return (
     <header
@@ -87,57 +156,7 @@ export default function UserHeader() {
         </div>
 
         <div>
-          <div className='flex gap-6'>
-            {!isCreateReview && (
-              <button
-                onClick={() => router.push("/user/edit_profile")}
-                aria-label='Edit Profile'
-              >
-                {isEditProfile ? (
-                  <span className='mobile:block text-gray-200 tablet:block desktop:hidden'>
-                    <BackButton />
-                  </span>
-                ) : (
-                  <Edit className='text-gray-200' />
-                )}
-              </button>
-            )}
-
-            {isCreateReview && (
-              <span className='mobile:block text-gray-200 tablet:hidden'>
-                <BackButton />
-              </span>
-            )}
-
-            {!isUserPage && !isEditProfile && !isCreateReview && (
-              <button>
-                <SearchIcon className='text-gray-200' aria-label='Search' />
-              </button>
-            )}
-
-            {!isUserPage && !isEditProfile && !isCreateReview && (
-              <button onClick={() => router.push("/create")}>
-                <PlusIcon
-                  className='text-gray-200'
-                  aria-label='Create Meetup'
-                />
-              </button>
-            )}
-
-            {(isEditProfile || isCreateReview) && (
-              <div className='hidden gap-6 desktop:flex'>
-                <button>
-                  <SearchIcon className='text-gray-200' aria-label='Search' />
-                </button>
-                <button onClick={() => router.push("/create")}>
-                  <PlusIcon
-                    className='text-gray-200'
-                    aria-label='Create Meetup'
-                  />
-                </button>
-              </div>
-            )}
-          </div>
+          <div className='flex gap-6'>{renderRightButtons()}</div>
         </div>
       </div>
     </header>
