@@ -13,7 +13,6 @@ export default function InitializeUser() {
     typeof window !== "undefined"
       ? JSON.parse(localStorage.getItem("user") || "null")
       : null;
-
   const userId = userInfo?.userId;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =

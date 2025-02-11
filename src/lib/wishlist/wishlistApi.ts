@@ -16,6 +16,11 @@ export const fetchUserAllWishlist = async ({
       },
     );
 
+    if (!response.ok) {
+      console.log(response);
+      throw new Error(response.statusText);
+    }
+
     const resData = await response.json();
 
     return {
