@@ -23,16 +23,22 @@ export default async function Home({
 }) {
   const queryClient = new QueryClient();
 
-  const result = await getMeetupList({
-    page: 0,
-    limit: 10,
-    orderBy: searchParams.orderBy,
-    type: searchParams.type,
-    state: searchParams.state,
-    location: searchParams.location,
-    startDate: searchParams.startDate,
-    endDate: searchParams.endDate,
-  });
+  let result;
+
+  try {
+    result = await getMeetupList({
+      page: 0,
+      limit: 10,
+      orderBy: searchParams.orderBy,
+      type: searchParams.type,
+      state: searchParams.state,
+      location: searchParams.location,
+      startDate: searchParams.startDate,
+      endDate: searchParams.endDate,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 
   const queryKey = generateQueryKey(searchParams);
   queryClient.setQueryData(queryKey, {
