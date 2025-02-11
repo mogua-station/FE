@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type {
   MeetupType,
   OrderType,
@@ -51,12 +51,15 @@ export function useMeetupQueryParams(initialParams?: MeetupQueryType) {
     if (orderBy) setSelectedOrder(orderBy);
   }, [searchParams]);
 
-  return {
-    selectedMeetup,
-    setSelectedMeetup,
-    selectedOrder,
-    setSelectedOrder,
-    selectedFilter,
-    setSelectedFilter,
-  };
+  return useMemo(
+    () => ({
+      selectedMeetup,
+      setSelectedMeetup,
+      selectedOrder,
+      setSelectedOrder,
+      selectedFilter,
+      setSelectedFilter,
+    }),
+    [selectedMeetup, selectedOrder, selectedFilter],
+  );
 }
