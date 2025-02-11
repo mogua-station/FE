@@ -31,6 +31,7 @@ export default function Header() {
     ? "bg-gray-950 tablet:bg-[#0E0E10]"
     : "bg-[#0E0E10]";
   const createBgColor = isCreatePageHeader ? "bg-gray-950" : "bg-[#0E0E10]";
+  const landingBgColor = pathname === "/welcome" ? "bg-[#0E0E10]" : "";
 
   useEffect(() => setIsClient(true), []);
 
@@ -45,7 +46,7 @@ export default function Header() {
       />
 
       <header
-        className={`${authBgColor} ${createBgColor} ${isCreatePageHeader ? "hidden tablet:flex" : "flex"} fixed left-0 top-0 z-50 w-full items-center justify-center`}
+        className={`${authBgColor} ${createBgColor} ${landingBgColor} ${isCreatePageHeader ? "hidden tablet:flex" : "flex"} fixed left-0 top-0 z-50 w-full items-center justify-center`}
       >
         <div className='flex h-14 w-full max-w-[1240px] items-center justify-between px-5 py-2.5'>
           <div className='flex items-center gap-12'>
