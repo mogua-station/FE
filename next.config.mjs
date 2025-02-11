@@ -14,6 +14,16 @@ const nextConfig = {
         hostname: "fesi6.s3.dualstack.ap-southeast-2.amazonaws.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "k.kakaocdn.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "img1.kakaocdn.net",
+        pathname: "/**",
+      },
     ],
   },
 };
