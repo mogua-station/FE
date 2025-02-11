@@ -5,7 +5,7 @@ import SolidButton from "@/components/common/buttons/SolidButton";
 import CommonTextArea from "@/components/common/inputs/TextArea";
 import RatingInput from "@/components/create-reaview/RatingInput";
 import ReviewImageInput from "@/components/create-reaview/ReviewImageInput";
-import useReviewMutations from "@/hooks/review/useReviewMutation";
+import useReviewModals from "@/hooks/review/useReviewModals";
 
 interface ReviewFormData {
   rating: number;
@@ -15,7 +15,7 @@ interface ReviewFormData {
 }
 
 export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
-  const { createReviewMutation } = useReviewMutations();
+  const { handleCreateReview } = useReviewModals();
   const methods = useForm<ReviewFormData>({
     defaultValues: {
       rating: -1,
@@ -56,13 +56,12 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
 
     if (data.image) {
       formData.append("image", data.image);
+    } else {
+      const emptyBlob = new Blob([], { type: "application/octet-stream" });
+      formData.append("image", emptyBlob, "empty.txt");
     }
 
-    if (data.image === null) {
-      formData.append("image", new Blob(), "");
-    }
-
-    await createReviewMutation.mutateAsync(formData);
+    await handleCreateReview(formData);
   });
 
   return (
@@ -86,13 +85,9 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
         <SolidButton
           type='submit'
           className='mt-10'
-          state={
-            createReviewMutation.isPending || !isFormValid
-              ? "inactive"
-              : "activated"
-          }
+          state={!isFormValid ? "inactive" : "activated"}
         >
-          {createReviewMutation.isPending ? "작성 중..." : "작성 완료"}
+          {isFormValid ? "작성 완료" : "작성 준비중"}
         </SolidButton>
       </form>
     </FormProvider>

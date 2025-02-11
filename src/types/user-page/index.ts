@@ -128,15 +128,14 @@ export interface WrittenReview {
   nickname: string;
   profileImg: string;
   rating: 0 | 1 | 2;
-  id: number;
   meetupId: number;
-  meetingType: MeetingType;
   title: string;
+  reviewId: number;
   content: string;
   meetingEndDate: string;
   thumbnail?: string;
-  reviewThumbnail?: string;
   reviewDate: string;
+  editabel: boolean;
 }
 
 // ===== API 요청 설정 타입 =====

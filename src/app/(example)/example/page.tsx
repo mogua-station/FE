@@ -40,6 +40,7 @@ export default function Home() {
       userid: 1,
       username: "모과",
       date: new Date(),
+      reviewId: 1,
     },
     {
       rating: 1,
@@ -50,6 +51,7 @@ export default function Home() {
       userprofile:
         "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
       date: new Date(),
+      reviewId: 2,
     },
     {
       rating: 2,
@@ -64,6 +66,7 @@ export default function Home() {
       isMyReview: true,
       eventId: 14,
       eventType: "tutoring",
+      reviewId: 3,
     },
   ];
 
