@@ -35,7 +35,7 @@ export default async function UserPage({ params }: Props) {
 
   return (
     <AuthWrapper>
-      <div className='flex h-full flex-1 flex-col p-4 tablet:px-20 tablet:py-[52px] desktop:py-[56px]'>
+      <div className='nav-mb header-mt flex h-full flex-1 flex-col p-4 tablet:px-20 tablet:py-[52px] desktop:py-[56px]'>
         <div className='relative z-10 mx-auto flex w-full flex-col desktop:max-w-[960px]'>
           {/* 유저 프로필 섹션 */}
           <section aria-label='프로필 정보'>

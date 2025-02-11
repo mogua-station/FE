@@ -73,12 +73,13 @@ export default function Content({ content }: CardContentProps) {
       </div>
       <div className='flex flex-col justify-end'>
         <Image
-          className='size-20 rounded-[8px] object-cover'
+          className='size-20 rounded-lg object-cover'
           src={content.thumbnail ? content.thumbnail : ""}
           width={80}
           height={80}
           alt='모임 이미지'
-          loading='lazy'
+          priority
+          loading='eager'
         />
       </div>
     </div>
