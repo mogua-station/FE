@@ -1,21 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect } from "react";
-import KakaoIcon from "@/assets/images/icons/kakao.svg";
-import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useCookie from "@/hooks/auths/useTokenState";
+import KakaoLoginButton from "@/components/sign-in/KakaoLoginBtn";
 
 const SignInPage = () => {
-  const token = useCookie("accessToken");
-
-  useEffect(() => {
-    if (token !== null) {
-      console.log("Token:", token);
-    }
-  }, [token]);
-
   return (
     <div className='relative flex grow flex-col gap-[24px]'>
       <video
@@ -31,15 +18,7 @@ const SignInPage = () => {
         <div className='relative z-10 flex h-full w-full flex-col items-center justify-center gap-[24px] p-4 tablet:justify-end tablet:p-20 desktop:w-[40%]'>
           <div className='flex w-full flex-col gap-[16px] p-6'>
             <div className='flex w-full flex-col gap-[10px]'>
-              <IconButton className='mt-2 w-full gap-[12px]'>
-                <KakaoIcon className='mr-[12px] size-6 text-yellow-400' />
-                <Link
-                  href={process.env.NEXT_PUBLIC_KAKAO_AUTH_URL || "#"}
-                  className='text-body-2-normal font-medium text-gray-200'
-                >
-                  <p>카카오로 시작하기</p>
-                </Link>
-              </IconButton>
+              <KakaoLoginButton />
               <SolidButton className='mt-2 w-full gap-[12px]'>
                 <Link
                   href='/sign-up'
