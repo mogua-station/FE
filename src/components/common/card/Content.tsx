@@ -3,17 +3,31 @@ import { type CardContentProps } from "@/types/card";
 
 export default function Content({ content }: CardContentProps) {
   const locationFormat = (): string => {
-    const locationMap: { [key: string]: string } = {
-      CAPITAL: "수도권",
-      DAEJEON: "대전광역시",
-      DAEGU: "대구광역시",
-      GWANGJU: "광주광역시",
-      BUSAN: "부산광역시",
-      JEONJU: "전주시",
-      GANGNEUNG: "강릉시",
-    };
+    if (content.online) return "온라인";
+    switch (content.location) {
+      case "CAPITAL":
+        return "수도권";
 
-    return content.location ? locationMap[content.location] || "" : "";
+      case "DAEJEON":
+        return "대전광역시";
+
+      case "DAEGU":
+        return "대구광역시";
+
+      case "GWANGJU":
+        return "광주광역시";
+
+      case "BUSAN":
+        return "부산광역시";
+
+      case "JEONJU":
+        return "전주시";
+
+      case "GANGNEUNG":
+        return "강릉시";
+    }
+
+    return "";
   };
 
   return (

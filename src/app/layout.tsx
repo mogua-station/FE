@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
+import { ToastContainer } from "react-toastify";
 import Providers from "./providers/Providers";
 import HeaderWrapper from "@/components/common/layout/HeaderWrapper";
 import InitializeUser from "@/hooks/auths/InitializeUser";
@@ -21,7 +22,7 @@ const BackgroundWrapper = dynamic(
 );
 
 const pretendard = localFont({
-  src: "./fonts/PretendardVariable.woff2",
+  src: "/fonts/PretendardVariable.woff2",
   display: "swap",
   weight: "45 920",
   preload: true,
@@ -70,6 +71,12 @@ export default function RootLayout({
           <NavBarWrapper />
           <BackgroundWrapper />
         </Providers>
+        <ToastContainer
+          containerId={"joinArea"}
+          autoClose={2000}
+          className='fixed bottom-[100px] left-1/2 right-[unset] top-[unset] w-full -translate-x-1/2 px-5 tablet:px-20 desktop:max-w-[585px] desktop:px-0'
+          position='bottom-center'
+        />
       </body>
     </html>
   );

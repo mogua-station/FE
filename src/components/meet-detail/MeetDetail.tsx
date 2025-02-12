@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { ToastContainer } from "react-toastify";
 import StatusBadge from "@/components/common/card/StatusBadge";
 import { fetchHostData } from "@/lib/meetDetail/meetDetailApi";
 import {
@@ -28,25 +27,32 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
     4,
   );
 
-  const Location = () => {
+  const locationFormat = (): string => {
+    if (meetInfo.online) return "온라인";
     switch (meetInfo.location) {
       case "CAPITAL":
         return "수도권";
+
       case "DAEJEON":
         return "대전광역시";
-      case "JEONJU":
-        return "전주시";
-      case "GWANGJU":
-        return "광주광역시";
-      case "BUSAN":
-        return "부신광역시";
+
       case "DAEGU":
         return "대구광역시";
+
+      case "GWANGJU":
+        return "광주광역시";
+
+      case "BUSAN":
+        return "부산광역시";
+
+      case "JEONJU":
+        return "전주시";
+
       case "GANGNEUNG":
         return "강릉시";
-      default:
-        return "";
     }
+
+    return "";
   };
 
   const clientInfo: ClientInfo = {
@@ -60,8 +66,8 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
   const hostInfo = await fetchHostData(meetInfo.hostId);
 
   return (
-    <div className='mx-auto w-full max-w-[1200px] bg-gray-950 pb-[108px] pt-[176px] desktop:bg-[unset] desktop:pb-[88px] desktop:pt-[130px]'>
-      <div className='absolute left-1/2 top-[76px] z-10 block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:static desktop:hidden'>
+    <div className='mx-auto w-full max-w-[1200px] bg-gray-950 pb-[108px] pt-[120px] desktop:bg-[unset] desktop:pb-[88px] desktop:pt-[74px]'>
+      <div className='absolute left-1/2 top-[22px] z-10 block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:static desktop:hidden'>
         <ShareMeetUpButton />
       </div>
       <div className='relative h-[346px] w-full overflow-hidden desktop:rounded-[24px]'>
@@ -98,7 +104,7 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
                   </h1>
 
                   <h2 className='mt-3 inline-block text-body-2-normal text-gray-300'>
-                    {meetInfo.online ? "온라인" : Location()}
+                    {locationFormat()}
                   </h2>
                 </div>
               </div>
@@ -225,12 +231,6 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
           />
         </section>
       </div>
-      <ToastContainer
-        containerId={"joinArea"}
-        autoClose={2000}
-        className='fixed bottom-[100px] left-1/2 right-[unset] top-[unset] w-full -translate-x-1/2 px-5 tablet:px-20 desktop:max-w-[585px] desktop:px-0'
-        position='bottom-center'
-      />
     </div>
   );
 }
