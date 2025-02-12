@@ -47,7 +47,7 @@ function NavigationLinks({ user }: { user: User | null }) {
     { href: "/", label: "모임찾기" },
     { href: "/wishlist", label: "북마크" },
     {
-      href: `${user != null ? `/user/${user.userId}` : "/sign-in"}`,
+      href: user ? `/user/${user.userId}` : "/sign-in",
       label: "마이페이지",
     },
   ];
@@ -74,9 +74,11 @@ export default function UserHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useUserStore();
-  const [isClient, setIsClient] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => setIsClient(true), []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isUserPage =
     pathname.startsWith("/user/") &&
@@ -100,9 +102,9 @@ export default function UserHeader() {
     ? "border-b border-gray-900 tablet:border-none"
     : "";
 
-  // 버튼 렌더링 로직
   const renderRightButtons = () => {
-    // 리뷰 작성 페이지
+    if (!mounted) return null;
+
     if (isReviewPage) {
       return (
         <>
@@ -111,13 +113,12 @@ export default function UserHeader() {
           </span>
           <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
             <CreateButton />
-            {isClient && user !== null && <ProfileImage user={user} />}
+            {user && <ProfileImage user={user} />}
           </div>
         </>
       );
     }
 
-    // 프로필 수정 페이지
     if (isEditProfile) {
       return (
         <>
@@ -126,13 +127,12 @@ export default function UserHeader() {
           </span>
           <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
             <CreateButton />
-            {isClient && user !== null && <ProfileImage user={user} />}
+            {user && <ProfileImage user={user} />}
           </div>
         </>
       );
     }
 
-    // 유저 프로필 페이지
     if (isUserPage) {
       if (isMyPage) {
         return (
@@ -144,14 +144,15 @@ export default function UserHeader() {
           </button>
         );
       }
-      // 다른 유저의 프로필 페이지
       return (
         <div className='flex gap-6 transition-all desktop:gap-9'>
           <CreateButton />
-          {isClient && user !== null && <ProfileImage user={user} />}
+          {user && <ProfileImage user={user} />}
         </div>
       );
     }
+
+    return null;
   };
 
   return (
@@ -172,7 +173,7 @@ export default function UserHeader() {
               <MoguaLogo />
             )}
           </h1>
-          <NavigationLinks user={user} />
+          {mounted && <NavigationLinks user={user} />}
         </div>
 
         <div>
