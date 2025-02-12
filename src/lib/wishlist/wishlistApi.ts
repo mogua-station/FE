@@ -53,7 +53,6 @@ export const fetchUserWishlist = async ({
     );
 
     if (!response.ok) {
-      console.log(response);
       throw new Error(response.statusText);
     }
 
@@ -171,7 +170,6 @@ export const deleteUserWishList = async (meetupId: number) => {
     );
 
     if (!response.ok) {
-      console.log(response);
       throw new Error(response.statusText);
     }
 
@@ -193,7 +191,6 @@ export const addUserWishlist = async (meetupId: number) => {
     );
 
     if (!response.ok) {
-      console.log(response);
       throw new Error(response.statusText);
     }
 

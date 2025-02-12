@@ -48,6 +48,13 @@ export default function MeetButtonArea({
   };
 
   const [wishlist, setWishlist] = useState<number[]>([]);
+  const handleClickJoin = useCallback(() => {
+    if (user === null) {
+      router.push("/sign-in");
+    } else {
+      joinMutate.mutate(clientInfo.meetupId);
+    }
+  }, [user, clientInfo.meetupId]);
   const joinButton = useMemo(() => {
     if (clientInfo.meetupStatus === "COMPLETED") {
       return (
@@ -127,23 +134,13 @@ export default function MeetButtonArea({
     [clientInfo.meetupId, clientInfo.meetupStatus, user],
   );
 
-  // const handleClickNavigateUser = (e: React.MouseEvent, id: number) => {
-  //   e.stopPropagation();
-  //   router.push(`/user/${id}`);
-  // };
-
-  const handleClickJoin = useCallback(() => {
-    if (user === null) {
-      alert("로그인 해주세요");
-    } else {
-      joinMutate.mutate(clientInfo.meetupId);
-    }
-  }, [user, clientInfo.meetupId]);
-
   const joinMutate = useMutation({
     mutationFn: (id: number) => fetchJoinMeet(id),
     onSuccess: () => {
-      toast((props) => <JoinToast {...props} type='join' />, JoinToastOption);
+      toast(
+        (props) => <JoinToast {...props} toastType='join' />,
+        JoinToastOption,
+      );
       router.refresh();
     },
   });
@@ -151,7 +148,10 @@ export default function MeetButtonArea({
   const leaveMutate = useMutation({
     mutationFn: (id: number) => fetchLeaveMeet(id),
     onSuccess: () => {
-      toast((props) => <JoinToast {...props} type='leave' />, JoinToastOption);
+      toast(
+        (props) => <JoinToast {...props} toastType='leave' />,
+        JoinToastOption,
+      );
       router.refresh();
     },
   });
@@ -190,10 +190,7 @@ export default function MeetButtonArea({
         </IconButton>
         {joinButton}
       </div>
-      <div
-        className='meet-info-box-small mt-6 flex flex-col gap-4'
-        // onClick={(e) => handleClickNavigateUser(e, hostInfo.userId)}
-      >
+      <div className='meet-info-box-small mt-6 flex flex-col gap-4'>
         <span className='text-title block text-left'>주최자 프로필</span>
         <Link
           href={`/user/${clientInfo.hostId}`}

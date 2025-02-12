@@ -30,6 +30,7 @@ export default function InitializeUser() {
       initialPageParam: 0,
       enabled: !!userId,
       select: (data) => data.pages.flatMap((ele) => ele.data.data || []),
+      retry: 1,
     });
 
   useEffect(() => {

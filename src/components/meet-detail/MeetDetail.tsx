@@ -1,10 +1,6 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { ToastContainer } from "react-toastify";
-// import ShareMeetUpButton from "./ShareMeetUpButton";
 import StatusBadge from "@/components/common/card/StatusBadge";
-// import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
-// import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
 import { fetchHostData } from "@/lib/meetDetail/meetDetailApi";
 import {
   type MeetInfo,
@@ -228,12 +224,6 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
           />
         </section>
       </div>
-      <ToastContainer
-        containerId={"joinArea"}
-        autoClose={2000}
-        className='fixed bottom-[100px] left-1/2 right-[unset] top-[unset] w-full -translate-x-1/2 px-5 tablet:px-20 desktop:max-w-[585px] desktop:px-0'
-        position='bottom-center'
-      />
     </div>
   );
 }
