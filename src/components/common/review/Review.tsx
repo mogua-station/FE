@@ -34,7 +34,7 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
   }, [reviewInfo]);
 
   const handleClickModify = () => {
-    alert("리뷰 수정입니다.");
+    router.push(`/user/edit_review?reviewId=${reviewInfo.reviewId}`);
   };
 
   const handleClickDelete = () => {

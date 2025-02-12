@@ -1,6 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { createReview, deleteReview } from "@/lib/review/reviewApi";
+import {
+  createReview,
+  updateReview,
+  deleteReview,
+} from "@/lib/review/reviewApi";
 import useUserStore from "@/store/auth/useUserStore";
 
 export default function useReviewMutations() {
@@ -34,8 +38,28 @@ export default function useReviewMutations() {
     },
   });
 
+  const updateReviewMutation = useMutation({
+    mutationFn: ({
+      reviewId,
+      formData,
+    }: {
+      reviewId: string;
+      formData: FormData;
+    }) => updateReview(reviewId, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["meetings", "myReview", "study"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["meetings", "myReview", "tutoring"],
+      });
+      router.replace(`/user/${user?.userId}`);
+    },
+  });
+
   return {
     createReviewMutation,
+    updateReviewMutation,
     deleteReviewMutation,
   };
 }

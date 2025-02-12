@@ -10,7 +10,8 @@ import useUserStore from "@/store/auth/useUserStore";
 import modal from "@/utils/modalController";
 
 export default function useReviewModals() {
-  const { deleteReviewMutation, createReviewMutation } = useReviewMutations();
+  const { deleteReviewMutation, createReviewMutation, updateReviewMutation } =
+    useReviewMutations();
   const router = useRouter();
   const { user } = useUserStore();
 
@@ -63,6 +64,15 @@ export default function useReviewModals() {
     }
   };
 
+  const handleUpdateReview = async (reviewId: string, formData: FormData) => {
+    try {
+      await updateReviewMutation.mutateAsync({ reviewId, formData });
+      handleSuccess("수정 완료", "리뷰가 수정되었어요.", true);
+    } catch (error) {
+      handleError(error, "수정 실패", "리뷰 수정에 실패했어요.");
+    }
+  };
+
   const handleDeleteClick = (reviewId: number) => {
     modal.open(
       ({ close }) =>
@@ -98,5 +108,6 @@ export default function useReviewModals() {
     handleError,
     handleCreateReview,
     handleDeleteClick,
+    handleUpdateReview,
   };
 }

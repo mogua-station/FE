@@ -5,11 +5,15 @@ import CameraIcon from "@/assets/images/icons/camera.svg";
 import FilledDeleteIcon from "@/assets/images/icons/filled_delete.svg";
 import { useUploadImage } from "@/hooks/inputs/images/useUploadImage";
 
+interface ReviewImageInputProps {
+  onImageSelect: (image: File | null) => void;
+  imageUrl?: string;
+}
+
 export default function ReviewImageInput({
   onImageSelect,
-}: {
-  onImageSelect: (image: File | null) => void;
-}) {
+  imageUrl,
+}: ReviewImageInputProps) {
   const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const {
@@ -45,11 +49,11 @@ export default function ReviewImageInput({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {previewUrl ? (
+        {previewUrl || imageUrl ? (
           <div className='relative h-full w-full'>
             <img
               className='h-full w-full rounded-xl object-cover'
-              src={previewUrl}
+              src={previewUrl || imageUrl}
               alt='리뷰 이미지'
             />
             {isHovered && (

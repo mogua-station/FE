@@ -11,6 +11,7 @@ const HIDE_NAV_PATHS = [
   "/create",
   "/user/edit_profile",
   "/user/create_review",
+  "/user/edit_review",
   "/welcome",
   /^\/create\/\d+$/,
   /^\/study\/\d+$/,

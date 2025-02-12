@@ -87,7 +87,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
           className='mt-10'
           state={!isFormValid ? "inactive" : "activated"}
         >
-          {isFormValid ? "작성 완료" : "작성 준비중"}
+          작성 완료
         </SolidButton>
       </form>
     </FormProvider>

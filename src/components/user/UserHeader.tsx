@@ -82,9 +82,13 @@ export default function UserHeader() {
     pathname.startsWith("/user/") &&
     pathname !== "/user/edit_profile" &&
     pathname !== "/user/create_review" &&
+    pathname !== "/user/edit_review" &&
     pathname.split("/").length === 3;
   const isEditProfile = pathname === "/user/edit_profile";
   const isCreateReview = pathname === "/user/create_review";
+  const isEditReview = pathname === "/user/edit_review";
+
+  const isReviewPage = isCreateReview || isEditReview;
 
   const currentUserId = isUserPage ? Number(pathname.split("/")[2]) : null;
   const isMyPage = currentUserId === user?.userId;
@@ -92,14 +96,14 @@ export default function UserHeader() {
   const headerBgColor = isEditProfile
     ? "bg-gray-900 desktop:bg-gray-950"
     : "bg-[#0E0E10]";
-  const headerBorderColor = isCreateReview
+  const headerBorderColor = isReviewPage
     ? "border-b border-gray-900 tablet:border-none"
     : "";
 
   // 버튼 렌더링 로직
   const renderRightButtons = () => {
     // 리뷰 작성 페이지
-    if (isCreateReview) {
+    if (isReviewPage) {
       return (
         <>
           <span className='mobile:block text-gray-200 tablet:hidden'>
@@ -157,10 +161,10 @@ export default function UserHeader() {
       <div className='flex h-14 w-full max-w-[1240px] items-center justify-between px-5 py-2.5'>
         <div className='flex items-center gap-12'>
           <h1>
-            {isCreateReview ? (
+            {isReviewPage ? (
               <>
                 <span className='mobile:block text-gray-200 tablet:hidden'>
-                  리뷰 작성하기
+                  {isCreateReview ? "리뷰 작성하기" : "리뷰 수정하기"}
                 </span>
                 <MoguaLogo className='hidden tablet:block' />
               </>

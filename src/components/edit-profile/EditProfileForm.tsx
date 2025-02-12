@@ -10,8 +10,10 @@ import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
 import TagInputField from "./TagInputField";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import { FailModal } from "@/components/create/modals/ResultInfoModal";
 import { SYSTEM_ALERTS } from "@/constants/alerts";
 import { useEditProfile } from "@/hooks/user/useEditProfile";
+import modal from "@/utils/modalController";
 
 type FormValues = {
   nickname: string;
@@ -123,7 +125,19 @@ export default function EditProfileForm() {
     if (!changes) return;
 
     if (!changes.image && !changes.requestData) {
-      alert("변경된 내용이 없습니다.");
+      modal.open(
+        ({ close }) => (
+          <FailModal
+            title='변경된 내용이 없습니다.'
+            message='수정할 내용을 입력해주세요.'
+            close={close}
+          />
+        ),
+        {
+          hasCloseBtn: false,
+          isBottom: false,
+        },
+      );
       return;
     }
 
