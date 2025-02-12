@@ -30,7 +30,7 @@ const mapParticipatingMeetupToCard = (
     meetingStartDate: new Date(meetup.meetingStartDate),
     meetingEndDate: new Date(meetup.meetingEndDate),
     thumbnail: meetup.thumbnail,
-    online: meetup.online,
+    isOnline: meetup.isOnline,
     participants: meetup.participants,
     meetupStatus: meetup.meetupStatus,
     isMypage: true,
@@ -53,7 +53,7 @@ const mapCreatedMeetupToCard = (
     meetingStartDate: new Date(meetup.meetingStartDate),
     meetingEndDate: new Date(meetup.meetingEndDate),
     thumbnail: meetup.thumbnail,
-    online: meetup.online,
+    isOnline: meetup.isOnline,
     participants: Array(meetup.participants).fill({
       userId: 0,
       profileImageUrl: "",
@@ -79,7 +79,7 @@ const mapEligibleReviewToCard = (
     meetingStartDate: new Date(review.meetingStartDate),
     meetingEndDate: new Date(review.meetingEndDate),
     thumbnail: review.thumbnail,
-    online: review.online,
+    isOnline: review.isOnline,
     participants: Array(review.participantsCount).fill({
       userId: 0,
       profileImageUrl: "",

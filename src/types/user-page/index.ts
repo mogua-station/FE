@@ -27,7 +27,7 @@ interface BaseMeetup {
   meetingStartDate: string;
   meetingEndDate: string;
   thumbnail: string;
-  online: boolean;
+  isOnline: boolean;
 }
 
 // ===== 유저 프로필 타입 =====
