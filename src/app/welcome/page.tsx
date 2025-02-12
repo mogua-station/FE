@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import WelcomePlanet from "@/../public/images/welcome_planet.svg";
 import SolidButton from "@/components/common/buttons/SolidButton";
 
 const WelcomePage = () => {
@@ -17,7 +17,13 @@ const WelcomePage = () => {
           </p>
         </div>
         <div className='flex w-full items-center justify-center'>
-          <WelcomePlanet className='' />
+          <Image
+            src='/images/welcome_planet.svg'
+            alt='Welcome Planet'
+            width={500}
+            height={500}
+            priority
+          />
         </div>
         <div className='flex flex-col gap-2'>
           <Link href='/sign-in'>
