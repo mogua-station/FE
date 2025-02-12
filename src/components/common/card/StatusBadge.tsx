@@ -17,7 +17,7 @@ export default function StatusBadge({ badge }: BadgeInfo) {
     switch (badge.meetupStatus) {
       case "RECRUITING":
         return (
-          <div className='flex gap-1.5'>
+          <span className='flex gap-1.5'>
             <span className='flex items-center justify-between gap-1.5 rounded-[6px] bg-gray-800 px-2 py-1'>
               <Megaphone className='text-blue-300' />
               <span className='text-caption-normal font-medium text-blue-300'>
@@ -47,7 +47,7 @@ export default function StatusBadge({ badge }: BadgeInfo) {
                 )}
               </div>
             )}
-          </div>
+          </span>
         );
 
       case "BEFORE_START":

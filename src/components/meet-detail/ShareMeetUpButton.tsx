@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { toast } from "react-toastify";
 import ArrowRight from "@/assets/images/icons/arrow_right.svg";
 import JoinToast from "@/components/toast/JoinToast";
@@ -24,9 +25,15 @@ export default function ShareMeetUpButton() {
     <button
       className='relative mx-auto flex w-full gap-[15px] rounded-[16px] bg-gray-800 p-3'
       onClick={() => handleClickShare()}
+      aria-label='모임 공유하기'
     >
-      <div className='overflow-hidden rounded-[50%] bg-gray-600'>
-        <img src='/images/share_character.png' alt='캐릭터 이미지' />
+      <div className='relative h-[40px] w-[40px] overflow-hidden rounded-[50%] bg-gray-600'>
+        <Image
+          fill
+          src='/images/share_character.png'
+          alt='캐릭터 이미지'
+          sizes='40px'
+        />
       </div>
       <div className='flex flex-col justify-between'>
         <p className='text-body text-gray-300'>친구와 함께 참여해보세요</p>
