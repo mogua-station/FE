@@ -22,15 +22,12 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
 
   const ratingArr = ["그냥그래요", "괜찮아요", "추천해요"];
 
+  // '리뷰 삭제/수정' 도입으로 클릭 시 높낮이가 바뀌는 디자인으로 변경 (해당 모임 상세로 이동x)
   const handleClickReview = useCallback(() => {
-    if (reviewInfo.isMyReview) {
-      //과외와 스터디가 다른 라우터를 사용하기 때문에 eventType으로 분기처리
-      router.push(
-        `/${reviewInfo.eventType?.toLowerCase()}/${reviewInfo.eventId}`,
-      );
+    if (reviewInfo.isMyWritten) {
+      setIsOpen((prev) => !prev);
     }
-    return;
-  }, [reviewInfo]);
+  }, [reviewInfo.isMyWritten]);
 
   const handleClickDetail = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,10 +45,12 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
     handleDeleteClick(reviewInfo.reviewId);
   };
 
+  const isMyWrittenStyle = reviewInfo.isMyWritten ? "cursor-pointer" : "";
+
   return (
     <div
-      className='rounded-[12px] bg-gray-900 p-4'
-      onClick={reviewInfo.isMyReview ? handleClickReview : undefined}
+      className={`rounded-[12px] bg-gray-900 p-4 ${isMyWrittenStyle}`}
+      onClick={reviewInfo.isMyWritten ? handleClickReview : undefined}
     >
       <div className='relative'>
         <div className='flex justify-between'>

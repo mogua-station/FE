@@ -3,11 +3,7 @@ import Link from "next/link";
 import { type ContentProps } from "@/types/review";
 
 export default function Content({ reviewContent, isOpen }: ContentProps) {
-  const contentStyle = reviewContent.isMyWritten
-    ? ""
-    : isOpen
-      ? ""
-      : "comment-overflow comment-overflow-webkit";
+  const contentStyle = isOpen ? "" : "comment-overflow comment-overflow-webkit";
 
   return (
     <div className='w-full'>
@@ -28,7 +24,8 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
         >
           {reviewContent.review}
         </p>
-        {reviewContent.thumbnail &&
+        {isOpen &&
+          reviewContent.thumbnail &&
           typeof reviewContent.thumbnail === "string" && (
             <div className='mt-4 flex justify-end'>
               <Image
