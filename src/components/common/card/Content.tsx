@@ -3,7 +3,7 @@ import { type CardContentProps } from "@/types/card";
 
 export default function Content({ content }: CardContentProps) {
   const locationFormat = (): string => {
-    if (content.online) return "온라인";
+    if (content.isOnline) return "온라인";
     switch (content.location) {
       case "CAPITAL":
         return "수도권";

@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import ShareMeetUpButton from "./ShareMeetUpButton";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
@@ -71,83 +71,107 @@ export default function MeetButtonArea({
       JoinToastOption,
     );
   }, []);
+  const [joinButton, setJoinButton] = useState<React.ReactNode>(null);
 
-  const joinButton = useMemo(() => {
+  useEffect(() => {
     if (clientInfo.meetupStatus === "COMPLETED") {
-      return (
+      setJoinButton(
         <SolidButton mode='special' disabled>
           종료된 모임이에요
-        </SolidButton>
+        </SolidButton>,
       );
+      return;
     }
     if (clientInfo.meetupStatus === "IN_PROGRESS") {
-      return (
+      setJoinButton(
         <SolidButton mode='special' disabled>
           진행중인 모임이에요
-        </SolidButton>
+        </SolidButton>,
       );
+      return;
     }
     if (clientInfo.meetupStatus === "BEFORE_START") {
-      return (
+      setJoinButton(
         <SolidButton mode='special' disabled>
           시작전인 모임이에요
-        </SolidButton>
+        </SolidButton>,
       );
+      return;
     }
 
     if (!user) {
-      return (
+      setJoinButton(
         <SolidButton mode='special' onClick={handleClickJoin}>
           모임 신청하기
-        </SolidButton>
+        </SolidButton>,
       );
+      return;
     }
 
     if (clientInfo.hostId === user.userId) {
       if (clientInfo.participants.length >= clientInfo.minParticipants) {
-        return (
+        setJoinButton(
           <SolidButton mode='special' disabled>
             개설확정된 모임이에요
-          </SolidButton>
+          </SolidButton>,
+        );
+      } else {
+        setJoinButton(
+          <SolidButton mode='special' onClick={handleClickDeleteMeetup}>
+            모임 취소하기
+          </SolidButton>,
         );
       }
-      return (
-        <SolidButton mode='special' onClick={handleClickDeleteMeetup}>
-          모임 취소하기
-        </SolidButton>
-      );
+      return;
     }
 
     const isJoined = clientInfo.participants.some(
       (item) => item.userId === user.userId,
     );
 
-    return isJoined ? (
-      <SolidButton mode='special' onClick={handleClickLeave}>
-        신청 취소하기
-      </SolidButton>
-    ) : (
-      <SolidButton mode='special' onClick={handleClickJoin}>
-        모임 신청하기
-      </SolidButton>
-    );
-  }, [clientInfo, user]);
+    if (
+      clientInfo.maxParticipants === clientInfo.participants.length &&
+      !isJoined
+    ) {
+      setJoinButton(
+        <SolidButton mode='special' disabled>
+          정원이 마감된 모임이에요
+        </SolidButton>,
+      );
+      return;
+    }
 
-  const handleClickToggleWishlist = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (user != null) {
-        loggedInWishlist(clientInfo.meetupId, clientInfo.meetupStatus);
-      } else {
-        nonLoggedInWishlist(
-          clientInfo.meetupId,
-          clientInfo.meetupStatus,
-          setWishlist,
-        );
-      }
-    },
-    [clientInfo.meetupId, clientInfo.meetupStatus, user],
-  );
+    setJoinButton(
+      isJoined ? (
+        <SolidButton mode='special' onClick={handleClickLeave}>
+          신청 취소하기
+        </SolidButton>
+      ) : (
+        <SolidButton mode='special' onClick={handleClickJoin}>
+          모임 신청하기
+        </SolidButton>
+      ),
+    );
+  }, [
+    clientInfo,
+    user,
+    handleClickJoin,
+    handleClickLeave,
+    handleClickDeleteMeetup,
+  ]);
+
+  const handleClickToggleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (user != null) {
+      loggedInWishlist(clientInfo.meetupId, clientInfo.meetupStatus);
+    } else {
+      nonLoggedInWishlist(
+        clientInfo.meetupId,
+        clientInfo.meetupStatus,
+        setWishlist,
+      );
+    }
+  };
 
   const joinMutate = useMutation({
     mutationFn: (id: number) => fetchJoinMeet(id),
@@ -157,6 +181,12 @@ export default function MeetButtonArea({
         JoinToastOption,
       );
       router.refresh();
+    },
+    onError: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='failed' />,
+        JoinToastOption,
+      );
     },
   });
 
@@ -168,6 +198,12 @@ export default function MeetButtonArea({
         JoinToastOption,
       );
       router.refresh();
+    },
+    onError: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='failed' />,
+        JoinToastOption,
+      );
     },
   });
 
@@ -207,7 +243,7 @@ export default function MeetButtonArea({
         </IconButton>
         {joinButton}
       </div>
-      
+
       <div className='meet-info-box-small mt-6 flex flex-col gap-4'>
         <span className='text-title block text-left'>주최자 프로필</span>
         <Link

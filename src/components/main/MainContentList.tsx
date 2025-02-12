@@ -47,7 +47,7 @@ export default function MainContentList() {
                   | undefined,
                 participants: item.participants,
                 thumbnail: item.thumbnail,
-                online: item.online,
+                isOnline: item.isOnline,
                 recruitmentStartDate: new Date(item.recruitmentStartDate),
                 minParticipants: item.minParticipants,
                 recruitmentEndDate: new Date(item.recruitmentEndDate),

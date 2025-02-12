@@ -28,7 +28,7 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
   );
 
   const locationFormat = (): string => {
-    if (meetInfo.online) return "온라인";
+    if (meetInfo.isOnline) return "온라인";
     switch (meetInfo.location) {
       case "CAPITAL":
         return "수도권";
@@ -59,6 +59,7 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
     meetupId: meetInfo.meetupId,
     hostId: meetInfo.hostId,
     participants: meetInfo.participants,
+    maxParticipants: meetInfo.maxParticipants,
     minParticipants: meetInfo.minParticipants,
     meetupStatus: meetInfo.meetupStatus,
   };

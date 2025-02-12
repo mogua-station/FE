@@ -52,7 +52,7 @@ const Card = ({ card }: CardInfo) => {
           meetingStartDate: card.meetingStartDate,
           meetingEndDate: card.meetingEndDate,
           thumbnail: card.thumbnail,
-          online: card.online,
+          isOnline: card.isOnline,
         }}
       />
 

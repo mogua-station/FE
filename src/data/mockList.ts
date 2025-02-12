@@ -17,7 +17,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-02-05"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 2,
@@ -33,7 +33,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-02-05"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    online: true,
+    isOnline: true,
   },
   {
     meetupId: 3,
@@ -49,7 +49,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-02-05"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    online: true,
+    isOnline: true,
   },
   {
     meetupId: 4,
@@ -65,7 +65,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-01-15"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    online: false,
+    isOnline: false,
   },
 ];
 
@@ -150,7 +150,7 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: false,
+    isOnline: false,
     participants: [
       {
         userId: 1,
@@ -196,7 +196,7 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: false,
+    isOnline: false,
     participants: [
       {
         userId: 1,
@@ -242,7 +242,7 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: true,
+    isOnline: true,
     participants: [
       {
         userId: 1,
@@ -293,7 +293,7 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: false,
+    isOnline: false,
     participants: [
       {
         userId: 1,
