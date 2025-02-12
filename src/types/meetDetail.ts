@@ -35,7 +35,7 @@ export interface MeetProps {
   thumbnail: string;
   hostId: number;
   hostNickname: string;
-  online: boolean;
+  isOnline: boolean;
   participants: ParticipantInfo[];
 }
 

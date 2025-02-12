@@ -22,7 +22,7 @@ export interface CardProps {
   meetingStartDate: Date;
   meetingEndDate: Date;
   thumbnail?: string;
-  online: boolean;
+  isOnline: boolean;
   participants: ParticipantInfo[];
   isReview?: boolean; //리뷰 작성 가능한 상태?
   isMypage?: boolean;
@@ -54,7 +54,7 @@ export interface CardContentProps {
     | "meetingStartDate"
     | "meetingEndDate"
     | "thumbnail"
-    | "online"
+    | "isOnline"
   >;
 }
 
