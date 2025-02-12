@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { type Metadata } from "next";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
-import Head from "next/head";
 import Providers from "./providers/Providers";
 import HeaderWrapper from "@/components/common/layout/HeaderWrapper";
 import NavBarWrapper from "@/components/common/layout/NavBarWrapper";
@@ -20,7 +19,7 @@ const BackgroundWrapper = dynamic(
 );
 
 const pretendard = localFont({
-  src: "/fonts/PretendardVariable.woff2",
+  src: "./fonts/PretendardVariable.woff2",
   display: "swap",
   weight: "45 920",
 });
@@ -59,15 +58,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko-KR' className={pretendard.className}>
-      <Head>
-        <link
-          rel='preload'
-          href='/fonts/PretendardVariable.woff2'
-          as='font'
-          type='font/woff2'
-          crossOrigin='anonymous'
-        />
-      </Head>
       <body className='flex min-h-[100dvh] flex-col overflow-x-hidden bg-gray-950 scrollbar:w-1 scrollbar:bg-transparent scrollbar-thumb:rounded-full scrollbar-thumb:bg-orange-300'>
         <Providers>
           <InitializeUser />
