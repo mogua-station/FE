@@ -10,6 +10,12 @@ import LogoIcon from "@/assets/images/icons/mogua.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
 import useUserStore, { type User } from "@/store/auth/useUserStore";
 
+const EXCLUDED_USER_PATHS = [
+  "/user/edit_profile",
+  "/user/create_review",
+  "/user/edit_review",
+];
+
 function CreateButton() {
   const router = useRouter();
   return (
@@ -82,10 +88,9 @@ export default function UserHeader() {
 
   const isUserPage =
     pathname.startsWith("/user/") &&
-    pathname !== "/user/edit_profile" &&
-    pathname !== "/user/create_review" &&
-    pathname !== "/user/edit_review" &&
+    !EXCLUDED_USER_PATHS.includes(pathname) &&
     pathname.split("/").length === 3;
+
   const isEditProfile = pathname === "/user/edit_profile";
   const isCreateReview = pathname === "/user/create_review";
   const isEditReview = pathname === "/user/edit_review";
@@ -102,6 +107,15 @@ export default function UserHeader() {
     ? "border-b border-gray-900 tablet:border-none"
     : "";
 
+  function DesktopButtons({ user }: { user: User | null }) {
+    return (
+      <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
+        <CreateButton />
+        {user && <ProfileImage user={user} />}
+      </div>
+    );
+  }
+
   const renderRightButtons = () => {
     if (!mounted) return null;
 
@@ -111,10 +125,7 @@ export default function UserHeader() {
           <span className='mobile:block text-gray-200 tablet:hidden'>
             <BackButton />
           </span>
-          <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
-            <CreateButton />
-            {user && <ProfileImage user={user} />}
-          </div>
+          <DesktopButtons user={user} />
         </>
       );
     }
@@ -125,10 +136,7 @@ export default function UserHeader() {
           <span className='text-gray-200 desktop:hidden'>
             <BackButton />
           </span>
-          <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
-            <CreateButton />
-            {user && <ProfileImage user={user} />}
-          </div>
+          <DesktopButtons user={user} />
         </>
       );
     }
@@ -144,12 +152,7 @@ export default function UserHeader() {
           </button>
         );
       }
-      return (
-        <div className='flex gap-6 transition-all desktop:gap-9'>
-          <CreateButton />
-          {user && <ProfileImage user={user} />}
-        </div>
-      );
+      return <DesktopButtons user={user} />;
     }
 
     return null;
