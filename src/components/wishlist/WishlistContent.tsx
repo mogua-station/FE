@@ -8,8 +8,9 @@ import Card from "@/components/common/card/Card";
 import CardSkeleton from "@/components/common/card/CardSkeleton";
 import useIntersectionObserver from "@/hooks/useInterSectionObserve";
 import {
-  fetchUserWishlist,
+  // fetchUserWishlist,
   fetchLocalWishlist,
+  fetchUserWishlistType2,
 } from "@/lib/wishlist/wishlistApi";
 import useUserStore from "@/store/auth/useUserStore";
 import { type CardProps } from "@/types/card";
@@ -51,20 +52,21 @@ export default function WishlistContent() {
     ],
     queryFn: ({ pageParam }) => {
       if (user != null) {
-        const filterString = Object.entries(filter).reduce<
-          Record<string, string>
-        >((acc, [key, value]) => {
-          acc[key] = String(value);
-          return acc;
-        }, {});
+        // const filterString = Object.entries(filter).reduce<
+        //   Record<string, string>
+        // >((acc, [key, value]) => {
+        //   acc[key] = String(value);
+        //   return acc;
+        // }, {});
 
-        return fetchUserWishlist({
+        return fetchUserWishlistType2({
           pageParams: pageParam,
           userId: user.userId,
-          filter: new URLSearchParams(filterString).toString(),
+          filter: filter,
+          // filter: new URLSearchParams(filterString).toString(),
         });
       } else {
-        return fetchLocalWishlist({ pageParms: pageParam, filter: filter });
+        return fetchLocalWishlist({ pageParams: pageParam, filter: filter });
       }
     },
     initialPageParam: 0,

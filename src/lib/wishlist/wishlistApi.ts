@@ -17,7 +17,6 @@ export const fetchUserAllWishlist = async ({
     );
 
     if (!response.ok) {
-
       console.log(response);
       throw new Error(response.statusText);
     }
@@ -29,7 +28,93 @@ export const fetchUserAllWishlist = async ({
       page: pageParams,
       isNext: resData.additionalData.nextPage,
     };
+  } catch (error) {
+    throw error;
+  }
+};
 
+//사용자의 찜 목록을 가져오는 함수
+export const fetchUserWishlistType2 = async ({
+  pageParams = 0,
+  userId,
+  filter,
+}: {
+  pageParams: number;
+  userId: number;
+  filter: FilterProps;
+}) => {
+  //유저 정보가 있을 때
+  try {
+    const response = await fetch(
+      //찜만 100를 하지 않을 것으로 추정
+      `${process.env.NEXT_PUBLIC_BASE_URL}/wishlist/${userId}?page=${pageParams}&limit=100`,
+      {
+        credentials: "include",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    const responseData = await response.json();
+
+    //회원의 모든 찜한 목록을 가져온다
+    let filteredList = await responseData.data;
+
+    //아래에서 필터링을 구현
+    if (filter.meetupType != null) {
+      filteredList = filteredList.filter(
+        (item: CardProps) => item.meetingType === filter.meetupType,
+      );
+    }
+
+    if (filter.location != null) {
+      if (filter.location !== "ALL") {
+        filteredList = filteredList.filter(
+          (item: CardProps) => item.location === filter.location,
+        );
+      }
+    }
+
+    if (filter.orderBy != null) {
+      if (filter.orderBy === "latest") {
+        filteredList = filteredList.sort((a: CardProps, b: CardProps) => {
+          const aTime = new Date(a.recruitmentStartDate).getTime();
+          const bTime = new Date(b.recruitmentStartDate).getTime();
+
+          return bTime - aTime;
+        });
+      }
+
+      if (filter.orderBy === "deadline") {
+        filteredList = filteredList.sort((a: CardProps, b: CardProps) => {
+          const aTime = new Date(a.recruitmentEndDate).getTime();
+          const bTime = new Date(b.recruitmentEndDate).getTime();
+
+          return aTime - bTime;
+        });
+      }
+
+      if (filter.orderBy === "participant") {
+        filteredList = filteredList.sort((a: CardProps, b: CardProps) => {
+          const aLenght = a.participants.length;
+          const bLenght = b.participants.length;
+
+          return bLenght - aLenght;
+        });
+      }
+    }
+
+    const startIndex = pageParams * filter.limit;
+    const endIndex = startIndex + filter.limit;
+
+    return {
+      data: filteredList.slice(startIndex, endIndex),
+      page: pageParams,
+      isNext:
+        filteredList.length - (startIndex + 1) * filter.limit > 0 ? 1 : -1,
+    };
   } catch (error) {
     throw error;
   }
@@ -71,10 +156,10 @@ export const fetchUserWishlist = async ({
 };
 
 export const fetchLocalWishlist = async ({
-  pageParms = 0,
+  pageParams = 0,
   filter,
 }: {
-  pageParms: number;
+  pageParams: number;
   filter: FilterProps;
 }) => {
   try {
@@ -144,16 +229,14 @@ export const fetchLocalWishlist = async ({
       }
     }
 
-    const startIndex = pageParms * filter.limit;
+    const startIndex = pageParams * filter.limit;
     const endIndex = startIndex + filter.limit;
 
     return {
       data: filteredList.slice(startIndex, endIndex),
-      page: pageParms,
+      page: pageParams,
       isNext:
-        filteredList.length - (startIndex + 1) * filter.limit > 0
-          ? true
-          : false,
+        filteredList.length - (startIndex + 1) * filter.limit > 0 ? 1 : -1,
     };
   } catch (error) {
     throw error;
