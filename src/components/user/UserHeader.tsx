@@ -96,11 +96,9 @@ export default function UserHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, setUser } = useUserStore();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted, setMounted] = useState(false);
+  const [headerKey, setHeaderKey] = useState(0);
 
   const isUserPage =
     pathname.startsWith("/user/") &&
@@ -116,6 +114,17 @@ export default function UserHeader() {
   const currentUserId = isUserPage ? Number(pathname.split("/")[2]) : null;
   const isMyPage = currentUserId === user?.userId;
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const hasImageChanged = sessionStorage.getItem("profileImageChanged");
+    if (hasImageChanged) {
+      setHeaderKey((prev) => prev + 1);
+    }
+  }, [pathname]);
+
   // 프로필 이미지 변경 감지 및 업데이트
   useEffect(() => {
     const updateProfileImage = async () => {
@@ -128,6 +137,14 @@ export default function UserHeader() {
             ...user,
             profileImg: data.profileImg,
           });
+
+          const localUser = localStorage.getItem("user");
+          if (localUser) {
+            const parsedUser = JSON.parse(localUser);
+            parsedUser.profileImg = data.profileImg;
+            localStorage.setItem("user", JSON.stringify(parsedUser));
+          }
+
           sessionStorage.removeItem("profileImageChanged");
         } catch (error) {
           console.error("[프로필 이미지 URL 조회 실패]:", error);
@@ -136,7 +153,7 @@ export default function UserHeader() {
     };
 
     updateProfileImage();
-  }, [user, setUser]);
+  }, [user, setUser, headerKey]);
 
   const headerBgColor = isEditProfile
     ? "bg-gray-900 desktop:bg-gray-950"
