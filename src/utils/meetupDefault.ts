@@ -14,7 +14,7 @@ const getDefaultValues = (meetupData?: MeetProps): MeetupFormType => {
         meetingEndDate: new Date(meetupData.meetingEndDate),
         minParticipants: meetupData.minParticipants,
         maxParticipants: meetupData.maxParticipants,
-        isOnline: meetupData.online,
+        isOnline: meetupData.isOnline,
       }
     : {
         title: "",
