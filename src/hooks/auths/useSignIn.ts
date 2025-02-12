@@ -51,8 +51,9 @@ const useSignIn = () => {
         };
       }
 
+      setUser(responseData.data.user);
+
       if (options?.redirect !== false) {
-        setUser(responseData.data.user);
         await router.push("/");
       }
       return { success: true };
