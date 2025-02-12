@@ -47,7 +47,6 @@ export default function ShareMeetUpButton() {
           </p>
         </div>
       </div>
-
       <ArrowRight className='text-gray-400' />
     </button>
   );

@@ -9,6 +9,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 export default function MainContentList() {
   const { data, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useMeetupList();
+
   const loadMoreRef = useInfiniteScroll(
     fetchNextPage,
     hasNextPage,

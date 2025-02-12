@@ -129,6 +129,7 @@ export const fetchMeetupReview = async ({
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/reviews/list/${meetupId}?page=${pageParams}&limit=3`,
       {
+
         credentials: "include",
         next: { revalidate: 60 }, //캐싱 1분
       },
