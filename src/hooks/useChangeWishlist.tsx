@@ -49,16 +49,11 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], updatedWishlist);
       }
 
-      toast(
-        (props) => <JoinToast {...props} toastType='wishlistRemove' />,
-        JoinToastOption,
-      );
-
       //이전 상태를 onError에 context로 저장장
       return { prevWishlist };
     },
     onError: (_, __, context) => {
-      //에러가 났으면 다시 이전 데이터로 롤백백
+      //에러가 났으면 다시 이전 데이터로 롤백
       if (context?.prevWishlist) {
         const rollback = context.prevWishlist.data.map(
           (item: CardProps) => item.meetupId,
@@ -67,6 +62,16 @@ export default function useChangeWishlist() {
         setUserAllWishlist(rollback);
         queryClient.setQueryData(["userAllWishlist"], context.prevWishlist);
       }
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistFailed' />,
+        JoinToastOption,
+      );
+    },
+    onSuccess: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistRemove' />,
+        JoinToastOption,
+      );
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
@@ -96,11 +101,6 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], updatedWishlist);
       }
 
-      toast(
-        (props) => <JoinToast {...props} toastType='wishlistAdd' />,
-        JoinToastOption,
-      );
-
       return { prevWishlist };
     },
     onError: (_, __, context) => {
@@ -111,6 +111,16 @@ export default function useChangeWishlist() {
         setUserAllWishlist(rollback);
         queryClient.setQueryData(["userAllWishlist"], context.prevWishlist);
       }
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistFailed' />,
+        JoinToastOption,
+      );
+    },
+    onSuccess: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistAdd' />,
+        JoinToastOption,
+      );
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
