@@ -39,9 +39,7 @@ export const fetchJoinMeet = async (id: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}/join`,
       {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
-        },
+        credentials: "include",
       },
     );
 
@@ -74,9 +72,7 @@ export const fetchLeaveMeet = async (id: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}/leave`,
       {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
-        },
+        credentials: "include",
       },
     );
 
