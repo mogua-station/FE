@@ -4,10 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Dropdown from "../common/Dropdown";
 import BackButton from "./BackButton";
 import Edit from "@/assets/images/icons/edit.svg";
 import LogoIcon from "@/assets/images/icons/mogua.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
+import useSignOut from "@/hooks/auths/useSignOut";
 import { getUserProfile } from "@/lib/user/getUserProfile";
 import useUserStore, { type User } from "@/store/auth/useUserStore";
 
@@ -27,17 +29,30 @@ function CreateButton() {
 }
 
 function ProfileImage({ user }: { user: User }) {
+  const { handleSignOut } = useSignOut();
+
   return (
-    <Link href={`/user/${user.userId}`}>
-      <Image
-        src={user.profileImg ?? "/images/default_user_profile.png.png"}
-        alt='Profile'
-        className='size-6 cursor-pointer rounded-full'
-        width={24}
-        height={24}
-        sizes='(max-width: 640px) 24px, 32px'
-      />
-    </Link>
+    <div className='size-6'>
+      <Dropdown
+        content={[
+          {
+            label: "로그아웃",
+            value: "logout",
+            onClick: handleSignOut,
+          },
+        ]}
+        isHeader={true}
+      >
+        <Image
+          src={user.profileImg ?? "/images/default_user_profile.png.png"}
+          alt='Profile'
+          className='size-6 cursor-pointer rounded-full'
+          width={24}
+          height={24}
+          sizes='(max-width: 640px) 24px, 32px'
+        />
+      </Dropdown>
+    </div>
   );
 }
 
@@ -130,9 +145,15 @@ export default function UserHeader() {
     ? "border-b border-gray-900 tablet:border-none"
     : "";
 
-  function DesktopButtons({ user }: { user: User | null }) {
+  function HeaderButtons({
+    user,
+    className = "",
+  }: {
+    user: User | null;
+    className?: string;
+  }) {
     return (
-      <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
+      <div className={`flex gap-6 transition-all ${className}`}>
         <CreateButton />
         {user && <ProfileImage user={user} />}
       </div>
@@ -148,7 +169,7 @@ export default function UserHeader() {
           <span className='mobile:block text-gray-200 tablet:hidden'>
             <BackButton />
           </span>
-          <DesktopButtons user={user} />
+          <HeaderButtons user={user} className='hidden desktop:flex' />
         </>
       );
     }
@@ -159,7 +180,7 @@ export default function UserHeader() {
           <span className='text-gray-200 desktop:hidden'>
             <BackButton />
           </span>
-          <DesktopButtons user={user} />
+          <HeaderButtons user={user} className='hidden desktop:flex' />
         </>
       );
     }
@@ -175,7 +196,7 @@ export default function UserHeader() {
           </button>
         );
       }
-      return <DesktopButtons user={user} />;
+      return <HeaderButtons user={user} />;
     }
 
     return null;
