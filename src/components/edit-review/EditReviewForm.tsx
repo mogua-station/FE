@@ -83,10 +83,6 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
       changes.hasChanges = true;
     }
 
-    // TODO: 백엔드 응답에 이미지 URL 추가 후
-    // 1. 기존 이미지 렌더링 확인 필요 (이미지 없는 경우도 처리)
-    // 2. 이미지 수정/삭제/추가 기능 테스트 필요
-    // 3. 이미지 삭제 시 서버에 어떻게 알릴지 백엔드와 협의 필요
     // 이미지 변경 여부 확인
     if (image) {
       changes.image = image;
@@ -173,7 +169,7 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
           />
           <ReviewImageInput
             onImageSelect={handleImageSelect}
-            imageUrl={review?.imageUrl}
+            imageUrl={review?.thumbnail || null}
           />
         </div>
         <SolidButton
