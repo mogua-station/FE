@@ -8,6 +8,7 @@ import BackButton from "./BackButton";
 import Edit from "@/assets/images/icons/edit.svg";
 import LogoIcon from "@/assets/images/icons/mogua.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
+import { getUserProfile } from "@/lib/user/getUserProfile";
 import useUserStore, { type User } from "@/store/auth/useUserStore";
 
 const EXCLUDED_USER_PATHS = [
@@ -79,7 +80,7 @@ function NavigationLinks({ user }: { user: User | null }) {
 export default function UserHeader() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -99,6 +100,28 @@ export default function UserHeader() {
 
   const currentUserId = isUserPage ? Number(pathname.split("/")[2]) : null;
   const isMyPage = currentUserId === user?.userId;
+
+  // 프로필 이미지 변경 감지 및 업데이트
+  useEffect(() => {
+    const updateProfileImage = async () => {
+      const hasImageChanged = sessionStorage.getItem("profileImageChanged");
+
+      if (user && hasImageChanged) {
+        try {
+          const data = await getUserProfile(user.userId.toString());
+          setUser({
+            ...user,
+            profileImg: data.profileImg,
+          });
+          sessionStorage.removeItem("profileImageChanged");
+        } catch (error) {
+          console.error("[프로필 이미지 URL 조회 실패]:", error);
+        }
+      }
+    };
+
+    updateProfileImage();
+  }, [user, setUser]);
 
   const headerBgColor = isEditProfile
     ? "bg-gray-900 desktop:bg-gray-950"
