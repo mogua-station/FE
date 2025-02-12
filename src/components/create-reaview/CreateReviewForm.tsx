@@ -57,8 +57,7 @@ export default function CreateReviewForm({ meetupId }: { meetupId: string }) {
     if (data.image) {
       formData.append("image", data.image);
     } else {
-      const emptyBlob = new Blob([], { type: "application/octet-stream" });
-      formData.append("image", emptyBlob, "empty.txt");
+      formData.append("image", "");
     }
 
     await handleCreateReview(formData);
