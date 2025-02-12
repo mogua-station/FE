@@ -129,10 +129,8 @@ export const fetchMeetupReview = async ({
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/reviews/list/${meetupId}?page=${pageParams}&limit=3`,
       {
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjY4LCJpYXQiOjE3MzkxOTQyNzQsImV4cCI6MTczOTE5Nzg3NCwianRpIjoiMzlmZGY2ZWMtY2FjZS00N2E1LWIwYzItNDUzYWU3OGRmYWZkIn0.Ys6IR0m79oujX_E2bvWclUsisEnUAEWgbxgHkfTFYIjtusB6KqSQZYKyv8wCfdQsBbRz73rjpK69zzs4UP7j3A`,
-        },
-        // credentials: "include",
+
+        credentials: "include",
         next: { revalidate: 60 }, //캐싱 1분
       },
     );

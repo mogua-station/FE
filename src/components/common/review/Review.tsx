@@ -41,7 +41,8 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
     handleDeleteClick(reviewInfo.reviewId);
   };
 
- const handleClickDetail = useCallback(
+
+const handleClickDetail = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       setIsOpen((prev) => !prev);
