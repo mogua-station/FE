@@ -59,6 +59,7 @@ export default async function MeetDetail({ meetInfo }: MeetInfo) {
     meetupId: meetInfo.meetupId,
     hostId: meetInfo.hostId,
     participants: meetInfo.participants,
+    maxParticipants: meetInfo.maxParticipants,
     minParticipants: meetInfo.minParticipants,
     meetupStatus: meetInfo.meetupStatus,
   };

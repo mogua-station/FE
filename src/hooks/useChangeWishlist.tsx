@@ -63,7 +63,7 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], context.prevWishlist);
       }
       toast(
-        (props) => <JoinToast {...props} toastType='wishlistFailed' />,
+        (props) => <JoinToast {...props} toastType='failed' />,
         JoinToastOption,
       );
     },
@@ -112,7 +112,7 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], context.prevWishlist);
       }
       toast(
-        (props) => <JoinToast {...props} toastType='wishlistFailed' />,
+        (props) => <JoinToast {...props} toastType='failed' />,
         JoinToastOption,
       );
     },
