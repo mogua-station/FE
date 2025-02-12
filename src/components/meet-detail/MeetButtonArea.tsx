@@ -55,6 +55,22 @@ export default function MeetButtonArea({
       joinMutate.mutate(clientInfo.meetupId);
     }
   }, [user, clientInfo.meetupId]);
+
+  const handleClickLeave = useCallback(() => {
+    if (user === null) {
+      router.push("/sign-in");
+    } else {
+      leaveMutate.mutate(clientInfo.meetupId);
+    }
+  }, [user, clientInfo.meetupId]);
+
+  const handleClickDeleteMeetup = useCallback(() => {
+    toast(
+      (props) => <JoinToast {...props} toastType='deleteMeetup' />,
+      JoinToastOption,
+    );
+  }, []);
+
   const joinButton = useMemo(() => {
     if (clientInfo.meetupStatus === "COMPLETED") {
       return (
@@ -95,7 +111,7 @@ export default function MeetButtonArea({
         );
       }
       return (
-        <SolidButton mode='special' onClick={() => {}}>
+        <SolidButton mode='special' onClick={handleClickDeleteMeetup}>
           모임 취소하기
         </SolidButton>
       );
@@ -104,11 +120,9 @@ export default function MeetButtonArea({
     const isJoined = clientInfo.participants.some(
       (item) => item.userId === user.userId,
     );
+
     return isJoined ? (
-      <SolidButton
-        mode='special'
-        onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-      >
+      <SolidButton mode='special' onClick={handleClickLeave}>
         신청 취소하기
       </SolidButton>
     ) : (

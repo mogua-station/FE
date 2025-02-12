@@ -12,7 +12,8 @@ interface JoinToastProps extends ToastContentProps {
     | "leave"
     | "wishlistError"
     | "wishlistAdd"
-    | "wishlistRemove";
+    | "wishlistRemove"
+    | "deleteMeetup";
 }
 
 export default function JoinToast({ closeToast, toastType }: JoinToastProps) {
@@ -38,7 +39,7 @@ export default function JoinToast({ closeToast, toastType }: JoinToastProps) {
     <div className='border-1 flex h-[66px] w-full items-center justify-between rounded-[20px] border-solid border-gray-700 bg-gray-800-80 px-5 py-3.5 desktop:max-w-[584px]'>
       <p className='relative pl-9 text-body-2-normal font-semibold text-gray-200'>
         <JoinCheck
-          className={`${toastType === "wishlistError" ? "text-[#F56973]" : "text-[#13C299]"} absolute left-0 top-1/2 -translate-y-1/2`}
+          className={`${toastType === "wishlistError" || toastType === "deleteMeetup" ? "text-[#F56973]" : "text-[#13C299]"} absolute left-0 top-1/2 -translate-y-1/2`}
         />
         {toastType === "join" && "모임 신청이 완료되었어요"}
         {toastType === "copy" && "모임 링크를 복사했어요"}
@@ -46,6 +47,7 @@ export default function JoinToast({ closeToast, toastType }: JoinToastProps) {
         {toastType === "wishlistError" && "모집중인 모임만 가능합니다"}
         {toastType === "wishlistAdd" && "찜하기가 완료되었습니다"}
         {toastType === "wishlistRemove" && "찜하기가 취소되었습니다"}
+        {toastType === "deleteMeetup" && "모임삭제 기능이 추가될 예정이에요"}
       </p>
       {toastType === "join" && (
         <button
