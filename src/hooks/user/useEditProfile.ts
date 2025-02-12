@@ -31,18 +31,25 @@ export function useEditProfile() {
     if (!(request instanceof Blob)) return;
 
     const requestData = JSON.parse(await request.text());
+    const hasImageFile = formData.get("image") instanceof File;
 
     updateProfileMutation.mutate(
       { formData },
       {
         onSuccess: () => {
-          if (requestData) {
+          // 닉네임만 스토어에 업데이트
+          if (requestData?.nickname) {
             setUser({
               ...user,
-              name: requestData.nickname || user.name,
-              profileImg: requestData.profileImg || user.profileImg,
+              name: requestData.nickname,
             });
           }
+
+          // 이미지가 변경된 경우 sessionStorage에 표시
+          if (hasImageFile) {
+            sessionStorage.setItem("profileImageChanged", "true");
+          }
+
           modal.open(
             ({ close }) =>
               createElement(EditProfileSuccessModal, {

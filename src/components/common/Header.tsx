@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Dropdown from "./Dropdown";
 import LogoIcon from "@/assets/images/icons/mogua.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
+import useSignOut from "@/hooks/auths/useSignOut";
 import useUserStore from "@/store/auth/useUserStore";
 
 const AUTH_PAGE_PATHS = [
@@ -34,6 +36,8 @@ export default function Header() {
   const landingBgColor = pathname === "/welcome" ? "bg-[#0E0E10]" : "";
 
   useEffect(() => setIsClient(true), []);
+
+  const { handleSignOut } = useSignOut();
 
   if (pathname.startsWith("/user/")) {
     return null;
@@ -98,18 +102,30 @@ export default function Header() {
               </button>
 
               {isClient && user !== null && (
-                <Link href={`/user/${user.userId}`}>
-                  <Image
-                    src={
-                      user.profileImg ?? "/images/default_user_profile.png.png"
-                    }
-                    alt='Profile'
-                    className='size-6 cursor-pointer rounded-full'
-                    width={24}
-                    height={24}
-                    sizes='(max-width: 640px) 24px, 32px'
-                  />
-                </Link>
+                <div className='size-6'>
+                  <Dropdown
+                    content={[
+                      {
+                        label: "로그아웃",
+                        value: "logout",
+                        onClick: handleSignOut,
+                      },
+                    ]}
+                    isHeader={true}
+                  >
+                    <Image
+                      src={
+                        user.profileImg ??
+                        "/images/default_user_profile.png.png"
+                      }
+                      alt='Profile'
+                      className='size-6 cursor-pointer rounded-full'
+                      width={24}
+                      height={24}
+                      sizes='(max-width: 640px) 24px, 32px'
+                    />
+                  </Dropdown>
+                </div>
               )}
             </div>
           )}

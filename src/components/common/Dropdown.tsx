@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+
 import Popover from "./Popover";
 import { type DropdownProps, type Position } from "@/types/dropdown.type";
 
@@ -12,6 +13,7 @@ export default function Dropdown({
   defaultSelected,
   children,
   isReview,
+  isHeader,
 }: DropdownProps) {
   const [selected, setSelected] = useState<string | null>(
     defaultSelected || null,
@@ -63,6 +65,8 @@ export default function Dropdown({
     }
   };
 
+  const headerListStyle = isHeader ? "text-gray-200" : "text-gray-500";
+
   return (
     <Popover
       gapX={gapX}
@@ -79,7 +83,7 @@ export default function Dropdown({
                 !isReview
                   ? selected === item.label || selected === item.value
                     ? "text-gray-200"
-                    : "text-gray-500"
+                    : headerListStyle
                   : "text-gray-100"
               } mx-auto w-max px-[0.875rem] py-3 text-center font-semibold`}
               onClick={() =>

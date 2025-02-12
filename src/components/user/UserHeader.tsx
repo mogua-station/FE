@@ -4,11 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import Dropdown from "../common/Dropdown";
 import BackButton from "./BackButton";
 import Edit from "@/assets/images/icons/edit.svg";
 import LogoIcon from "@/assets/images/icons/mogua.svg";
 import PlusIcon from "@/assets/images/icons/plus-thin.svg";
+import useSignOut from "@/hooks/auths/useSignOut";
+import { getUserProfile } from "@/lib/user/getUserProfile";
 import useUserStore, { type User } from "@/store/auth/useUserStore";
+
+const EXCLUDED_USER_PATHS = [
+  "/user/edit_profile",
+  "/user/create_review",
+  "/user/edit_review",
+];
 
 function CreateButton() {
   const router = useRouter();
@@ -20,17 +29,30 @@ function CreateButton() {
 }
 
 function ProfileImage({ user }: { user: User }) {
+  const { handleSignOut } = useSignOut();
+
   return (
-    <Link href={`/user/${user.userId}`}>
-      <Image
-        src={user.profileImg ?? "/images/default_user_profile.png.png"}
-        alt='Profile'
-        className='size-6 cursor-pointer rounded-full'
-        width={24}
-        height={24}
-        sizes='(max-width: 640px) 24px, 32px'
-      />
-    </Link>
+    <div className='size-6'>
+      <Dropdown
+        content={[
+          {
+            label: "로그아웃",
+            value: "logout",
+            onClick: handleSignOut,
+          },
+        ]}
+        isHeader={true}
+      >
+        <Image
+          src={user.profileImg ?? "/images/default_user_profile.png.png"}
+          alt='Profile'
+          className='size-6 cursor-pointer rounded-full'
+          width={24}
+          height={24}
+          sizes='(max-width: 640px) 24px, 32px'
+        />
+      </Dropdown>
+    </div>
   );
 }
 
@@ -47,7 +69,7 @@ function NavigationLinks({ user }: { user: User | null }) {
     { href: "/", label: "모임찾기" },
     { href: "/wishlist", label: "북마크" },
     {
-      href: `${user != null ? `/user/${user.userId}` : "/sign-in"}`,
+      href: user ? `/user/${user.userId}` : "/sign-in",
       label: "마이페이지",
     },
   ];
@@ -73,17 +95,16 @@ function NavigationLinks({ user }: { user: User | null }) {
 export default function UserHeader() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user } = useUserStore();
-  const [isClient, setIsClient] = useState(false);
+  const { user, setUser } = useUserStore();
 
-  useEffect(() => setIsClient(true), []);
+  const [mounted, setMounted] = useState(false);
+  const [headerKey, setHeaderKey] = useState(0);
 
   const isUserPage =
     pathname.startsWith("/user/") &&
-    pathname !== "/user/edit_profile" &&
-    pathname !== "/user/create_review" &&
-    pathname !== "/user/edit_review" &&
+    !EXCLUDED_USER_PATHS.includes(pathname) &&
     pathname.split("/").length === 3;
+
   const isEditProfile = pathname === "/user/edit_profile";
   const isCreateReview = pathname === "/user/create_review";
   const isEditReview = pathname === "/user/edit_review";
@@ -93,6 +114,47 @@ export default function UserHeader() {
   const currentUserId = isUserPage ? Number(pathname.split("/")[2]) : null;
   const isMyPage = currentUserId === user?.userId;
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const hasImageChanged = sessionStorage.getItem("profileImageChanged");
+    if (hasImageChanged) {
+      setHeaderKey((prev) => prev + 1);
+    }
+  }, [pathname]);
+
+  // 프로필 이미지 변경 감지 및 업데이트
+  useEffect(() => {
+    const updateProfileImage = async () => {
+      const hasImageChanged = sessionStorage.getItem("profileImageChanged");
+
+      if (user && hasImageChanged) {
+        try {
+          const data = await getUserProfile(user.userId.toString());
+          setUser({
+            ...user,
+            profileImg: data.profileImg,
+          });
+
+          const localUser = localStorage.getItem("user");
+          if (localUser) {
+            const parsedUser = JSON.parse(localUser);
+            parsedUser.profileImg = data.profileImg;
+            localStorage.setItem("user", JSON.stringify(parsedUser));
+          }
+
+          sessionStorage.removeItem("profileImageChanged");
+        } catch (error) {
+          console.error("[프로필 이미지 URL 조회 실패]:", error);
+        }
+      }
+    };
+
+    updateProfileImage();
+  }, [user, setUser, headerKey]);
+
   const headerBgColor = isEditProfile
     ? "bg-gray-900 desktop:bg-gray-950"
     : "bg-[#0E0E10]";
@@ -100,39 +162,46 @@ export default function UserHeader() {
     ? "border-b border-gray-900 tablet:border-none"
     : "";
 
-  // 버튼 렌더링 로직
+  function HeaderButtons({
+    user,
+    className = "",
+  }: {
+    user: User | null;
+    className?: string;
+  }) {
+    return (
+      <div className={`flex gap-6 transition-all ${className}`}>
+        <CreateButton />
+        {user && <ProfileImage user={user} />}
+      </div>
+    );
+  }
+
   const renderRightButtons = () => {
-    // 리뷰 작성 페이지
+    if (!mounted) return null;
+
     if (isReviewPage) {
       return (
         <>
           <span className='mobile:block text-gray-200 tablet:hidden'>
             <BackButton />
           </span>
-          <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
-            <CreateButton />
-            {isClient && user !== null && <ProfileImage user={user} />}
-          </div>
+          <HeaderButtons user={user} className='hidden desktop:flex' />
         </>
       );
     }
 
-    // 프로필 수정 페이지
     if (isEditProfile) {
       return (
         <>
           <span className='text-gray-200 desktop:hidden'>
             <BackButton />
           </span>
-          <div className='hidden gap-6 transition-all desktop:flex desktop:gap-9'>
-            <CreateButton />
-            {isClient && user !== null && <ProfileImage user={user} />}
-          </div>
+          <HeaderButtons user={user} className='hidden desktop:flex' />
         </>
       );
     }
 
-    // 유저 프로필 페이지
     if (isUserPage) {
       if (isMyPage) {
         return (
@@ -144,14 +213,10 @@ export default function UserHeader() {
           </button>
         );
       }
-      // 다른 유저의 프로필 페이지
-      return (
-        <div className='flex gap-6 transition-all desktop:gap-9'>
-          <CreateButton />
-          {isClient && user !== null && <ProfileImage user={user} />}
-        </div>
-      );
+      return <HeaderButtons user={user} />;
     }
+
+    return null;
   };
 
   return (
@@ -172,7 +237,7 @@ export default function UserHeader() {
               <MoguaLogo />
             )}
           </h1>
-          <NavigationLinks user={user} />
+          {mounted && <NavigationLinks user={user} />}
         </div>
 
         <div>

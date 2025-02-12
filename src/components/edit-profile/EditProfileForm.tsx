@@ -28,13 +28,12 @@ export default function EditProfileForm() {
 
   const methods = useForm<FormValues>({
     mode: "onChange",
-    values: userInfo
-      ? {
-          nickname: userInfo.nickname || "",
-          bio: userInfo.bio || "",
-          userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
-        }
-      : undefined,
+    // 빈 값으로 초기화하여 controlled 상태 유지
+    defaultValues: {
+      nickname: "",
+      bio: "",
+      userTagList: [],
+    },
   });
 
   const {
@@ -57,14 +56,15 @@ export default function EditProfileForm() {
 
   useEffect(() => {
     if (userInfo) {
-      setValue("nickname", userInfo.nickname);
-      setValue("bio", userInfo.bio);
-      setValue(
-        "userTagList",
-        userInfo.userTagList.map((tag) => tag.tag),
-      );
+      // reset을 사용해 한번에 업데이트하지만,
+      // userInfo가 있을 때만 값을 설정하는 원래 의도는 유지
+      methods.reset({
+        nickname: userInfo.nickname || "",
+        bio: userInfo.bio || "",
+        userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
+      });
     }
-  }, [userInfo, setValue]);
+  }, [userInfo, methods]);
 
   if (isLoading) {
     return (

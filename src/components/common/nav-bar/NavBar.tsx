@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import NavMenuItem from "./NavMenuItem";
 import BookmarkFillIcon from "@/assets/images/icons/bookmark_fill.svg";
 import PlanetIcon from "@/assets/images/icons/planet.svg";
@@ -9,12 +10,17 @@ import useUserStore from "@/store/auth/useUserStore";
 
 export default function NavBar() {
   const { user } = useUserStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const NAV_ITEMS = [
     { href: "/", icon: <PlanetIcon />, label: "모임 찾기" },
     { href: "/wishlist", icon: <BookmarkFillIcon />, label: "북마크" },
     {
-      href: user ? `/user/${user.userId}` : "/sign-in",
+      href: mounted ? (user ? `/user/${user.userId}` : "/sign-in") : "/sign-in",
       icon: <UserIcon />,
       label: "마이 페이지",
     },

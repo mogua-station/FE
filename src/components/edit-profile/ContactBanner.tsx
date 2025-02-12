@@ -12,13 +12,22 @@ export default function ContactBanner() {
       onClick={() => alert(SYSTEM_ALERTS.IN_PROGRESS)}
     >
       <div className='flex items-center gap-2.5'>
-        <InfoIcon className='size-6 text-gray-400' aria-hidden='true' />
-        <p className='max-w-[160px] text-start text-label-reading font-regular text-gray-300 tablet:max-w-full'>
-          운영자 문의 후 과외 선생님으로 활동해보세요
+        <InfoIcon
+          width={24}
+          height={24}
+          className='min-w-6 text-gray-400'
+          aria-hidden='true'
+        />
+        <p className='min-w-40 text-start text-label-reading font-regular text-gray-300 tablet:whitespace-nowrap'>
+          운영자 문의 후 과외 선생님으로
+          <br className='tablet:hidden' />
+          활동해보세요
         </p>
       </div>
       <ArrowIcon
-        className='size-6 -rotate-90 text-gray-300'
+        width={24}
+        height={24}
+        className='min-w-6 -rotate-90 text-gray-300'
         aria-hidden='true'
       />
     </button>

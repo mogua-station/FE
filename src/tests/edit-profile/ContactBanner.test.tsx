@@ -10,8 +10,8 @@ describe("ContactBanner", () => {
   });
 
   it("텍스트가 올바르게 표시된다", () => {
-    const text = "운영자 문의 후 과외 선생님으로 활동해보세요";
-    expect(screen.getByText(text)).toBeInTheDocument();
+    const paragraph = screen.getByText(/운영자 문의 후 과외 선생님으로/);
+    expect(paragraph).toBeInTheDocument();
   });
 
   it("배너 클릭 시 준비 중 알림이 표시된다", () => {
