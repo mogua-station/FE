@@ -74,13 +74,13 @@ export default function InitializeUser() {
       .then(() => {
         //모두 추가하고나서는 다시 refetch
         refetch();
+
+        //왼료되었으면 로컬스토리지 초기화
+        localStorage.setItem("wishlist", JSON.stringify([]));
       })
       .catch((error) => {
         throw error;
       });
-
-    //왼료되었으면 로컬스토리지 초기화
-    localStorage.setItem("wishlist", JSON.stringify([]));
   }, [userInfo]);
 
   return null;
