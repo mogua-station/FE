@@ -104,6 +104,8 @@ const mapWrittenReviewToReviewInfo = (
     meetingEndDate: new Date(review.meetingEndDate),
     isMyReview: true,
     eventId: review.meetupId,
+    reviewId: review.reviewId,
+    editable: review.editabel,
   };
 };
 

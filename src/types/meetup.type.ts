@@ -85,7 +85,7 @@ export interface MeetupListResponseType {
 export interface MeetupFormType {
   title: string;
   meetingType: MeetupType;
-  location: LocationType | null | "";
+  location: LocationType | "" | "UNDEFINED";
   content: string;
   recruitmentStartDate: Date;
   recruitmentEndDate: Date | null;

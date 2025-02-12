@@ -52,7 +52,7 @@ export default function JoinToast({ closeToast, toastType }: JoinToastProps) {
       {toastType === "join" && (
         <button
           className='rounded-[20px] bg-gray-600 px-3 py-2.5 text-label-normal font-medium text-gray-200'
-          onClick={handleClickUser}
+          onClick={() => handleClickUser()}
           aria-label={`${user?.userId} 페이지 이동 버튼`}
         >
           내역확인

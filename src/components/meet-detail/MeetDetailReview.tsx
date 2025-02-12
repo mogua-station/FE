@@ -41,11 +41,13 @@ export default function MeetDetailReview({
 
   return (
     <div className='flex flex-col gap-2'>
-      <div className='flex flex-col'>
+      <div className='flex min-h-[318px] flex-col'>
         <h3 className='text-title mb-4'>
           리뷰 <span className='text-title text-blue-300'>{reviewCount}</span>
         </h3>
-        <div className='flex flex-col gap-6'>
+        <div
+          className={`flex flex-1 flex-col gap-6 ${isFetching ? "justify-center" : ""}`}
+        >
           {isError && (
             <div className='mt-[60px] flex flex-col items-center gap-4'>
               <EmptyImage />
@@ -68,9 +70,9 @@ export default function MeetDetailReview({
                 </p>
               </div>
             ))}
+          {isFetching && <p className='text-center text-white'>로딩중...</p>}
         </div>
       </div>
-      {isFetching && <p className='text-center text-white'>로딩중...</p>}
       {hasNextPage && (
         <SolidButton
           mode='special'

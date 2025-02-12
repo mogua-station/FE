@@ -88,7 +88,9 @@ export const MeetingList = ({
           key={`review-${item.userid}-${index}`}
           ref={isLastItem ? ref : undefined}
         >
-          <Review reviewInfo={item} />
+          <Review
+            reviewInfo={{ ...item, isMyWritten: isMe && item.editable }}
+          />
         </li>
       );
     }

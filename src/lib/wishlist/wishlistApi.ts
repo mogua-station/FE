@@ -17,6 +17,7 @@ export const fetchUserAllWishlist = async ({
     );
 
     if (!response.ok) {
+
       console.log(response);
       throw new Error(response.statusText);
     }
@@ -28,6 +29,7 @@ export const fetchUserAllWishlist = async ({
       page: pageParams,
       isNext: resData.additionalData.nextPage,
     };
+
   } catch (error) {
     throw error;
   }

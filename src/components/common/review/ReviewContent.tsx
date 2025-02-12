@@ -1,25 +1,15 @@
 import Link from "next/link";
-import { type ContentProps, type RatingStyle } from "@/types/review";
+import { type ContentProps } from "@/types/review";
 
 export default function Content({ reviewContent, isOpen }: ContentProps) {
-  const reviewTextStyle: RatingStyle = {
-    0: "text-purple-200",
-    1: "text-blue-200",
-    2: "text-orange-200",
-  };
-
-  const ratingArr = ["그냥그래요", "괜찮아요", "추천해요"];
+  const contentStyle = reviewContent.isMyWritten
+    ? ""
+    : isOpen
+      ? ""
+      : "comment-overflow comment-overflow-webkit";
 
   return (
     <div className='w-full'>
-      <div className='flex'>
-        <span
-          className={`inline-block px-2 py-[3px] text-caption-normal ${reviewTextStyle[reviewContent.rating]} rounded-[20px] bg-gray-700`}
-        >
-          {ratingArr[reviewContent.rating]}
-        </span>
-      </div>
-
       {reviewContent.isMyReview && (
         <div className='mt-2 flex'>
           <span className='caption-stroke relative inline-block pr-2 text-label-reading font-regular text-gray-400'>
@@ -32,7 +22,7 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
       )}
 
       <p
-        className={`body-2-reading mt-4 break-keep text-gray-200 ${isOpen ? "" : "comment-overflow comment-overflow-webkit"}`}
+        className={`body-2-reading mt-4 whitespace-pre-line break-keep text-gray-200 ${contentStyle}`}
       >
         {reviewContent.review}
       </p>

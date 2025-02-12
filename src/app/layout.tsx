@@ -15,6 +15,10 @@ const ClearImageOnPageLeave = dynamic(
   },
 );
 
+const BackgroundWrapper = dynamic(
+  () => import("@/components/common/layout/BackgroundWrapper"),
+);
+
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
   display: "swap",
@@ -55,26 +59,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko-KR' className={pretendard.className}>
-      <body className='flex min-h-[100dvh] flex-col bg-gray-950 scrollbar:w-1 scrollbar:bg-transparent scrollbar-thumb:rounded-full scrollbar-thumb:bg-orange-300'>
+      <body className='flex min-h-[100dvh] flex-col overflow-x-hidden bg-gray-950 scrollbar:w-1 scrollbar:bg-transparent scrollbar-thumb:rounded-full scrollbar-thumb:bg-orange-300'>
         <Providers>
           <InitializeUser />
           <ClearImageOnPageLeave />
           <HeaderWrapper />
-          <main className='relative flex flex-1 flex-col'>{children}</main>
+          <main className='relative flex flex-grow flex-col'>{children}</main>
           <NavBarWrapper />
+          <BackgroundWrapper />
         </Providers>
-
-        {/* 배경 비디오 임시설정 */}
-        <video
-          className='fixed inset-0 -z-10 size-full object-cover'
-          src='/videos/background.mp4'
-          loop
-          autoPlay
-          muted
-          preload='auto'
-          playsInline
-        />
-
         <ToastContainer
           containerId={"joinArea"}
           autoClose={2000}
