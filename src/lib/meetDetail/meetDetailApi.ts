@@ -1,13 +1,12 @@
 import { type ReviewInfo, type MeetupReviewProps } from "@/types/review";
+// import { getAccessToken } from "@/utils/cookie";
 
 export const fetchHostData = async (hostId: number) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/user/profile/${hostId}`,
       {
-        headers: {
-          Authorization: `Bearer ${document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1")}`,
-        },
+        next: { revalidate: 60 * 60 }, //캐싱 한시간
       },
     );
 
@@ -108,7 +107,7 @@ export const fetchMeetupData = async (id: number) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`,
       {
-        cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
+        next: { revalidate: 60 }, //캐싱 1분
       },
     );
 
@@ -118,7 +117,6 @@ export const fetchMeetupData = async (id: number) => {
 
     return response.json();
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
@@ -129,9 +127,13 @@ export const fetchMeetupReview = async ({
 }: MeetupReviewProps) => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${meetupId}/reviews?page=${pageParams}&limit=3`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/reviews/list/${meetupId}?page=${pageParams}&limit=3`,
       {
-        cache: "no-store", //매 요청마다 새로운 데이터를 가져온다.
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjY4LCJpYXQiOjE3MzkxOTQyNzQsImV4cCI6MTczOTE5Nzg3NCwianRpIjoiMzlmZGY2ZWMtY2FjZS00N2E1LWIwYzItNDUzYWU3OGRmYWZkIn0.Ys6IR0m79oujX_E2bvWclUsisEnUAEWgbxgHkfTFYIjtusB6KqSQZYKyv8wCfdQsBbRz73rjpK69zzs4UP7j3A`,
+        },
+        // credentials: "include",
+        next: { revalidate: 60 }, //캐싱 1분
       },
     );
 
@@ -154,7 +156,6 @@ export const fetchMeetupReview = async ({
       allDataLenght: reviewArr.length,
     };
   } catch (error) {
-    console.error(error);
     throw error;
   }
 };
