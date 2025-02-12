@@ -11,12 +11,15 @@ const CommonImageInput = ({ label }: ImageUploadProps) => {
   const { previewUrl, handleImageUpload, handleImageDelete } = useUploadImage();
 
   const handleButtonClick = async () => {
-    if (previewUrl) {
-      // 이미지가 있는 경우 이미지 삭제
-      await handleImageDelete();
-    } else {
-      // 이미지가 없는 경우 파일 선택 창 열기
+    if (!previewUrl) {
       fileInputRef.current?.click();
+    }
+  };
+
+  const handleDeleteButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (previewUrl) {
+      handleImageDelete();
     }
   };
 
@@ -44,7 +47,10 @@ const CommonImageInput = ({ label }: ImageUploadProps) => {
               className='h-[120px] w-[120px] rounded-[12px] object-cover group-hover:brightness-50'
             />
             {/* hover 시에만 보이도록 설정 */}
-            <div className='absolute left-12 top-12 z-10 hidden h-[24px] w-[24px] items-center justify-center rounded-[7px] bg-[#28292E] p-1 text-center text-label-normal font-semibold text-[#C4C4C4] group-hover:block'>
+            <div
+              className='absolute left-12 top-12 z-10 hidden h-[24px] w-[24px] items-center justify-center rounded-[7px] bg-[#28292E] p-1 text-center text-label-normal font-semibold text-[#C4C4C4] group-hover:block'
+              onClick={handleDeleteButtonClick}
+            >
               X
             </div>
           </div>
