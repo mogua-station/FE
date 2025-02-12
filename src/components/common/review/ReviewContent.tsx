@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { type ContentProps } from "@/types/review";
 
@@ -21,11 +22,27 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
         </div>
       )}
 
-      <p
-        className={`body-2-reading mt-4 whitespace-pre-line break-keep text-gray-200 ${contentStyle}`}
-      >
-        {reviewContent.review}
-      </p>
+      <div>
+        <p
+          className={`body-2-reading mt-4 whitespace-pre-line break-keep text-gray-200 ${contentStyle}`}
+        >
+          {reviewContent.review}
+        </p>
+        {reviewContent.thumbnail &&
+          typeof reviewContent.thumbnail === "string" && (
+            <div className='mt-4 flex justify-end'>
+              <Image
+                className='size-20 rounded-lg object-cover'
+                src={reviewContent.thumbnail}
+                width={80}
+                height={80}
+                alt='리뷰 이미지'
+                priority
+                loading='eager'
+              />
+            </div>
+          )}
+      </div>
       <div className='mt-4 flex justify-end'>
         <div className='flex items-center'>
           <Link

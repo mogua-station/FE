@@ -101,6 +101,7 @@ export const mapWrittenReviewToReviewInfo = (
     eventId: review.meetupId,
     reviewId: review.reviewId,
     editable: review.editabel,
+    thumbnail: review.thumbnail,
   };
 };
 

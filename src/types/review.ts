@@ -13,6 +13,7 @@ export interface ReviewInfo {
   eventType?: string;
   reviewId: number;
   editable?: boolean;
+  thumbnail?: string | null;
 }
 
 export interface ReviewInfoProps {
