@@ -137,7 +137,7 @@ export default function WishlistContent() {
                   meetingStartDate: new Date(meet.meetingStartDate),
                   meetingEndDate: new Date(meet.meetingEndDate),
                   thumbnail: meet.thumbnail,
-                  online: meet.online,
+                  isOnline: meet.isOnline,
                   participants: meet.participants,
                 }}
               />
