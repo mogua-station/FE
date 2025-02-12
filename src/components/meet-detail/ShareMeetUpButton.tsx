@@ -18,7 +18,10 @@ export default function ShareMeetUpButton() {
   const handleClickShare = () => {
     copyToClipBoard(window.location.href);
 
-    toast((props) => <JoinToast {...props} type='copy' />, JoinToastOption);
+    toast(
+      (props) => <JoinToast {...props} toastType='copy' />,
+      JoinToastOption,
+    );
   };
 
   return (

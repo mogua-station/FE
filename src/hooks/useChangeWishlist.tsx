@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import JoinToast from "@/components/toast/JoinToast";
 import {
   deleteUserWishList,
   addUserWishlist,
@@ -15,17 +16,15 @@ interface WishlistProps {
 
 export default function useChangeWishlist() {
   const queryClient = useQueryClient();
-  // const { deleteMutation, addMutation } = useSetWishlist();
   const { userAllWishlist, setUserAllWishlist } = useUserWishlist();
   const router = useRouter();
 
-  const [myWishlist, setMyWishlist] = useState<number[]>([]);
-
-  useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-
-    if (wishlist.length > 0) setMyWishlist(wishlist);
-  }, []);
+  const JoinToastOption = {
+    containerId: "joinArea",
+    closeButton: false,
+    className: "join-toast",
+    hideProgressBar: true,
+  };
 
   const deleteMutation = useMutation({
     mutationFn: ({ meetupId }: WishlistProps) => deleteUserWishList(meetupId),
@@ -50,6 +49,11 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], updatedWishlist);
       }
 
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistRemove' />,
+        JoinToastOption,
+      );
+
       //이전 상태를 onError에 context로 저장장
       return { prevWishlist };
     },
@@ -66,8 +70,12 @@ export default function useChangeWishlist() {
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
-      queryClient.refetchQueries({ queryKey: ["userAllWishlist"] });
-      queryClient.refetchQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("userAllWishlist"),
+      });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("wishlist"),
+      });
     },
   });
 
@@ -88,6 +96,11 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], updatedWishlist);
       }
 
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistAdd' />,
+        JoinToastOption,
+      );
+
       return { prevWishlist };
     },
     onError: (_, __, context) => {
@@ -101,12 +114,16 @@ export default function useChangeWishlist() {
     },
     onSettled: () => {
       //API 성공 여부에 상관없이 실행하는 콜백
-      queryClient.refetchQueries({ queryKey: ["userAllWishlist"] });
-      queryClient.refetchQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("userAllWishlist"),
+      });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes("wishlist"),
+      });
     },
   });
 
-  //로그인한 사용자의 찜하기 기능능
+  //로그인한 사용자의 찜하기 기능
   const loggedInWishlist = (
     meetupId: number,
     meetupStatus: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START",
@@ -123,7 +140,10 @@ export default function useChangeWishlist() {
         addMutation.mutate({ meetupId: meetupId });
       }
     } else {
-      alert("모집중인 모임만 가능합니다");
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistError' />,
+        JoinToastOption,
+      );
     }
   };
 
@@ -136,12 +156,17 @@ export default function useChangeWishlist() {
     ) => void,
   ) => {
     if (meetupStatus === "RECRUITING") {
+      const myWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+
       //이미 추가되었는지 확인
       if (!myWishlist.includes(meetupId)) {
         //새로운 모임을 로컬 스토리지에 추가
         const newWishlist = [...myWishlist, meetupId];
-
         localStorage.setItem("wishlist", JSON.stringify(newWishlist));
+        toast(
+          (props) => <JoinToast {...props} toastType='wishlistAdd' />,
+          JoinToastOption,
+        );
       } else {
         const idx = myWishlist.indexOf(meetupId);
         //로컬스토리지에서 모임 요소 삭제
@@ -149,6 +174,10 @@ export default function useChangeWishlist() {
         newWishlist.splice(idx, 1);
 
         localStorage.setItem("wishlist", JSON.stringify(newWishlist));
+        toast(
+          (props) => <JoinToast {...props} toastType='wishlistRemove' />,
+          JoinToastOption,
+        );
       }
 
       //toggleWishlist는 로컬 스토리지에 아이디를 추가 또는 삭제
@@ -157,10 +186,13 @@ export default function useChangeWishlist() {
       if (myWishlist != storage) stateSetter(storage);
 
       //쿼리 다시 실행
-      queryClient.refetchQueries({ queryKey: ["wishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
       router.refresh();
     } else {
-      alert("모집중인 모임만 가능합니다");
+      toast(
+        (props) => <JoinToast {...props} toastType='wishlistError' />,
+        JoinToastOption,
+      );
     }
   };
 

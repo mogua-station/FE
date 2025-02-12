@@ -101,3 +101,10 @@ export interface BaseFormProps {
   watch: UseFormWatch<MeetupFormType>;
   setValue: UseFormSetValue<MeetupFormType>;
 }
+
+export interface FilterProps {
+  limit: number;
+  meetupType: MeetupType;
+  location: LocationType;
+  orderBy: OrderType;
+}

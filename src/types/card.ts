@@ -54,6 +54,7 @@ export interface CardContentProps {
     | "meetingStartDate"
     | "meetingEndDate"
     | "thumbnail"
+    | "online"
   >;
 }
 
