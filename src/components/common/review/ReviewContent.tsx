@@ -48,10 +48,14 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
           >
             <div className='flex h-7 w-7 items-center justify-center rounded-[50%] bg-gray-800'>
               <div className='h-6 w-6 overflow-hidden rounded-[50%] bg-gray-700'>
-                <img
+                <Image
                   src={`${reviewContent.userprofile != null ? reviewContent.userprofile : "/images/default_user_profile.png"}`}
                   alt='유저 이미지'
                   className='object-cover'
+                  width={24}
+                  height={24}
+                  priority
+                  loading='eager'
                 />
               </div>
             </div>
