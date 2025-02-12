@@ -64,26 +64,23 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
   const getChangedFields = () => {
     if (!review) return null;
 
+    // 변경사항이 없더라도 현재 값을 전송해야함
+    // content: 서버에서 null을 허용하지 않으므로 항상 포함
+    // rating: 보내지않으면 강제로 1로 설정되므로 기존 rating을 보내줌
     const changes: {
       image?: File;
       requestData?: any;
-    } = {};
+      hasChanges: boolean;
+    } = {
+      requestData: {
+        rating: rating !== -1 ? rating : review.rating,
+        content: content || review.content,
+      },
+      hasChanges: false,
+    };
 
-    const requestData: any = {};
-    let hasChanges = false;
-
-    // content 변경 여부 확인
-    if (content !== review.content) {
-      hasChanges = true;
-    }
-    // content는 서버에서 null을 허용하지 않으므로 항상 포함
-    // 변경사항이 없더라도 현재 값을 전송
-    requestData.content = content;
-
-    // rating 변경 여부 확인
-    if (rating !== review.rating) {
-      requestData.rating = rating;
-      hasChanges = true;
+    if (content !== review.content || rating !== review.rating) {
+      changes.hasChanges = true;
     }
 
     // TODO: 백엔드 응답에 이미지 URL 추가 후
@@ -93,12 +90,7 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
     // 이미지 변경 여부 확인
     if (image) {
       changes.image = image;
-      hasChanges = true;
-    }
-
-    // 실제 변경사항이 있을 때만 requestData 포함
-    if (hasChanges) {
-      changes.requestData = requestData;
+      changes.hasChanges = true;
     }
 
     return changes;
@@ -117,7 +109,7 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
     if (!changes) return;
 
     // 변경사항이 없을 때 알림
-    if (!changes.image && !changes.requestData) {
+    if (!changes.hasChanges && !changes.image) {
       modal.open(
         ({ close }) => (
           <FailModal
@@ -190,7 +182,7 @@ export default function EditReviewForm({ reviewId }: { reviewId: string }) {
           state={
             !isFormValid
               ? "inactive"
-              : getChangedFields()?.requestData || getChangedFields()?.image
+              : getChangedFields()?.hasChanges
                 ? "activated"
                 : "default"
           }
