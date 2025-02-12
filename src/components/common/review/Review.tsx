@@ -48,15 +48,6 @@ export default function Review({ reviewInfo }: ReviewInfoProps) {
     handleDeleteClick(reviewInfo.reviewId);
   };
 
-
-const handleClickDetail = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.stopPropagation();
-      setIsOpen((prev) => !prev);
-    },
-    [],
-  );
-
   return (
     <div
       className='rounded-[12px] bg-gray-900 p-4'
