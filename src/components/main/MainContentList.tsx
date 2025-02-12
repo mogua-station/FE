@@ -1,10 +1,23 @@
 "use client";
 
-import CardSkeleton from "../common/skeleton/CardSkeleton";
-import MainContentEmpty from "./MainContentEmpty";
+import dynamicImport from "next/dynamic";
 import Card from "@/components/common/card/Card";
 import { useMeetupList } from "@/hooks/meetup/useMeetupList";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+
+const CardSkeleton = dynamicImport(
+  () => import("@/components/common/skeleton/CardSkeleton"),
+  {
+    ssr: false,
+  },
+);
+
+const MainContentEmpty = dynamicImport(
+  () => import("@/components/main/MainContentEmpty"),
+  {
+    ssr: false,
+  },
+);
 
 export default function MainContentList() {
   const { data, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =

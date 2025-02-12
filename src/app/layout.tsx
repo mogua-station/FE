@@ -4,28 +4,31 @@ import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import Providers from "./providers/Providers";
 import HeaderWrapper from "@/components/common/layout/HeaderWrapper";
-import NavBarWrapper from "@/components/common/layout/NavBarWrapper";
 import InitializeUser from "@/hooks/auths/InitializeUser";
+
+const NavBarWrapper = dynamic(
+  () => import("@/components/common/layout/NavBarWrapper"),
+);
 
 const ClearImageOnPageLeave = dynamic(
   () => import("@/hooks/inputs/images/useLeavePage"),
-  {
-    ssr: false,
-  },
+  { ssr: false },
 );
 
 const BackgroundWrapper = dynamic(
   () => import("@/components/common/layout/BackgroundWrapper"),
+  { ssr: false },
 );
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
   display: "swap",
   weight: "45 920",
+  preload: true,
 });
 
 export const metadata: Metadata = {
-  title: "모과 | 스터디 & 과외 매칭 플랫폼",
+  title: "møgua | 스터디 & 과외 매칭 플랫폼",
   description:
     "모과(mogua)는 스터디 및 과외 모임을 쉽게 만들고 참여할 수 있는 플랫폼입니다. 원하는 과목과 지역에 맞춰 최적의 학습 파트너를 찾아보세요.",
   keywords:

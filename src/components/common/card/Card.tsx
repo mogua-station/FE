@@ -1,11 +1,15 @@
 "use client";
 
+import dynamicImport from "next/dynamic";
 import { useRouter } from "next/navigation";
 import CardWishlist from "./CardWishlist";
 import Content from "./Content";
 import StatusBadge from "./StatusBadge";
-import CardReview from "@/components/common/card/CardReview";
 import { type CardInfo } from "@/types/card";
+
+const CardReview = dynamicImport(
+  () => import("@/components/common/card/CardReview"),
+);
 
 const Card = ({ card }: CardInfo) => {
   const router = useRouter();

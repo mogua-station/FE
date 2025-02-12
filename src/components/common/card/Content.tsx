@@ -3,30 +3,17 @@ import { type CardContentProps } from "@/types/card";
 
 export default function Content({ content }: CardContentProps) {
   const locationFormat = (): string => {
-    switch (content.location) {
-      case "CAPITAL":
-        return "수도권";
+    const locationMap: { [key: string]: string } = {
+      CAPITAL: "수도권",
+      DAEJEON: "대전광역시",
+      DAEGU: "대구광역시",
+      GWANGJU: "광주광역시",
+      BUSAN: "부산광역시",
+      JEONJU: "전주시",
+      GANGNEUNG: "강릉시",
+    };
 
-      case "DAEJEON":
-        return "대전광역시";
-
-      case "DAEGU":
-        return "대구광역시";
-
-      case "GWANGJU":
-        return "광주광역시";
-
-      case "BUSAN":
-        return "부산광역시";
-
-      case "JEONJU":
-        return "전주시";
-
-      case "GANGNEUNG":
-        return "강릉시";
-    }
-
-    return "";
+    return content.location ? locationMap[content.location] || "" : "";
   };
 
   return (
@@ -74,12 +61,14 @@ export default function Content({ content }: CardContentProps) {
       <div className='flex flex-col justify-end'>
         <Image
           className='size-20 rounded-lg object-cover'
-          src={content.thumbnail ? content.thumbnail : ""}
+          src={content.thumbnail || ""}
           width={80}
           height={80}
           alt='모임 이미지'
           priority
           loading='eager'
+          quality={75}
+          sizes='80px'
         />
       </div>
     </div>
