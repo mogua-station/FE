@@ -37,7 +37,6 @@ export default function WishlistContent() {
 
   const {
     data: wishlist,
-    isFetchingNextPage,
     hasNextPage,
     isLoading,
     fetchNextPage,
@@ -88,18 +87,21 @@ export default function WishlistContent() {
     const location = searchParams.get("location") as LocationType;
     const orderBy = searchParams.get("orderBy") as OrderType;
 
-    const newPrams: FilterProps = filter;
+    const newParams: FilterProps = { ...filter }; // 상태 복사
 
-    if (type === null) newPrams.meetupType = "STUDY";
-    if (type !== null) newPrams.meetupType = type;
-    if (location === null) newPrams.location = "ALL";
-    if (location !== null) newPrams.location = location;
-    if (orderBy !== null) newPrams.orderBy = orderBy;
+    if (type === null) newParams.meetupType = "STUDY";
+    if (type !== null) newParams.meetupType = type;
+    if (location === null) newParams.location = "ALL";
+    if (location !== null) newParams.location = location;
+    if (orderBy === null) newParams.orderBy = "latest";
+    if (orderBy !== null) newParams.orderBy = orderBy;
 
-    setFilter(newPrams);
-
-    refetch();
+    setFilter(newParams);
   }, [searchParams]);
+
+  useEffect(() => {
+    refetch();
+  }, [filter, refetch]);
 
   if (isLoading) {
     return (
@@ -157,9 +159,7 @@ export default function WishlistContent() {
             </p>
           </div>
         ))}
-      {isFetchingNextPage && hasNextPage && (
-        <p className='text-center text-white'>로딩중...</p>
-      )}
+
       <div className='mb-1 h-10 w-full touch-none' ref={ref} />
     </div>
   );
