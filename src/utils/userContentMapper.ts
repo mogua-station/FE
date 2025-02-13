@@ -102,6 +102,7 @@ export const mapWrittenReviewToReviewInfo = (
     reviewId: review.reviewId,
     editable: review.editabel,
     thumbnail: review.thumbnail,
+    reviewThumbnail: review.reviewThumbnail,
   };
 };
 
