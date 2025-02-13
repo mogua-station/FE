@@ -1,13 +1,34 @@
-import ShareMeetUpButton from "./ShareMeetUpButton";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import StatusBadge from "@/components/common/card/StatusBadge";
-import MeetButtonArea from "@/components/meet-detail/MeetButtonArea";
-import MeetDetailReview from "@/components/meet-detail/MeetDetailReview";
-import { reviews } from "@/data/mockList";
-import { type MeetInfo, type ClientInfo } from "@/types/meetDetail";
+import { fetchHostData } from "@/lib/meetDetail/meetDetailApi";
+import {
+  type MeetInfo,
+  type ClientInfo,
+  type ParticipantInfo,
+} from "@/types/meetDetail";
 
-export default function MeetDetail({ meetInfo }: MeetInfo) {
-  const participationSlice = meetInfo.participants.slice(0, 4);
-  const Location = () => {
+const ShareMeetUpButton = dynamic(() => import("./ShareMeetUpButton"), {
+  ssr: false,
+});
+
+const MeetButtonArea = dynamic(
+  () => import("@/components/meet-detail/MeetButtonArea"),
+  { ssr: false },
+);
+const MeetDetailReview = dynamic(
+  () => import("@/components/meet-detail/MeetDetailReview"),
+  { ssr: false },
+);
+
+export default async function MeetDetail({ meetInfo }: MeetInfo) {
+  const participationSlice: ParticipantInfo[] = meetInfo.participants.slice(
+    0,
+    4,
+  );
+
+  const locationFormat = (): string => {
+    if (meetInfo.isOnline) return "온라인";
     switch (meetInfo.location) {
       case "CAPITAL":
         return "수도권";
@@ -15,52 +36,56 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
       case "DAEJEON":
         return "대전광역시";
 
-      case "JEONJU":
-        return "전주시";
+      case "DAEGU":
+        return "대구광역시";
 
       case "GWANGJU":
         return "광주광역시";
 
       case "BUSAN":
-        return "부신광역시";
+        return "부산광역시";
 
-      case "DAEGU":
-        return "대구광역시";
+      case "JEONJU":
+        return "전주시";
 
       case "GANGNEUNG":
         return "강릉시";
-
-      default:
-        return "";
     }
+
+    return "";
   };
 
   const clientInfo: ClientInfo = {
     meetupId: meetInfo.meetupId,
     hostId: meetInfo.hostId,
-    hostNickname: meetInfo.hostNickname,
     participants: meetInfo.participants,
+    maxParticipants: meetInfo.maxParticipants,
     minParticipants: meetInfo.minParticipants,
     meetupStatus: meetInfo.meetupStatus,
   };
 
+  const hostInfo = await fetchHostData(meetInfo.hostId);
+
   return (
-    <div className='relative mx-auto w-full max-w-[1200px] bg-gray-950 py-[60px] desktop:bg-[unset] desktop:py-[74px]'>
-      <div className='fixed left-1/2 z-10 -mt-[38px] block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:hidden'>
+    <div className='mx-auto w-full max-w-[1200px] bg-gray-950 pb-[108px] pt-[120px] desktop:bg-[unset] desktop:pb-[88px] desktop:pt-[74px]'>
+      <div className='absolute left-1/2 top-[22px] z-10 block w-full -translate-x-1/2 px-5 tablet:px-20 desktop:static desktop:hidden'>
         <ShareMeetUpButton />
       </div>
-      <div className='h-[346px] w-full overflow-hidden desktop:rounded-[24px]'>
-        <img
+      <div className='relative h-[346px] w-full overflow-hidden desktop:rounded-[24px]'>
+        <Image
           src={meetInfo.thumbnail}
-          alt='모임 이미지'
-          className='h-full w-full object-cover'
+          sizes='(max-width: 1200px) 100vw, 1200px'
+          alt={`모임 제목: ${meetInfo.title} 이미지`}
+          fill
+          priority
+          className='object-cover'
         />
       </div>
       <div className='px-5 tablet:px-20 desktop:px-0'>
         <div className='mt-10 flex flex-col gap-6 desktop:flex-row'>
           <div className='flex flex-col desktop:w-[775px]'>
-            {/* 스터디디 제목 정보 */}
-            <div className='meet-info-box flex flex-col gap-8'>
+            {/* 스터디 제목 정보 */}
+            <section className='meet-info-box flex flex-col gap-8'>
               <div>
                 <div className='flex gap-1.5'>
                   <StatusBadge
@@ -75,14 +100,13 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                 </div>
 
                 <div className='mt-3'>
-                  <div></div>
-                  <p className='text-heading-2 font-medium text-gray-50'>
+                  <h1 className='text-heading-2 font-medium text-gray-50'>
                     {meetInfo.title}
-                  </p>
+                  </h1>
 
-                  <span className='mt-3 inline-block text-body-2-normal text-gray-300'>
-                    {meetInfo.online ? "온라인" : Location()}
-                  </span>
+                  <h2 className='mt-3 inline-block text-body-2-normal text-gray-300'>
+                    {locationFormat()}
+                  </h2>
                 </div>
               </div>
 
@@ -112,10 +136,10 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                   </span>
                 </div>
               </div>
-            </div>
+            </section>
 
             {/* 스터디 참여인원, 본문 */}
-            <div className='meet-info-box mt-10 flex flex-col gap-8'>
+            <section className='meet-info-box mt-10 flex flex-col gap-8'>
               <div className='flex flex-col gap-4'>
                 <span className='text-title'>참여 인원</span>
                 <div className='meet-info-box-inner-1'>
@@ -136,20 +160,35 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                     </span>
                     <div className='flex items-center'>
                       <div className='flex'>
-                        {participationSlice.map((item, index) => (
-                          <div
-                            key={index}
-                            className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
-                          >
-                            <span className='inline-block h-full w-full overflow-hidden rounded-[50%]'>
-                              <img
-                                src={item.userProfile}
-                                alt='유저 프로필 이미지'
-                                className='h-full w-full object-cover'
-                              />
-                            </span>
-                          </div>
-                        ))}
+                        {participationSlice.length !== 0
+                          ? participationSlice.map(
+                              (item: ParticipantInfo, index) => (
+                                <div
+                                  key={index}
+                                  className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
+                                >
+                                  <span className='w- relative inline-block h-5 w-5 overflow-hidden rounded-[50%]'>
+                                    <Image
+                                      src={item.profileImageUrl}
+                                      fill
+                                      alt={`유저 ${item.userId}님의 프로필 이미지`}
+                                      className='object-cover'
+                                      sizes='30px'
+                                    />
+                                  </span>
+                                </div>
+                              ),
+                            )
+                          : Array.from({ length: 4 }).map((_, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'
+                                >
+                                  <span className='w- relative inline-block h-5 w-5 overflow-hidden rounded-[50%]'></span>
+                                </div>
+                              );
+                            })}
                         {meetInfo.participants.length > 4 && (
                           <div className='-ml-1.5 h-6 w-6 rounded-[50%] border-[2px] border-gray-800 bg-gray-700'>
                             <span className='flex items-center justify-center text-label-reading text-gray-200'>
@@ -163,9 +202,9 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
                           {meetInfo.participants.length}/
                           {meetInfo.maxParticipants}
                         </span>
-                        <span className='ml-8 text-label-reading text-orange-300'>
+                        <p className='ml-8 text-label-reading text-orange-300'>
                           {`${meetInfo.maxParticipants - meetInfo.participants.length}명 더 참여 할 수 있어요`}
-                        </span>
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -173,21 +212,25 @@ export default function MeetDetail({ meetInfo }: MeetInfo) {
               </div>
               <div className='flex flex-col gap-4'>
                 <span className='text-title'>모집 내용</span>
-                <textarea
-                  readOnly
-                  className='h-[160px] w-full resize-none rounded-[12px] bg-gray-900 px-4 py-[18px] text-body-2-reading text-gray-200'
-                  value={meetInfo.content}
-                />
+                <p
+                  className='h-[160px] w-full resize-none rounded-[12px] bg-gray-900 px-4 py-[18px] text-body-2-reading text-gray-200 outline-none'
+                  aria-label={`모임${meetInfo.meetupId} 설명란`}
+                >
+                  {meetInfo.content}
+                </p>
               </div>
-            </div>
+            </section>
           </div>
           {/* 주최자 프로필, 시작 */}
-          <MeetButtonArea clientInfo={clientInfo} />
+          <MeetButtonArea clientInfo={clientInfo} hostInfo={hostInfo.data} />
         </div>
         {/* 리뷰 */}
-        <div className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
-          <MeetDetailReview meetupId={meetInfo.meetupId} reviews={reviews} />
-        </div>
+        <section className='meet-info-box mt-8 desktop:mt-10 desktop:w-[775px]'>
+          <MeetDetailReview
+            meetupId={meetInfo.meetupId}
+            meetupStatus={meetInfo.meetupStatus}
+          />
+        </section>
       </div>
     </div>
   );

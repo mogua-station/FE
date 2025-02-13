@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { DotLoader } from "react-spinners";
 import { twMerge } from "tailwind-merge";
 import { CommonNicknameInput } from "../auth/AuthInputs";
 import CommonTextArea from "../common/inputs/TextArea";
 import CommonTextInput from "../common/inputs/TextInput";
 import ProfileImageInput from "./ProfileImageInput";
-import TagInput from "./TagInput";
+import TagInputField from "./TagInputField";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import { FailModal } from "@/components/create/modals/ResultInfoModal";
 import { SYSTEM_ALERTS } from "@/constants/alerts";
 import { useEditProfile } from "@/hooks/user/useEditProfile";
+import modal from "@/utils/modalController";
 
 type FormValues = {
   nickname: string;
@@ -20,51 +23,67 @@ type FormValues = {
 
 export default function EditProfileForm() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const { userInfo, error, handleProfileUpdate, isUpdating } = useEditProfile();
+  const { userInfo, error, handleProfileUpdate, isUpdating, isLoading } =
+    useEditProfile();
 
   const methods = useForm<FormValues>({
-    values: userInfo
-      ? {
-          nickname: userInfo.nickname,
-          bio: userInfo.bio,
-          userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
-        }
-      : {
-          nickname: "",
-          bio: "",
-          userTagList: [],
-        },
     mode: "onChange",
+    // 빈 값으로 초기화하여 controlled 상태 유지
+    defaultValues: {
+      nickname: "",
+      bio: "",
+      userTagList: [],
+    },
   });
 
-  // userInfo가 없을 때는 빈 화면 표시
-  if (!userInfo) {
-    return <div className='min-h-[calc(100vh-64px)]' />;
-  }
-
-  // 에러 처리
-  if (error) {
-    return (
-      <div className='flex min-h-[calc(100vh-64px)] items-center text-white'>
-        프로필을 불러오는데 실패했습니다. 다시 시도해주세요.
-      </div>
-    );
-  }
-
-  // form 관련 로직
   const {
     control,
     formState: { errors },
     watch,
+    setValue,
   } = methods;
 
   const watchedNickname = watch("nickname");
   const watchedBio = watch("bio");
   const watchedTags = watch("userTagList");
 
-  const handleTagsChange = (tags: string[]) => {
-    methods.setValue("userTagList", tags);
-  };
+  const handleTagsChange = useCallback(
+    (tags: string[]) => {
+      setValue("userTagList", tags);
+    },
+    [setValue],
+  );
+
+  useEffect(() => {
+    if (userInfo) {
+      // reset을 사용해 한번에 업데이트하지만,
+      // userInfo가 있을 때만 값을 설정하는 원래 의도는 유지
+      methods.reset({
+        nickname: userInfo.nickname || "",
+        bio: userInfo.bio || "",
+        userTagList: userInfo.userTagList?.map((tag) => tag.tag) || [],
+      });
+    }
+  }, [userInfo, methods]);
+
+  if (isLoading) {
+    return (
+      <div className='flex min-h-[calc(100vh-212px)] w-full items-center justify-center'>
+        <DotLoader
+          size={24}
+          color={"#FF9A42"}
+          cssOverride={{ position: "absolute" }}
+          loading={isLoading}
+        />
+      </div>
+    );
+  }
+
+  if (!userInfo || error) {
+    throw new Error("프로필을 불러오는데 실패했습니다.");
+  }
+
+  const profile = userInfo;
 
   const getChangedFields = () => {
     const changes: {
@@ -74,19 +93,18 @@ export default function EditProfileForm() {
 
     const requestData: any = {};
 
-    if (watchedNickname !== userInfo.nickname) {
+    if (watchedNickname !== profile.nickname) {
       requestData.nickname = watchedNickname;
     }
 
-    if (watchedBio !== userInfo.bio) {
+    if (watchedBio !== profile.bio) {
       requestData.bio = watchedBio;
     }
 
     if (
       watchedTags &&
-      userInfo.userTagList &&
       JSON.stringify([...watchedTags].sort()) !==
-        JSON.stringify(userInfo.userTagList.map((tag) => tag.tag).sort())
+        JSON.stringify(profile.userTagList.map((tag) => tag.tag).sort())
     ) {
       requestData.userTagList = watchedTags;
     }
@@ -107,7 +125,19 @@ export default function EditProfileForm() {
     if (!changes) return;
 
     if (!changes.image && !changes.requestData) {
-      alert("변경된 내용이 없습니다.");
+      modal.open(
+        ({ close }) => (
+          <FailModal
+            title='변경된 내용이 없습니다.'
+            message='수정할 내용을 입력해주세요.'
+            close={close}
+          />
+        ),
+        {
+          hasCloseBtn: false,
+          isBottom: false,
+        },
+      );
       return;
     }
 
@@ -126,7 +156,6 @@ export default function EditProfileForm() {
     handleProfileUpdate(submitFormData);
   });
 
-  // 버튼 상태 관리
   const getButtonState = () => {
     if (Object.keys(errors).length > 0) return "inactive";
     if (isUpdating) return "inactive";
@@ -141,7 +170,7 @@ export default function EditProfileForm() {
     <FormProvider {...methods}>
       <form className='contents' onSubmit={onSubmit}>
         <ProfileImageInput
-          profileImg={userInfo.profileImg}
+          profileImg={profile.profileImg}
           onImageSelect={setSelectedImage}
         />
         <p
@@ -155,7 +184,8 @@ export default function EditProfileForm() {
             className='cursor-not-allowed bg-gray-800 text-gray-500'
             name='email'
             label='이메일 주소'
-            value={userInfo.email}
+            aria-label='이메일 주소'
+            value={profile.email}
             control={control}
             disabled
           />
@@ -177,8 +207,8 @@ export default function EditProfileForm() {
             maxLength={20}
             hint='최대 20자까지 입력 가능해요'
           />
-          <TagInput
-            defaultTags={userInfo.userTagList}
+          <TagInputField
+            defaultTags={profile.userTagList}
             onTagsChange={handleTagsChange}
             name='userTag'
           />

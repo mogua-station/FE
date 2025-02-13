@@ -35,4 +35,6 @@ export type DropdownProps = {
   gapY?: number;
   defaultSelected?: string;
   children: React.ReactNode;
+  isReview?: boolean;
+  isHeader?: boolean;
 };

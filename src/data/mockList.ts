@@ -17,7 +17,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-02-05"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 2,
@@ -33,7 +33,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-02-05"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    online: true,
+    isOnline: true,
   },
   {
     meetupId: 3,
@@ -49,7 +49,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-02-05"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    online: true,
+    isOnline: true,
   },
   {
     meetupId: 4,
@@ -65,7 +65,7 @@ export const cardList: CardProps[] = [
     meetingEndDate: new Date("2025-01-15"),
     thumbnail:
       "https://cdn.pixabay.com/photo/2022/10/09/14/57/stair-7509394_640.jpg",
-    online: false,
+    isOnline: false,
   },
 ];
 
@@ -77,6 +77,7 @@ export const comments: ReviewInfo[] = [
     userid: 1,
     username: "A",
     date: new Date(),
+    reviewId: 1,
   },
   {
     rating: 1,
@@ -87,6 +88,7 @@ export const comments: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 2,
   },
   {
     rating: 0,
@@ -95,6 +97,7 @@ export const comments: ReviewInfo[] = [
     userid: 1,
     username: "C",
     date: new Date(),
+    reviewId: 3,
   },
   {
     rating: 1,
@@ -105,6 +108,7 @@ export const comments: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 4,
   },
   {
     rating: 0,
@@ -113,6 +117,7 @@ export const comments: ReviewInfo[] = [
     userid: 1,
     username: "E",
     date: new Date(),
+    reviewId: 5,
   },
   {
     rating: 1,
@@ -123,6 +128,7 @@ export const comments: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 6,
   },
 ];
 
@@ -144,31 +150,31 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: false,
+    isOnline: false,
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
@@ -190,31 +196,31 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: false,
+    isOnline: false,
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
@@ -236,36 +242,36 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: true,
+    isOnline: true,
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
       {
         userId: 6,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
@@ -287,36 +293,36 @@ export const meetDetailMock: MeetProps[] = [
       "https://cdn.pixabay.com/photo/2024/12/20/11/53/architect-9280053_1280.jpg",
     hostId: 33,
     hostNickname: "조수아",
-    online: false,
+    isOnline: false,
     participants: [
       {
         userId: 1,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2023/05/03/10/37/character-7967244_640.png",
       },
       {
         userId: 2,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2024/02/10/15/03/flowers-8564948_640.png",
       },
       {
         userId: 3,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2022/09/05/16/17/baltic-sea-7434540_640.jpg",
       },
       {
         userId: 4,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2021/08/11/02/49/sunset-6537216_640.jpg",
       },
       {
         userId: 5,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
       {
         userId: 6,
-        userProfile:
+        profileImageUrl:
           "https://cdn.pixabay.com/photo/2020/05/19/13/21/star-5190776_640.jpg",
       },
     ],
@@ -331,6 +337,7 @@ export const reviews: ReviewInfo[] = [
     userid: 1,
     username: "A",
     date: new Date(),
+    reviewId: 1,
   },
   {
     rating: 1,
@@ -341,6 +348,7 @@ export const reviews: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 2,
   },
   {
     rating: 0,
@@ -349,6 +357,7 @@ export const reviews: ReviewInfo[] = [
     userid: 1,
     username: "C",
     date: new Date(),
+    reviewId: 3,
   },
   {
     rating: 1,
@@ -359,6 +368,7 @@ export const reviews: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 4,
   },
   {
     rating: 0,
@@ -367,6 +377,7 @@ export const reviews: ReviewInfo[] = [
     userid: 1,
     username: "E",
     date: new Date(),
+    reviewId: 5,
   },
   {
     rating: 1,
@@ -377,6 +388,7 @@ export const reviews: ReviewInfo[] = [
     userprofile:
       "https://cdn.pixabay.com/photo/2024/11/21/22/06/deer-9214838_640.jpg",
     date: new Date(),
+    reviewId: 6,
   },
 ];
 

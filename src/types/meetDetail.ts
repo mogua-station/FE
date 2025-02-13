@@ -1,13 +1,13 @@
 export interface ParticipantInfo {
   userId: number;
-  userProfile: string;
+  profileImageUrl: string;
 }
 
 export interface ClientInfo {
   meetupId: number;
   hostId: number;
-  hostNickname: string;
   participants: ParticipantInfo[];
+  maxParticipants: number;
   minParticipants: number;
   meetupStatus: "RECRUITING" | "IN_PROGRESS" | "COMPLETED" | "BEFORE_START";
 }
@@ -32,10 +32,10 @@ export interface MeetProps {
   recruitmentEndDate: Date;
   meetingStartDate: Date;
   meetingEndDate: Date;
-  thumbnail?: string;
+  thumbnail: string;
   hostId: number;
   hostNickname: string;
-  online: boolean;
+  isOnline: boolean;
   participants: ParticipantInfo[];
 }
 

@@ -3,7 +3,7 @@ import type {
   MeetupQueryType,
   MeetupListResponseType,
 } from "@/types/meetup.type";
-import { getAccessToken } from "@/utils/cookie";
+import { generateQueryKey } from "@/utils/meetup.queryKey";
 
 export const getMeetupList = async ({
   page = 0,
@@ -35,7 +35,17 @@ export const getMeetupList = async ({
         "Content-Type": "application/json",
       },
       next: {
-        revalidate: 1600,
+        revalidate: 40,
+        tags: generateQueryKey({
+          page,
+          limit,
+          type,
+          orderBy,
+          state,
+          location,
+          startDate,
+          endDate,
+        }),
       },
     },
   );
@@ -62,22 +72,34 @@ export const getMeetupList = async ({
 };
 
 export const createMeetup = async (formData: FormData) => {
-  const accessToken = getAccessToken();
-
-  if (!accessToken) {
-    throw new Error("Access token is not found");
-  }
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups`, {
     method: "POST",
     body: formData,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    credentials: "include",
   });
 
   if (!res.ok) {
     throw new Error("Failed to create meetup");
+  }
+
+  return await res.json();
+};
+
+export const editMeetup = async ({
+  id,
+  formData,
+}: {
+  id: number;
+  formData: FormData;
+}) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/meetups/${id}`, {
+    method: "PATCH",
+    body: formData,
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to edit meetup");
   }
 
   return await res.json();

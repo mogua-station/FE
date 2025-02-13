@@ -6,9 +6,14 @@ export interface ReviewInfo {
   username: string;
   userprofile?: string;
   date: Date;
+  meetingEndDate?: Date;
   isMyReview?: boolean;
+  isMyWritten?: boolean;
   eventId?: number;
   eventType?: string;
+  reviewId: number;
+  editable?: boolean;
+  thumbnail?: string | null;
 }
 
 export interface ReviewInfoProps {

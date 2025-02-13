@@ -17,7 +17,7 @@ export type StateType =
 
 export type LocationType =
   | "ALL"
-  | "Capital"
+  | "CAPITAL"
   | "DAEJEON"
   | "JEONJU"
   | "GWANGJU"
@@ -78,14 +78,14 @@ export interface MeetupListResponseType {
     profileImageUrl: string;
   }[];
   meetupStatus: StateType;
-  online: boolean;
+  isOnline: boolean;
   isWishlist: boolean;
 }
 
 export interface MeetupFormType {
   title: string;
   meetingType: MeetupType;
-  location: LocationType | null | "";
+  location: LocationType | "" | "UNDEFINED";
   content: string;
   recruitmentStartDate: Date;
   recruitmentEndDate: Date | null;
@@ -100,4 +100,11 @@ export interface BaseFormProps {
   control: Control<MeetupFormType>;
   watch: UseFormWatch<MeetupFormType>;
   setValue: UseFormSetValue<MeetupFormType>;
+}
+
+export interface FilterProps {
+  limit: number;
+  meetupType: MeetupType;
+  location: LocationType;
+  orderBy: OrderType;
 }

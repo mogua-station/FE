@@ -27,7 +27,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-01-15"),
     meetingEndDate: new Date("2025-02-15"),
     thumbnail: "https://via.placeholder.com/300x200?text=영어+회화+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 2,
@@ -51,7 +51,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-12-20"),
     meetingEndDate: new Date("2025-01-20"),
     thumbnail: "https://via.placeholder.com/300x200?text=프로그래밍+개인+과외",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 3,
@@ -75,7 +75,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-11-15"),
     meetingEndDate: new Date("2024-12-15"),
     thumbnail: "https://via.placeholder.com/300x200?text=수학+문제+풀이+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 4,
@@ -100,7 +100,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2025-03-01"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=초등학교+과학+과외",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 5,
@@ -125,7 +125,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2025-02-01"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=웹+개발+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 6,
@@ -150,7 +150,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2025-03-15"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=프랑스어+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 7,
@@ -175,7 +175,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2025-02-15"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=고등학교+수학+과외",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 8,
@@ -200,7 +200,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2024-11-15"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=글쓰기+워크숍",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 9,
@@ -225,7 +225,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2025-04-05"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=기초+일본어+과외",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 10,
@@ -250,7 +250,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2025-02-25"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=데이터+분석+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 11,
@@ -274,7 +274,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-12-05"),
     meetingEndDate: new Date("2025-01-05"),
     thumbnail: "https://via.placeholder.com/300x200?text=데이터+분석+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 12,
@@ -299,7 +299,7 @@ export const mockCardData: CardProps[] = [
     meetingEndDate: new Date("2025-04-15"),
 
     thumbnail: "https://via.placeholder.com/300x200?text=인공지능+기초+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 13,
@@ -323,7 +323,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-01-30"),
     meetingEndDate: new Date("2025-02-28"),
     thumbnail: "https://via.placeholder.com/300x200?text=대학교+논문+첨삭",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 14,
@@ -347,7 +347,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-09-25"),
     meetingEndDate: new Date("2024-10-25"),
     thumbnail: "https://via.placeholder.com/300x200?text=기초+피트니스+그룹",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 15,
@@ -371,7 +371,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-02-20"),
     meetingEndDate: new Date("2025-03-20"),
     thumbnail: "https://via.placeholder.com/300x200?text=비즈니스+영어+회화",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 16,
@@ -395,7 +395,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-12-25"),
     meetingEndDate: new Date("2025-01-25"),
     thumbnail: "https://via.placeholder.com/300x200?text=기초+회계+과외",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 17,
@@ -419,7 +419,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-10-15"),
     meetingEndDate: new Date("2024-11-15"),
     thumbnail: "https://via.placeholder.com/300x200?text=영화+감상+및+토론",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 18,
@@ -451,7 +451,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-01-20"),
     meetingEndDate: new Date("2025-02-20"),
     thumbnail: "https://via.placeholder.com/300x200?text=중급+중국어+회화",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 19,
@@ -475,7 +475,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-12-05"),
     meetingEndDate: new Date("2025-01-05"),
     thumbnail: "https://via.placeholder.com/300x200?text=헬스+트레이닝+그룹",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 20,
@@ -499,7 +499,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-09-25"),
     meetingEndDate: new Date("2024-10-25"),
     thumbnail: "https://via.placeholder.com/300x200?text=창업+아이디어+개발",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 21,
@@ -523,7 +523,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-02-05"),
     meetingEndDate: new Date("2025-03-05"),
     thumbnail: "https://via.placeholder.com/300x200?text=비즈니스+전략+스터디",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 22,
@@ -547,7 +547,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-02-15"),
     meetingEndDate: new Date("2025-03-15"),
     thumbnail: "https://via.placeholder.com/300x200?text=전문+사진+촬영+과외",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 23,
@@ -587,7 +587,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2024-12-15"),
     meetingEndDate: new Date("2025-01-15"),
     thumbnail: "https://via.placeholder.com/300x200?text=전문+사진+촬영+과외",
-    online: false,
+    isOnline: false,
   },
   {
     meetupId: 24,
@@ -611,7 +611,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-01-17"),
     meetingEndDate: new Date("2025-01-20"),
     thumbnail: "https://via.placeholder.com/300x200?text=전문+사진+촬영+과외",
-    online: false,
+    isOnline: false,
   },
 
   {
@@ -636,7 +636,7 @@ export const mockCardData: CardProps[] = [
     meetingStartDate: new Date("2025-01-15"),
     meetingEndDate: new Date("2025-01-16"),
     thumbnail: "https://via.placeholder.com/300x200?text=전문+사진+촬영+과외",
-    online: false,
+    isOnline: false,
     isMypage: true,
     isReview: true,
   },

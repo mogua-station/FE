@@ -19,7 +19,6 @@ export const MeetingList = ({
   studyType,
   reviewTab,
   isMe,
-  token,
 }: MeetingListProps) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteMeetings({
@@ -28,7 +27,6 @@ export const MeetingList = ({
       reviewTab,
       userId,
       currentUserId: userId,
-      token,
     });
 
   const { ref } = useInView({
@@ -90,7 +88,9 @@ export const MeetingList = ({
           key={`review-${item.userid}-${index}`}
           ref={isLastItem ? ref : undefined}
         >
-          <Review reviewInfo={item} />
+          <Review
+            reviewInfo={{ ...item, isMyWritten: isMe && item.editable }}
+          />
         </li>
       );
     }

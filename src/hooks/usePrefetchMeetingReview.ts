@@ -1,11 +1,9 @@
 import { QueryClient } from "@tanstack/react-query";
-
 import { fetchMeetupReview } from "@/lib/meetDetail/meetDetailApi";
 import { type ReviewQueryProps } from "@/types/review";
 
 export default function usePrefetchMeetingReview(meetupId: number) {
   const queryClient = new QueryClient();
-  console.log(123);
 
   queryClient.prefetchInfiniteQuery({
     queryKey: ["review", meetupId],

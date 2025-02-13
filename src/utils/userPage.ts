@@ -1,6 +1,5 @@
 import { PAGE_SIZE } from "@/constants/pagination";
-import useCookie from "@/hooks/auths/useTokenState";
-import { fetcher } from "@/lib/user/fetcher";
+import { get } from "@/lib/user/fetcher";
 
 import { type CardProps } from "@/types/card";
 import { type ReviewInfo } from "@/types/review";
@@ -31,7 +30,7 @@ const mapParticipatingMeetupToCard = (
     meetingStartDate: new Date(meetup.meetingStartDate),
     meetingEndDate: new Date(meetup.meetingEndDate),
     thumbnail: meetup.thumbnail,
-    online: meetup.online,
+    isOnline: meetup.isOnline,
     participants: meetup.participants,
     meetupStatus: meetup.meetupStatus,
     isMypage: true,
@@ -54,7 +53,7 @@ const mapCreatedMeetupToCard = (
     meetingStartDate: new Date(meetup.meetingStartDate),
     meetingEndDate: new Date(meetup.meetingEndDate),
     thumbnail: meetup.thumbnail,
-    online: meetup.online,
+    isOnline: meetup.isOnline,
     participants: Array(meetup.participants).fill({
       userId: 0,
       profileImageUrl: "",
@@ -80,7 +79,7 @@ const mapEligibleReviewToCard = (
     meetingStartDate: new Date(review.meetingStartDate),
     meetingEndDate: new Date(review.meetingEndDate),
     thumbnail: review.thumbnail,
-    online: review.online,
+    isOnline: review.isOnline,
     participants: Array(review.participantsCount).fill({
       userId: 0,
       profileImageUrl: "",
@@ -102,8 +101,12 @@ const mapWrittenReviewToReviewInfo = (
     title: review.title,
     review: review.content,
     date: new Date(review.reviewDate),
+    meetingEndDate: new Date(review.meetingEndDate),
     isMyReview: true,
     eventId: review.meetupId,
+    reviewId: review.reviewId,
+    editable: review.editabel,
+    thumbnail: review.thumbnail,
   };
 };
 
@@ -114,21 +117,13 @@ export const fetchItems = async ({
   page,
   userId,
 }: FetchConfig): Promise<PageResponse<CardProps | ReviewInfo>> => {
-  const token = useCookie("accessToken");
-
-  if (!token) {
-    throw new Error("No token available");
-  }
-
-  // 내 모임 탭일 경우 실제 API 호출
+  // 내 모임 탭
   if (tab === "myMeeting") {
     try {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
 
-      const response = await fetcher(
+      const response = await get(
         `/user/${userId}/meetups/participating/${type}?page=${page - 1}&limit=${PAGE_SIZE}`,
-        token,
-        { auth: true },
       );
 
       if (!response.ok) {
@@ -148,14 +143,12 @@ export const fetchItems = async ({
     }
   }
 
-  // 만든 모임 탭일 경우 실제 API 호출
+  // 만든 모임 탭
   if (tab === "createdMeeting") {
     try {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
-      const response = await fetcher(
+      const response = await get(
         `/user/${userId}/meetups/created/${type}?page=${page - 1}&limit=${PAGE_SIZE}`,
-        token,
-        { auth: true },
       );
 
       if (!response.ok) {
@@ -177,16 +170,14 @@ export const fetchItems = async ({
     }
   }
 
-  // 내 리뷰 탭일 경우 실제 API 호출
+  // 내 리뷰 탭
   if (tab === "myReview") {
     try {
       const type = studyType === "study" ? "STUDY" : "TUTORING";
       const status = reviewTab === "toWrite" ? "eligible" : "written";
 
-      const response = await fetcher(
+      const response = await get(
         `/user/${userId}/reviews/${type}/${status}?page=${page - 1}&limit=${PAGE_SIZE}`,
-        token,
-        { auth: true },
       );
 
       if (!response.ok) {
@@ -214,13 +205,11 @@ export const fetchItems = async ({
     }
   }
 
-  // 수강평 탭일 경우 실제 API 호출
+  // 수강평 탭
   if (tab === "classReview") {
     try {
-      const response = await fetcher(
+      const response = await get(
         `/user/${userId}/reviews/received?page=${page - 1}&limit=${PAGE_SIZE}`,
-        token,
-        { auth: true },
       );
 
       if (!response.ok) {

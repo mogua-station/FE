@@ -27,7 +27,7 @@ interface BaseMeetup {
   meetingStartDate: string;
   meetingEndDate: string;
   thumbnail: string;
-  online: boolean;
+  isOnline: boolean;
 }
 
 // ===== 유저 프로필 타입 =====
@@ -128,15 +128,14 @@ export interface WrittenReview {
   nickname: string;
   profileImg: string;
   rating: 0 | 1 | 2;
-  id: number;
   meetupId: number;
-  meetingType: MeetingType;
   title: string;
+  reviewId: number;
   content: string;
   meetingEndDate: string;
-  thumbnail?: string;
-  reviewThumbnail?: string;
+  thumbnail: string | null;
   reviewDate: string;
+  editabel: boolean;
 }
 
 // ===== API 요청 설정 타입 =====
@@ -166,7 +165,6 @@ export interface UserProfileProps {
 export interface UserTabsProps {
   userId: string;
   isInstructor?: boolean;
-  token: string;
 }
 
 export interface TabListProps {
@@ -191,5 +189,4 @@ export interface MeetingListProps {
   studyType: StudyType;
   reviewTab?: MyReviewTab;
   isMe: boolean;
-  token: string;
 }

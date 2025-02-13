@@ -1,199 +1,78 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 import ShareMeetUpButton from "./ShareMeetUpButton";
 import Bookmark from "@/assets/images/icons/bookmark.svg";
 import BookmarkActive from "@/assets/images/icons/bookmark_active.svg";
 import IconButton from "@/components/common/buttons/IconButton";
 import SolidButton from "@/components/common/buttons/SolidButton";
-import useToggleWishlist from "@/hooks/useToggleWishlist";
-import {
-  fetchHostData,
-  fetchJoinMeet,
-  fetchLeaveMeet,
-} from "@/lib/meetDetail/meetDetailApi";
-import {
-  deleteUserWishList,
-  addUserWishlist,
-} from "@/lib/wishlist/wishlistApi";
+import JoinToast from "@/components/toast/JoinToast";
+import useChangeWishlist from "@/hooks/useChangeWishlist";
+import { fetchJoinMeet, fetchLeaveMeet } from "@/lib/meetDetail/meetDetailApi";
 import useUserStore from "@/store/auth/useUserStore";
 import useUserWishlist from "@/store/wishlist/useUserWishlist";
 import { type ClientInfo } from "@/types/meetDetail";
+import { type UserProfile } from "@/types/user-page";
 
 interface UserTag {
   id: number;
   tag: string;
 }
 
+interface MeetButtonAreaProps {
+  clientInfo: ClientInfo;
+  hostInfo: UserProfile;
+}
+
 export default function MeetButtonArea({
   clientInfo,
-}: {
-  clientInfo: ClientInfo;
-}) {
+  hostInfo,
+}: MeetButtonAreaProps) {
   //임시 유저 데이터 확인
   const { user } = useUserStore();
-  const { userWishlist, setUserWishlist } = useUserWishlist();
+  const { userAllWishlist } = useUserWishlist();
 
   const router = useRouter();
-  const toggleWishlist = useToggleWishlist();
-  const queryClient = useQueryClient();
+  const { loggedInWishlist, nonLoggedInWishlist } = useChangeWishlist();
 
-  //지금 페이지가 북마크가 되어있느지 확인
-  const [isBookmark, setIsBookmark] = useState<boolean | null>(null);
-  const [joinButton, setJoinButton] = useState<JSX.Element | null>(() => {
-    if (clientInfo.meetupStatus === "COMPLETED") {
-      return (
-        <SolidButton mode='special' disabled>
-          종료된 모임이에요
-        </SolidButton>
-      );
-    }
-    if (user === null) {
-      return (
-        <SolidButton mode='special' onClick={() => handleClickJoin()}>
-          모임 신청하기
-        </SolidButton>
-      );
-    } else {
-      //내가 주최자 일 때
-      if (clientInfo.hostId === user.userId) {
-        //모집 중일 때때
-        if (clientInfo.meetupStatus === "RECRUITING") {
-          if (clientInfo.participants.length >= clientInfo.minParticipants) {
-            return (
-              <SolidButton mode='special' disabled>
-                개설확정된 모임이에요
-              </SolidButton>
-            );
-          } else {
-            return (
-              <SolidButton mode='special' onClick={() => {}}>
-                모임 취소하기
-              </SolidButton>
-            );
-          }
-        }
-      } else {
-        //주최자가 아니면서 참여 여부에 따른 버튼 렌더링
-        if (
-          clientInfo.participants.some((item) => item.userId === user.userId) &&
-          clientInfo.meetupStatus === "RECRUITING"
-        ) {
-          return (
-            <SolidButton
-              mode='special'
-              onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-            >
-              신청 취소하기
-            </SolidButton>
-          );
-        } else {
-          return (
-            <SolidButton mode='special' onClick={() => handleClickJoin()}>
-              모임 신청하기
-            </SolidButton>
-          );
-        }
-      }
-    }
-
-    return null;
-  });
-
-  const { data: hostData, isLoading } = useQuery({
-    queryKey: ["host", clientInfo.hostId],
-    queryFn: async () => {
-      const host = await fetchHostData(clientInfo.hostId);
-      return host.data;
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (meetupId: number) => deleteUserWishList(meetupId),
-    onSuccess: (variables) => {
-      alert("찜하기가 취소되었습니다.");
-      const updatedArray = userWishlist.filter(
-        (item: number) => item !== variables,
-      );
-      setUserWishlist(updatedArray);
-      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
-      router.refresh();
-    },
-  });
-
-  const addMutation = useMutation({
-    mutationFn: (meetupId: number) => addUserWishlist(meetupId),
-    onSuccess: (variables) => {
-      alert("찜하기가 완료되었습니다.");
-      const updatedArray = [...userWishlist, variables];
-      setUserWishlist(updatedArray);
-      queryClient.refetchQueries({ queryKey: ["userWishlist"] });
-      router.refresh();
-    },
-  });
-
-  const handleClickToggleWishlist = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (user != null) {
-      const isIncludeArr = userWishlist.includes(clientInfo.meetupId);
-
-      //찜하기를 클릭했을 때 이미 찜하기에 등록 된 데이터
-      if (isIncludeArr) {
-        deleteMutation.mutate(clientInfo.meetupId);
-        setIsBookmark(false);
-      } else {
-        addMutation.mutate(clientInfo.meetupId);
-        setIsBookmark(true);
-      }
-    } else {
-      if (clientInfo.meetupStatus === "RECRUITING") {
-        const isBookmarked = toggleWishlist(clientInfo.meetupId);
-        if (isBookmarked) {
-          setIsBookmark(true);
-        } else {
-          setIsBookmark(false);
-        }
-
-        router.refresh();
-      } else {
-        alert("모집중인 모임만 가능합니다");
-      }
-    }
+  const JoinToastOption = {
+    containerId: "joinArea",
+    closeButton: false,
+    className: "join-toast",
+    hideProgressBar: true,
   };
 
-  const handleClickNavigateUser = (e: React.MouseEvent, id: number) => {
-    e.stopPropagation();
-    router.push(`/user/${id}`);
-  };
+  const [wishlist, setWishlist] = useState<number[]>([]);
 
-  const handleClickJoin = () => {
+  const handleClickJoin = useCallback(() => {
     if (user === null) {
-      alert("로그인 해주세요");
+      router.push("/sign-in");
     } else {
       joinMutate.mutate(clientInfo.meetupId);
     }
-  };
+  }, [user, clientInfo.meetupId]);
 
-  const joinMutate = useMutation({
-    mutationFn: (id: number) => fetchJoinMeet(id),
-    onSuccess: () => {
-      alert("모임 신청이 완료되었습니다.");
-      router.refresh();
-    },
-  });
+  const handleClickLeave = useCallback(() => {
+    if (user === null) {
+      router.push("/sign-in");
+    } else {
+      leaveMutate.mutate(clientInfo.meetupId);
+    }
+  }, [user, clientInfo.meetupId]);
 
-  const leaveMutate = useMutation({
-    mutationFn: (id: number) => fetchLeaveMeet(id),
-    onSuccess: () => {
-      alert("신청 취소가 완료되었습니다.");
-      router.refresh();
-    },
-  });
+  const handleClickDeleteMeetup = useCallback(() => {
+    toast(
+      (props) => <JoinToast {...props} toastType='deleteMeetup' />,
+      JoinToastOption,
+    );
+  }, []);
+  const [joinButton, setJoinButton] = useState<React.ReactNode>(null);
 
-  //참여자가 변경될 때 마다
   useEffect(() => {
     if (clientInfo.meetupStatus === "COMPLETED") {
       setJoinButton(
@@ -201,123 +80,205 @@ export default function MeetButtonArea({
           종료된 모임이에요
         </SolidButton>,
       );
-    } else {
-      if (user === null) {
+      return;
+    }
+    if (clientInfo.meetupStatus === "IN_PROGRESS") {
+      setJoinButton(
+        <SolidButton mode='special' disabled>
+          진행중인 모임이에요
+        </SolidButton>,
+      );
+      return;
+    }
+    if (clientInfo.meetupStatus === "BEFORE_START") {
+      setJoinButton(
+        <SolidButton mode='special' disabled>
+          시작전인 모임이에요
+        </SolidButton>,
+      );
+      return;
+    }
+
+    if (!user) {
+      setJoinButton(
+        <SolidButton mode='special' onClick={handleClickJoin}>
+          모임 신청하기
+        </SolidButton>,
+      );
+      return;
+    }
+
+    if (clientInfo.hostId === user.userId) {
+      if (clientInfo.participants.length >= clientInfo.minParticipants) {
         setJoinButton(
-          <SolidButton mode='special' onClick={() => handleClickJoin()}>
-            모임 신청하기
+          <SolidButton mode='special' disabled>
+            개설확정된 모임이에요
           </SolidButton>,
         );
       } else {
-        //내가 주최자 일 때
-        if (clientInfo.hostId === user.userId) {
-          //모집 중일 때
-          if (clientInfo.meetupStatus === "RECRUITING") {
-            if (clientInfo.participants.length >= clientInfo.minParticipants) {
-              setJoinButton(
-                <SolidButton mode='special' disabled>
-                  개설확정된 모임이에요
-                </SolidButton>,
-              );
-            } else {
-              setJoinButton(
-                <SolidButton mode='special' onClick={() => {}}>
-                  모임 취소하기
-                </SolidButton>,
-              );
-            }
-          }
-        } else {
-          //주최자가 아니면서 참여 여부에 따른 버튼 렌더링
-          if (
-            clientInfo.participants.some(
-              (item) => item.userId === user.userId,
-            ) &&
-            clientInfo.meetupStatus === "RECRUITING"
-          ) {
-            setJoinButton(
-              <SolidButton
-                mode='special'
-                onClick={() => leaveMutate.mutate(clientInfo.meetupId)}
-              >
-                신청 취소하기
-              </SolidButton>,
-            );
-          } else {
-            setJoinButton(
-              <SolidButton mode='special' onClick={() => handleClickJoin()}>
-                모임 신청하기
-              </SolidButton>,
-            );
-          }
-        }
+        setJoinButton(
+          <SolidButton mode='special' onClick={handleClickDeleteMeetup}>
+            모임 취소하기
+          </SolidButton>,
+        );
       }
+      return;
     }
-  }, [clientInfo.participants, user]);
 
-  //븍마크 확인
-  useEffect(() => {
-    if (!user) {
-      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      if (wishlist.includes(clientInfo.meetupId)) {
-        setIsBookmark(true);
-      }
+    const isJoined = clientInfo.participants.some(
+      (item) => item.userId === user.userId,
+    );
+
+    if (
+      clientInfo.maxParticipants === clientInfo.participants.length &&
+      !isJoined
+    ) {
+      setJoinButton(
+        <SolidButton mode='special' disabled>
+          정원이 마감된 모임이에요
+        </SolidButton>,
+      );
+      return;
+    }
+
+    setJoinButton(
+      isJoined ? (
+        <SolidButton mode='special' onClick={handleClickLeave}>
+          신청 취소하기
+        </SolidButton>
+      ) : (
+        <SolidButton mode='special' onClick={handleClickJoin}>
+          모임 신청하기
+        </SolidButton>
+      ),
+    );
+  }, [
+    clientInfo,
+    user,
+    handleClickJoin,
+    handleClickLeave,
+    handleClickDeleteMeetup,
+  ]);
+
+  const handleClickToggleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (user != null) {
+      loggedInWishlist(clientInfo.meetupId, clientInfo.meetupStatus);
     } else {
-      if (userWishlist.includes(clientInfo.meetupId)) {
-        setIsBookmark(true);
-      }
+      nonLoggedInWishlist(
+        clientInfo.meetupId,
+        clientInfo.meetupStatus,
+        setWishlist,
+      );
     }
-  }, [user, setIsBookmark]);
+  };
 
-  if (isLoading) {
-    <div>로딩중..</div>;
-  }
+  const joinMutate = useMutation({
+    mutationFn: (id: number) => fetchJoinMeet(id),
+    onSuccess: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='join' />,
+        JoinToastOption,
+      );
+      router.refresh();
+    },
+    onError: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='failed' />,
+        JoinToastOption,
+      );
+    },
+  });
+
+  const leaveMutate = useMutation({
+    mutationFn: (id: number) => fetchLeaveMeet(id),
+    onSuccess: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='leave' />,
+        JoinToastOption,
+      );
+      router.refresh();
+    },
+    onError: () => {
+      toast(
+        (props) => <JoinToast {...props} toastType='failed' />,
+        JoinToastOption,
+      );
+    },
+  });
+
+  const updateWishlist = useCallback(() => {
+    if (user === null) {
+      const myWishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      setWishlist(myWishlist);
+    } else {
+      setWishlist(userAllWishlist);
+    }
+  }, [user, userAllWishlist]);
+
+  useEffect(() => {
+    updateWishlist();
+  }, [updateWishlist]);
 
   return (
-    <div className='flex flex-1 flex-col'>
-      <ShareMeetUpButton />
-      <div className='meet-info-box-small fixed bottom-0 left-0 z-30 mt-8 flex w-full gap-2 bg-gray-950 p-5 desktop:static desktop:bg-[unset] desktop:p-0'>
+    <section className='flex flex-1 flex-col'>
+      <div className='hidden desktop:block'>
+        <ShareMeetUpButton />
+      </div>
+      <div className='meet-info-box fixed bottom-0 left-0 z-30 flex w-full gap-2 rounded-none bg-gray-950 p-4 desktop:static desktop:mt-8 desktop:rounded-[24px] desktop:px-8 desktop:py-7'>
         <IconButton
           mode='special'
           className='w-[72px]'
           onClick={handleClickToggleWishlist}
+          aria-label='모임 찜하기'
         >
-          {isBookmark ? (
-            <BookmarkActive className='size-6 text-orange-200' />
+          {wishlist.includes(clientInfo.meetupId) ? (
+            <BookmarkActive
+              className='size-6 text-orange-200'
+              aria-label='active'
+            />
           ) : (
-            <Bookmark className='size-6' />
+            <Bookmark className='size-6' aria-label='default' />
           )}
         </IconButton>
         {joinButton}
       </div>
-      <button
-        className='meet-info-box-small mt-6 flex flex-col gap-4'
-        onClick={(e) => handleClickNavigateUser(e, clientInfo.hostId)}
-      >
-        <span className='text-title block'>주최자 프로필</span>
-        <div className='meet-info-box-inner-2 flex w-full flex-col gap-5'>
+
+      <div className='meet-info-box-small mt-6 flex flex-col gap-4'>
+        <span className='text-title block text-left'>주최자 프로필</span>
+        <Link
+          href={`/user/${clientInfo.hostId}`}
+          className='meet-info-box-inner-2 flex w-full flex-col gap-5'
+          aria-label={`유저 ${clientInfo.hostId} 프로필 이동`}
+        >
           <div className='flex gap-[14px]'>
-            <div className='h-[46px] w-[46px] overflow-hidden rounded-[50%] bg-gray-700'>
-              <img src={hostData?.profileImg} alt='유저 프로필' />
+            <div className='relative h-[46px] w-[46px] overflow-hidden rounded-[50%] bg-gray-700'>
+              <Image
+                src={hostInfo.profileImg}
+                alt='유저 프로필'
+                fill
+                className='object-cover'
+                sizes='60px'
+              />
             </div>
             <div>
               <span className='flex items-center gap-[6px] text-body-2-normal font-medium text-gray-300'>
-                {clientInfo.hostNickname}
-                {hostData?.qualificationStatus == "QUALIFIED" && (
+                {hostInfo.nickname}
+                {hostInfo.qualificationStatus == "QUALIFIED" && (
                   <span className='rounded-5 text-gary-300 inline-block rounded-[20px] bg-gray-700 px-2 py-1 text-caption-normal font-medium'>
                     과외선생님
                   </span>
                 )}
               </span>
-              {hostData?.bio.length === 0 && (
-                <p className='text-body mt-[6px] text-gray-400'>
-                  안녕하세요! 기획하는 모과입니다.
-                </p>
-              )}
+              <p className='text-body mt-[6px] text-gray-400'>
+                {hostInfo.bio.length === 0
+                  ? "소개글이 없습니다."
+                  : hostInfo.bio}
+              </p>
             </div>
           </div>
           <ul className='flex gap-1'>
-            {hostData?.userTagList.map((item: UserTag, index: number) => (
+            {hostInfo.userTagList.map((item: UserTag, index: number) => (
               <li
                 className='rounded-[6px] bg-gray-600 px-2 py-[3px] text-caption-normal font-medium text-gray-300'
                 key={index}
@@ -325,12 +286,9 @@ export default function MeetButtonArea({
                 {item.tag}
               </li>
             ))}
-            <li className='rounded-[6px] bg-gray-600 px-2 py-[3px] text-caption-normal font-medium text-gray-300'>
-              태그
-            </li>
           </ul>
-        </div>
-      </button>
-    </div>
+        </Link>
+      </div>
+    </section>
   );
 }

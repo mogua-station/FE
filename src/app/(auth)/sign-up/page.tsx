@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import DotLoader from "react-spinners/DotLoader";
+
 import {
   CommonEmailInput,
   CommonPasswordInput,
@@ -14,6 +17,7 @@ import { type FormData } from "@/types";
 
 const SignUpPage = () => {
   const { signUp } = useSignUp();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     control,
@@ -36,22 +40,15 @@ const SignUpPage = () => {
   const confirmPassword = watch("confirmPassword");
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setIsLoading(true);
     await signUp(data, setError);
+    setIsLoading(false);
   };
 
   return (
-    <div className='relative flex grow flex-col bg-gray-950'>
-      <video
-        className='absolute inset-0 hidden h-full w-full object-cover tablet:block'
-        src='/videos/background.mp4'
-        loop
-        autoPlay
-        muted
-        preload='auto'
-        playsInline
-      />
-      <div className='flex h-screen flex-col items-center tablet:justify-center'>
-        <div className='z-10 flex h-auto w-[100%] flex-col gap-[24px] bg-gray-950 p-4 tablet:m-20 tablet:w-[90%] tablet:rounded-[40px] tablet:px-[40px] tablet:py-[56px] desktop:w-[40%]'>
+    <div className='relative flex grow flex-col bg-gray-950 tablet:bg-transparent tablet:px-10 tablet:pb-4 tablet:pt-[calc(20dvh-56px)] desktop:mx-auto desktop:w-full desktop:max-w-[668px] desktop:justify-center desktop:p-4'>
+      <div className='z-10 flex w-full flex-grow flex-col items-center px-4 pb-4 pt-2 tablet:flex-grow-0 tablet:rounded-[40px] tablet:bg-gray-950-48 tablet:px-[40px] tablet:py-[56px]'>
+        <div className='flex w-full flex-grow flex-col gap-6'>
           <div>
             <p className='text-title-1 font-medium text-gray-100'>반가워요!</p>
             <p className='text-body-2-normal font-medium text-gray-400'>
@@ -83,13 +80,17 @@ const SignUpPage = () => {
                 </Link>
               </div>
             </div>
-            <div className='mt-[30px]'>
-              <SolidButton
-                type='submit'
-                state={isValid ? "activated" : "default"}
-              >
-                가입완료
-              </SolidButton>
+            <div className='mt-[30px] flex flex-col items-center'>
+              {/* 로딩중일 때는 버튼 비활성화 */}
+              {!isLoading && (
+                <SolidButton
+                  type='submit'
+                  state={isValid ? "activated" : "default"}
+                >
+                  가입완료
+                </SolidButton>
+              )}
+              <DotLoader size={24} color={"#FF9A42"} loading={isLoading} />
             </div>
           </form>
         </div>
