@@ -7,6 +7,8 @@ export type ErrorProps = {
   error: Error & { digest?: string };
 };
 
+export const dynamic = "force-dynamic";
+
 export default function Error({ error }: ErrorProps) {
   const router = useRouter();
 

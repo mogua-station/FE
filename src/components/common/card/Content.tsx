@@ -75,12 +75,14 @@ export default function Content({ content }: CardContentProps) {
       <div className='flex flex-col justify-end'>
         <Image
           className='size-20 rounded-lg object-cover'
-          src={content.thumbnail ? content.thumbnail : ""}
+          src={content.thumbnail || ""}
           width={80}
           height={80}
           alt='모임 이미지'
           priority
           loading='eager'
+          quality={75}
+          sizes='80px'
         />
       </div>
     </div>
