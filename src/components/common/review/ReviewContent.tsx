@@ -20,7 +20,11 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
 
       <div>
         <p
-          className={`body-2-reading mt-4 whitespace-pre-line break-keep text-gray-200 ${contentStyle}`}
+          className={`body-2-reading mt-4 min-h-[72px] w-full break-keep text-gray-200 ${
+            isOpen
+              ? "h-auto whitespace-pre-line"
+              : "line-clamp-3 h-[72px] whitespace-normal"
+          } ${contentStyle}`}
         >
           {reviewContent.review}
         </p>
