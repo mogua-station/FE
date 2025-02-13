@@ -5,6 +5,10 @@ import { type ContentProps } from "@/types/review";
 export default function Content({ reviewContent, isOpen }: ContentProps) {
   const contentStyle = isOpen ? "" : "comment-overflow comment-overflow-webkit";
 
+  // 수강평인 경우 reviewThumbnail을, 아닌 경우 thumbnail을 사용
+  const thumbnailImage =
+    reviewContent.reviewThumbnail || reviewContent.thumbnail;
+
   return (
     <div className='w-full'>
       {reviewContent.isMyReview && (
@@ -20,25 +24,27 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
 
       <div>
         <p
-          className={`body-2-reading mt-4 whitespace-pre-line break-keep text-gray-200 ${contentStyle}`}
+          className={`body-2-reading mt-4 min-h-[72px] w-full break-keep text-gray-200 ${
+            isOpen
+              ? "h-auto whitespace-pre-line"
+              : "line-clamp-3 h-[72px] whitespace-normal"
+          } ${contentStyle}`}
         >
           {reviewContent.review}
         </p>
-        {isOpen &&
-          reviewContent.thumbnail &&
-          typeof reviewContent.thumbnail === "string" && (
-            <div className='mt-4 flex justify-end'>
-              <Image
-                className='size-20 rounded-lg object-cover'
-                src={reviewContent.thumbnail}
-                width={80}
-                height={80}
-                alt='리뷰 이미지'
-                priority
-                loading='eager'
-              />
-            </div>
-          )}
+        {isOpen && thumbnailImage && typeof thumbnailImage === "string" && (
+          <div className='mt-4 flex justify-end'>
+            <Image
+              className='size-20 rounded-lg object-cover'
+              src={thumbnailImage}
+              width={80}
+              height={80}
+              alt='리뷰 이미지'
+              priority
+              loading='eager'
+            />
+          </div>
+        )}
       </div>
       <div className='mt-4 flex justify-end'>
         <div className='flex items-center'>
