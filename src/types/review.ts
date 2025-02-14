@@ -1,11 +1,12 @@
 export interface ReviewInfo {
   rating: number;
   title?: string;
-  review: string;
+  content: string;
   userid: number;
-  username: string;
-  userprofile?: string;
-  date: Date;
+  userNickname: string;
+  thumbnail: string;
+  updatedAt: string;
+  createdAt: string;
   meetingEndDate?: Date;
   isMyReview?: boolean;
   isMyWritten?: boolean;
@@ -13,7 +14,6 @@ export interface ReviewInfo {
   eventType?: string;
   reviewId: number;
   editable?: boolean;
-  thumbnail?: string | null;
 }
 
 export interface ReviewInfoProps {
