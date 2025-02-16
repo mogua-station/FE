@@ -52,7 +52,7 @@ export default function useChangeWishlist() {
       //이전 상태를 onError에 context로 저장장
       return { prevWishlist };
     },
-    onError: (_, __, context) => {
+    onError: (err, __, context) => {
       //에러가 났으면 다시 이전 데이터로 롤백
       if (context?.prevWishlist) {
         const rollback = context.prevWishlist.data.map(
@@ -63,7 +63,7 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], context.prevWishlist);
       }
       toast(
-        (props) => <JoinToast {...props} toastType='failed' />,
+        (props) => <JoinToast {...props} toastType='failed' errorProps={err} />,
         JoinToastOption,
       );
     },
@@ -103,7 +103,7 @@ export default function useChangeWishlist() {
 
       return { prevWishlist };
     },
-    onError: (_, __, context) => {
+    onError: (err, __, context) => {
       if (context?.prevWishlist) {
         const rollback = context.prevWishlist?.data.map(
           (item: CardProps) => item.meetupId,
@@ -112,7 +112,7 @@ export default function useChangeWishlist() {
         queryClient.setQueryData(["userAllWishlist"], context.prevWishlist);
       }
       toast(
-        (props) => <JoinToast {...props} toastType='failed' />,
+        (props) => <JoinToast {...props} toastType='failed' errorProps={err} />,
         JoinToastOption,
       );
     },
