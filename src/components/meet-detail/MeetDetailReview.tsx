@@ -30,7 +30,6 @@ export default function MeetDetailReview({
       lastPage.nextPage ? lastPage.page + 1 : undefined,
     select: (data) => data.pages.flatMap((ele) => ele.data),
     enabled: meetupStatus === "COMPLETED",
-    staleTime: 5 * 60 * 1000, //5분
   });
 
   const handleClickNextComment = useCallback(() => {

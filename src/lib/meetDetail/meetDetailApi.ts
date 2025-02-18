@@ -1,5 +1,4 @@
 import { type ReviewInfo, type MeetupReviewProps } from "@/types/review";
-// import { getAccessToken } from "@/utils/cookie";
 
 export const fetchHostData = async (hostId: number) => {
   try {
@@ -107,17 +106,12 @@ export const fetchMeetupReview = async ({
     }
 
     const reviewData = await response.json();
-    const reviewArr = reviewData.data;
-
-    const pageSize = 3;
-    const start = pageParams * pageSize;
-    const end = start + pageSize;
-    const data: ReviewInfo[] = reviewArr.slice(start, end);
+    const reviewArr: ReviewInfo[] = reviewData.data;
 
     return {
-      data: data,
+      data: reviewArr,
       page: pageParams,
-      nextPage: (pageParams + 1) * pageSize < reviewArr.length,
+      nextPage: !reviewData.additionalData.isLast,
       allDataLenght: reviewArr.length,
     };
   } catch (error) {

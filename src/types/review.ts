@@ -1,11 +1,11 @@
 export interface ReviewInfo {
   rating: number;
   title?: string;
-  review: string;
+  content: string;
   userid: number;
-  username: string;
-  userprofile?: string;
-  date: Date;
+  userNickname: string;
+  updatedAt: Date;
+  createdAt: Date;
   meetingEndDate?: Date;
   isMyReview?: boolean;
   isMyWritten?: boolean;

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { type ContentProps } from "@/types/review";
 
 export default function Content({ reviewContent, isOpen }: ContentProps) {
@@ -17,7 +16,8 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
             {reviewContent.title}
           </span>
           <span className='inline-block pl-2 text-label-reading font-regular text-gray-400'>
-            {reviewContent.meetingEndDate?.toLocaleDateString("ko-KR") ?? "-"}
+            {new Date(reviewContent.updatedAt).toLocaleDateString("ko-KR") ??
+              "-"}
           </span>
         </div>
       )}
@@ -30,7 +30,7 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
               : "line-clamp-3 h-[72px] whitespace-normal"
           } ${contentStyle}`}
         >
-          {reviewContent.review}
+          {reviewContent.content}
         </p>
         {isOpen && thumbnailImage && typeof thumbnailImage === "string" && (
           <div className='mt-4 flex justify-end'>
@@ -48,14 +48,11 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
       </div>
       <div className='mt-4 flex justify-end'>
         <div className='flex items-center'>
-          <Link
-            href={`/user/${reviewContent.userid}`}
-            className='flex items-center gap-2'
-          >
+          <div className='flex items-center gap-2'>
             <div className='flex h-7 w-7 items-center justify-center rounded-[50%] bg-gray-800'>
               <div className='h-6 w-6 overflow-hidden rounded-[50%] bg-gray-700'>
                 <Image
-                  src={`${reviewContent.userprofile != null ? reviewContent.userprofile : "/images/default_user_profile.png"}`}
+                  src={`https://fesi6.s3.dualstack.ap-southeast-2.amazonaws.com/profileImage/defaultProfileImages/4.png`}
                   alt='유저 이미지'
                   className='object-cover'
                   width={24}
@@ -66,11 +63,11 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
               </div>
             </div>
             <span className='caption-stroke relative inline-block pr-2 text-caption-normal font-regular text-gray-400'>
-              {reviewContent.username}
+              {reviewContent.userNickname}
             </span>
-          </Link>
+          </div>
           <span className='inline-block pl-2 text-caption-normal font-regular text-gray-400'>
-            {reviewContent.date.toLocaleDateString("ko-KR")}
+            {new Date(reviewContent.updatedAt).toLocaleDateString("ko-KR")}
           </span>
         </div>
       </div>
