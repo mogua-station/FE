@@ -4,9 +4,9 @@ export interface ReviewInfo {
   content: string;
   userid: number;
   userNickname: string;
-  thumbnail: string;
-  updatedAt: string;
-  createdAt: string;
+  thumbnail: string | null;
+  updatedAt: Date;
+  createdAt: Date;
   meetingEndDate?: Date;
   isMyReview?: boolean;
   isMyWritten?: boolean;

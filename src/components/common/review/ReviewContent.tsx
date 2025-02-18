@@ -46,7 +46,7 @@ export default function Content({ reviewContent, isOpen }: ContentProps) {
             <div className='flex h-7 w-7 items-center justify-center rounded-[50%] bg-gray-800'>
               <div className='h-6 w-6 overflow-hidden rounded-[50%] bg-gray-700'>
                 <Image
-                  src={`${reviewContent.thumbnail != null ? reviewContent.thumbnail : "/images/default_user_profile.png"}`}
+                  src={`https://fesi6.s3.dualstack.ap-southeast-2.amazonaws.com/profileImage/defaultProfileImages/4.png`}
                   alt='유저 이미지'
                   className='object-cover'
                   width={24}
