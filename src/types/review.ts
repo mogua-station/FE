@@ -4,7 +4,6 @@ export interface ReviewInfo {
   content: string;
   userid: number;
   userNickname: string;
-  thumbnail: string | null;
   updatedAt: Date;
   createdAt: Date;
   meetingEndDate?: Date;
@@ -14,6 +13,8 @@ export interface ReviewInfo {
   eventType?: string;
   reviewId: number;
   editable?: boolean;
+  thumbnail?: string | null;
+  reviewThumbnail?: string | null;
 }
 
 export interface ReviewInfoProps {
