@@ -4,6 +4,8 @@ import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useMemo } from "react";
+import EmptyImage from "@/assets/images/icons/empty.svg";
+import SolidButton from "@/components/common/buttons/SolidButton";
 import Card from "@/components/common/card/Card";
 import CardSkeleton from "@/components/common/card/CardSkeleton";
 import useIntersectionObserver from "@/hooks/useInterSectionObserve";
@@ -41,7 +43,10 @@ export default function WishlistContent() {
   const {
     data: wishlist,
     hasNextPage,
+    isLoading,
+    isError,
     fetchNextPage,
+    refetch,
     isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: [
@@ -88,6 +93,42 @@ export default function WishlistContent() {
       fetchNextPage();
     }
   }, [fetchNextPage, isPageEnd, hasNextPage]);
+
+  if (isLoading) {
+    return (
+      <div className='w-full'>
+        <section className='relative grid w-full grow grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'>
+          {Array.from({ length: 8 }).map((_, index) => {
+            return <CardSkeleton key={index} />;
+          })}
+        </section>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className='relative size-full grow'>
+        <div className='flex h-[50vh] flex-col items-center justify-center gap-4'>
+          <EmptyImage />
+          <p className='text-center text-body-1-reading text-gray-500'>
+            찜한 모임을 불러오지 못했어요
+          </p>
+          <div className='flex flex-col items-center gap-8'>
+            <SolidButton
+              size='small'
+              onClick={() => {
+                refetch();
+              }}
+              aria-label='refetch wishlist'
+            >
+              다시 시도하기
+            </SolidButton>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className='w-full'>

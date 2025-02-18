@@ -2,6 +2,7 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
+import DotLoader from "react-spinners/DotLoader";
 import EmptyImage from "@/assets/images/icons/empty.svg";
 import SolidButton from "@/components/common/buttons/SolidButton";
 import Review from "@/components/common/review/Review";
@@ -18,8 +19,10 @@ export default function MeetDetailReview({
     data: reviewData,
     isFetching,
     isError,
+    error,
     hasNextPage,
     fetchNextPage,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ["review", meetupId],
     queryFn: ({ pageParam }) =>
@@ -52,8 +55,19 @@ export default function MeetDetailReview({
             <div className='mt-[60px] flex flex-col items-center gap-4'>
               <EmptyImage />
               <p className='text-body-1-reading font-regular text-gray-500'>
-                리뷰를 불러오지 못했어요
+                {error.message}
               </p>
+              <div className='flex flex-col items-center gap-8'>
+                <SolidButton
+                  size='small'
+                  onClick={() => {
+                    refetch();
+                  }}
+                  aria-label='refetch wishlist'
+                >
+                  다시 시도하기
+                </SolidButton>
+              </div>
             </div>
           )}
           {!isFetching &&
@@ -70,7 +84,11 @@ export default function MeetDetailReview({
                 </p>
               </div>
             ))}
-          {isFetching && <p className='text-center text-white'>로딩중...</p>}
+          {isFetching && (
+            <div className='flex justify-center'>
+              <DotLoader size={24} color={"#FF9A42"} loading={isFetching} />
+            </div>
+          )}
         </div>
       </div>
       {hasNextPage && (

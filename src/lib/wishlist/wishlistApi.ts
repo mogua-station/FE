@@ -17,8 +17,10 @@ export const fetchUserAllWishlist = async ({
     );
 
     if (!response.ok) {
-      console.log(response);
-      throw new Error(response.statusText);
+      const errorData = await response.json();
+      throw new Error(
+        `유저의 찜 목록을 가져오지 못했습니다: ${errorData.message || "알 수 없는 오류"}`,
+      );
     }
 
     const resData = await response.json();
@@ -54,7 +56,17 @@ export const fetchUserWishlistType2 = async ({
     );
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const errorData = await response.json();
+
+      if (response.status === 400) {
+        throw new Error(
+          `잘못된 요청${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+        );
+      }
+
+      throw new Error(
+        `데이터 요청 오류${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+      );
     }
 
     const responseData = await response.json();
@@ -140,7 +152,16 @@ export const fetchUserWishlist = async ({
     );
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const errorData = await response.json();
+      if (response.status === 400) {
+        throw new Error(
+          `잘못된 요청${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+        );
+      }
+
+      throw new Error(
+        `데이터 요청 오류${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+      );
     }
 
     const responseData = await response.json();
@@ -168,7 +189,16 @@ export const fetchLocalWishlist = async ({
     );
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const errorData = await response.json();
+      if (response.status === 400) {
+        throw new Error(
+          `잘못된 요청${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+        );
+      }
+
+      throw new Error(
+        `데이터 요청 오류${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+      );
     }
 
     const responseData = await response.json();
@@ -255,7 +285,20 @@ export const deleteUserWishList = async (meetupId: number) => {
     );
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const errorData = await response.json();
+      if (response.status === 400) {
+        throw {
+          statusCode: response.status,
+          message: `잘못된 요청 ${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+          data: errorData,
+        };
+      }
+
+      throw {
+        statusCode: response.status,
+        message: `데이터 요청 오류 ${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+        data: errorData,
+      };
     }
 
     return response.json();
@@ -276,7 +319,20 @@ export const addUserWishlist = async (meetupId: number) => {
     );
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const errorData = await response.json();
+      if (response.status === 400) {
+        throw {
+          statusCode: response.status,
+          message: `잘못된 요청 ${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+          data: errorData,
+        };
+      }
+
+      throw {
+        statusCode: response.status,
+        message: `데이터 요청 오류 ${response.status}: ${errorData.message || "알 수 없는 오류"}`,
+        data: errorData,
+      };
     }
 
     return response.json();

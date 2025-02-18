@@ -11,10 +11,9 @@ export const fetchHostData = async (hostId: number) => {
     );
 
     if (!response.ok) {
-      //catch문에 error 응답객체 전달
-      const error = new Error("API 요청 에러");
-      (error as any).response = response;
-      throw error;
+      const errorData = await response.json();
+
+      throw new Error(errorData.message);
     }
 
     return response.json();
@@ -35,10 +34,9 @@ export const fetchJoinMeet = async (id: number) => {
     );
 
     if (!response.ok) {
-      //catch문에 error 응답객체 전달
-      const error = new Error("API 요청 에러");
-      (error as any).response = response;
-      throw error;
+      const errorData = await response.json();
+
+      throw new Error(errorData.message);
     }
 
     return response.json();
@@ -59,10 +57,9 @@ export const fetchLeaveMeet = async (id: number) => {
     );
 
     if (!response.ok) {
-      //catch문에 error 응답객체 전달
-      const error = new Error("API 요청 에러");
-      (error as any).response = response;
-      throw error;
+      const errorData = await response.json();
+
+      throw new Error(errorData.message);
     }
 
     return response.json();
@@ -81,7 +78,9 @@ export const fetchMeetupData = async (id: number) => {
     );
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const errorData = await response.json();
+
+      throw new Error(errorData.message);
     }
 
     return response.json();
@@ -103,7 +102,7 @@ export const fetchMeetupReview = async ({
     );
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      throw { message: "리뷰 정보를 불러오지 못했어요" };
     }
 
     const reviewData = await response.json();
