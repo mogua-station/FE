@@ -134,6 +134,7 @@ export interface WrittenReview {
   content: string;
   meetingEndDate: string;
   thumbnail: string | null;
+  reviewThumbnail?: string | null;
   reviewDate: string;
   editabel: boolean;
 }
