@@ -1,11 +1,11 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 import EmptyImage from "@/assets/images/icons/empty.svg";
 import SolidButton from "@/components/common/buttons/SolidButton";
+import { useEffect, useRef, useMemo, useState } from "react";
 import Card from "@/components/common/card/Card";
 import CardSkeleton from "@/components/common/card/CardSkeleton";
 import useIntersectionObserver from "@/hooks/useInterSectionObserve";
@@ -30,27 +30,29 @@ export default function WishlistContent() {
   const isPageEnd = !!pageRef?.isIntersecting;
   const { user } = useUserStore();
 
-  //여러개의 값을 한번에 가져오고 싶다면
-  const [filter, setFilter] = useState<FilterProps>({
-    limit: 10,
-    meetupType: "STUDY",
-    location: "ALL",
-    orderBy: "latest",
-  });
+  const wishlistParams = useMemo(() => {
+    const queryParams: FilterProps = {
+      limit: 10,
+      meetupType: (searchParams.get("type") as MeetupType) ?? "STUDY",
+      location: (searchParams.get("location") as LocationType) ?? "ALL",
+      orderBy: (searchParams.get("orderBy") as OrderType) ?? "latest",
+    };
 
+    return queryParams;
+  }, [searchParams]);
   const {
     data: wishlist,
     hasNextPage,
     isLoading,
     isError,
     fetchNextPage,
-    refetch,
+    isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: [
       "wishlist",
-      filter.meetupType,
-      filter.location,
-      filter.orderBy,
+      wishlistParams.meetupType,
+      wishlistParams.location,
+      wishlistParams.orderBy,
       user?.userId ?? "guest",
     ],
     queryFn: ({ pageParam }) => {
@@ -65,11 +67,14 @@ export default function WishlistContent() {
         return fetchUserWishlistType2({
           pageParams: pageParam,
           userId: user.userId,
-          filter: filter,
+          filter: wishlistParams,
           // filter: new URLSearchParams(filterString).toString(),
         });
       } else {
-        return fetchLocalWishlist({ pageParams: pageParam, filter: filter });
+        return fetchLocalWishlist({
+          pageParams: pageParam,
+          filter: wishlistParams,
+        });
       }
     },
     initialPageParam: 0,
@@ -78,6 +83,7 @@ export default function WishlistContent() {
     },
     select: (data) => data.pages.flatMap((ele) => ele.data || []),
     retry: 1,
+    placeholderData: keepPreviousData,
   });
 
   //페이지의 끝에 도달하면 fetchNextPage를 호출
@@ -190,6 +196,16 @@ export default function WishlistContent() {
         ))}
 
       <div className='mb-1 h-10 w-full touch-none' ref={ref} />
+
+      <div
+        ref={ref}
+        className='relative grid w-full grid-cols-1 gap-y-6 desktop:grid-cols-2 desktop:gap-x-8 desktop:gap-y-10'
+      >
+        {isFetchingNextPage &&
+          Array.from({ length: 10 }).map((_, index) => (
+            <CardSkeleton key={index} />
+          ))}
+      </div>
     </div>
   );
 }

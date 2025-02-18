@@ -14,6 +14,7 @@ export interface ReviewInfo {
   reviewId: number;
   editable?: boolean;
   thumbnail?: string | null;
+  reviewThumbnail?: string | null;
 }
 
 export interface ReviewInfoProps {
